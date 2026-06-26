@@ -6,7 +6,7 @@ class ApiClient {
     this.baseUrl = API_BASE;
   }
 
-  async request(endpoint, options = {}) {
+  async request(endpoint, options = {}, retries = 2, backoff = 1000) {
     const url = `${this.baseUrl}${endpoint}`;
     
     const headers = { 'Content-Type': 'application/json', ...options.headers };
@@ -15,9 +15,13 @@ class ApiClient {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second timeout
+
     const config = {
       ...options,
       headers,
+      signal: controller.signal,
     };
 
     if (config.body && typeof config.body === 'object' && !(config.body instanceof FormData)) {
@@ -30,6 +34,7 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
+      clearTimeout(timeoutId);
       
       if (response.status === 401) {
         localStorage.removeItem('raaed_token');
@@ -40,6 +45,12 @@ class ApiClient {
       }
 
       if (!response.ok) {
+        if (response.status >= 500 && retries > 0) {
+          console.warn(`API Error ${response.status}. Retrying in ${backoff}ms...`);
+          await new Promise(r => setTimeout(r, backoff));
+          return this.request(endpoint, options, retries - 1, backoff * 2);
+        }
+
         const errorData = await response.json().catch(() => ({}));
         let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
         if (errorData.detail) {
@@ -53,7 +64,16 @@ class ApiClient {
       }
       return await response.json();
     } catch (error) {
+      clearTimeout(timeoutId);
+      if (error.name === 'AbortError') {
+        throw new Error('Request timed out. The server took too long to respond.');
+      }
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        if (retries > 0) {
+          console.warn(`Network Error. Retrying in ${backoff}ms...`);
+          await new Promise(r => setTimeout(r, backoff));
+          return this.request(endpoint, options, retries - 1, backoff * 2);
+        }
         throw new Error('Network error: Unable to reach the server. Is the backend running?');
       }
       throw error;

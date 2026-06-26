@@ -9,6 +9,7 @@ import {
   Bot, UserCircle,
 } from 'lucide-react';
 import { PLATFORM_STATS, FEATURES, TESTIMONIALS, HOW_IT_WORKS } from '@/data/mockData';
+import { Helmet } from 'react-helmet-async';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -577,8 +578,4 @@ export default function HomePage() {
         {/* Tagline */}
         <p className="text-center mt-12 text-sm text-surface-600 tracking-[0.15em] uppercase font-heading">
           Real Intelligence isn't predicted. It's built.
-        </p>
-      </section>
-    </div>
-  );
-}
+   

@@ -4,6 +4,8 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { SidebarProvider } from '@/contexts/SidebarContext';
 import { ToastProvider } from '@/components/common/Toast';
+import { HelmetProvider } from 'react-helmet-async';
+import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 
 // Layouts
 import PublicLayout from '@/layouts/PublicLayout';
@@ -24,6 +26,7 @@ const PageLoader = () => (
 // Lazy Loaded Pages
 const HomePage = lazy(() => import('@/pages/public/HomePage'));
 const AboutPage = lazy(() => import('@/pages/public/AboutPage'));
+const ContactPage = lazy(() => import('@/pages/public/ContactPage'));
 const CoursesPage = lazy(() => import('@/pages/public/CoursesPage'));
 const CourseDetailPage = lazy(() => import('@/pages/public/CourseDetailPage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
@@ -71,6 +74,7 @@ function AppRoutes() {
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:courseId" element={<CourseDetailPage />} />
         </Route>
@@ -108,16 +112,20 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <ThemeProvider>
-        <SidebarProvider>
-          <AuthProvider>
-            <ToastProvider>
-              <AppRoutes />
-            </ToastProvider>
-          </AuthProvider>
-        </SidebarProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <HelmetProvider>
+      <ErrorBoundary>
+        <BrowserRouter>
+          <ThemeProvider>
+            <SidebarProvider>
+              <AuthProvider>
+                <ToastProvider>
+                  <AppRoutes />
+                </ToastProvider>
+              </AuthProvider>
+            </SidebarProvider>
+          </ThemeProvider>
+        </BrowserRouter>
+      </ErrorBoundary>
+    </HelmetProvider>
   );
 }

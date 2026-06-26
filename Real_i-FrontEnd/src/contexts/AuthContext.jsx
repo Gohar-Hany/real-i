@@ -25,6 +25,38 @@ export function AuthProvider({ children }) {
     initAuth();
   }, []);
 
+  // Activity Tracker for Auto-Logout (30 mins inactivity)
+  useEffect(() => {
+    let timeoutId;
+    const INACTIVITY_LIMIT = 30 * 60 * 1000;
+
+    const resetTimer = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (user) {
+        timeoutId = setTimeout(() => {
+          logout();
+          window.location.href = '/login?reason=timeout';
+        }, INACTIVITY_LIMIT);
+      }
+    };
+
+    if (user) {
+      resetTimer();
+      window.addEventListener('mousemove', resetTimer);
+      window.addEventListener('keydown', resetTimer);
+      window.addEventListener('scroll', resetTimer);
+      window.addEventListener('click', resetTimer);
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      window.removeEventListener('mousemove', resetTimer);
+      window.removeEventListener('keydown', resetTimer);
+      window.removeEventListener('scroll', resetTimer);
+      window.removeEventListener('click', resetTimer);
+    };
+  }, [user]);
+
   const login = async (email, password) => {
     try {
       const res = await api.post('/auth/login', { email, password });
