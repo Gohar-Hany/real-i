@@ -2,13 +2,30 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FolderOpen, Plus, Edit3, Trash2, Users, BookOpen, Eye, EyeOff, Search } from 'lucide-react';
 import { COURSES } from '@/data/mockData';
+import { useToast } from '@/components/common/Toast';
+
 export default function AdminCourses() {
   const [search, setSearch] = useState('');
+  const [courses, setCourses] = useState(COURSES);
+  const toast = useToast();
 
-  const filtered = COURSES.filter((c) =>
+  const filtered = courses.filter((c) =>
     c.title.toLowerCase().includes(search.toLowerCase()) ||
     c.category.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleNewCourse = () => {
+    toast.info('New course creation is coming soon! Backend integration required.');
+  };
+
+  const handleEdit = (courseId) => {
+    toast.info('Edit course feature is coming soon!');
+  };
+
+  const handleDelete = (courseId) => {
+    setCourses(prev => prev.filter(c => c.id !== courseId));
+    toast.success('Course deleted successfully (mock)!');
+  };
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -17,7 +34,10 @@ export default function AdminCourses() {
           <h1 className="text-3xl font-bold text-surface-100">Course Management</h1>
           <p className="text-surface-400 mt-1">Create, edit, and manage your courses</p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-surface-950 text-sm font-semibold shadow-glow hover:shadow-glow-lg transition-all active:scale-95">
+        <button 
+          onClick={handleNewCourse}
+          className="flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-surface-950 text-sm font-semibold shadow-glow hover:shadow-glow-lg transition-all active:scale-95"
+        >
           <Plus size={18} />
           New Course
         </button>
@@ -112,10 +132,10 @@ export default function AdminCourses() {
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex items-center justify-end gap-1.5">
-                      <button className="p-2 rounded-lg text-surface-400 hover:text-primary-400 hover:bg-primary-500/10 transition-all" title="Edit">
+                      <button onClick={() => handleEdit(course.id)} className="p-2 rounded-lg text-surface-400 hover:text-primary-400 hover:bg-primary-500/10 transition-all" title="Edit">
                         <Edit3 size={15} />
                       </button>
-                      <button className="p-2 rounded-lg text-surface-400 hover:text-danger-400 hover:bg-danger-500/10 transition-all" title="Delete">
+                      <button onClick={() => handleDelete(course.id)} className="p-2 rounded-lg text-surface-400 hover:text-danger-400 hover:bg-danger-500/10 transition-all" title="Delete">
                         <Trash2 size={15} />
                       </button>
                     </div>
