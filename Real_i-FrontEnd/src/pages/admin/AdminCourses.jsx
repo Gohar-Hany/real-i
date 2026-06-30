@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FolderOpen, Plus, Edit3, Trash2, Users, BookOpen, Eye, EyeOff, Search } from 'lucide-react';
 import { COURSES } from '@/data/mockData';
-
 export default function AdminCourses() {
   const [search, setSearch] = useState('');
 
@@ -79,7 +79,9 @@ export default function AdminCourses() {
                         <BookOpen size={18} style={{ color: course.color }} />
                       </div>
                       <div>
-                        <p className="font-semibold text-surface-100">{course.title}</p>
+                        <Link to={`/courses/${course.id}`} className="font-semibold text-surface-100 hover:text-primary-400 transition-colors">
+                          {course.title}
+                        </Link>
                         <p className="text-xs text-surface-500">{course.lessonsCount} lessons · {course.totalHours}h</p>
                       </div>
                     </div>
