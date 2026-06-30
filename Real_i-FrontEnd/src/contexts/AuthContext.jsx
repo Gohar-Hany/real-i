@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { api } from '@/services/api';
 
 const AuthContext = createContext(null);
@@ -9,20 +9,25 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem('raaed_token');
+      const token = localStorage.getItem('reali_token');
       if (token) {
         try {
           const res = await api.get('/auth/me');
           setUser(res.user);
         } catch (err) {
           console.error("Token invalid", err);
-          localStorage.removeItem('raaed_token');
+          localStorage.removeItem('reali_token');
           setUser(null);
         }
       }
       setLoading(false);
     };
     initAuth();
+  }, []);
+
+  const logout = useCallback(() => {
+    setUser(null);
+    localStorage.removeItem('reali_token');
   }, []);
 
   // Activity Tracker for Auto-Logout (30 mins inactivity)
@@ -55,13 +60,13 @@ export function AuthProvider({ children }) {
       window.removeEventListener('scroll', resetTimer);
       window.removeEventListener('click', resetTimer);
     };
-  }, [user]);
+  }, [user, logout]);
 
   const login = async (email, password) => {
     try {
       const res = await api.post('/auth/login', { email, password });
       const { access_token, user: userData } = res;
-      localStorage.setItem('raaed_token', access_token);
+      localStorage.setItem('reali_token', access_token);
       setUser(userData);
       return { success: true, user: userData };
     } catch (err) {
@@ -73,17 +78,12 @@ export function AuthProvider({ children }) {
     try {
       const res = await api.post('/auth/register', { name, email, password, role });
       const { access_token, user: userData } = res;
-      localStorage.setItem('raaed_token', access_token);
+      localStorage.setItem('reali_token', access_token);
       setUser(userData);
       return { success: true, user: userData };
     } catch (err) {
       return { success: false, error: err.message || "Registration failed" };
     }
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('raaed_token');
   };
 
   return (

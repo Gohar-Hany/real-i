@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSidebar } from '@/contexts/SidebarContext';
-import { Menu, Bell, UserCircle } from 'lucide-react';
+import { Menu, Bell, UserCircle, X } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 
 export default function DashboardHeader() {
   const { user } = useAuth();
   const { toggle } = useSidebar();
   const location = useLocation();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const getPageTitle = () => {
     const path = location.pathname;
@@ -34,6 +36,7 @@ export default function DashboardHeader() {
         <button 
           onClick={toggle}
           className="p-2 text-surface-400 hover:text-surface-100 transition-colors lg:hidden rounded-lg bg-surface-800/50"
+          aria-label="Toggle sidebar"
         >
           <Menu size={20} />
         </button>
@@ -43,10 +46,36 @@ export default function DashboardHeader() {
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="p-2 text-surface-400 hover:text-primary-400 transition-colors relative">
-          <Bell size={20} />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary-500 rounded-full shadow-[0_0_8px_rgba(212,175,55,0.8)] animate-pulse"></span>
-        </button>
+        {/* Notification Bell */}
+        <div className="relative">
+          <button
+            onClick={() => setShowNotifications(!showNotifications)}
+            className="p-2 text-surface-400 hover:text-primary-400 transition-colors relative"
+            aria-label="Notifications"
+            aria-expanded={showNotifications}
+          >
+            <Bell size={20} />
+          </button>
+
+          {/* Notification Dropdown */}
+          {showNotifications && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setShowNotifications(false)} />
+              <div className="absolute right-0 top-full mt-2 w-72 bg-surface-900 border border-surface-800 rounded-xl shadow-modal z-50 animate-slide-down overflow-hidden">
+                <div className="flex items-center justify-between p-4 border-b border-surface-800/50">
+                  <h3 className="text-sm font-bold text-surface-200">Notifications</h3>
+                  <button onClick={() => setShowNotifications(false)} className="text-surface-500 hover:text-surface-300">
+                    <X size={14} />
+                  </button>
+                </div>
+                <div className="p-6 text-center">
+                  <Bell size={24} className="text-surface-600 mx-auto mb-2" />
+                  <p className="text-xs text-surface-500">No new notifications</p>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
         
         <div className="flex items-center gap-3 pl-4 border-l border-surface-800/50">
           <div className="hidden sm:block text-right">

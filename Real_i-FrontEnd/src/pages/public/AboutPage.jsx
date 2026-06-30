@@ -3,6 +3,8 @@ import { ArrowRight, CheckCircle2, Shield, BrainCircuit, Users } from 'lucide-re
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { Helmet } from 'react-helmet-async';
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutPage() {
@@ -28,7 +30,12 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-surface-950 pt-20">
+    <>
+      <Helmet>
+        <title>REAL.i | The Mission Archive</title>
+        <meta name="description" content="Discover the mission of REAL.i. Merging cognitive engineering with educational technology to build an AI-native learning ecosystem." />
+      </Helmet>
+      <div ref={containerRef} className="min-h-screen bg-surface-950 pt-20">
       {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-grid-pattern">
         {/* Decorative Grid/Scanline */}
@@ -159,6 +166,7 @@ export default function AboutPage() {
                   src={architect.img} 
                   alt={architect.name}
                   loading="lazy"
+                  onError={(e) => { e.target.onerror = null; e.target.src = '/logo.jpeg'; }}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 mix-blend-luminosity" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-surface-950 via-surface-950/20 to-transparent opacity-90"></div>
@@ -200,9 +208,10 @@ export default function AboutPage() {
               <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></div>
               Terminal Active _ Waiting for Input
             </div>
+            </div>
           </div>
-        </div>
       </section>
     </div>
+    </>
   );
 }

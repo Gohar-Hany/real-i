@@ -16,6 +16,8 @@ export default function StudentDashboard() {
   const { user } = useAuth();
   const toast = useToast();
   const [assignedQuizzes, setAssignedQuizzes] = useState([]);
+  const [projectsCount, setProjectsCount] = useState(0);
+  const [completedQuizzes, setCompletedQuizzes] = useState([]);
   const headerRef = useRef(null);
 
   useEffect(() => {
@@ -28,6 +30,7 @@ export default function StudentDashboard() {
 
           try {
             const res = await getCompletedQuizzes(user?.id);
+            setCompletedQuizzes(res.completed_tasks || []);
             completedTaskIds = res.completed_tasks ? res.completed_tasks.map(ct => ct.task_id) : [];
           } catch (e) {
             console.error('Failed to fetch completed quizzes', e);
@@ -47,6 +50,7 @@ export default function StudentDashboard() {
             } catch (e) { /* skip */ }
           }
           setAssignedQuizzes(allQuizzes);
+          setProjectsCount(list.length);
         }
       } catch (err) {
         console.error('Failed to load quizzes', err);
@@ -66,6 +70,11 @@ export default function StudentDashboard() {
 
   const pendingQuizzes = assignedQuizzes.filter(q => !q.isCompleted);
   const completedCount = assignedQuizzes.filter(q => q.isCompleted).length;
+
+  // Calculate Average Score from completed quizzes
+  const avgScore = completedQuizzes.length > 0 
+    ? Math.round(completedQuizzes.reduce((acc, curr) => acc + (curr.score || 0), 0) / completedQuizzes.length)
+    : 0;
 
   const quickActions = [
     {
@@ -120,10 +129,10 @@ export default function StudentDashboard() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { icon: BookOpen, label: 'Courses', value: '4', color: 'text-primary-400' },
+          { icon: BookOpen, label: 'Courses', value: String(projectsCount), color: 'text-primary-400' },
           { icon: Target, label: 'Quizzes Done', value: String(completedCount), color: 'text-emerald-400' },
-          { icon: BarChart3, label: 'Avg Score', value: '87%', color: 'text-amber-400' },
-          { icon: Zap, label: 'Study Streak', value: '5 days', color: 'text-purple-400' },
+          { icon: BarChart3, label: 'Avg Score', value: `${avgScore}%`, color: 'text-amber-400' },
+          { icon: Zap, label: 'Study Streak', value: '1 days', color: 'text-purple-400' },
         ].map((stat, i) => (
           <div key={i} className="dash-card glass-card rounded-2xl p-5 flex items-center gap-4">
             <div className="w-11 h-11 rounded-xl bg-surface-800/50 flex items-center justify-center shrink-0">

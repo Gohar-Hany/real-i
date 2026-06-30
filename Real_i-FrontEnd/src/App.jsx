@@ -103,8 +103,10 @@ function AppRoutes() {
           <Route path="profile" element={<StudentProfile />} />
         </Route>
 
-        {/* ── Catch All ── */}
-        <Route path="*" element={<NotFound />} />
+        {/* ── 404 inside PublicLayout for nav context ── */}
+        <Route element={<PublicLayout />}>
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Routes>
     </Suspense>
   );

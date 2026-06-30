@@ -10,7 +10,7 @@ class ApiClient {
     const url = `${this.baseUrl}${endpoint}`;
     
     const headers = { 'Content-Type': 'application/json', ...options.headers };
-    const token = localStorage.getItem('raaed_token');
+    const token = localStorage.getItem('reali_token');
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
@@ -37,7 +37,7 @@ class ApiClient {
       clearTimeout(timeoutId);
       
       if (response.status === 401) {
-        localStorage.removeItem('raaed_token');
+        localStorage.removeItem('reali_token');
         if (window.location.pathname !== '/login' && window.location.pathname !== '/') {
           window.location.href = '/login';
         }
@@ -103,6 +103,11 @@ class ApiClient {
       formData.append('file', file);
 
       xhr.open('POST', `${this.baseUrl}${endpoint}`);
+
+      const token = localStorage.getItem('reali_token');
+      if (token) {
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+      }
 
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable && onProgress) {

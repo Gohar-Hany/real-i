@@ -9,27 +9,33 @@ const footerLinks = {
     { label: 'Admin Panel', to: '/admin' },
   ],
   resources: [
-    { label: 'Documentation', to: '#' },
-    { label: 'API Reference', to: '#' },
-    { label: 'Community', to: '#' },
-    { label: 'Blog', to: '#' },
+    { label: 'Documentation', to: '#', comingSoon: true },
+    { label: 'API Reference', to: '#', comingSoon: true },
+    { label: 'Community', to: '#', comingSoon: true },
+    { label: 'Blog', to: '#', comingSoon: true },
   ],
   company: [
-    { label: 'About Us', to: '#' },
-    { label: 'Contact', to: '#' },
-    { label: 'Privacy Policy', to: '#' },
-    { label: 'Terms of Service', to: '#' },
+    { label: 'About Us', to: '/about' },
+    { label: 'Contact', to: '/contact' },
+    { label: 'Privacy Policy', to: '#', comingSoon: true },
+    { label: 'Terms of Service', to: '#', comingSoon: true },
   ],
 };
 
 const socialLinks = [
-  { icon: Globe, href: '#', label: 'Website' },
-  { icon: MessageCircle, href: '#', label: 'Community' },
-  { icon: Briefcase, href: '#', label: 'Careers' },
-  { icon: Mail, href: 'mailto:contact@real.ai', label: 'Email' },
+  { icon: Globe, href: 'https://real-i.ai', label: 'Website', external: true },
+  { icon: MessageCircle, href: 'https://discord.gg/reali', label: 'Community', external: true },
+  { icon: Briefcase, href: 'https://linkedin.com/company/reali', label: 'Careers', external: true },
+  { icon: Mail, href: 'mailto:contact@real.ai', label: 'Email', external: false },
 ];
 
 export default function Footer() {
+  const handleComingSoon = (e, link) => {
+    if (link.comingSoon) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <footer className="relative overflow-hidden">
       {/* Top divider */}
@@ -67,6 +73,8 @@ export default function Footer() {
                   <a
                     key={social.label}
                     href={social.href}
+                    target={social.external ? '_blank' : undefined}
+                    rel={social.external ? 'noopener noreferrer' : undefined}
                     aria-label={social.label}
                     className="w-10 h-10 rounded-xl glass-light flex items-center justify-center text-surface-400 hover:text-primary-400 hover:border-primary-500/30 transition-all duration-300 hover:shadow-glow-sm"
                   >
@@ -85,13 +93,19 @@ export default function Footer() {
                 <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.label}>
-                      <Link
-                        to={link.to}
-                        className="text-sm text-surface-400 hover:text-primary-400 transition-colors duration-300 flex items-center gap-1 group"
-                      >
-                        {link.label}
-                        <ExternalLink size={11} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </Link>
+                      {link.comingSoon ? (
+                        <span className="text-sm text-surface-500 cursor-default flex items-center gap-1 group">
+                          {link.label}
+                          <span className="text-[9px] ml-1 px-1.5 py-0.5 rounded bg-surface-800 text-surface-500 font-mono uppercase">Soon</span>
+                        </span>
+                      ) : (
+                        <Link
+                          to={link.to}
+                          className="text-sm text-surface-400 hover:text-primary-400 transition-colors duration-300 flex items-center gap-1 group"
+                        >
+                          {link.label}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>

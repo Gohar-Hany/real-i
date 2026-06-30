@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { COURSES } from '@/data/mockData';
 import { useAuth } from '@/contexts/AuthContext';
+import { Helmet } from 'react-helmet-async';
 
 export default function CourseDetailPage() {
   const { courseId } = useParams();
@@ -46,6 +47,11 @@ export default function CourseDetailPage() {
   const totalLessons = course.modules.reduce((acc, m) => acc + m.lessons.length, 0);
 
   return (
+    <>
+      <Helmet>
+        <title>REAL.i | {course.title}</title>
+        <meta name="description" content={course.description.slice(0, 160)} />
+      </Helmet>
     <div className="min-h-screen pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
@@ -67,11 +73,6 @@ export default function CourseDetailPage() {
                 style={{ background: `linear-gradient(135deg, ${course.color}30, ${course.color}08)` }}
               >
                 <div className="absolute inset-0 bg-grid-pattern opacity-30" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-28 h-28 rounded-3xl bg-surface-950/40 backdrop-blur-sm border border-white/10 flex items-center justify-center">
-                    <BookOpen size={48} className="text-primary-400" />
-                  </div>
-                </div>
                 {/* Play Button */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <button className="w-20 h-20 rounded-full gradient-primary flex items-center justify-center shadow-glow-lg hover:scale-110 transition-transform duration-300 active:scale-95">
@@ -208,7 +209,7 @@ export default function CourseDetailPage() {
               <button
                 onClick={() => {
                   if (!user) navigate('/login?register=true');
-                  else navigate('/student/courses');
+                  else navigate(`/student/courses`);
                 }}
                 className="w-full py-4 rounded-xl gradient-primary text-surface-950 font-bold text-base shadow-glow hover:shadow-glow-lg transition-all duration-300 active:scale-95 mb-4"
               >
@@ -257,5 +258,6 @@ export default function CourseDetailPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

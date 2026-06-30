@@ -3,19 +3,35 @@ import { Mail, MapPin, Globe, Terminal, Send, Loader2 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useToast } from '@/components/common/Toast';
+import { Helmet } from 'react-helmet-async';
+import { useAuth } from '@/contexts/AuthContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ContactPage() {
   const containerRef = useRef(null);
   const toast = useToast();
+  const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
     message: ''
   });
+
+  // Pre-fill from auth context
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.name || '',
+        email: user.email || '',
+      }));
+    }
+  }, [user]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -35,22 +51,40 @@ export default function ContactPage() {
     return () => ctx.revert();
   }, []);
 
+  const validate = () => {
+    const newErrors = {};
+    if (formData.name.trim().length < 2) newErrors.name = 'Name must be at least 2 characters';
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Invalid email format';
+    if (formData.subject.trim().length < 3) newErrors.subject = 'Subject must be at least 3 characters';
+    if (formData.message.trim().length < 10) newErrors.message = 'Message must be at least 10 characters';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setIsSubmitting(true);
     // Simulate network request
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsSubmitting(false);
+    setIsSubmitted(true);
     toast.success('Message transmitted successfully. Awaiting response.');
     setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) setErrors({ ...errors, [e.target.name]: null });
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-surface-950 pt-20">
+    <>
+      <Helmet>
+        <title>REAL.i | Establish Connection</title>
+        <meta name="description" content="Initialize a secure transmission to our cognitive engineering division." />
+      </Helmet>
+      <div ref={containerRef} className="min-h-screen bg-surface-950 pt-20">
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
@@ -146,55 +180,63 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Operator Name</label>
+                    <label htmlFor="contact-name" className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Operator Name</label>
                     <input
+                      id="contact-name"
                       type="text"
                       name="name"
                       required
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full bg-surface-900 border border-surface-800 rounded-lg px-4 py-3 text-surface-100 font-mono text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all"
+                      className={`w-full bg-surface-900 border ${errors.name ? 'border-danger-500' : 'border-surface-800'} rounded-lg px-4 py-3 text-surface-100 font-mono text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all`}
                       placeholder="John Doe"
                     />
+                    {errors.name && <p className="text-danger-500 text-xs font-mono">{errors.name}</p>}
                   </div>
                   <div className="space-y-2">
-                    <label className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Return Address</label>
+                    <label htmlFor="contact-email" className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Return Address</label>
                     <input
+                      id="contact-email"
                       type="email"
                       name="email"
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full bg-surface-900 border border-surface-800 rounded-lg px-4 py-3 text-surface-100 font-mono text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all"
+                      className={`w-full bg-surface-900 border ${errors.email ? 'border-danger-500' : 'border-surface-800'} rounded-lg px-4 py-3 text-surface-100 font-mono text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all`}
                       placeholder="sys@domain.com"
                     />
+                    {errors.email && <p className="text-danger-500 text-xs font-mono">{errors.email}</p>}
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Transmission Subject</label>
+                  <label htmlFor="contact-subject" className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Transmission Subject</label>
                   <input
+                    id="contact-subject"
                     type="text"
                     name="subject"
                     required
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full bg-surface-900 border border-surface-800 rounded-lg px-4 py-3 text-surface-100 font-mono text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all"
+                    className={`w-full bg-surface-900 border ${errors.subject ? 'border-danger-500' : 'border-surface-800'} rounded-lg px-4 py-3 text-surface-100 font-mono text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all`}
                     placeholder="Enter subject code"
                   />
+                  {errors.subject && <p className="text-danger-500 text-xs font-mono">{errors.subject}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Payload</label>
+                  <label htmlFor="contact-message" className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Payload</label>
                   <textarea
+                    id="contact-message"
                     name="message"
                     required
                     rows="6"
                     value={formData.message}
                     onChange={handleChange}
-                    className="w-full bg-surface-900 border border-surface-800 rounded-lg px-4 py-3 text-surface-100 font-mono text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all resize-none"
+                    className={`w-full bg-surface-900 border ${errors.message ? 'border-danger-500' : 'border-surface-800'} rounded-lg px-4 py-3 text-surface-100 font-mono text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all resize-none`}
                     placeholder="Enter your message here..."
                   ></textarea>
+                  {errors.message && <p className="text-danger-500 text-xs font-mono">{errors.message}</p>}
                 </div>
 
                 <button
@@ -221,5 +263,6 @@ export default function ContactPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CourseCard from '@/components/features/courses/CourseCard';
@@ -45,7 +46,12 @@ export default function CoursesPage() {
   }, [filtered]);
 
   return (
-    <div className="min-h-screen pt-28 pb-20">
+    <>
+      <Helmet>
+        <title>REAL.i | Advanced Neural Modules</title>
+        <meta name="description" content="Explore our catalog of advanced cognitive modules and elevate your technical prowess." />
+      </Helmet>
+      <div className="min-h-screen bg-surface-950 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div ref={headerRef} className="mb-12">
@@ -138,5 +144,6 @@ export default function CoursesPage() {
         )}
       </div>
     </div>
+    </>
   );
 }

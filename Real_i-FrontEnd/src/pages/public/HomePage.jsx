@@ -155,7 +155,12 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="overflow-hidden">
+    <>
+      <Helmet>
+        <title>REAL.i | Advanced Cognitive Platform</title>
+        <meta name="description" content="Enter the next generation of intelligent learning with REAL.i. Experience AI-driven education in a premium cyber-industrial environment." />
+      </Helmet>
+      <div className="min-h-screen bg-surface-950 overflow-hidden pt-20">
       {/* ═══════════════════════════════════════════════════════
           HERO SECTION
           ═══════════════════════════════════════════════════════ */}
@@ -578,4 +583,9 @@ export default function HomePage() {
         {/* Tagline */}
         <p className="text-center mt-12 text-sm text-surface-600 tracking-[0.15em] uppercase font-heading">
           Real Intelligence isn't predicted. It's built.
-   
+        </p>
+      </section>
+    </div>
+    </>
+  );
+}

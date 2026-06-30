@@ -65,8 +65,7 @@ export default function StudentChat() {
         const list = await getProjects();
         setProjects(list);
         if (list.length > 0) {
-          const hasTest = list.some(p => p.project_id === 'testproject1');
-          const selectedId = hasTest ? 'testproject1' : list[0].project_id;
+          const selectedId = list[0].project_id;
           setProjectId(selectedId);
           fetchGuidance(selectedId);
         }

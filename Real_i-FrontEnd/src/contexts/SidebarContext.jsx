@@ -4,12 +4,12 @@ const SidebarContext = createContext(null);
 
 export function SidebarProvider({ children }) {
   const [collapsed, setCollapsed] = useState(() => {
-    const stored = localStorage.getItem('raaed_sidebar_collapsed');
+    const stored = localStorage.getItem('reali_sidebar_collapsed');
     return stored === 'true';
   });
 
   useEffect(() => {
-    localStorage.setItem('raaed_sidebar_collapsed', String(collapsed));
+    localStorage.setItem('reali_sidebar_collapsed', String(collapsed));
   }, [collapsed]);
 
   const toggle = () => setCollapsed(c => !c);

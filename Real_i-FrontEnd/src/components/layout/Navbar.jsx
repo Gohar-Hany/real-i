@@ -56,7 +56,7 @@ export default function Navbar() {
             <div className="w-10 h-10 overflow-hidden group-hover:shadow-glow transition-shadow duration-300 flex items-center justify-center">
               <Brain size={28} className="text-primary-500" />
             </div>
-            <div className="hidden sm:block">
+            <div>
               <h1 className="text-xl font-bold text-primary-500 font-heading tracking-[0.2em] leading-none uppercase">
                 REAL.i
               </h1>
@@ -112,6 +112,8 @@ export default function Navbar() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 rounded-xl text-surface-400 hover:text-surface-100 transition-colors"
+            aria-expanded={mobileOpen}
+            aria-label="Toggle navigation menu"
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
