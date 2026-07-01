@@ -129,15 +129,14 @@ export default function CoursesPage() {
                     )}
                   </div>
 
-                  {/* Level Filter */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 overflow-hidden">
                     <SlidersHorizontal size={16} className="text-surface-500 shrink-0" />
-                    <div className="flex gap-1.5">
+                    <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-2 w-full">
                       {levels.map((level) => (
                         <button
                           key={level}
                           onClick={() => setActiveLevel(level)}
-                          className={`px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 ${
+                          className={`px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 shrink-0 ${
                             activeLevel === level
                               ? 'bg-primary-500 text-surface-950'
                               : 'bg-surface-900/80 text-surface-400 border border-surface-700/50 hover:text-surface-200 hover:border-surface-600/50'

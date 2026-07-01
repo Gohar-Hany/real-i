@@ -485,15 +485,15 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[600px]">
             {/* Admin Agent (Large Span) */}
-            <div className="lg:col-span-8 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[300px] sm:min-h-[400px]" style={{opacity: 1}}>
-              <div className="absolute inset-0 bg-surface-900/60 group-hover:bg-transparent transition-colors duration-500 z-10" />
+            <div className="lg:col-span-8 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[450px] lg:min-h-0 h-full" style={{opacity: 1}}>
+              <div className="absolute inset-0 bg-surface-900/60 group-hover:bg-surface-900/20 transition-colors duration-500 z-10" />
               <img 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzgzOR4u6w0Sxdjjv_NUxG9UiXJeey13upASnvrEsQCuAl6Kg8xOwZvbxZUBS2PHK5678KNwKRprWsg89vmVXem1ONo9vfKHjqBEorNDL3620By2CQMNW73rxYJGMRNJVkAZH8Qfj56iBvGo9i_iFZfgWQ3OBzIvu-J5p_3M-r5c9rXpTzdNK8tiOH-6-vV4fCVdZKmkvvOl4EQWCkc37nEzh7Ad1vK7yV_q0W-xuG_GaNTYOnKvp-5aLS2qYeauwbLGwcgGoE1AA"
                 alt="Admin Agent"
                 loading="lazy"
                 width="800"
                 height="600"
-                className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-80 transition-opacity duration-700 grayscale group-hover:grayscale-0 mix-blend-luminosity"
+                className="absolute inset-0 w-full h-full object-cover object-top opacity-50 group-hover:opacity-100 transition-opacity duration-700 grayscale group-hover:grayscale-0 mix-blend-luminosity"
               />
               <div className="absolute bottom-0 left-0 p-8 md:p-12 z-20 w-full bg-gradient-to-t from-surface-950 via-surface-950/80 to-transparent">
                 <div className="flex items-center gap-3 mb-3">
@@ -513,18 +513,18 @@ export default function HomePage() {
             </div>
 
             {/* Side Column for smaller agents */}
-            <div className="lg:col-span-4 flex flex-col gap-6">
+            <div className="lg:col-span-4 flex flex-col gap-6 h-full">
               {/* Student Agent */}
-              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[250px]" style={{ opacity: 1 }}>
+              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[350px] lg:min-h-0" style={{ opacity: 1 }}>
                 <img 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJdTkDIHsoWoKj6cpNMZItpvLtHcuCoUodDXzCBcTBdB-hjSufY8s5xO85OGu42BGg0mtFW_68HomCxLvo4sk5QeRWX00ew8q3hNaWnJjwd0-DjtG3l0wdvYHvu4v9k3un6Auj-dMlGfMcJueFmtr50h7Or2-3jnejoX2KC-iMNebGdSQcRsdajmDLcfYy3A1Y4mMYLWv7rCgkP0fAgL35QX0jpAOvjEphfknW3HF_CiBB7z-LRaHbOse5fDFMuqc_FzSbKCu8Ads"
                   alt="Student Agent"
                   loading="lazy"
                   width="400"
                   height="300"
-                  className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity duration-500 mix-blend-overlay"
+                  className="absolute inset-0 w-full h-full object-cover object-center opacity-40 group-hover:opacity-70 transition-opacity duration-500 mix-blend-overlay"
                 />
-                <div className="absolute inset-0 p-8 flex flex-col justify-end z-20 bg-gradient-to-t from-surface-950/90 to-transparent">
+                <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end z-20 bg-gradient-to-t from-surface-950/95 via-surface-950/60 to-transparent">
                   <div className="flex items-center gap-3 mb-2">
                     <span className="w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
                     <span className="text-xs font-mono text-surface-400 uppercase tracking-widest">Class: Peer</span>
@@ -539,16 +539,16 @@ export default function HomePage() {
               </div>
 
               {/* Friend Agent */}
-              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[250px]" style={{ opacity: 1 }}>
+              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[350px] lg:min-h-0" style={{ opacity: 1 }}>
                 <img 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvn5zETFFGGfNSBUv-cKH2TnSBa8kojciUpRKXhlORLR7u4_dz7lyMh9b4p8AL_ndylREyTOXpiUDZDOGX746zoTkdc1W3lqTNoi0hHyhXf6YxmBNQyWOuC6pzLcbngbfj_aoLClIXJu43eWsATj4mPne4p3T5gj96DWnnX-j_Uq0eXjQ5-rfyqXtlvtgJAVBl5_czDGBwyFTd3EJWidcdy8_STWvjDTup2I_eKlTgGf9nqR8uZYun2bwUb1eNlYW58TepPXvlYT0"
                   alt="Friend Agent"
                   loading="lazy"
                   width="400"
                   height="300"
-                  className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity duration-500 mix-blend-overlay"
+                  className="absolute inset-0 w-full h-full object-cover object-center opacity-40 group-hover:opacity-70 transition-opacity duration-500 mix-blend-overlay"
                 />
-                <div className="absolute inset-0 p-8 flex flex-col justify-end z-20 bg-gradient-to-t from-surface-950/90 to-transparent">
+                <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end z-20 bg-gradient-to-t from-surface-950/95 via-surface-950/60 to-transparent">
                   <div className="flex items-center gap-3 mb-2">
                     <span className="w-2 h-2 bg-primary-500 rounded-full shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
                     <span className="text-xs font-mono text-surface-400 uppercase tracking-widest">Class: Support</span>
