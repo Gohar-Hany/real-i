@@ -548,30 +548,32 @@ export default function HomePage() {
           ═══════════════════════════════════════════════════════ */}
       <section ref={ctaRef} className="py-24 relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl overflow-hidden">
-            {/* Background */}
-            <div className="absolute inset-0 gradient-primary opacity-90" />
-            <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+          <div className="relative rounded-3xl overflow-hidden glass border border-primary-500/20 shadow-glow-lg group">
+            {/* Animated Glow Background */}
+            <div className="absolute inset-0 bg-surface-900/60" />
+            <div className="absolute inset-0 bg-grid-pattern opacity-30" />
+            <div className="absolute -top-1/2 -left-1/2 w-[150%] h-[150%] bg-primary-500/5 blur-[120px] rounded-full group-hover:bg-primary-500/10 transition-colors duration-700" />
+            <div className="absolute -bottom-1/2 -right-1/2 w-[150%] h-[150%] bg-primary-500/5 blur-[120px] rounded-full group-hover:bg-primary-500/10 transition-colors duration-700" />
             
             <div className="relative z-10 text-center px-8 py-16 sm:py-20">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-950 mb-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 mb-4 tracking-tight">
                 Ready to Build Real Intelligence?
               </h2>
-              <p className="text-surface-950/70 text-lg max-w-xl mx-auto mb-8">
+              <p className="text-surface-300 text-lg max-w-xl mx-auto mb-8">
                 Join thousands of students already learning smarter with AI. 
                 Start your journey today — completely free.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link
                   to="/login?register=true"
-                  className="flex items-center gap-2 px-8 py-4 rounded-full bg-surface-950 text-primary-400 font-bold text-base hover:bg-surface-900 transition-all duration-300 active:scale-95 shadow-lg"
+                  className="flex items-center gap-2 px-8 py-4 rounded-full gradient-primary text-surface-950 font-bold text-base hover-lift hover:shadow-glow"
                 >
                   Get Started Free
                   <ArrowRight size={20} />
                 </Link>
                 <Link
                   to="/courses"
-                  className="flex items-center gap-2 px-8 py-4 rounded-full border-2 border-surface-950/30 text-surface-950 font-semibold text-base hover:bg-surface-950/10 transition-all duration-300"
+                  className="flex items-center gap-2 px-8 py-4 rounded-full border border-primary-500/30 text-primary-400 font-semibold text-base hover:bg-primary-500/10 hover:border-primary-500 transition-all duration-300"
                 >
                   Browse Courses
                 </Link>

@@ -16,7 +16,7 @@ const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-surface-950">
     <div className="text-center">
       <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-glow animate-gold-glow mx-auto mb-4">
-        <img src="/logo.jpeg" alt="REAL.i" loading="lazy" width="56" height="56" className="w-full h-full object-cover" />
+        <img src="/Logo-removebg-preview.png" alt="REAL.i" loading="lazy" width="56" height="56" className="w-full h-full object-contain" />
       </div>
       <p className="text-xs text-surface-500 tracking-[0.15em] uppercase font-heading">Loading...</p>
     </div>

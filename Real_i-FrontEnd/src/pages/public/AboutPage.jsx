@@ -166,7 +166,7 @@ export default function AboutPage() {
                   src={architect.img} 
                   alt={architect.name}
                   loading="lazy"
-                  onError={(e) => { e.target.onerror = null; e.target.src = '/logo.jpeg'; }}
+                  onError={(e) => { e.target.onerror = null; e.target.src = '/Logo-removebg-preview.png'; }}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 mix-blend-luminosity" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-surface-950 via-surface-950/20 to-transparent opacity-90"></div>

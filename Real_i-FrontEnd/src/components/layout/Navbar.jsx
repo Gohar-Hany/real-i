@@ -54,7 +54,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" ref={logoRef} className="flex items-center gap-3 group">
             <div className="w-10 h-10 overflow-hidden group-hover:shadow-glow transition-shadow duration-300 flex items-center justify-center">
-              <Brain size={28} className="text-primary-500" />
+              <img src="/Logo-removebg-preview.png" alt="REAL.i Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-primary-500 font-heading tracking-[0.2em] leading-none uppercase">
@@ -69,13 +69,19 @@ export default function Navbar() {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`relative font-mono text-xs uppercase tracking-widest transition-all duration-300 transform active:scale-95 ${
+                className={`relative font-mono text-xs uppercase tracking-widest transition-all duration-300 transform active:scale-95 group ${
                   isActive(link.path)
-                    ? 'text-primary-500 font-bold border-t-2 border-primary-500 pt-1 -mt-1'
+                    ? 'text-primary-500 font-bold'
                     : 'text-surface-400 hover:text-primary-400'
                 }`}
               >
                 {link.label}
+                {/* Non-layout-shifting underline */}
+                <span 
+                  className={`absolute -bottom-2 left-0 h-[2px] bg-primary-500 transition-all duration-300 ease-out ${
+                    isActive(link.path) ? 'w-full' : 'w-0 group-hover:w-1/2'
+                  }`} 
+                />
               </Link>
             ))}
           </div>
