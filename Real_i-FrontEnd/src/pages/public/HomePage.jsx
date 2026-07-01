@@ -57,28 +57,52 @@ export default function HomePage() {
       };
       document.addEventListener("mousemove", window.handleMouseMove);
 
-      // ── Features Section ──
-      ScrollTrigger.batch('.feature-card', {
-        onEnter: (elements) => {
-          gsap.from(elements, {
-            opacity: 0, y: 50, duration: 0.7,
-            stagger: 0.15, ease: 'power2.out',
-          });
-        },
-        start: 'top 85%',
+      // ── Features Section — Cinematic Staggered Reveal ──
+      ScrollTrigger.create({
+        trigger: featuresRef.current,
+        start: 'top 80%',
         once: true,
+        onEnter: () => {
+          const tl = gsap.timeline();
+          // Header slide-in
+          tl.from('.features-header', {
+            opacity: 0, x: -60, duration: 0.8, ease: 'power3.out',
+          })
+          // Cards stagger from bottom with blur
+          .from('.feature-card', {
+            opacity: 0, y: 80, scale: 0.9, filter: 'blur(6px)',
+            duration: 1, stagger: 0.15, ease: 'expo.out',
+          }, '-=0.4')
+          // SVG ring animation
+          .to('.feature-ring', {
+            strokeDashoffset: 44,
+            duration: 1.2, stagger: 0.1, ease: 'power2.out',
+          }, '-=0.6');
+        },
       });
 
-      // ── How It Works ──
-      ScrollTrigger.batch('.how-step', {
-        onEnter: (elements) => {
-          gsap.from(elements, {
-            opacity: 0, x: -40, duration: 0.6,
-            stagger: 0.2, ease: 'power2.out',
-          });
-        },
-        start: 'top 85%',
+      // ── How It Works — Timeline Reveal ──
+      ScrollTrigger.create({
+        trigger: howItWorksRef.current,
+        start: 'top 80%',
         once: true,
+        onEnter: () => {
+          const tl = gsap.timeline();
+          // Header
+          tl.from('.hiw-header', {
+            opacity: 0, x: -60, duration: 0.8, ease: 'power3.out',
+          })
+          // Steps stagger in
+          .from('.how-step', {
+            opacity: 0, y: 60, scale: 0.95, filter: 'blur(4px)',
+            duration: 0.8, stagger: 0.2, ease: 'expo.out',
+          }, '-=0.3')
+          // Timeline progress line grows
+          .to('.hiw-progress-line', {
+            width: '100%',
+            duration: 1.5, ease: 'power2.inOut',
+          }, '-=1');
+        },
       });
 
       // ── Stats Counter Animation ──
@@ -281,46 +305,73 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          FEATURES SECTION
+          FEATURES SECTION — Premium Cyber-Industrial Design
           ═══════════════════════════════════════════════════════ */}
-      <section ref={featuresRef} className="py-24 relative">
-        <div className="absolute inset-0 bg-dot-pattern opacity-20" />
+      <section ref={featuresRef} className="py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary-500/5 blur-[150px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-primary-500/3 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-primary-500/30 to-transparent animate-[scan_4s_ease-in-out_infinite]" style={{top: '20%'}} />
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Section Header */}
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <div className="section-title">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-light text-xs font-medium text-primary-400 mb-4">
-                <Sparkles size={12} />
-                Why REAL.i
-              </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-100 mb-4">
-                Learn Smarter, <span className="text-gradient">Not Harder</span>
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-20">
+            <div className="max-w-2xl features-header">
+              <div className="inline-flex items-center gap-3 px-5 py-2 mb-6 border border-primary-500/30 bg-surface-950/80 backdrop-blur-sm">
+                <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.6)]" />
+                <span className="font-mono text-[11px] text-primary-500 uppercase tracking-[0.3em]">SYS.CAPABILITIES // ACTIVE</span>
+              </div>
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-100 mb-6 font-heading uppercase tracking-wide leading-[1.1]">
+                Learn Smarter, <br className="hidden sm:block" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 drop-shadow-[0_0_20px_rgba(212,175,55,0.3)]">Not Harder</span>
               </h2>
-              <p className="text-surface-400 text-lg">
+              <p className="text-surface-400 text-lg leading-relaxed">
                 Our platform combines cutting-edge AI with premium educational content 
                 to create an unmatched learning experience.
               </p>
             </div>
+            <div className="hidden lg:flex items-end gap-8">
+              <div className="text-right">
+                <p className="font-mono text-[10px] text-surface-600 uppercase tracking-widest mb-1">Modules</p>
+                <p className="font-heading text-5xl font-bold text-surface-800">04</p>
+              </div>
+              <div className="w-px h-16 bg-surface-800" />
+              <div className="text-right">
+                <p className="font-mono text-[10px] text-surface-600 uppercase tracking-widest mb-1">Status</p>
+                <p className="font-mono text-sm text-primary-500 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" /> ALL ONLINE
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* Features Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-surface-800/30 border border-surface-800/50">
             {FEATURES.map((feature, i) => {
               const Icon = ICON_MAP[feature.icon] || Brain;
+              const moduleIds = ['AX-01', 'BX-02', 'CX-03', 'DX-04'];
               return (
-                <div
-                  key={i}
-                  className="feature-card group glass-card rounded-2xl p-7 hover:border-primary-500/20 transition-all duration-500 hover-lift"
-                >
-                  <div className="w-14 h-14 rounded-2xl bg-primary-500/10 border border-primary-500/10 flex items-center justify-center mb-5 group-hover:bg-primary-500/20 group-hover:shadow-glow-sm transition-all duration-500">
-                    <Icon size={26} className="text-primary-400 group-hover:scale-110 transition-transform duration-300" />
+                <div key={i} className="feature-card group relative bg-surface-950 p-8 lg:p-10 overflow-hidden cursor-pointer transition-all duration-700 hover:bg-surface-900/50">
+                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
+                  <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
+                  <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
+                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
+                  <div className="absolute top-4 right-5 font-mono text-[9px] text-surface-700 group-hover:text-primary-500/60 transition-colors duration-500 tracking-widest">MOD.{moduleIds[i]}</div>
+                  <div className="absolute -bottom-6 -right-4 font-heading text-[120px] font-bold text-surface-900/50 group-hover:text-primary-500/8 transition-colors duration-700 leading-none select-none pointer-events-none">0{i + 1}</div>
+
+                  <div className="relative w-16 h-16 mb-8">
+                    <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 64 64">
+                      <circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" strokeWidth="1" className="text-surface-800" />
+                      <circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="176" strokeDashoffset="176" className="text-primary-500 feature-ring" style={{transition: 'stroke-dashoffset 1s ease-out'}} />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Icon size={26} className="text-surface-500 group-hover:text-primary-400 transition-all duration-500 group-hover:drop-shadow-[0_0_12px_rgba(212,175,55,0.5)]" strokeWidth={1.5} />
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold text-surface-100 mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm text-surface-400 leading-relaxed">
-                    {feature.description}
-                  </p>
+
+                  <h3 className="text-base font-bold text-surface-200 group-hover:text-surface-50 mb-3 font-heading uppercase tracking-wider transition-colors duration-500">{feature.title}</h3>
+                  <p className="text-sm text-surface-500 group-hover:text-surface-400 leading-relaxed transition-colors duration-500">{feature.description}</p>
+                  <div className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-primary-500 via-primary-400 to-transparent transition-all duration-700 ease-out" />
                 </div>
               );
             })}
@@ -357,42 +408,69 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          HOW IT WORKS SECTION
+          HOW IT WORKS — Cyber Timeline Design
           ═══════════════════════════════════════════════════════ */}
-      <section ref={howItWorksRef} className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16 section-title">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-light text-xs font-medium text-primary-400 mb-4">
-              <Target size={12} />
-              How It Works
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-100 mb-4">
-              Start in <span className="text-gradient">4 Simple Steps</span>
+      <section ref={howItWorksRef} className="py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-dot-pattern opacity-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-500/3 blur-[200px] rounded-full pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-2xl mb-20 hiw-header">
+            <div className="inline-flex items-center gap-3 px-5 py-2 mb-6 border border-primary-500/30 bg-surface-950/80 backdrop-blur-sm">
+              <span className="font-mono text-[11px] text-primary-500 uppercase tracking-[0.3em]">&gt;_ INIT.PROTOCOL</span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-100 mb-6 font-heading uppercase tracking-wide leading-[1.1]">
+              Start in <br className="hidden sm:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600">4 Steps</span>
             </h2>
-            <p className="text-surface-400 text-lg">
+            <p className="text-surface-400 text-lg leading-relaxed">
               From signup to mastery — our streamlined process gets you learning in minutes.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {HOW_IT_WORKS.map((step, i) => (
-              <div key={i} className="how-step relative group">
-                <div className="glass-card rounded-2xl p-7 h-full hover:border-primary-500/15 transition-all duration-500 hover-lift">
-                  {/* Step Number */}
-                  <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center text-surface-950 font-extrabold text-lg mb-5 shadow-glow-sm group-hover:shadow-glow transition-shadow duration-300">
-                    {step.step}
+          <div className="relative">
+            {/* Central Timeline Line (desktop) */}
+            <div className="hidden lg:block absolute top-[60px] left-0 right-0 h-[1px] z-0">
+              <div className="w-full h-full bg-surface-800" />
+              <div className="hiw-progress-line absolute top-0 left-0 h-full w-0 bg-gradient-to-r from-primary-500 via-primary-400 to-primary-500" />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 relative z-10">
+              {HOW_IT_WORKS.map((step, i) => (
+                <div key={i} className="how-step group relative">
+                  {/* Step Number Node */}
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="relative">
+                      <div className="absolute inset-0 rounded-full bg-primary-500/20 scale-0 group-hover:scale-150 transition-transform duration-700 blur-md" />
+                      <div className="relative w-[72px] h-[72px] border-2 border-surface-700 group-hover:border-primary-500 transition-all duration-500 rounded-full flex items-center justify-center bg-surface-950 z-10">
+                        <span className="font-heading text-2xl font-bold text-surface-600 group-hover:text-primary-500 transition-colors duration-500">
+                          0{step.step}
+                        </span>
+                      </div>
+                      <div className="hidden lg:block absolute -bottom-[21px] left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-surface-800 border-2 border-surface-700 group-hover:bg-primary-500 group-hover:border-primary-500 group-hover:shadow-[0_0_12px_rgba(212,175,55,0.6)] transition-all duration-500 z-20" />
+                    </div>
+                    <div className="lg:hidden flex-1 h-[1px] bg-surface-800 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-primary-500/50 -translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold text-surface-100 mb-2">{step.title}</h3>
-                  <p className="text-sm text-surface-400 leading-relaxed">{step.description}</p>
+
+                  {/* Card Content */}
+                  <div className="relative bg-surface-950 border border-surface-800/50 group-hover:border-primary-500/30 p-7 transition-all duration-500 overflow-hidden">
+                    <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/50 transition-all duration-500" />
+                    <div className="absolute inset-0 bg-primary-500/0 group-hover:bg-primary-500/3 transition-all duration-700" />
+                    <div className="relative z-10">
+                      <h3 className="text-lg font-bold text-surface-200 group-hover:text-surface-50 mb-3 font-heading uppercase tracking-wider transition-colors duration-500">
+                        {step.title}
+                      </h3>
+                      <p className="text-sm text-surface-500 group-hover:text-surface-400 leading-relaxed transition-colors duration-500">
+                        {step.description}
+                      </p>
+                    </div>
+                    <div className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-primary-500 to-transparent transition-all duration-700 ease-out" />
+                  </div>
                 </div>
-                {/* Connector Arrow (hidden on last + mobile) */}
-                {i < HOW_IT_WORKS.length - 1 && (
-                  <div className="hidden lg:flex absolute top-1/2 -right-3 -translate-y-1/2 z-10">
-                    <ChevronRight size={20} className="text-primary-500/40" />
-                  </div>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
