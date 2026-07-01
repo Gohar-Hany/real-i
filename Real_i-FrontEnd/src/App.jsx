@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
@@ -6,22 +6,11 @@ import { SidebarProvider } from '@/contexts/SidebarContext';
 import { ToastProvider } from '@/components/common/Toast';
 import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+import PageLoader from '@/components/common/PageLoader';
 
 // Layouts
 import PublicLayout from '@/layouts/PublicLayout';
 import DashboardLayout from '@/layouts/DashboardLayout';
-
-// Fallback Loading Component
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-surface-950">
-    <div className="text-center">
-      <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-glow animate-gold-glow mx-auto mb-4">
-        <img src="/Logo-removebg-preview.png" alt="REAL.i" loading="lazy" width="56" height="56" className="w-full h-full object-contain" />
-      </div>
-      <p className="text-xs text-surface-500 tracking-[0.15em] uppercase font-heading">Loading...</p>
-    </div>
-  </div>
-);
 
 // Lazy Loaded Pages
 const HomePage = lazy(() => import('@/pages/public/HomePage'));
@@ -113,6 +102,14 @@ function AppRoutes() {
 }
 
 export default function App() {
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  const handleLoaderComplete = () => {
+    setFadeOut(true);
+    setTimeout(() => setInitialLoading(false), 500); // Wait for fade out transition
+  };
+
   return (
     <HelmetProvider>
       <ErrorBoundary>
@@ -121,6 +118,11 @@ export default function App() {
             <SidebarProvider>
               <AuthProvider>
                 <ToastProvider>
+                  {initialLoading && (
+                    <div className={`fixed inset-0 z-[9999] transition-opacity duration-500 ${fadeOut ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                      <PageLoader onComplete={handleLoaderComplete} />
+                    </div>
+                  )}
                   <AppRoutes />
                 </ToastProvider>
               </AuthProvider>
