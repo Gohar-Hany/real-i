@@ -23,13 +23,26 @@ export default function CourseCard({ course, index = 0 }) {
       className="course-card group block glass-card overflow-hidden hover:border-primary-500/20 transition-all duration-500 hover-lift"
     >
       {/* Thumbnail */}
-      <div className="relative h-48 overflow-hidden" style={{ background: `linear-gradient(135deg, ${course.color}22, ${course.color}08)` }}>
-        <div className="absolute inset-0 bg-grid-pattern opacity-30" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-20 h-20 bg-surface-950/50 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-            <BookOpen size={32} className="text-primary-400" />
+      <div className="relative h-48 overflow-hidden bg-surface-900">
+        {course.thumbnail ? (
+          <img 
+            src={course.thumbnail} 
+            alt={course.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100"
+          />
+        ) : (
+          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${course.color}22, ${course.color}08)` }}>
+            <div className="absolute inset-0 bg-grid-pattern opacity-30" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-20 h-20 bg-surface-950/50 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                <BookOpen size={32} className="text-primary-400" />
+              </div>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-surface-950 via-surface-950/20 to-surface-950/40 opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
         {/* Play overlay */}
         <div className="absolute inset-0 bg-surface-950/0 group-hover:bg-surface-950/30 transition-all duration-500 flex items-center justify-center">
           <div className="w-14 h-14 rounded-full bg-primary-500/90 flex items-center justify-center opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-500 shadow-glow">

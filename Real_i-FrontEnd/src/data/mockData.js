@@ -20,7 +20,7 @@ export const COURSES = [
     price: 0,
     badge: 'Popular',
     tags: ['AI', 'Machine Learning', 'Neural Networks'],
-    thumbnail: null,
+    thumbnail: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80',
     color: '#D4AF37',
     modules: [
       {
@@ -72,7 +72,7 @@ export const COURSES = [
     price: 0,
     badge: 'Top Rated',
     tags: ['Deep Learning', 'CNN', 'RNN', 'Transformers'],
-    thumbnail: null,
+    thumbnail: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80',
     color: '#B8860B',
     modules: [
       {
@@ -112,7 +112,7 @@ export const COURSES = [
     price: 0,
     badge: 'New',
     tags: ['NLP', 'Transformers', 'BERT', 'GPT'],
-    thumbnail: null,
+    thumbnail: 'https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=800&q=80',
     color: '#8B6914',
     modules: [
       {
@@ -143,7 +143,7 @@ export const COURSES = [
     price: 0,
     badge: 'Bestseller',
     tags: ['Python', 'Pandas', 'Visualization', 'Statistics'],
-    thumbnail: null,
+    thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
     color: '#D4AF37',
     modules: [
       {
@@ -174,7 +174,7 @@ export const COURSES = [
     price: 0,
     badge: 'Advanced',
     tags: ['OpenCV', 'YOLO', 'Segmentation', 'Detection'],
-    thumbnail: null,
+    thumbnail: 'https://images.unsplash.com/photo-1561557944-6e7860d1a7eb?auto=format&fit=crop&w=800&q=80',
     color: '#B8860B',
     modules: [
       {
@@ -204,7 +204,7 @@ export const COURSES = [
     price: 0,
     badge: 'Hot',
     tags: ['RAG', 'Vector DB', 'LangChain', 'Embeddings'],
-    thumbnail: null,
+    thumbnail: 'https://images.unsplash.com/photo-1633412802994-5c058f151b66?auto=format&fit=crop&w=800&q=80',
     color: '#D4AF37',
     modules: [
       {
