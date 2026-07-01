@@ -18,8 +18,8 @@ const AboutPage = lazy(() => import('@/pages/public/AboutPage'));
 const ContactPage = lazy(() => import('@/pages/public/ContactPage'));
 const CoursesPage = lazy(() => import('@/pages/public/CoursesPage'));
 const CourseDetailPage = lazy(() => import('@/pages/public/CourseDetailPage'));
-const LoginPage = lazy(() => import('@/pages/LoginPage'));
-const NotFound = lazy(() => import('@/pages/NotFound'));
+const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
+const NotFound = lazy(() => import('@/pages/errors/NotFound'));
 
 // Admin Pages
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
