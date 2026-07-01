@@ -20,13 +20,13 @@ export default function CourseCard({ course, index = 0 }) {
   return (
     <Link
       to={`/courses/${course.id}`}
-      className="course-card group block glass-card rounded-2xl overflow-hidden hover:border-primary-500/20 transition-all duration-500 hover-lift"
+      className="course-card group block glass-card overflow-hidden hover:border-primary-500/20 transition-all duration-500 hover-lift"
     >
       {/* Thumbnail */}
       <div className="relative h-48 overflow-hidden" style={{ background: `linear-gradient(135deg, ${course.color}22, ${course.color}08)` }}>
         <div className="absolute inset-0 bg-grid-pattern opacity-30" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-20 h-20 rounded-2xl bg-surface-950/40 backdrop-blur-sm border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+          <div className="w-20 h-20 bg-surface-950/50 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
             <BookOpen size={32} className="text-primary-400" />
           </div>
         </div>
@@ -38,22 +38,25 @@ export default function CourseCard({ course, index = 0 }) {
         </div>
         {/* Badge */}
         {course.badge && (
-          <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${BADGE_COLORS[course.badge] || BADGE_COLORS.Popular}`}>
+          <div className={`absolute top-3 left-3 px-3 py-1 text-[10px] font-bold font-mono uppercase tracking-wider border ${BADGE_COLORS[course.badge] || BADGE_COLORS.Popular}`}>
             {course.badge}
           </div>
         )}
         {/* Level */}
-        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-surface-950/60 backdrop-blur-sm">
-          <span className={`text-[10px] font-semibold ${LEVEL_COLORS[course.level] || 'text-surface-300'}`}>
+        <div className="absolute top-3 right-3 px-2.5 py-1 bg-surface-950/70">
+          <span className={`text-[10px] font-mono font-semibold ${LEVEL_COLORS[course.level] || 'text-surface-300'}`}>
             {course.level}
           </span>
         </div>
+
+        {/* Cyber accent */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-500/30 to-transparent" />
       </div>
 
       {/* Content */}
       <div className="p-6">
         {/* Category */}
-        <span className="text-[10px] font-semibold text-primary-400 uppercase tracking-wider">
+        <span className="text-[10px] font-mono font-semibold text-primary-400 uppercase tracking-widest">
           {course.category}
         </span>
 
@@ -68,7 +71,7 @@ export default function CourseCard({ course, index = 0 }) {
         </p>
 
         {/* Meta */}
-        <div className="flex items-center gap-4 text-xs text-surface-500 mb-4">
+        <div className="flex items-center gap-4 text-xs text-surface-500 mb-4 font-mono">
           <span className="flex items-center gap-1">
             <BookOpen size={12} />
             {course.lessonsCount} lessons
@@ -89,10 +92,10 @@ export default function CourseCard({ course, index = 0 }) {
           <div className="flex items-center gap-1.5">
             <Star size={14} className="text-primary-400 fill-primary-400" />
             <span className="text-sm font-bold text-surface-200">{course.rating}</span>
-            <span className="text-xs text-surface-500">({course.reviewsCount})</span>
+            <span className="text-xs text-surface-500 font-mono">({course.reviewsCount})</span>
           </div>
           {/* Price / CTA */}
-          <div className="flex items-center gap-1 text-sm font-semibold text-primary-400 group-hover:text-primary-300 transition-colors">
+          <div className="flex items-center gap-1 text-sm font-mono font-semibold text-primary-400 group-hover:text-primary-300 transition-colors uppercase tracking-wider">
             {course.price === 0 ? 'Free' : `$${course.price}`}
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </div>
