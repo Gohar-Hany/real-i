@@ -226,6 +226,16 @@
   }
 }
 
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 /* ═══════════════════════════════════════════════════════════
    Utility Classes — REAL.i Premium Design System
    ═══════════════════════════════════════════════════════════ */

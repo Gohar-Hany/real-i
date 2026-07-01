@@ -68,9 +68,9 @@ export default function HomePage() {
           tl.from('.features-header', {
             opacity: 0, x: -60, duration: 0.8, ease: 'power3.out',
           })
-          // Cards stagger from bottom with blur
+          // Cards stagger from bottom
           .from('.feature-card', {
-            opacity: 0, y: 80, scale: 0.9, filter: 'blur(6px)',
+            opacity: 0, y: 80, scale: 0.9,
             duration: 1, stagger: 0.15, ease: 'expo.out',
           }, '-=0.4')
           // SVG ring animation
@@ -94,7 +94,7 @@ export default function HomePage() {
           })
           // Steps stagger in
           .from('.how-step', {
-            opacity: 0, y: 60, scale: 0.95, filter: 'blur(4px)',
+            opacity: 0, y: 60, scale: 0.95,
             duration: 0.8, stagger: 0.2, ease: 'expo.out',
           }, '-=0.3')
           // Timeline progress line grows
@@ -125,27 +125,16 @@ export default function HomePage() {
       });
 
       // ── Agents Section ──
-      ScrollTrigger.batch('.agent-card', {
-        onEnter: (elements) => {
-          gsap.from(elements, {
+      ScrollTrigger.create({
+        trigger: agentsRef.current,
+        start: 'top 80%',
+        once: true,
+        onEnter: () => {
+          gsap.from('.agent-card', {
             opacity: 0, y: 60, scale: 0.95, duration: 0.8,
-            stagger: 0.2, ease: 'back.out(1.4)',
+            stagger: 0.2, ease: 'back.out(1.4)'
           });
-        },
-        start: 'top 85%',
-        once: true,
-      });
-
-      // ── Testimonials ──
-      ScrollTrigger.batch('.testimonial-card', {
-        onEnter: (elements) => {
-          gsap.from(elements, {
-            opacity: 0, y: 40, duration: 0.6,
-            stagger: 0.15, ease: 'power2.out',
-          });
-        },
-        start: 'top 85%',
-        once: true,
+        }
       });
 
       // ── CTA Section ──
@@ -351,7 +340,7 @@ export default function HomePage() {
               const Icon = ICON_MAP[feature.icon] || Brain;
               const moduleIds = ['AX-01', 'BX-02', 'CX-03', 'DX-04'];
               return (
-                <div key={i} className="feature-card group relative bg-surface-950 p-8 lg:p-10 overflow-hidden cursor-pointer transition-all duration-700 hover:bg-surface-900/50">
+                <div key={i} className="feature-card group relative bg-surface-950 p-8 lg:p-10 overflow-hidden cursor-pointer transition-colors duration-700 hover:bg-surface-900/50" style={{opacity: 1}}>
                   <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
                   <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
                   <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
@@ -494,9 +483,9 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto lg:h-[600px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[600px]">
             {/* Admin Agent (Large Span) */}
-            <div className="lg:col-span-8 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card">
+            <div className="lg:col-span-8 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[300px] sm:min-h-[400px]" style={{opacity: 1}}>
               <div className="absolute inset-0 bg-surface-900/60 group-hover:bg-transparent transition-colors duration-500 z-10" />
               <img 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzgzOR4u6w0Sxdjjv_NUxG9UiXJeey13upASnvrEsQCuAl6Kg8xOwZvbxZUBS2PHK5678KNwKRprWsg89vmVXem1ONo9vfKHjqBEorNDL3620By2CQMNW73rxYJGMRNJVkAZH8Qfj56iBvGo9i_iFZfgWQ3OBzIvu-J5p_3M-r5c9rXpTzdNK8tiOH-6-vV4fCVdZKmkvvOl4EQWCkc37nEzh7Ad1vK7yV_q0W-xuG_GaNTYOnKvp-5aLS2qYeauwbLGwcgGoE1AA"
@@ -524,9 +513,9 @@ export default function HomePage() {
             </div>
 
             {/* Side Column for smaller agents */}
-            <div className="lg:col-span-4 flex flex-col gap-6 h-full">
+            <div className="lg:col-span-4 flex flex-col gap-6">
               {/* Student Agent */}
-              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card" style={{ transitionDelay: '150ms' }}>
+              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[250px]" style={{ opacity: 1 }}>
                 <img 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJdTkDIHsoWoKj6cpNMZItpvLtHcuCoUodDXzCBcTBdB-hjSufY8s5xO85OGu42BGg0mtFW_68HomCxLvo4sk5QeRWX00ew8q3hNaWnJjwd0-DjtG3l0wdvYHvu4v9k3un6Auj-dMlGfMcJueFmtr50h7Or2-3jnejoX2KC-iMNebGdSQcRsdajmDLcfYy3A1Y4mMYLWv7rCgkP0fAgL35QX0jpAOvjEphfknW3HF_CiBB7z-LRaHbOse5fDFMuqc_FzSbKCu8Ads"
                   alt="Student Agent"
@@ -550,7 +539,7 @@ export default function HomePage() {
               </div>
 
               {/* Friend Agent */}
-              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card" style={{ transitionDelay: '300ms' }}>
+              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[250px]" style={{ opacity: 1 }}>
                 <img 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvn5zETFFGGfNSBUv-cKH2TnSBa8kojciUpRKXhlORLR7u4_dz7lyMh9b4p8AL_ndylREyTOXpiUDZDOGX746zoTkdc1W3lqTNoi0hHyhXf6YxmBNQyWOuC6pzLcbngbfj_aoLClIXJu43eWsATj4mPne4p3T5gj96DWnnX-j_Uq0eXjQ5-rfyqXtlvtgJAVBl5_czDGBwyFTd3EJWidcdy8_STWvjDTup2I_eKlTgGf9nqR8uZYun2bwUb1eNlYW58TepPXvlYT0"
                   alt="Friend Agent"
@@ -578,41 +567,67 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          TESTIMONIALS SECTION
+          TESTIMONIALS SECTION — Premium Marquee
           ═══════════════════════════════════════════════════════ */}
-      <section ref={testimonialsRef} className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16 section-title">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-light text-xs font-medium text-primary-400 mb-4">
-              <Star size={12} />
-              Testimonials
+      <section ref={testimonialsRef} className="py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-surface-950" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-16">
+          <div className="text-center max-w-2xl mx-auto section-title">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-light text-xs font-medium text-primary-400 mb-4 border border-primary-500/20">
+              <Star size={12} className="text-primary-500 fill-primary-500" />
+              Trusted by Top Performers
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-100 mb-4">
-              Loved by <span className="text-gradient">Students</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-100 mb-4 font-heading uppercase tracking-wide">
+              Loved by <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600">Students</span>
             </h2>
           </div>
+        </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="testimonial-card glass-card rounded-2xl p-8 hover:border-primary-500/15 transition-all duration-500 hover-lift">
-                {/* Stars */}
-                <div className="flex items-center gap-1 mb-4">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} size={16} className="text-primary-400 fill-primary-400" />
-                  ))}
+        {/* Marquee Container with fade masks */}
+        <div className="relative flex overflow-hidden group w-full">
+          {/* Gradient Masks for smooth fade at edges */}
+          <div className="absolute top-0 bottom-0 left-0 w-32 md:w-64 bg-gradient-to-r from-surface-950 to-transparent z-20 pointer-events-none" />
+          <div className="absolute top-0 bottom-0 right-0 w-32 md:w-64 bg-gradient-to-l from-surface-950 to-transparent z-20 pointer-events-none" />
+
+          {/* Marquee Track — using animate-[marquee_40s_linear_infinite] */}
+          <div className="flex gap-6 min-w-max animate-[marquee_30s_linear_infinite] hover:[animation-play-state:paused] px-3">
+            {/* We duplicate the array to ensure continuous seamless looping. 
+                Using 4 sets ensures it covers ultra-wide screens. */}
+            {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
+              <div 
+                key={i} 
+                className="w-[280px] sm:w-[340px] flex-shrink-0 relative bg-surface-900/40 backdrop-blur-md rounded-xl p-6 sm:p-7 border border-surface-800/60 hover:border-primary-500/30 transition-all duration-500 hover:-translate-y-1 overflow-hidden group"
+              >
+                {/* Accent Line */}
+                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* Watermark Quote */}
+                <div className="absolute -top-6 -right-2 text-[120px] font-serif leading-none text-surface-800/30 pointer-events-none select-none group-hover:text-primary-500/10 transition-colors duration-500">
+                  "
                 </div>
-                {/* Quote */}
-                <p className="text-surface-300 text-sm leading-relaxed mb-6 italic">
-                  "{t.content}"
-                </p>
-                {/* Author */}
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center text-surface-950 text-sm font-bold">
-                    {t.name.charAt(0)}
+                
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex items-center gap-1 mb-5">
+                    {Array.from({ length: t.rating }).map((_, j) => (
+                      <Star key={j} size={12} className="text-primary-500 fill-primary-500" />
+                    ))}
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-surface-100">{t.name}</p>
-                    <p className="text-xs text-surface-500">{t.role}</p>
+                  
+                  {/* Quote */}
+                  <p className="text-surface-300 text-[14px] leading-[1.7] mb-6 italic flex-1 font-light">
+                    {t.content}
+                  </p>
+                  
+                  {/* Author Info */}
+                  <div className="flex items-center gap-3 pt-4 border-t border-surface-800/40 mt-auto">
+                    <div className="w-9 h-9 rounded-full bg-surface-800 border border-primary-500/20 flex items-center justify-center text-primary-400 text-sm font-bold font-heading shadow-[0_0_10px_rgba(212,175,55,0.1)] group-hover:border-primary-500/50 transition-colors duration-500">
+                      {t.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-surface-100">{t.name}</p>
+                      <p className="text-[10px] text-primary-500/70 uppercase tracking-wider mt-0.5">{t.role}</p>
+                    </div>
                   </div>
                 </div>
               </div>
