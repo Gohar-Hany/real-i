@@ -4,12 +4,12 @@ import './PageLoader.css';
 /* ── System boot log lines ── */
 const BOOT_SEQUENCE = [
   { text: 'SYS.KERNEL      → Initializing neural core...', delay: 0 },
-  { text: 'MEM.ALLOC       → Allocating 1024TB cognitive matrix', delay: 400 },
-  { text: 'NET.PROTOCOL    → Establishing secure lattice link', delay: 800 },
-  { text: 'AUTH.LAYER      → Quantum encryption handshake', delay: 1200 },
-  { text: 'RENDER.ENGINE   → Loading UI compositor v4.2', delay: 1600 },
-  { text: 'AI.MODULE       → Neural weights synchronized', delay: 2000 },
-  { text: 'CORE.READY      → All systems nominal ✓', delay: 2800 },
+  { text: 'MEM.ALLOC       → Allocating 1024TB cognitive matrix', delay: 150 },
+  { text: 'NET.PROTOCOL    → Establishing secure lattice link', delay: 300 },
+  { text: 'AUTH.LAYER      → Quantum encryption handshake', delay: 450 },
+  { text: 'RENDER.ENGINE   → Loading UI compositor v4.2', delay: 600 },
+  { text: 'AI.MODULE       → Neural weights synchronized', delay: 750 },
+  { text: 'CORE.READY      → All systems nominal ✓', delay: 900 },
 ];
 
 /* ── Pre-generate particles at module level (no re-renders) ── */
@@ -34,13 +34,13 @@ export default function PageLoader({ onComplete }) {
     const interval = setInterval(() => {
       setProgress(prev => {
         if (onComplete) {
-          const speed = prev < 40 ? 1.4 : prev < 80 ? 0.9 : 0.4;
+          const speed = prev < 40 ? 4.5 : prev < 80 ? 3.5 : 2.0;
           const jitter = Math.random() * 1.5;
           const next = prev + speed + jitter;
           if (next >= 100) {
             clearInterval(interval);
             setPhase('ready');
-            setTimeout(() => onComplete(), 600);
+            setTimeout(() => onComplete(), 300);
             return 100;
           }
           return next;
@@ -49,7 +49,7 @@ export default function PageLoader({ onComplete }) {
           return Math.min(prev + increment, 99);
         }
       });
-    }, 60);
+    }, 30);
     return () => clearInterval(interval);
   }, [onComplete]);
 

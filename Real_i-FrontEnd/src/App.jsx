@@ -42,7 +42,11 @@ function ProtectedRoute({ children, role }) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <PageLoader />;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-surface-950">
+        <div className="w-8 h-8 rounded-full border-2 border-primary-500 border-t-transparent animate-spin" />
+      </div>
+    );
   }
 
   if (!user) return <Navigate to="/login" replace />;
@@ -57,7 +61,11 @@ function AppRoutes() {
   const { user } = useAuth();
 
   return (
-    <Suspense fallback={<PageLoader />}>
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-surface-950">
+        <div className="w-8 h-8 rounded-full border-2 border-primary-500 border-t-transparent animate-spin" />
+      </div>
+    }>
       <Routes>
         {/* ── Public Routes (with Navbar + Footer) ── */}
         <Route element={<PublicLayout />}>
@@ -102,14 +110,6 @@ function AppRoutes() {
 }
 
 export default function App() {
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [fadeOut, setFadeOut] = useState(false);
-
-  const handleLoaderComplete = () => {
-    setFadeOut(true);
-    setTimeout(() => setInitialLoading(false), 500); // Wait for fade out transition
-  };
-
   return (
     <HelmetProvider>
       <ErrorBoundary>
@@ -118,11 +118,6 @@ export default function App() {
             <SidebarProvider>
               <AuthProvider>
                 <ToastProvider>
-                  {initialLoading && (
-                    <div className={`fixed inset-0 z-[9999] transition-opacity duration-500 ${fadeOut ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                      <PageLoader onComplete={handleLoaderComplete} />
-                    </div>
-                  )}
                   <AppRoutes />
                 </ToastProvider>
               </AuthProvider>
