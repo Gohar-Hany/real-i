@@ -106,7 +106,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   to="/login?register=true"
-                  className="relative group bg-primary-500 text-surface-950 px-6 py-2 font-mono text-xs uppercase font-bold tracking-widest overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 rounded-none"
+                  className="btn-cyber-solid group"
                 >
                   <span className="relative z-10">Get Started</span>
                 </Link>

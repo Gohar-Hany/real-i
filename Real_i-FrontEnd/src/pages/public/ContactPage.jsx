@@ -84,7 +84,7 @@ export default function ContactPage() {
         <title>REAL.i | Establish Connection</title>
         <meta name="description" content="Initialize a secure transmission to our cognitive engineering division." />
       </Helmet>
-      <div ref={containerRef} className="min-h-screen bg-surface-950 pt-20">
+      <div ref={containerRef} className="min-h-screen bg-surface-950">
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
@@ -180,7 +180,7 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label htmlFor="contact-name" className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Operator Name</label>
+                    <label htmlFor="contact-name" className="font-mono text-xs font-bold text-surface-400 uppercase tracking-widest">Operator Name</label>
                     <input
                       id="contact-name"
                       type="text"
@@ -194,7 +194,7 @@ export default function ContactPage() {
                     {errors.name && <p className="text-danger-500 text-xs font-mono">{errors.name}</p>}
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="contact-email" className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Return Address</label>
+                    <label htmlFor="contact-email" className="font-mono text-xs font-bold text-surface-400 uppercase tracking-widest">Return Address</label>
                     <input
                       id="contact-email"
                       type="email"
@@ -210,7 +210,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="contact-subject" className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Transmission Subject</label>
+                  <label htmlFor="contact-subject" className="font-mono text-xs font-bold text-surface-400 uppercase tracking-widest">Transmission Subject</label>
                   <input
                     id="contact-subject"
                     type="text"
@@ -225,7 +225,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="contact-message" className="font-mono text-[10px] text-surface-400 uppercase tracking-widest">Payload</label>
+                  <label htmlFor="contact-message" className="font-mono text-xs font-bold text-surface-400 uppercase tracking-widest">Payload</label>
                   <textarea
                     id="contact-message"
                     name="message"
@@ -242,7 +242,7 @@ export default function ContactPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-primary-500 text-surface-950 font-mono font-bold text-sm uppercase tracking-widest py-4 px-6 rounded-lg hover:bg-primary-400 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+                  className="w-full btn-cyber-solid group mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>

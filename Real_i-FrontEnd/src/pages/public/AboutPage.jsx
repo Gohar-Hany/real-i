@@ -35,7 +35,7 @@ export default function AboutPage() {
         <title>REAL.i | The Mission Archive</title>
         <meta name="description" content="Discover the mission of REAL.i. Merging cognitive engineering with educational technology to build an AI-native learning ecosystem." />
       </Helmet>
-      <div ref={containerRef} className="min-h-screen bg-surface-950 pt-20">
+      <div ref={containerRef} className="min-h-screen bg-surface-950">
       {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-grid-pattern">
         {/* Decorative Grid/Scanline */}
@@ -51,10 +51,10 @@ export default function AboutPage() {
             Designing the cognitive bedrock for the next century. We bridge the gap between biological intuition and synthetic precision through industrial-grade neural architectures.
           </p>
           <div className="mt-12 flex flex-col sm:flex-row gap-6 justify-center">
-            <button className="bg-primary-500 px-8 py-4 text-surface-950 font-mono font-bold text-sm uppercase tracking-widest hover:scale-105 transition-transform shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+            <button className="btn-cyber-solid group">
               Explore Systems
             </button>
-            <button className="border border-primary-500 px-8 py-4 text-primary-500 font-mono font-bold text-sm uppercase tracking-widest hover:bg-primary-500/10 transition-all">
+            <button className="btn-cyber group">
               Technical Specs
             </button>
           </div>
@@ -124,7 +124,7 @@ export default function AboutPage() {
           
           <div>
             <h2 className="text-4xl font-bold font-heading text-primary-500 uppercase mb-6 leading-tight">Neural Engineering Approach</h2>
-            <p className="text-lg text-surface-300 mb-10 leading-relaxed font-arabic">
+            <p className="text-lg text-surface-300 mb-10 leading-relaxed font-arabic max-w-3xl">
               We don't just build AI; we forge technical ecosystems. Our proprietary "Cognitive Lattice" methodology integrates deep learning with deterministic industrial protocols to create systems that are both creative and unfailing.
             </p>
             <ul className="space-y-8">
@@ -193,23 +193,23 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-primary-500/5 bg-grid-pattern opacity-50"></div>
         <div className="relative z-10 max-w-4xl mx-auto glass-card p-12 md:p-16 text-center border-t border-primary-500/50">
           <h2 className="text-3xl md:text-5xl font-bold font-heading text-primary-500 uppercase mb-6 drop-shadow-md">Ready to Interface?</h2>
-          <p className="text-lg text-surface-300 mb-10 max-w-2xl mx-auto font-arabic leading-relaxed">
+          <p className="text-lg text-surface-300 mb-10 max-w-3xl mx-auto font-arabic leading-relaxed">
             We are selectively expanding the REAL.i cohort. Join the frontline of cognitive engineering and define the future of technical intelligence.
           </p>
           <div className="flex flex-col items-center">
-            <button className="group relative px-12 py-5 bg-primary-500 text-surface-950 font-mono font-bold text-sm md:text-lg uppercase tracking-widest overflow-hidden hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all">
-              <span className="relative z-10 flex items-center gap-2">
-                <Users size={20} />
-                JOIN THE COHORT
-                <ArrowRight size={20} />
+            <button className="btn-cyber-solid group px-12 py-5 text-sm md:text-lg mb-6">
+              <span className="relative z-10 flex items-center gap-3">
+                Initialize Connect Protocol
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>
             </button>
+            <p className="font-mono text-[10px] text-surface-500 uppercase tracking-widest">Access Level: Level 1 Clearance Required</p>
             <div className="mt-8 flex items-center gap-4 text-surface-500 font-mono text-[10px] uppercase tracking-widest">
               <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></div>
               Terminal Active _ Waiting for Input
             </div>
-            </div>
           </div>
+        </div>
       </section>
     </div>
     </>

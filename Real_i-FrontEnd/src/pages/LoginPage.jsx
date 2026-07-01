@@ -113,7 +113,7 @@ export default function LoginPage() {
         <title>REAL.i | {isRegistering ? 'Register' : 'Login'}</title>
         <meta name="description" content="Secure authentication for REAL.i platform." />
       </Helmet>
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-surface-950 px-4">
+    <div className="min-h-screen flex items-center justify-center relative overflow-y-auto bg-surface-950 px-4 py-12">
       {/* Cyber Background Elements */}
       <div className="absolute inset-0 bg-grid-pattern opacity-10" />
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-500/5 blur-[120px]" />
@@ -182,7 +182,7 @@ export default function LoginPage() {
 
               <button
                 type="submit"
-                className="w-full bg-primary-500 text-surface-950 font-bold font-mono text-sm uppercase tracking-widest py-3 px-4 transition-all flex items-center justify-center gap-2 hover:bg-primary-400 hover:shadow-[0_0_15px_rgba(212,175,55,0.4)]"
+                className="w-full btn-cyber-solid group"
               >
                 Send Reset Link
                 <ArrowRight size={18} />
@@ -237,13 +237,13 @@ export default function LoginPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-end mb-1">
                     <label htmlFor="auth-password" className="font-mono text-xs text-surface-300 uppercase tracking-wider">Auth.Key</label>
                     {!isRegistering && (
                       <button
                         type="button"
                         onClick={() => setShowForgotPassword(true)}
-                        className="font-mono text-xs text-primary-500 hover:text-primary-400 transition-colors uppercase"
+                        className="font-mono text-[10px] text-primary-500 hover:text-primary-400 transition-colors uppercase leading-none"
                       >
                         Forgot Key?
                       </button>
@@ -281,7 +281,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting || isLockedOut()}
-                  className="w-full bg-primary-500 text-surface-950 font-bold font-mono text-sm uppercase tracking-widest py-3 px-4 transition-all flex items-center justify-center gap-2 mt-8 hover:bg-primary-400 hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full btn-cyber-solid group mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <Loader2 className="animate-spin" size={18} />

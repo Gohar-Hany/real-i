@@ -160,7 +160,7 @@ export default function HomePage() {
         <title>REAL.i | Advanced Cognitive Platform</title>
         <meta name="description" content="Enter the next generation of intelligent learning with REAL.i. Experience AI-driven education in a premium cyber-industrial environment." />
       </Helmet>
-      <div className="min-h-screen bg-surface-950 overflow-hidden pt-20">
+      <div className="min-h-screen bg-surface-950 overflow-hidden">
       {/* ═══════════════════════════════════════════════════════
           HERO SECTION
           ═══════════════════════════════════════════════════════ */}
@@ -566,14 +566,14 @@ export default function HomePage() {
               <div className="flex flex-wrap justify-center gap-4">
                 <Link
                   to="/login?register=true"
-                  className="flex items-center gap-2 px-8 py-4 rounded-full gradient-primary text-surface-950 font-bold text-base hover-lift hover:shadow-glow"
+                  className="btn-cyber-solid group"
                 >
                   Get Started Free
                   <ArrowRight size={20} />
                 </Link>
                 <Link
                   to="/courses"
-                  className="flex items-center gap-2 px-8 py-4 rounded-full border border-primary-500/30 text-primary-400 font-semibold text-base hover:bg-primary-500/10 hover:border-primary-500 transition-all duration-300"
+                  className="btn-cyber group"
                 >
                   Browse Courses
                 </Link>

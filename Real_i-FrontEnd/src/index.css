@@ -223,6 +223,16 @@
    Utility Classes — REAL.i Premium Design System
    ═══════════════════════════════════════════════════════════ */
 
+/* ── Buttons ────────────────────────────────────────────── */
+@layer components {
+  .btn-cyber {
+    @apply relative inline-flex items-center justify-center gap-2 bg-transparent text-primary-500 font-mono text-xs uppercase font-bold tracking-widest px-6 py-3 border border-primary-500/50 hover:bg-primary-500/10 hover:border-primary-500 hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300 rounded-none overflow-hidden cursor-pointer;
+  }
+  .btn-cyber-solid {
+    @apply relative inline-flex items-center justify-center gap-2 bg-primary-500 text-surface-950 font-mono text-xs uppercase font-bold tracking-widest px-6 py-3 border border-transparent hover:bg-primary-400 hover:shadow-[0_0_20px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all duration-300 rounded-none overflow-hidden cursor-pointer;
+  }
+}
+
 /* ── Gradients ────────────────────────────────────────────── */
 .gradient-primary {
   background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%);
