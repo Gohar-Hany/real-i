@@ -37,7 +37,7 @@ export default function AboutPage() {
       </Helmet>
       <div ref={containerRef} className="min-h-screen bg-surface-950">
       {/* Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-grid-pattern">
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-grid-pattern pt-24">
         {/* Decorative Grid/Scanline */}
         <div className="absolute inset-0 bg-surface-950/80"></div>
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-500/5 blur-[120px] rounded-full pointer-events-none" />
