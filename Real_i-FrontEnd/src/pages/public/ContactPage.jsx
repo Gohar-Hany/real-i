@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Mail, MapPin, Globe, Terminal, Send, Loader2, CheckCircle2, MessageSquare, ArrowRight, Clock } from 'lucide-react';
+import Select from '@/components/common/Select';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useToast } from '@/components/common/Toast';
@@ -295,20 +296,17 @@ export default function ContactPage() {
                         <label htmlFor="contact-subject" className="block font-mono text-xs font-medium text-surface-400 uppercase tracking-wider">
                           Subject <span className="text-primary-500">*</span>
                         </label>
-                        <select
-                          id="contact-subject"
-                          name="subject"
+                        <Select
                           value={formData.subject}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={`w-full bg-surface-900/80 border ${touched.subject && errors.subject ? 'border-red-500/70 focus:border-red-500' : 'border-surface-800 focus:border-primary-500/70'} px-4 py-3 text-surface-100 text-sm outline-none focus:ring-1 ${touched.subject && errors.subject ? 'focus:ring-red-500/30' : 'focus:ring-primary-500/20'} transition-all duration-200 appearance-none cursor-pointer`}
-                          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
-                        >
-                          <option value="" className="bg-surface-900 text-surface-500">Select a topic...</option>
-                          {SUBJECT_OPTIONS.map(opt => (
-                            <option key={opt} value={opt} className="bg-surface-900 text-surface-100">{opt}</option>
-                          ))}
-                        </select>
+                          onChange={(val) => {
+                            setFormData(prev => ({ ...prev, subject: val }));
+                            if (touched.subject) {
+                              setErrors(prev => ({ ...prev, subject: validateField('subject', val) || undefined }));
+                            }
+                          }}
+                          options={SUBJECT_OPTIONS}
+                          placeholder="Select a topic..."
+                        />
                         {touched.subject && errors.subject && (
                           <p className="text-red-400 text-xs font-mono mt-1">{errors.subject}</p>
                         )}

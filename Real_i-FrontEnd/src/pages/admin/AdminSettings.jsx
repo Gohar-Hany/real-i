@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useToast } from '@/components/common/Toast';
+import Select from '@/components/common/Select';
 import { Settings, Globe, Shield, Database, Bell, Bot, Server, Smartphone, Zap } from 'lucide-react';
 
 export default function AdminSettings() {
@@ -106,15 +107,15 @@ export default function AdminSettings() {
               <label className="block text-[10px] font-bold text-surface-400 uppercase tracking-wider mb-2 flex items-center gap-2">
                 <Globe size={12} /> System Language
               </label>
-              <select
-                name="systemLanguage"
+              <Select
                 value={settings.systemLanguage}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl bg-surface-900 border border-surface-700 text-sm font-medium text-white outline-none focus:border-primary-500/50 transition-all"
-              >
-                <option value="en">English (US)</option>
-                <option value="ar">Arabic (AE)</option>
-              </select>
+                onChange={(val) => setSettings(prev => ({ ...prev, systemLanguage: val }))}
+                options={[
+                  { value: 'en', label: 'English (US)' },
+                  { value: 'ar', label: 'Arabic (AE)' }
+                ]}
+                placeholder="Select Language"
+              />
             </div>
           </div>
         </div>

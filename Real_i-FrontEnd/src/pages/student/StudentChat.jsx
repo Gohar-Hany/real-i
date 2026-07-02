@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ChatInterface from '@/components/features/chat/ChatInterface';
+import Select from '@/components/common/Select';
 import { chatWithAgent, clearSession, getProjects, getActiveGuidelines } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
 import { Sparkles, BookOpen, ChevronDown } from 'lucide-react';
@@ -142,23 +143,16 @@ export default function StudentChat() {
             <div className="w-8 h-8 rounded-full bg-surface-800/80 flex items-center justify-center border border-surface-700">
               <BookOpen size={14} className="text-surface-400" />
             </div>
-            <div className="relative group">
-              <select
+            <div className="relative z-10 w-full sm:w-64">
+              <Select
                 value={projectId}
-                onChange={(e) => {
-                  const newProjId = e.target.value;
-                  setProjectId(newProjId);
-                  handleClear(newProjId);
+                onChange={(val) => {
+                  setProjectId(val);
+                  handleClear(val);
                 }}
-                className="appearance-none pl-4 pr-10 py-2.5 rounded-xl bg-surface-900 border border-surface-700 text-sm text-white font-medium outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 hover:border-surface-600 transition-all cursor-pointer min-w-[160px]"
-              >
-                {projects.map(p => (
-                  <option key={p.project_id} value={p.project_id}>{p.project_id}</option>
-                ))}
-              </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-surface-500 group-hover:text-primary-400 transition-colors">
-                <ChevronDown size={16} />
-              </div>
+                options={projects.map(p => ({ value: p.project_id, label: p.project_id }))}
+                placeholder="Select a Project"
+              />
             </div>
           </div>
         )}

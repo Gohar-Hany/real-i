@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { generateQuiz, getProjects, getAssignedQuizzes, submitQuizResult, getCompletedQuizzes } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
+import Select from '@/components/common/Select';
 import {
   BrainCircuit, Loader2, CheckCircle, XCircle, ArrowRight,
   RotateCcw, Trophy, Target, Clock, Sparkles, Lightbulb
@@ -276,15 +277,14 @@ export default function StudentQuiz() {
                   <label className="block text-sm font-semibold text-surface-300 mb-2 uppercase tracking-wide">
                     Select Course
                   </label>
-                  <select
-                    value={projectId}
-                    onChange={(e) => setProjectId(e.target.value)}
-                    className="w-full px-5 py-3.5 rounded-xl bg-surface-800/80 border border-surface-700 text-sm outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all text-white font-medium"
-                  >
-                    {projects.map(p => (
-                      <option key={p.project_id} value={p.project_id}>{p.project_id}</option>
-                    ))}
-                  </select>
+                  <div className="relative z-10 w-full md:w-64">
+                  <Select
+                    value={selectedTopic}
+                    onChange={(val) => setSelectedTopic(val)}
+                    options={topics}
+                    placeholder="All Topics"
+                  />
+                </div>
                 </div>
               )}
 

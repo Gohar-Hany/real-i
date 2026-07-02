@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, Power, PowerOff, Edit3, Trash2, AlertCircle, Loader2, BookOpen } from 'lucide-react';
 import Modal from '@/components/common/Modal';
+import Select from '@/components/common/Select';
 import { useToast } from '@/components/common/Toast';
 import { getGuidelines, saveGuideline, toggleGuideline, deleteGuideline } from '@/services/api';
 
@@ -259,13 +260,11 @@ export default function AdminGuidelines() {
         <div className="space-y-5 p-2">
           <div>
             <label className="block text-[10px] font-bold text-surface-400 uppercase tracking-wider mb-2">Directive Type</label>
-            <select
+            <Select
               value={form.task_type}
-              onChange={(e) => setForm(f => ({ ...f, task_type: e.target.value }))}
-              className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-medium text-white outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all shadow-inner"
-            >
-              {TASK_TYPES.map(t => <option key={t} value={t} className="bg-surface-900">{t}</option>)}
-            </select>
+              onChange={(val) => setForm(f => ({ ...f, task_type: val }))}
+              options={TASK_TYPES}
+            />
           </div>
           <div>
             <label className="block text-[10px] font-bold text-surface-400 uppercase tracking-wider mb-2">Protocol Description</label>
@@ -290,13 +289,11 @@ export default function AdminGuidelines() {
             </div>
             <div>
               <label className="block text-[10px] font-bold text-surface-400 uppercase tracking-wider mb-2">Execution Priority</label>
-              <select
+              <Select
                 value={form.priority}
-                onChange={(e) => setForm(f => ({ ...f, priority: e.target.value }))}
-                className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-medium text-white outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all shadow-inner"
-              >
-                {PRIORITIES.map(p => <option key={p} value={p} className="bg-surface-900">{p}</option>)}
-              </select>
+                onChange={(val) => setForm(f => ({ ...f, priority: val }))}
+                options={PRIORITIES}
+              />
             </div>
           </div>
           <div>

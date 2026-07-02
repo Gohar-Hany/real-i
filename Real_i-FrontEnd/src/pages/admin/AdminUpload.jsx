@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import FileUpload from '@/components/common/FileUpload';
+import Select from '@/components/common/Select';
 import { uploadFile, processFiles, pushToIndex, getProjects } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
 import { Cpu, Database, Loader2, CheckCircle, ArrowRight, Upload, Search, AlertCircle, Plus, FolderOpen } from 'lucide-react';
@@ -189,24 +190,13 @@ export default function AdminUpload() {
                     No courses found in database.
                   </div>
                 ) : (
-                  <div className="relative">
-                    <select
+                  <div className="relative z-10 w-full mt-1">
+                    <Select
                       value={projectId}
-                      onChange={(e) => setProjectId(e.target.value)}
-                      className="w-full appearance-none px-4 py-3.5 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-medium outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all text-white cursor-pointer"
-                    >
-                      <option value="" disabled className="bg-surface-900 text-surface-500">Select a course...</option>
-                      {projects.map(p => (
-                        <option key={p.project_id} value={p.project_id} className="bg-surface-900">
-                          {p.project_id}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-surface-500">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
+                      onChange={(val) => setProjectId(val)}
+                      options={projects.map(p => ({ value: p.project_id, label: p.project_id }))}
+                      placeholder="Select a course..."
+                    />
                   </div>
                 )}
               </div>
