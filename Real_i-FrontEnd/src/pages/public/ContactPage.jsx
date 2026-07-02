@@ -215,7 +215,7 @@ export default function ContactPage() {
 
             {/* ── Right Column — Form ── */}
             <div className="lg:col-span-8 contact-form-panel">
-              <div className="glass-card p-8 sm:p-10 border border-surface-800/50 relative overflow-hidden">
+              <div className="glass-card p-8 sm:p-10 border border-surface-800/50 relative">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-primary-500/5 blur-[60px] rounded-full pointer-events-none" />
 
                 {isSubmitted ? (

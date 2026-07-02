@@ -260,7 +260,7 @@ export default function StudentQuiz() {
         </div>
 
         <div className="max-w-2xl mx-auto">
-          <div className="relative glass-card rounded-3xl border border-surface-700/50 p-8 sm:p-10 shadow-2xl bg-surface-900/60 overflow-hidden group">
+          <div className="relative glass-card rounded-3xl border border-surface-700/50 p-8 sm:p-10 shadow-2xl bg-surface-900/60 group">
             {/* Ambient Glow */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[100px] pointer-events-none group-hover:bg-primary-500/20 transition-all duration-700"></div>
             

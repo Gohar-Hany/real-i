@@ -134,7 +134,7 @@ export default function AdminUpload() {
         {/* Left Column - Setup & Upload */}
         <div className="lg:col-span-5 space-y-8">
           {/* Course / Project Selector */}
-          <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative overflow-hidden">
+          <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/10 rounded-full blur-[50px] pointer-events-none"></div>
             
             <h3 className="text-lg font-extrabold text-white flex items-center gap-2 mb-5 relative z-10">
