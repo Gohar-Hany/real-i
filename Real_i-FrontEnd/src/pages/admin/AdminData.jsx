@@ -145,84 +145,111 @@ export default function AdminData() {
 
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-3xl font-bold text-surface-900 dark:text-surface-100">Data Management</h1>
-        <p className="text-surface-500 dark:text-surface-400 mt-1">
-          View, edit, and manage all system records
-        </p>
+    <div className="space-y-8 animate-fade-in-up pb-10">
+      {/* Page Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800/80 border border-surface-700 mb-4 backdrop-blur-md shadow-sm">
+            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse-slow"></div>
+            <span className="text-[11px] font-mono font-bold text-blue-400 uppercase tracking-widest">
+              Data Core Access
+            </span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+            Data <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-primary-500">Manager</span>
+          </h1>
+          <p className="text-surface-400 text-sm sm:text-base max-w-2xl leading-relaxed">
+            Direct access to the system's core databases. View, modify, and manage guidelines, projects, and assets.
+          </p>
+        </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 bg-surface-100 dark:bg-surface-800 rounded-xl p-1 w-fit">
+      <div className="flex items-center gap-2 bg-surface-900/60 border border-surface-700/50 p-2 rounded-2xl w-fit shadow-inner backdrop-blur-md">
         {TABS.map(tab => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
               activeTab === tab.key
-                ? 'bg-white dark:bg-surface-700 text-surface-900 dark:text-surface-100 shadow-sm'
-                : 'text-surface-500 hover:text-surface-700 dark:hover:text-surface-300'
+                ? 'bg-blue-500/10 border border-blue-500/30 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]'
+                : 'border border-transparent text-surface-400 hover:text-white hover:bg-surface-800/50'
             }`}
           >
             {tab.label}
-            <span className="ml-2 text-xs text-surface-400">
-              ({data[tab.key]?.length || 0})
+            <span className={`px-2 py-0.5 rounded-md text-[10px] ${
+              activeTab === tab.key ? 'bg-blue-500/20 text-blue-300' : 'bg-surface-800 text-surface-500'
+            }`}>
+              {data[tab.key]?.length || 0}
             </span>
           </button>
         ))}
       </div>
 
-      {/* Data Table */}
-      {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 size={32} className="animate-spin text-primary-500" />
-        </div>
-      ) : (
-        <DataTable
-          title={TABS.find(t => t.key === activeTab)?.label || ''}
-          data={data[activeTab] || []}
-          columns={COLUMN_DEFS[activeTab] || []}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onAdd={handleAdd}
-        />
-      )}
+      {/* Data Table Area */}
+      <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl overflow-hidden bg-surface-900/60 relative min-h-[400px]">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        
+        {loading ? (
+          <div className="flex flex-col items-center justify-center h-[400px] relative z-10">
+            <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4" />
+            <p className="text-sm font-bold text-surface-400 uppercase tracking-widest">Querying Database...</p>
+          </div>
+        ) : (
+          <div className="relative z-10 p-2">
+            <DataTable
+              title={TABS.find(t => t.key === activeTab)?.label || ''}
+              data={data[activeTab] || []}
+              columns={COLUMN_DEFS[activeTab] || []}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onAdd={handleAdd}
+            />
+          </div>
+        )}
+      </div>
 
       {/* Add Modal */}
       <Modal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
-        title={`Add ${TABS.find(t => t.key === activeTab)?.label?.replace(/s$/, '') || 'Record'}`}
+        title={
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+              <span className="text-blue-400 font-bold">+</span>
+            </div>
+            <span>New {TABS.find(t => t.key === activeTab)?.label?.replace(/s$/, '') || 'Record'}</span>
+          </div>
+        }
         footer={
-          <>
+          <div className="flex gap-3 justify-end w-full">
             <button
               onClick={() => setShowAddModal(false)}
-              className="px-4 py-2 rounded-xl text-sm font-medium text-surface-600 hover:bg-surface-100 dark:hover:bg-surface-800 transition-all"
+              className="px-5 py-2.5 rounded-xl text-sm font-bold text-surface-400 bg-surface-800/50 border border-surface-700 hover:bg-surface-700 hover:text-white transition-all active:scale-95"
             >
               Cancel
             </button>
             <button
               onClick={saveNewRow}
-              className="px-4 py-2 rounded-xl text-sm font-medium gradient-primary text-surface-950 transition-all hover:shadow-glow"
+              className="px-5 py-2.5 rounded-xl text-sm font-bold gradient-primary text-surface-950 transition-all hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] active:scale-95"
             >
-              Add Record
+              Inject Record
             </button>
-          </>
+          </div>
         }
       >
-        <div className="space-y-4">
+        <div className="space-y-5 p-2">
           {(COLUMN_DEFS[activeTab] || []).filter(c => c.editable !== false).map(col => (
             <div key={col.key}>
-              <label className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
+              <label className="block text-xs font-bold text-surface-400 uppercase tracking-wider mb-2">
                 {col.label}
               </label>
               <input
                 type="text"
                 value={newRow[col.key] || ''}
                 onChange={(e) => setNewRow(prev => ({ ...prev, [col.key]: e.target.value }))}
-                className="w-full px-3 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 text-sm text-surface-900 dark:text-surface-100 outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition-all"
-                placeholder={`Enter ${col.label.toLowerCase()}`}
+                className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm text-white outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all shadow-inner placeholder-surface-600"
+                placeholder={`Enter ${col.label.toLowerCase()}...`}
               />
             </div>
           ))}
