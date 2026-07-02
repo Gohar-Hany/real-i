@@ -66,7 +66,7 @@ export default function AdminSettings() {
       <div className="grid lg:grid-cols-2 gap-6">
         
         {/* Core System Panel */}
-        <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative group hover:border-primary-500/30 transition-colors duration-500">
+        <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative z-50 group hover:border-primary-500/30 transition-colors duration-500">
           <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/5 rounded-full blur-[40px] pointer-events-none group-hover:bg-primary-500/10 transition-colors"></div>
           
           <h3 className="text-lg font-extrabold text-white flex items-center gap-2 mb-8 relative z-10">
@@ -121,7 +121,7 @@ export default function AdminSettings() {
         </div>
 
         {/* AI & Integration Panel */}
-        <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative group hover:border-blue-500/30 transition-colors duration-500">
+        <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative z-50 group hover:border-blue-500/30 transition-colors duration-500">
           <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-[40px] pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
           
           <h3 className="text-lg font-extrabold text-white flex items-center gap-2 mb-8 relative z-10">
