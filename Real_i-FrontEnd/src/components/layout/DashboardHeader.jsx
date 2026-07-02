@@ -20,6 +20,8 @@ export default function DashboardHeader() {
     if (path === '/admin/data') return 'Data Manager';
     if (path === '/admin/upload') return 'File Uploads';
     if (path === '/admin/guidelines') return 'System Guidelines';
+    if (path === '/admin/profile') return 'Admin Profile';
+    if (path === '/admin/settings') return 'System Settings';
 
     if (path === '/student') return 'Student Dashboard';
     if (path === '/student/courses') return 'My Courses';

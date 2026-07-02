@@ -5,6 +5,7 @@ import {
   LayoutDashboard, MessageSquare, Database, Upload, BookOpen,
   BrainCircuit, LogOut, ChevronLeft, ChevronRight, Shield,
   Users, BarChart3, GraduationCap, UserCircle, FolderOpen,
+  Settings,
 } from 'lucide-react';
 
 const adminLinks = [
@@ -16,6 +17,8 @@ const adminLinks = [
   { to: '/admin/data', icon: Database, label: 'Data Manager' },
   { to: '/admin/upload', icon: Upload, label: 'Upload Files' },
   { to: '/admin/guidelines', icon: BookOpen, label: 'Guidelines' },
+  { to: '/admin/profile', icon: UserCircle, label: 'Profile' },
+  { to: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 
 const studentLinks = [

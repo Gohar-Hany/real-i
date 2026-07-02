@@ -30,6 +30,8 @@ const AdminGuidelines = lazy(() => import('@/pages/admin/AdminGuidelines'));
 const AdminStudents = lazy(() => import('@/pages/admin/AdminStudents'));
 const AdminCourses = lazy(() => import('@/pages/admin/AdminCourses'));
 const AdminAnalytics = lazy(() => import('@/pages/admin/AdminAnalytics'));
+const AdminProfile = lazy(() => import('@/pages/admin/AdminProfile'));
+const AdminSettings = lazy(() => import('@/pages/admin/AdminSettings'));
 
 // Student Pages
 const StudentDashboard = lazy(() => import('@/pages/student/StudentDashboard'));
@@ -89,6 +91,8 @@ function AppRoutes() {
           <Route path="data" element={<AdminData />} />
           <Route path="upload" element={<AdminUpload />} />
           <Route path="guidelines" element={<AdminGuidelines />} />
+          <Route path="profile" element={<AdminProfile />} />
+          <Route path="settings" element={<AdminSettings />} />
         </Route>
 
         {/* ── Student Routes ── */}
