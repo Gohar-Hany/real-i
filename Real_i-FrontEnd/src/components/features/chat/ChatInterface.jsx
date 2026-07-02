@@ -50,16 +50,19 @@ export default function ChatInterface({
   return (
     <div className={`flex flex-col h-full ${className}`}>
       {/* Chat Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-surface-200 dark:border-surface-800">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-surface-800/50 bg-surface-900/60 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-glow">
             <Bot size={20} className="text-surface-950" />
           </div>
           <div>
-            <h3 className="font-semibold text-surface-900 dark:text-surface-100">{botName}</h3>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse-soft" />
-              <span className="text-xs text-surface-400">{botSubtitle}</span>
+            <h3 className="font-bold text-white text-lg tracking-tight">{botName}</h3>
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="text-xs font-medium text-surface-400 uppercase tracking-wider">{botSubtitle}</span>
             </div>
           </div>
         </div>
@@ -109,10 +112,10 @@ export default function ChatInterface({
 
             {/* Message Bubble */}
             <div
-              className={`max-w-[75%] group relative ${
+              className={`max-w-[75%] group relative shadow-md ${
                 msg.role === 'user'
-                  ? 'bg-primary-600 text-surface-950 rounded-2xl rounded-tr-md px-4 py-3'
-                  : 'bg-surface-100 dark:bg-surface-800 text-surface-900 dark:text-surface-100 rounded-2xl rounded-tl-md px-4 py-3'
+                  ? 'bg-gradient-to-br from-primary-600 to-primary-500 text-surface-950 rounded-2xl rounded-tr-md px-5 py-3.5 border border-primary-400/20'
+                  : 'bg-surface-800/80 backdrop-blur-sm text-surface-100 rounded-2xl rounded-tl-md px-5 py-3.5 border border-surface-700/50'
               }`}
             >
               <div className="text-sm leading-relaxed markdown-content">
@@ -180,11 +183,11 @@ export default function ChatInterface({
 
         {/* Typing Indicator */}
         {loading && (
-          <div className="flex gap-3 animate-fade-in">
-            <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center text-surface-950 shadow-sm">
+          <div className="flex gap-3 animate-fade-in-up">
+            <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center text-surface-950 shadow-sm shrink-0">
               <Bot size={16} />
             </div>
-            <div className="bg-surface-100 dark:bg-surface-800 rounded-2xl rounded-tl-md px-4 py-3">
+            <div className="bg-surface-800/80 backdrop-blur-sm border border-surface-700/50 rounded-2xl rounded-tl-md px-5 py-4">
               <div className="flex gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-primary-500 typing-dot" />
                 <span className="w-2 h-2 rounded-full bg-primary-500 typing-dot" />
@@ -200,9 +203,9 @@ export default function ChatInterface({
       {/* Input Area */}
       <form
         onSubmit={handleSubmit}
-        className="px-6 py-4 border-t border-surface-200 dark:border-surface-800"
+        className="p-4 border-t border-surface-800/50 bg-surface-900/60 backdrop-blur-md"
       >
-        <div className="flex items-center gap-3 bg-surface-100 dark:bg-surface-800 rounded-2xl px-4 py-2 focus-within:ring-2 focus-within:ring-primary-500/30 transition-all">
+        <div className="flex items-center gap-3 bg-surface-900 border border-surface-700 rounded-2xl px-4 py-2 focus-within:border-primary-500/50 focus-within:ring-2 focus-within:ring-primary-500/20 transition-all shadow-inner">
           <input
             ref={inputRef}
             type="text"
@@ -210,7 +213,7 @@ export default function ChatInterface({
             onChange={(e) => setInput(e.target.value)}
             placeholder={placeholder}
             disabled={loading}
-            className="flex-1 bg-transparent outline-none text-sm text-surface-900 dark:text-surface-100 placeholder:text-surface-400 disabled:opacity-50"
+            className="flex-1 bg-transparent py-2 outline-none text-sm text-white placeholder:text-surface-500 disabled:opacity-50"
           />
           <button
             type="submit"

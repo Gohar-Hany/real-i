@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ChatInterface from '@/components/features/chat/ChatInterface';
 import { chatWithAgent, clearSession, getProjects, getActiveGuidelines } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
-
+import { Sparkles, BookOpen, ChevronDown } from 'lucide-react';
 export default function StudentChat() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -113,52 +113,74 @@ export default function StudentChat() {
   };
 
   return (
-    <div className="animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div className="space-y-6 lg:space-y-8 animate-fade-in-up pb-10 h-full flex flex-col">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-bold text-surface-900 dark:text-surface-100">
-            Chat with <span className="text-gradient font-heading">REAL.i</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800/80 border border-surface-700 mb-4 backdrop-blur-md">
+            <Sparkles size={14} className="text-primary-400" />
+            <span className="text-[11px] font-mono font-bold text-primary-400 uppercase tracking-widest">
+              AI Study Assistant
+            </span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+            Chat with <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200 font-heading">REAL.i</span>
           </h1>
-          <p className="text-surface-500 dark:text-surface-400 mt-1">
-            Ask me anything about your course materials
+          <div className="flex flex-wrap items-center gap-3 mt-2 text-surface-400 text-sm">
+            <p>Ask anything about your course materials or quizzes.</p>
             {sessionId && (
-              <span className="ml-2 px-2 py-0.5 rounded-full text-[10px] font-mono bg-surface-100 dark:bg-surface-800 text-surface-400">
-                Session: {sessionId.slice(0, 8)}...
-              </span>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-800/80 border border-surface-700">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-mono text-surface-300">Session: {sessionId.slice(0, 8)}...</span>
+              </div>
             )}
-          </p>
+          </div>
         </div>
+
         {projects.length > 0 && (
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-surface-600 dark:text-surface-400">Course:</span>
-            <select
-              value={projectId}
-              onChange={(e) => {
-                const newProjId = e.target.value;
-                setProjectId(newProjId);
-                handleClear(newProjId);
-              }}
-              className="px-3 py-2 rounded-xl bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 text-sm text-surface-900 dark:text-surface-100 outline-none focus:ring-2 focus:ring-primary-500/30"
-            >
-              {projects.map(p => (
-                <option key={p.project_id} value={p.project_id}>{p.project_id}</option>
-              ))}
-            </select>
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="w-8 h-8 rounded-full bg-surface-800/80 flex items-center justify-center border border-surface-700">
+              <BookOpen size={14} className="text-surface-400" />
+            </div>
+            <div className="relative group">
+              <select
+                value={projectId}
+                onChange={(e) => {
+                  const newProjId = e.target.value;
+                  setProjectId(newProjId);
+                  handleClear(newProjId);
+                }}
+                className="appearance-none pl-4 pr-10 py-2.5 rounded-xl bg-surface-900 border border-surface-700 text-sm text-white font-medium outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 hover:border-surface-600 transition-all cursor-pointer min-w-[160px]"
+              >
+                {projects.map(p => (
+                  <option key={p.project_id} value={p.project_id}>{p.project_id}</option>
+                ))}
+              </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-surface-500 group-hover:text-primary-400 transition-colors">
+                <ChevronDown size={16} />
+              </div>
+            </div>
           </div>
         )}
       </div>
 
-
-      <div className="bg-white dark:bg-surface-900 rounded-2xl border border-surface-200 dark:border-surface-800 shadow-card h-[calc(100vh-220px)]">
-        <ChatInterface
-          messages={messages}
-          onSendMessage={handleSend}
-          loading={loading}
-          onClear={handleClear}
-          botName="REAL.i"
-          botSubtitle="Study Assistant • Online"
-          placeholder="Ask about your course materials..."
-        />
+      {/* Chat Container */}
+      <div className="flex-1 min-h-[500px] relative rounded-3xl bg-surface-900/40 border border-surface-700/50 shadow-2xl overflow-hidden glass-card flex flex-col">
+        {/* Glow Effects */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        
+        <div className="relative z-10 flex-1 flex flex-col h-full">
+          <ChatInterface
+            messages={messages}
+            onSendMessage={handleSend}
+            loading={loading}
+            onClear={handleClear}
+            botName="REAL.i"
+            botSubtitle="Study Assistant • Online"
+            placeholder="Type your question here..."
+          />
+        </div>
       </div>
     </div>
   );
