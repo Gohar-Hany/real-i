@@ -110,7 +110,7 @@ export default function PageLoader({ onComplete }) {
           <div className="loader-logo-ring loader-logo-ring-2" />
           <div className="loader-logo-inner">
             <img
-              src="/Logo-removebg-preview.png"
+              src="/logo.png"
               alt="REAL.i"
               className="loader-logo-img"
             />

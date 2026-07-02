@@ -147,7 +147,7 @@ export default function LoginPage() {
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center mb-6">
               <div className="w-16 h-16 bg-transparent flex items-center justify-center shadow-glow">
-                <img src="/Logo-removebg-preview.png" alt="REAL.i Logo" className="w-full h-full object-contain" />
+                <img src="/logo.png" alt="REAL.i Logo" className="w-full h-full object-contain" />
               </div>
             </div>
             <h1 className="text-3xl font-bold text-primary-500 font-heading tracking-[0.2em] uppercase mb-2">

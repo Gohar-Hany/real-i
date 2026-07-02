@@ -52,7 +52,7 @@ export default function Footer() {
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center gap-3 group">
                 <div className="w-12 h-12 rounded-xl overflow-hidden shadow-glow group-hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300">
-                  <img src="/Logo-removebg-preview.png" alt="REAL.i" loading="lazy" width="48" height="48" className="w-full h-full object-contain" />
+                  <img src="/logo.png" alt="REAL.i" loading="lazy" width="48" height="48" className="w-full h-full object-contain" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-gradient font-heading tracking-wider">
