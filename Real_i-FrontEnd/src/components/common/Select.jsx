@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronDown, Check } from 'lucide-react';
+import { ChevronDown, Check, ArrowRight } from 'lucide-react';
 
 export default function Select({ 
   value, 
@@ -21,7 +21,7 @@ export default function Select({
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
-      const dropdownHeight = 260; // max-h-60 = 240px + padding
+      const dropdownHeight = 280; // max-h-60 = 240px + padding
       const openAbove = spaceBelow < dropdownHeight && rect.top > dropdownHeight;
 
       setPosition({
@@ -39,7 +39,7 @@ export default function Select({
     setTimeout(() => {
       setIsOpen(false);
       setIsClosing(false);
-    }, 180);
+    }, 250); // Matched with exit animation duration
   }, []);
 
   // Close on outside click
@@ -111,9 +111,9 @@ export default function Select({
     }
 
     if (isClosing) {
-      base.animation = 'select-dropdown-exit 180ms cubic-bezier(0.4, 0, 1, 1) forwards';
+      base.animation = 'premium-dropdown-exit 250ms cubic-bezier(0.3, 0, 0.2, 1) forwards';
     } else {
-      base.animation = 'select-dropdown-enter 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards';
+      base.animation = 'premium-dropdown-enter 400ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
     }
 
     return base;
@@ -121,36 +121,37 @@ export default function Select({
 
   return (
     <>
-      {/* Inject keyframes once */}
       <style>{`
-        @keyframes select-dropdown-enter {
+        @keyframes premium-dropdown-enter {
           0% {
             opacity: 0;
-            transform: scale(0.95) translateY(${position.openAbove ? '8px' : '-8px'});
+            transform: scale(0.9) translateY(${position.openAbove ? '15px' : '-15px'}) rotateX(${position.openAbove ? '-10deg' : '10deg'});
+            filter: blur(4px);
           }
           100% {
+            opacity: 1;
+            transform: scale(1) translateY(0) rotateX(0);
+            filter: blur(0);
+          }
+        }
+        @keyframes premium-dropdown-exit {
+          0% {
             opacity: 1;
             transform: scale(1) translateY(0);
           }
-        }
-        @keyframes select-dropdown-exit {
-          0% {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
           100% {
             opacity: 0;
-            transform: scale(0.95) translateY(${position.openAbove ? '8px' : '-8px'});
+            transform: scale(0.95) translateY(${position.openAbove ? '10px' : '-10px'});
           }
         }
-        @keyframes select-item-enter {
+        @keyframes premium-item-enter {
           0% {
             opacity: 0;
-            transform: translateX(-6px);
+            transform: translateX(-10px) scale(0.95);
           }
           100% {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateX(0) scale(1);
           }
         }
       `}</style>
@@ -161,64 +162,86 @@ export default function Select({
           type="button"
           disabled={disabled}
           onClick={handleToggle}
-          className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-surface-950/80 border text-sm font-medium outline-none transition-all duration-200 shadow-inner
-            ${isOpen ? 'border-primary-500/50 ring-1 ring-primary-500/50 text-white shadow-[0_0_15px_rgba(212,175,55,0.1)]' : 'border-surface-800 text-surface-200 hover:border-surface-600'}
+          className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border text-sm font-medium outline-none transition-all duration-300 
+            ${isOpen 
+              ? 'bg-surface-900 border-primary-500/60 ring-4 ring-primary-500/10 text-white shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
+              : 'bg-surface-950/80 border-surface-800 text-surface-200 hover:border-surface-600 hover:bg-surface-900 shadow-inner'
+            }
             ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer'}
           `}
         >
-          <span className={`transition-colors duration-200 ${!selectedOption ? 'text-surface-500' : 'text-white'}`}>
+          <span className={`transition-colors duration-300 ${!selectedOption ? 'text-surface-500' : 'text-white'} flex items-center gap-2`}>
+            {selectedOption && <span className="w-1.5 h-1.5 rounded-full bg-primary-400 shadow-[0_0_8px_rgba(212,175,55,0.8)]"></span>}
             {selectedOption ? selectedOption.label : placeholder}
           </span>
-          <ChevronDown 
-            size={16} 
-            className={`transition-all duration-300 ${isOpen ? 'rotate-180 text-primary-400' : 'text-surface-500'}`} 
-          />
+          <div className={`w-6 h-6 rounded-md flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-primary-500/10 text-primary-400' : 'bg-surface-800 text-surface-500'}`}>
+            <ChevronDown 
+              size={14} 
+              className={`transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`} 
+            />
+          </div>
         </button>
       </div>
 
       {isOpen && !disabled && createPortal(
         <div
           ref={dropdownRef}
-          style={getDropdownStyle()}
-          className="rounded-xl border border-surface-700/80 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9),0_0_1px_rgba(212,175,55,0.1)] overflow-hidden backdrop-blur-none"
+          style={{
+            ...getDropdownStyle(),
+            perspective: '1000px',
+          }}
+          className="rounded-xl overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.9),_0_0_2px_rgba(212,175,55,0.5)] border border-surface-700"
         >
-          {/* Solid background — no transparency at all */}
-          <div className="absolute inset-0 bg-[#0d0d0d] rounded-xl" />
-          {/* Subtle gold accent line at top */}
-          <div className="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-primary-500/30 to-transparent" />
+          {/* Solid Background Container - NO Transparency */}
+          <div className="absolute inset-0 bg-[#0a0a0a]"></div>
           
-          <ul className="relative max-h-60 overflow-y-auto p-1.5 custom-scrollbar">
+          {/* Subtle gold accent lighting inside */}
+          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-primary-500/5 to-transparent pointer-events-none rounded-t-xl" />
+          
+          <ul className="relative z-10 max-h-[260px] overflow-y-auto p-2 custom-scrollbar">
             {formattedOptions.length === 0 ? (
-              <li className="px-4 py-3 text-sm text-surface-500 text-center">No options available</li>
+              <li className="px-4 py-4 text-sm text-surface-500 text-center font-mono tracking-widest uppercase">No options</li>
             ) : (
-              formattedOptions.map((option, index) => (
-                <li
-                  key={option.value}
-                  onClick={() => {
-                    onChange(option.value);
-                    handleClose();
-                  }}
-                  style={{
-                    animation: `select-item-enter 200ms cubic-bezier(0.16, 1, 0.3, 1) ${index * 40}ms both`,
-                  }}
-                  className={`flex items-center justify-between px-4 py-3 rounded-lg text-sm cursor-pointer transition-all duration-150 group/item
-                    ${value === option.value 
-                      ? 'bg-primary-500/10 text-primary-400 font-bold border border-primary-500/15' 
-                      : 'text-surface-300 hover:bg-surface-800/80 hover:text-white border border-transparent'
-                    }
-                  `}
-                >
-                  <span className="flex items-center gap-2.5">
-                    {value === option.value && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary-400 shadow-[0_0_6px_rgba(212,175,55,0.5)]" />
+              formattedOptions.map((option, index) => {
+                const isSelected = value === option.value;
+                return (
+                  <li
+                    key={option.value}
+                    onClick={() => {
+                      onChange(option.value);
+                      handleClose();
+                    }}
+                    style={{
+                      animation: `premium-item-enter 400ms cubic-bezier(0.16, 1, 0.3, 1) ${index * 30 + 50}ms both`,
+                    }}
+                    className={`relative flex items-center justify-between px-4 py-3 rounded-lg text-sm cursor-pointer transition-all duration-300 group/item overflow-hidden mb-1 last:mb-0
+                      ${isSelected 
+                        ? 'text-primary-400 font-bold' 
+                        : 'text-surface-300 hover:text-white'
+                      }
+                    `}
+                  >
+                    {/* Hover & Active Backgrounds */}
+                    {isSelected && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary-500/20 to-transparent border-l-2 border-primary-500 rounded-lg"></div>
                     )}
-                    {option.label}
-                  </span>
-                  {value === option.value && (
-                    <Check size={14} className="text-primary-400" />
-                  )}
-                </li>
-              ))
+                    <div className="absolute inset-0 bg-surface-800/0 group-hover/item:bg-surface-800/40 rounded-lg transition-colors duration-300"></div>
+
+                    <span className="relative z-10 flex items-center gap-3 transition-transform duration-300 group-hover/item:translate-x-1">
+                      {isSelected ? (
+                        <Check size={14} className="text-primary-400" />
+                      ) : (
+                        <span className="w-1.5 h-1.5 rounded-full bg-surface-700 group-hover/item:bg-primary-400/50 transition-colors duration-300" />
+                      )}
+                      {option.label}
+                    </span>
+                    
+                    {!isSelected && (
+                      <ArrowRight size={14} className="relative z-10 text-primary-400 opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300" />
+                    )}
+                  </li>
+                );
+              })
             )}
           </ul>
         </div>,
