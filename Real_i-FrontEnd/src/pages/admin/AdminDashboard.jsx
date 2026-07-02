@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import gsap from 'gsap';
 import { useAuth } from '@/contexts/AuthContext';
 import { adminHealthCheck, getProjects, getUsers, getGuidelines } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
@@ -47,14 +46,6 @@ export default function AdminDashboard() {
     }
   };
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.admin-card', {
-        opacity: 0, y: 30, duration: 0.6, stagger: 0.08, ease: 'power2.out', delay: 0.2,
-      });
-    });
-    return () => ctx.revert();
-  }, []);
 
   const quickActions = [
     { icon: Users, label: 'Students', desc: 'Manage users', path: '/admin/students', color: 'text-primary-400' },
@@ -66,56 +57,63 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in-up pb-10">
       {/* Welcome Header */}
-      <div className="relative glass-card rounded-3xl p-8 overflow-hidden admin-card">
-        <div className="absolute inset-0 bg-grid-pattern opacity-20" />
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-primary-500/5 rounded-full blur-[100px]" />
-        <div className="relative z-10 flex items-center justify-between">
+      <div className="relative glass-card rounded-3xl p-8 sm:p-10 overflow-hidden bg-surface-900/60 border border-surface-700/50 shadow-2xl group">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay"></div>
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary-500/10 rounded-full blur-[120px] pointer-events-none group-hover:bg-primary-500/20 transition-all duration-1000"></div>
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Shield size={18} className="text-primary-400" />
-              <span className="text-xs font-semibold text-primary-400 uppercase tracking-wider">
-                Admin Panel
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800/80 border border-surface-700 mb-4 backdrop-blur-md shadow-sm">
+              <Shield size={14} className="text-primary-400" />
+              <span className="text-[11px] font-mono font-bold text-primary-400 uppercase tracking-widest">
+                Central Command
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-100 mb-2">
-              Welcome, <span className="text-gradient">{user?.name || 'Admin'}</span>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+              Admin <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Terminal</span>
             </h1>
-            <p className="text-surface-400 text-base">
-              Monitor your platform, manage students, and oversee AI agents.
+            <p className="text-surface-400 text-sm sm:text-base max-w-2xl leading-relaxed">
+              Welcome back, <strong className="text-surface-200 font-bold">{user?.name || 'Administrator'}</strong>. Monitor platform activity, manage student access, and oversee all AI-driven agents.
             </p>
           </div>
           <button
             onClick={checkHealth}
-            className="hidden lg:flex items-center gap-2 px-5 py-3 rounded-xl glass-light text-sm font-medium text-surface-300 hover:text-surface-100 hover:bg-white/10 transition-all active:scale-95"
+            className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-surface-800/50 text-surface-300 border border-surface-700 hover:bg-surface-700 hover:text-white hover:border-surface-600 transition-all shadow-sm active:scale-95 group shrink-0"
           >
-            <Activity size={16} />
-            System Health
+            <Activity size={18} className="text-emerald-500 group-hover:text-emerald-400" />
+            <span className="font-bold text-sm">Run Diagnostics</span>
           </button>
         </div>
       </div>
 
-      {/* System Health (if checked) */}
+      {/* System Health Monitor */}
       {health && (
-        <div className="admin-card glass-card rounded-2xl p-6">
-          <h3 className="text-sm font-bold text-surface-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-            <Server size={16} className="text-primary-400" />
-            System Status
+        <div className="relative glass-card rounded-3xl p-6 sm:p-8 bg-surface-900/60 border border-surface-700/50 shadow-xl overflow-hidden animate-fade-in">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-blue-500"></div>
+          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
+            <Server size={20} className="text-emerald-400" />
+            Live System Status
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             {Object.entries(health).map(([key, value]) => {
               const isUp = typeof value === 'string' ? value.toLowerCase().includes('ok') || value.toLowerCase().includes('connected') : !!value;
               return (
-                <div key={key} className="flex items-center gap-3 p-3 rounded-xl bg-surface-800/30">
-                  {isUp ? (
-                    <CheckCircle size={18} className="text-emerald-400 shrink-0" />
-                  ) : (
-                    <XCircle size={18} className="text-rose-400 shrink-0" />
-                  )}
-                  <div>
-                    <p className="text-xs font-semibold text-surface-200 capitalize">{key.replace(/_/g, ' ')}</p>
-                    <p className="text-[10px] text-surface-500 truncate">{typeof value === 'string' ? value : JSON.stringify(value)}</p>
+                <div key={key} className="flex items-center gap-4 p-4 rounded-2xl bg-surface-800/40 border border-surface-700/50">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-inner ${isUp ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-rose-500/10 border-rose-500/20'} border`}>
+                    {isUp ? (
+                      <CheckCircle size={20} className="text-emerald-400" />
+                    ) : (
+                      <XCircle size={20} className="text-rose-400" />
+                    )}
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-bold text-surface-400 uppercase tracking-wider mb-1">{key.replace(/_/g, ' ')}</p>
+                    <p className={`text-sm font-semibold truncate ${isUp ? 'text-surface-100' : 'text-rose-300'}`}>
+                      {typeof value === 'string' ? value : JSON.stringify(value)}
+                    </p>
                   </div>
                 </div>
               );
@@ -124,48 +122,67 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Stats Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Global Metrics */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {[
-          { icon: Users, label: 'Total Users', value: loading ? '...' : stats.users, color: 'text-primary-400' },
-          { icon: FolderOpen, label: 'Projects', value: loading ? '...' : stats.projects, color: 'text-emerald-400' },
-          { icon: BookOpen, label: 'Active Guidelines', value: loading ? '...' : stats.guidelines, color: 'text-amber-400' },
-          { icon: Brain, label: 'AI Agents', value: '3', color: 'text-purple-400' },
+          { icon: Users, label: 'Total Users', value: loading ? '...' : stats.users, color: '#3B82F6' },
+          { icon: FolderOpen, label: 'Active Projects', value: loading ? '...' : stats.projects, color: '#10B981' },
+          { icon: BookOpen, label: 'Guidelines', value: loading ? '...' : stats.guidelines, color: '#F59E0B' },
+          { icon: Brain, label: 'AI Agents', value: '3', color: '#8B5CF6' },
         ].map((stat, i) => (
-          <div key={i} className="admin-card glass-card rounded-2xl p-5 flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-surface-800/50 flex items-center justify-center shrink-0">
-              <stat.icon size={20} className={stat.color} />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-surface-100">{stat.value}</p>
-              <p className="text-xs text-surface-500">{stat.label}</p>
+          <div 
+            key={i} 
+            className="relative glass-card rounded-3xl p-6 bg-surface-900/60 border border-surface-700/50 overflow-hidden group hover:-translate-y-1 transition-all duration-300"
+            style={{ boxShadow: `0 4px 30px ${stat.color}08` }}
+          >
+            <div 
+              className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none"
+              style={{ background: `radial-gradient(circle at center, ${stat.color} 0%, transparent 70%)` }}
+            ></div>
+            
+            <div className="flex items-center gap-4 relative z-10">
+              <div 
+                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg border"
+                style={{ background: `linear-gradient(135deg, ${stat.color}20, ${stat.color}05)`, borderColor: `${stat.color}40` }}
+              >
+                <stat.icon size={22} style={{ color: stat.color }} className="drop-shadow-[0_0_10px_currentColor]" />
+              </div>
+              <div>
+                <p className="text-2xl font-extrabold text-white">{stat.value}</p>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-surface-400 mt-0.5">{stat.label}</p>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Quick Actions Grid */}
+      {/* Control Modules (Quick Actions) */}
       <div>
-        <h2 className="text-lg font-bold text-surface-100 mb-4 flex items-center gap-2">
-          <Zap size={18} className="text-primary-400" />
-          Quick Actions
-        </h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-primary-500/10 border border-primary-500/20 flex items-center justify-center">
+            <Zap size={16} className="text-primary-400" />
+          </div>
+          <h2 className="text-xl font-bold text-white tracking-tight">Control Modules</h2>
+        </div>
+        
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {quickActions.map((action, i) => (
             <button
               key={i}
               onClick={() => navigate(action.path)}
-              className="admin-card glass-card rounded-2xl p-5 text-left hover:border-primary-500/20 transition-all duration-300 hover-lift group"
+              className="relative glass-card rounded-2xl p-5 sm:p-6 text-left bg-surface-900/60 border border-surface-700/50 hover:border-primary-500/30 transition-all duration-300 group hover:-translate-y-1 shadow-md hover:shadow-xl hover:shadow-primary-500/5"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-11 h-11 rounded-xl bg-surface-800/50 flex items-center justify-center shrink-0 group-hover:bg-primary-500/10 transition-colors">
-                  <action.icon size={20} className={action.color} />
+              <div className="flex items-start gap-4 relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-surface-800 border border-surface-700 flex items-center justify-center shrink-0 group-hover:bg-primary-500/10 group-hover:border-primary-500/20 transition-all">
+                  <action.icon size={24} className={`${action.color} drop-shadow-[0_0_8px_currentColor]`} />
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-surface-100">{action.label}</p>
-                  <p className="text-xs text-surface-500">{action.desc}</p>
+                <div className="flex-1 pt-1">
+                  <p className="text-base font-bold text-white mb-1 group-hover:text-primary-300 transition-colors">{action.label}</p>
+                  <p className="text-xs text-surface-400 line-clamp-2 leading-relaxed">{action.desc}</p>
                 </div>
-                <ChevronRight size={16} className="text-surface-600 group-hover:text-primary-400 group-hover:translate-x-1 transition-all" />
+                <div className="w-8 h-8 rounded-full bg-surface-800 flex items-center justify-center shrink-0 group-hover:bg-primary-500 group-hover:text-surface-950 text-surface-500 transition-all">
+                  <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                </div>
               </div>
             </button>
           ))}

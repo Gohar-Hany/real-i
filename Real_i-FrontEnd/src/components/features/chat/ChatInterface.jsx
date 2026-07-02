@@ -31,7 +31,9 @@ export default function ChatInterface({
   const inputRef = useRef(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messages.length > 0 || loading) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   }, [messages, loading]);
 
   const handleSubmit = (e) => {
@@ -80,15 +82,18 @@ export default function ChatInterface({
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
         {messages.length === 0 && !loading && (
-          <div className="flex flex-col items-center justify-center h-full text-center animate-fade-in">
-            <div className="w-20 h-20 rounded-2xl gradient-primary flex items-center justify-center mb-4 shadow-glow-lg">
-              <Bot size={36} className="text-surface-950" />
+          <div className="flex flex-col items-center justify-center h-full text-center animate-fade-in-up">
+            <div className="relative mb-8 group">
+              <div className="absolute inset-0 bg-primary-500/20 rounded-full blur-xl group-hover:bg-primary-500/30 transition-all duration-700"></div>
+              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-surface-800 to-surface-900 border border-surface-700 flex items-center justify-center shadow-[0_0_40px_rgba(212,175,55,0.15)] relative z-10 transform group-hover:scale-105 transition-transform duration-500">
+                <Bot size={48} className="text-primary-400 drop-shadow-[0_0_15px_rgba(212,175,55,0.5)]" />
+              </div>
             </div>
-            <h3 className="text-xl font-bold text-surface-900 dark:text-surface-100 mb-2">
-              Start a Conversation
+            <h3 className="text-2xl font-extrabold text-white mb-3 tracking-tight">
+              Start a <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Conversation</span>
             </h3>
-            <p className="text-surface-400 text-sm max-w-md">
-              Type a message below to begin chatting. I'm here to help you with your studies!
+            <p className="text-surface-400 text-sm sm:text-base max-w-md leading-relaxed font-medium">
+              I'm your AI Study Assistant. Ask me anything about your courses, request a quiz, or explore complex topics.
             </p>
           </div>
         )}
