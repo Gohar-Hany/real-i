@@ -132,9 +132,9 @@ export default function AdminUpload() {
 
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Left Column - Setup & Upload */}
-        <div className="lg:col-span-5 space-y-8">
+        <div className="lg:col-span-5 space-y-8 relative z-50">
           {/* Course / Project Selector */}
-          <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative z-50">
+          <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative z-[60]">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/10 rounded-full blur-[50px] pointer-events-none"></div>
             
             <h3 className="text-lg font-extrabold text-white flex items-center gap-2 mb-5 relative z-10">
@@ -190,7 +190,7 @@ export default function AdminUpload() {
                     No courses found in database.
                   </div>
                 ) : (
-                  <div className="relative z-10 w-full mt-1">
+                  <div className="relative z-[100] w-full mt-1">
                     <Select
                       value={projectId}
                       onChange={(val) => setProjectId(val)}
@@ -211,12 +211,12 @@ export default function AdminUpload() {
           </div>
 
           {/* File Upload Area */}
-          <div className={`glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative overflow-hidden transition-all duration-300 ${!effectiveProjectId ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
-            <h3 className="text-lg font-extrabold text-white flex items-center gap-2 mb-5 relative z-10">
+          <div className={`glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative z-0 overflow-hidden transition-all duration-300 ${!effectiveProjectId ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
+            <h3 className="text-lg font-extrabold text-white flex items-center gap-2 mb-5 relative">
               <span className="w-1.5 h-6 bg-emerald-500 rounded-full inline-block"></span>
               Step 1: Ingest Files
             </h3>
-            <div className="relative z-10">
+            <div className="relative">
               <FileUpload
                 onUpload={handleUpload}
                 accept=".pdf,.txt"
@@ -225,7 +225,7 @@ export default function AdminUpload() {
             </div>
 
             {uploadedFiles.length > 0 && (
-              <div className="mt-5 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 relative z-10 animate-fade-in-up">
+              <div className="mt-5 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 relative animate-fade-in-up">
                 <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mb-3 flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   Session Cache ({uploadedFiles.length})
