@@ -9,7 +9,11 @@ class ApiClient {
   async request(endpoint, options = {}, retries = 2, backoff = 1000) {
     const url = `${this.baseUrl}${endpoint}`;
     
-    const headers = { 'Content-Type': 'application/json', ...options.headers };
+    const headers = { 
+      'Content-Type': 'application/json', 
+      'ngrok-skip-browser-warning': 'true',
+      ...options.headers 
+    };
     const token = localStorage.getItem('reali_token');
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
@@ -108,6 +112,7 @@ class ApiClient {
       if (token) {
         xhr.setRequestHeader('Authorization', `Bearer ${token}`);
       }
+      xhr.setRequestHeader('ngrok-skip-browser-warning', 'true');
 
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable && onProgress) {

@@ -279,10 +279,10 @@ export default function StudentQuiz() {
                   </label>
                   <div className="relative z-10 w-full md:w-64">
                   <Select
-                    value={selectedTopic}
-                    onChange={(val) => setSelectedTopic(val)}
-                    options={topics}
-                    placeholder="All Topics"
+                    value={projectId}
+                    onChange={(val) => setProjectId(val)}
+                    options={projects.map(p => ({ value: p.project_id, label: p.project_id }))}
+                    placeholder="Select Course"
                   />
                 </div>
                 </div>
