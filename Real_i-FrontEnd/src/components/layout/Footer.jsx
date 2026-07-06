@@ -52,11 +52,11 @@ export default function Footer() {
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center gap-3 group">
                 <div className="w-12 h-12 rounded-xl overflow-hidden shadow-glow group-hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300">
-                  <img src="/logo.png" alt="Real_i" loading="lazy" width="48" height="48" className="w-full h-full object-contain" />
+                  <img src="/logo.png" alt="REAL_i" loading="lazy" width="48" height="48" className="w-full h-full object-contain" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-gradient font-heading tracking-wider">
-                    Real_i
+                    REAL_i
                   </h3>
                   <p className="text-[9px] text-surface-500 tracking-[0.2em] uppercase">
                     Building Real Intelligence
@@ -116,11 +116,11 @@ export default function Footer() {
           {/* Bottom Bar */}
           <div className="py-6 border-t border-surface-800/50 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs text-surface-500">
-              © {new Date().getFullYear()} Real_i — Building Real Intelligence. All rights reserved.
+              © {new Date().getFullYear()} REAL_i — Building Real Intelligence. All rights reserved.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4">
               <p className="text-xs text-surface-600 flex items-center gap-1">
-                Crafted with <Heart size={12} className="text-primary-500 fill-primary-500" /> by Real_i Team
+                Crafted with <Heart size={12} className="text-primary-500 fill-primary-500" /> by REAL_i Team
               </p>
               <div className="hidden sm:block h-3 w-px bg-surface-700"></div>
               <div className="flex items-center gap-2">

@@ -54,11 +54,11 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" ref={logoRef} className="flex items-center gap-3 group">
             <div className="w-10 h-10 overflow-hidden group-hover:shadow-glow transition-shadow duration-300 flex items-center justify-center">
-              <img src="/logo.png" alt="Real_i Logo" className="w-full h-full object-contain" />
+              <img src="/logo.png" alt="REAL_i Logo" className="w-full h-full object-contain" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-primary-500 font-heading tracking-[0.2em] leading-none uppercase">
-                Real_i
+              <h1 className="text-xl font-bold text-primary-500 font-heading tracking-[0.2em] leading-none">
+                REAL_i
               </h1>
             </div>
           </Link>

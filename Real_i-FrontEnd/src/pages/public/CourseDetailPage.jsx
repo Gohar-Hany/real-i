@@ -49,7 +49,7 @@ export default function CourseDetailPage() {
   return (
     <>
       <Helmet>
-        <title>Real_i | {course.title}</title>
+        <title>REAL_i | {course.title}</title>
         <meta name="description" content={course.description.slice(0, 160)} />
       </Helmet>
     <div className="min-h-screen pt-24 pb-20">

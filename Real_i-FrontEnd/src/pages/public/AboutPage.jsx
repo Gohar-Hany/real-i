@@ -32,8 +32,8 @@ export default function AboutPage() {
   return (
     <>
       <Helmet>
-        <title>Real_i | The Mission Archive</title>
-        <meta name="description" content="Discover the mission of Real_i. Merging cognitive engineering with educational technology to build an AI-native learning ecosystem." />
+        <title>REAL_i | The Mission Archive</title>
+        <meta name="description" content="Discover the mission of REAL_i. Merging cognitive engineering with educational technology to build an AI-native learning ecosystem." />
       </Helmet>
       
       <div ref={containerRef} className="min-h-screen bg-surface-950 selection:bg-primary-500/30">
@@ -52,7 +52,7 @@ export default function AboutPage() {
             </div>
             
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-surface-100 font-heading tracking-tight mb-8 leading-none">
-              THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">Real_i</span> MISSION
+              THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">REAL_i</span> MISSION
             </h1>
             
             <p className="text-lg md:text-xl max-w-3xl mx-auto text-surface-300 leading-relaxed">
@@ -285,7 +285,7 @@ export default function AboutPage() {
             </h2>
             
             <p className="text-base md:text-lg text-surface-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-              We are selectively expanding the Real_i cohort. Join the frontline of cognitive engineering and define the future of technical intelligence.
+              We are selectively expanding the REAL_i cohort. Join the frontline of cognitive engineering and define the future of technical intelligence.
             </p>
             
             <div className="flex flex-col items-center">

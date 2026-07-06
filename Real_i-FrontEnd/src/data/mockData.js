@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════
-// Real_i — Mock Data for Educational Platform
+// REAL_i — Mock Data for Educational Platform
 // ══════════════════════════════════════════════════════════════
 
 export const COURSES = [
@@ -265,7 +265,7 @@ export const TESTIMONIALS = [
   {
     name: 'Youssef Ahmed',
     role: 'AI Engineering Student',
-    content: 'Real_i transformed how I study. The AI assistant understands my course material better than any search engine. My grades improved significantly!',
+    content: 'REAL_i transformed how I study. The AI assistant understands my course material better than any search engine. My grades improved significantly!',
     rating: 5,
   },
   {

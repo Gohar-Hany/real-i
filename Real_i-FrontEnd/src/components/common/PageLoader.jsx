@@ -111,7 +111,7 @@ export default function PageLoader({ onComplete }) {
           <div className="loader-logo-inner">
             <img
               src="/logo.png"
-              alt="Real_i"
+              alt="REAL_i"
               className="loader-logo-img"
             />
           </div>

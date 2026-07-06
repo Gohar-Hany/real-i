@@ -111,7 +111,7 @@ export default function StudentDashboard() {
               {user?.name ? (
                 <>Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">{user.name}</span></>
               ) : (
-                <>Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Real_i</span></>
+                <>Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">REAL_i</span></>
               )}
             </h1>
             <p className="text-surface-400 text-sm sm:text-base max-w-xl leading-relaxed">

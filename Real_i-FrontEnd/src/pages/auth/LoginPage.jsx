@@ -78,7 +78,7 @@ export default function LoginPage() {
 
     if (result && result.success) {
       setAttempts(0);
-      toast.success(isRegistering ? 'Welcome to Real_i!' : 'Session established');
+      toast.success(isRegistering ? 'Welcome to REAL_i!' : 'Session established');
       navigate(result.user.role === 'admin' ? '/admin' : '/student');
     } else {
       const newAttempts = attempts + 1;
@@ -110,8 +110,8 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title>Real_i | {isRegistering ? 'Register' : 'Login'}</title>
-        <meta name="description" content="Secure authentication for Real_i platform." />
+        <title>REAL_i | {isRegistering ? 'Register' : 'Login'}</title>
+        <meta name="description" content="Secure authentication for REAL_i platform." />
       </Helmet>
     <div className="min-h-screen flex items-center justify-center relative overflow-y-auto bg-surface-950 px-4 py-12">
       {/* Cyber Background Elements */}
@@ -147,11 +147,11 @@ export default function LoginPage() {
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center mb-6">
               <div className="w-16 h-16 bg-transparent flex items-center justify-center shadow-glow">
-                <img src="/logo.png" alt="Real_i Logo" className="w-full h-full object-contain" />
+                <img src="/logo.png" alt="REAL_i Logo" className="w-full h-full object-contain" />
               </div>
             </div>
             <h1 className="text-3xl font-bold text-primary-500 font-heading tracking-[0.2em] uppercase mb-2">
-              Real_i
+              REAL_i
             </h1>
             <p className="font-mono text-xs text-surface-400 tracking-widest uppercase">
               {showForgotPassword ? 'Password Recovery' : isRegistering ? 'Initialize User Object' : 'System Authentication'}

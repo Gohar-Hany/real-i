@@ -120,8 +120,8 @@ export default function ContactPage() {
   return (
     <>
       <Helmet>
-        <title>Real_i | Contact Us</title>
-        <meta name="description" content="Get in touch with the Real_i team. We'd love to hear from you." />
+        <title>REAL_i | Contact Us</title>
+        <meta name="description" content="Get in touch with the REAL_i team. We'd love to hear from you." />
       </Helmet>
 
       <div ref={containerRef} className="min-h-screen bg-surface-950">

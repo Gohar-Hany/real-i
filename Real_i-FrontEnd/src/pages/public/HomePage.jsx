@@ -170,8 +170,8 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Real_i | Advanced Cognitive Platform</title>
-        <meta name="description" content="Enter the next generation of intelligent learning with Real_i. Experience AI-driven education in a premium cyber-industrial environment." />
+        <title>REAL_i | Advanced Cognitive Platform</title>
+        <meta name="description" content="Enter the next generation of intelligent learning with REAL_i. Experience AI-driven education in a premium cyber-industrial environment." />
       </Helmet>
       <div className="min-h-screen bg-surface-950 overflow-hidden">
       {/* ═══════════════════════════════════════════════════════

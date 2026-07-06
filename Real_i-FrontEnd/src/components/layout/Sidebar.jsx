@@ -60,12 +60,12 @@ export default function Sidebar() {
       {/* Logo */}
       <div className={`flex items-center h-16 px-4 border-b border-surface-800/50 ${collapsed ? 'justify-center' : 'gap-3'}`}>
         <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 shadow-glow-sm">
-          <img src="/logo.png" alt="Real_i" loading="lazy" width="36" height="36" className="w-full h-full object-contain" />
+          <img src="/logo.png" alt="REAL_i" loading="lazy" width="36" height="36" className="w-full h-full object-contain" />
         </div>
         {!collapsed && (
           <div className="animate-fade-in">
             <h1 className="text-lg font-bold text-gradient leading-tight font-heading tracking-wide">
-              Real_i
+              REAL_i
             </h1>
             <p className="text-[10px] text-surface-500 font-medium tracking-wide uppercase">
               {isAdmin ? 'Admin Panel' : 'Student Portal'}
