@@ -19,7 +19,7 @@ export default function ChatInterface({
   messages = [],
   loading = false,
   placeholder = 'Type your message...',
-  botName = 'REAL.i',
+  botName = 'Real_i',
   botSubtitle = 'AI Assistant',
   showClearButton = true,
   onClear,

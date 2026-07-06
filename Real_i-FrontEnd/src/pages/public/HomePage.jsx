@@ -170,8 +170,8 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title>REAL.i | Advanced Cognitive Platform</title>
-        <meta name="description" content="Enter the next generation of intelligent learning with REAL.i. Experience AI-driven education in a premium cyber-industrial environment." />
+        <title>Real_i | Advanced Cognitive Platform</title>
+        <meta name="description" content="Enter the next generation of intelligent learning with Real_i. Experience AI-driven education in a premium cyber-industrial environment." />
       </Helmet>
       <div className="min-h-screen bg-surface-950 overflow-hidden">
       {/* ═══════════════════════════════════════════════════════
@@ -217,12 +217,12 @@ export default function HomePage() {
                 <span className="w-12 h-[2px] bg-primary-500" />
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary-500">System Online</span>
               </div>
-              <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl text-surface-100 mb-6 tracking-tight opacity-0 hero-title font-bold uppercase">
-                <span className="inline-block glitch-char">R</span>
-                <span className="inline-block glitch-char">E</span>
-                <span className="inline-block glitch-char">A</span>
-                <span className="inline-block glitch-char">L</span>.
-                <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-500 to-primary-700 inline-block glitch-char drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">i</span>
+              <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl text-surface-100 mb-6 tracking-tight opacity-0 hero-title font-bold">
+                <span className="inline-block glitch-char uppercase">R</span>
+                <span className="inline-block glitch-char uppercase">E</span>
+                <span className="inline-block glitch-char uppercase">A</span>
+                <span className="inline-block glitch-char uppercase">L</span>_
+                <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-500 to-primary-700 inline-block glitch-char drop-shadow-[0_0_15px_rgba(212,175,55,0.4)] lowercase">i</span>
               </h1>
               <p className="font-heading text-2xl md:text-3xl lg:text-4xl text-surface-400 mb-10 max-w-2xl opacity-0 hero-subtitle tracking-tight leading-tight">
                 <span className="inline-block glitch-word">Real</span> <span className="inline-block glitch-word">Intelligence</span> <span className="inline-block glitch-word">isn't</span> <span className="inline-block glitch-word">predicted.</span> <br/>

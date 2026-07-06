@@ -4,7 +4,7 @@
 @variant dark (&:where(.dark, .dark *));
 
 /* ═══════════════════════════════════════════════════════════
-   REAL.i Design System — Premium Dark-First Gold Theme
+   Real_i Design System — Premium Dark-First Gold Theme
    ═══════════════════════════════════════════════════════════ */
 
 @theme {
@@ -237,7 +237,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   Utility Classes — REAL.i Premium Design System
+   Utility Classes — Real_i Premium Design System
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Buttons ────────────────────────────────────────────── */

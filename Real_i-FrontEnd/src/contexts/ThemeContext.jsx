@@ -6,7 +6,7 @@ export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     const stored = localStorage.getItem('reali_theme');
     if (stored) return stored;
-    return 'dark'; // REAL.i dark-first brand identity
+    return 'dark'; // Real_i dark-first brand identity
   });
 
   useEffect(() => {

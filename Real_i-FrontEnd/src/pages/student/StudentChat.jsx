@@ -125,7 +125,7 @@ export default function StudentChat() {
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
-            Chat with <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200 font-heading">REAL.i</span>
+            Chat with <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200 font-heading">Real_i</span>
           </h1>
           <div className="flex flex-wrap items-center gap-3 mt-2 text-surface-400 text-sm">
             <p>Ask anything about your course materials or quizzes.</p>
@@ -170,7 +170,7 @@ export default function StudentChat() {
             onSendMessage={handleSend}
             loading={loading}
             onClear={handleClear}
-            botName="REAL.i"
+            botName="Real_i"
             botSubtitle="Study Assistant • Online"
             placeholder="Type your question here..."
           />

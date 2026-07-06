@@ -56,7 +56,7 @@ export default function CoursesPage() {
   return (
     <>
       <Helmet>
-        <title>REAL.i | Advanced Neural Modules</title>
+        <title>Real_i | Advanced Neural Modules</title>
         <meta name="description" content="Explore our catalog of advanced cognitive modules and elevate your technical prowess." />
       </Helmet>
 
