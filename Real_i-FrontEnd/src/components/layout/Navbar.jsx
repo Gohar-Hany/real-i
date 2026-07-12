@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Menu, X, ChevronRight, LogIn, UserPlus, Brain } from 'lucide-react';
+import { Menu, X, ChevronRight } from 'lucide-react';
 import gsap from 'gsap';
 
 export default function Navbar() {
@@ -9,7 +9,6 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
   const navRef = useRef(null);
   const logoRef = useRef(null);
   const linksRef = useRef(null);

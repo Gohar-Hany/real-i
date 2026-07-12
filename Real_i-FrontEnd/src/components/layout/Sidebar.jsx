@@ -26,6 +26,7 @@ const studentLinks = [
   { to: '/student/courses', icon: GraduationCap, label: 'My Courses' },
   { to: '/student/chat', icon: MessageSquare, label: 'Study Chat' },
   { to: '/student/quiz', icon: BrainCircuit, label: 'Quizzes' },
+  { to: '/student/performance', icon: BarChart3, label: 'Performance' },
   { to: '/student/profile', icon: UserCircle, label: 'Profile' },
 ];
 

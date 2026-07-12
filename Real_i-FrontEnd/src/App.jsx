@@ -32,6 +32,7 @@ const AdminCourses = lazy(() => import('@/pages/admin/AdminCourses'));
 const AdminAnalytics = lazy(() => import('@/pages/admin/AdminAnalytics'));
 const AdminProfile = lazy(() => import('@/pages/admin/AdminProfile'));
 const AdminSettings = lazy(() => import('@/pages/admin/AdminSettings'));
+const AdminStudentProfile = lazy(() => import('@/pages/admin/AdminStudentProfile'));
 
 // Student Pages
 const StudentDashboard = lazy(() => import('@/pages/student/StudentDashboard'));
@@ -39,6 +40,7 @@ const StudentChat = lazy(() => import('@/pages/student/StudentChat'));
 const StudentQuiz = lazy(() => import('@/pages/student/StudentQuiz'));
 const StudentCourses = lazy(() => import('@/pages/student/StudentCourses'));
 const StudentProfile = lazy(() => import('@/pages/student/StudentProfile'));
+const StudentPerformance = lazy(() => import('@/pages/student/StudentPerformance'));
 
 function ProtectedRoute({ children, role }) {
   const { user, loading } = useAuth();
@@ -90,6 +92,7 @@ function AppRoutes() {
         <Route path="/admin" element={<ProtectedRoute role="admin"><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<AdminDashboard />} />
           <Route path="students" element={<AdminStudents />} />
+          <Route path="students/:id" element={<AdminStudentProfile />} />
           <Route path="courses" element={<AdminCourses />} />
           <Route path="analytics" element={<AdminAnalytics />} />
           <Route path="chat" element={<AdminChat />} />
@@ -106,6 +109,7 @@ function AppRoutes() {
           <Route path="courses" element={<StudentCourses />} />
           <Route path="chat" element={<StudentChat />} />
           <Route path="quiz" element={<StudentQuiz />} />
+          <Route path="performance" element={<StudentPerformance />} />
           <Route path="profile" element={<StudentProfile />} />
         </Route>
 

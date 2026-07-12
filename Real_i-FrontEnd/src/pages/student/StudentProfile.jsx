@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/common/Toast';
 import { getProjects, getCompletedQuizzes } from '@/services/api';
-import { UserCircle, Mail, Shield, Calendar, Award, BarChart3, BookOpen, BrainCircuit, Edit2, Check, X, Target } from 'lucide-react';
+import { UserCircle, Mail, Shield, Calendar, Award, BarChart3, BookOpen, BrainCircuit, Edit2, Check, X, Target, ArrowUpRight } from 'lucide-react';
 
 export default function StudentProfile() {
   const { user } = useAuth();
@@ -152,6 +153,17 @@ export default function StudentProfile() {
                     </div>
                     <span className="text-surface-200 font-medium">Joined Fall 2024</span>
                   </div>
+
+                  <Link
+                    to="/student/performance"
+                    className="flex items-center gap-4 text-sm p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20 hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all group"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                      <BarChart3 size={14} className="text-emerald-400" />
+                    </div>
+                    <span className="text-emerald-300 font-bold flex-1">View Performance Report</span>
+                    <ArrowUpRight size={14} className="text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </Link>
                 </div>
               </div>
             )}

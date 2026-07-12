@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { generateQuiz, getProjects, getAssignedQuizzes, submitQuizResult, getCompletedQuizzes } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
 import Select from '@/components/common/Select';
 import {
   BrainCircuit, Loader2, CheckCircle, XCircle, ArrowRight,
-  RotateCcw, Trophy, Target, Clock, Sparkles, Lightbulb
+  RotateCcw, Trophy, Target, Clock, Sparkles, Lightbulb, Timer, AlertTriangle
 } from 'lucide-react';
 
 const STATES = { SETUP: 'setup', LOADING: 'loading', QUIZ: 'quiz', RESULTS: 'results' };
@@ -27,6 +27,9 @@ export default function StudentQuiz() {
   const [activeTaskId, setActiveTaskId] = useState(null);
   const [quizScore, setQuizScore] = useState(null);
   const [quizTotal, setQuizTotal] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [timerEnabled, setTimerEnabled] = useState(true);
+  const timerRef = useRef(null);
   const toast = useToast();
 
   useEffect(() => {
@@ -134,6 +137,11 @@ export default function StudentQuiz() {
       setQuizTotal(null);
       setSelectedAnswer(null);
       setShowExplanation(false);
+      // Timer: 2 min per question
+      if (timerEnabled) {
+        const totalSecs = (quizItem.quiz?.questions?.length || 5) * 120;
+        setTimeLeft(totalSecs);
+      }
       setState(STATES.QUIZ);
     }
   };
@@ -152,6 +160,11 @@ export default function StudentQuiz() {
       setAnswers([]);
       setSelectedAnswer(null);
       setShowExplanation(false);
+      // Timer: 2 min per question
+      if (timerEnabled) {
+        const totalSecs = (result.quiz?.questions?.length || numQuestions) * 120;
+        setTimeLeft(totalSecs);
+      }
       setState(STATES.QUIZ);
     } catch (err) {
       toast.error(`Failed to generate quiz: ${err.message}`);
@@ -214,6 +227,42 @@ export default function StudentQuiz() {
     }
   };
 
+  // Timer effect
+  useEffect(() => {
+    if (state === STATES.QUIZ && timerEnabled && timeLeft > 0) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timerRef.current);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timerRef.current);
+    }
+    if (state !== STATES.QUIZ && timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+  }, [state, timerEnabled, timeLeft > 0]);
+
+  // Auto-submit when timer hits 0
+  useEffect(() => {
+    if (state === STATES.QUIZ && timerEnabled && timeLeft === 0 && quizData) {
+      // Force finish
+      const score = answers.filter(a => a.isCorrect).length;
+      setQuizScore(score);
+      setQuizTotal(quizData.questions.length);
+      setState(STATES.RESULTS);
+    }
+  }, [timeLeft]);
+
+  const formatTime = (secs) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
+
   const resetQuiz = () => {
     setState(STATES.SETUP);
     setQuizData(null);
@@ -225,7 +274,9 @@ export default function StudentQuiz() {
     setShowExplanation(false);
     setActiveTaskId(null);
     setTopic('');
+    setTimeLeft(0);
     setAnimatedOffset(2 * Math.PI * 60);
+    if (timerRef.current) clearInterval(timerRef.current);
   };
 
   const retryQuiz = () => {
@@ -321,6 +372,34 @@ export default function StudentQuiz() {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Timer Toggle */}
+              <div>
+                <label className="block text-sm font-semibold text-surface-300 mb-2 uppercase tracking-wide">
+                  Quiz Timer
+                </label>
+                <button
+                  onClick={() => setTimerEnabled(!timerEnabled)}
+                  className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${
+                    timerEnabled
+                      ? 'bg-primary-500/10 border-primary-500/30 text-primary-400'
+                      : 'bg-surface-800/50 border-surface-700 text-surface-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Timer size={18} />
+                    <div className="text-left">
+                      <p className="text-sm font-bold">{timerEnabled ? 'Timer Enabled' : 'Timer Disabled'}</p>
+                      <p className="text-[10px] text-surface-500 mt-0.5">
+                        {timerEnabled ? `${numQuestions * 2} minutes for ${numQuestions} questions` : 'No time limit'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className={`w-10 h-6 rounded-full transition-all relative ${timerEnabled ? 'bg-primary-500' : 'bg-surface-700'}`}>
+                    <div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-all ${timerEnabled ? 'left-5' : 'left-1'}`}></div>
+                  </div>
+                </button>
               </div>
 
               <button
@@ -432,9 +511,21 @@ export default function StudentQuiz() {
                   Question <span className="text-primary-400">{currentQuestion + 1}</span> <span className="text-surface-500 text-lg">/ {quizData.questions.length}</span>
                 </h2>
               </div>
-              <div className="flex items-center gap-2 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-700">
-                <Target size={14} className="text-emerald-400" />
-                <span className="text-xs font-bold text-white">{correctSoFar} Correct</span>
+              <div className="flex items-center gap-3">
+                {timerEnabled && timeLeft > 0 && (
+                  <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${
+                    timeLeft <= 60 ? 'bg-rose-500/10 border-rose-500/30 text-rose-400 animate-pulse' :
+                    timeLeft <= 180 ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
+                    'bg-surface-900 border-surface-700 text-surface-300'
+                  }`}>
+                    <Timer size={14} />
+                    <span className="text-xs font-bold font-mono">{formatTime(timeLeft)}</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-700">
+                  <Target size={14} className="text-emerald-400" />
+                  <span className="text-xs font-bold text-white">{correctSoFar} Correct</span>
+                </div>
               </div>
             </div>
             <div className="h-2 w-full bg-surface-900 rounded-full overflow-hidden border border-surface-800">
