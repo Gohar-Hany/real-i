@@ -5,7 +5,7 @@ import {
   LayoutDashboard, MessageSquare, Database, Upload, BookOpen,
   BrainCircuit, LogOut, ChevronLeft, ChevronRight, Shield,
   Users, BarChart3, GraduationCap, UserCircle, FolderOpen,
-  Settings, ClipboardList,
+  Settings, ClipboardList, CalendarDays,
 } from 'lucide-react';
 
 const adminLinks = [
@@ -13,6 +13,7 @@ const adminLinks = [
   { to: '/admin/students', icon: Users, label: 'Students' },
   { to: '/admin/courses', icon: FolderOpen, label: 'Courses' },
   { to: '/admin/assessments', icon: ClipboardList, label: 'Assessments' },
+  { to: '/admin/calendar', icon: CalendarDays, label: 'Calendar' },
   { to: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
   { to: '/admin/chat', icon: MessageSquare, label: 'Command Chat' },
   { to: '/admin/data', icon: Database, label: 'Data Manager' },
@@ -26,6 +27,7 @@ const studentLinks = [
   { to: '/student', icon: LayoutDashboard, label: 'Dashboard', end: true },
   { to: '/student/courses', icon: GraduationCap, label: 'My Courses' },
   { to: '/student/assessments', icon: ClipboardList, label: 'Assessments' },
+  { to: '/student/calendar', icon: CalendarDays, label: 'Calendar' },
   { to: '/student/chat', icon: MessageSquare, label: 'Study Chat' },
   { to: '/student/quiz', icon: BrainCircuit, label: 'Quizzes' },
   { to: '/student/performance', icon: BarChart3, label: 'Performance' },

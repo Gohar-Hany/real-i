@@ -22,6 +22,7 @@ const BREADCRUMB_MAP = {
   results: { label: 'Results' },
   profile: { label: 'Profile' },
   settings: { label: 'Settings' },
+  calendar: { label: 'Calendar' },
   quiz: { label: 'Quizzes' },
   performance: { label: 'Performance' },
 };
@@ -37,6 +38,7 @@ const PAGE_TITLES = {
   '/admin/guidelines': 'System Guidelines',
   '/admin/assessments': 'Assessment Management',
   '/admin/assessments/create': 'Create Assessment',
+  '/admin/calendar': 'Academic Calendar',
   '/admin/profile': 'Admin Profile',
   '/admin/settings': 'System Settings',
   '/student': 'Dashboard',
@@ -44,6 +46,7 @@ const PAGE_TITLES = {
   '/student/chat': 'Study Chat',
   '/student/quiz': 'Smart Quizzes',
   '/student/assessments': 'My Assessments',
+  '/student/calendar': 'My Calendar',
   '/student/profile': 'My Profile',
   '/student/performance': 'Performance Report',
 };

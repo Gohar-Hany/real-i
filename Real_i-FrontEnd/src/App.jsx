@@ -37,6 +37,7 @@ const AdminStudentProfile = lazy(() => import('@/pages/admin/AdminStudentProfile
 const AdminAssessments = lazy(() => import('@/pages/admin/AdminAssessments'));
 const AdminAssessmentCreate = lazy(() => import('@/pages/admin/AdminAssessmentCreate'));
 const AdminAssessmentDetail = lazy(() => import('@/pages/admin/AdminAssessmentDetail'));
+const AdminCalendar = lazy(() => import('@/pages/admin/AdminCalendar'));
 
 // Student Pages
 const StudentDashboard = lazy(() => import('@/pages/student/StudentDashboard'));
@@ -49,6 +50,7 @@ const StudentAssessments = lazy(() => import('@/pages/student/StudentAssessments
 const StudentExamTake = lazy(() => import('@/pages/student/StudentExamTake'));
 const StudentAssignmentSubmit = lazy(() => import('@/pages/student/StudentAssignmentSubmit'));
 const StudentAssessmentResult = lazy(() => import('@/pages/student/StudentAssessmentResult'));
+const StudentCalendar = lazy(() => import('@/pages/student/StudentCalendar'));
 
 function ProtectedRoute({ children, role }) {
   const { user, loading } = useAuth();
@@ -111,6 +113,7 @@ function AppRoutes() {
           <Route path="assessments/create" element={<AdminAssessmentCreate />} />
           <Route path="assessments/:id" element={<AdminAssessmentDetail />} />
           <Route path="assessments/:id/edit" element={<AdminAssessmentCreate />} />
+          <Route path="calendar" element={<AdminCalendar />} />
           <Route path="profile" element={<AdminProfile />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
@@ -126,6 +129,7 @@ function AppRoutes() {
           <Route path="assessments/:id/take" element={<StudentExamTake />} />
           <Route path="assessments/:id/submit" element={<StudentAssignmentSubmit />} />
           <Route path="assessments/:id/results" element={<StudentAssessmentResult />} />
+          <Route path="calendar" element={<StudentCalendar />} />
           <Route path="profile" element={<StudentProfile />} />
         </Route>
 
