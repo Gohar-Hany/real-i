@@ -5,13 +5,14 @@ import {
   LayoutDashboard, MessageSquare, Database, Upload, BookOpen,
   BrainCircuit, LogOut, ChevronLeft, ChevronRight, Shield,
   Users, BarChart3, GraduationCap, UserCircle, FolderOpen,
-  Settings,
+  Settings, ClipboardList,
 } from 'lucide-react';
 
 const adminLinks = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
   { to: '/admin/students', icon: Users, label: 'Students' },
   { to: '/admin/courses', icon: FolderOpen, label: 'Courses' },
+  { to: '/admin/assessments', icon: ClipboardList, label: 'Assessments' },
   { to: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
   { to: '/admin/chat', icon: MessageSquare, label: 'Command Chat' },
   { to: '/admin/data', icon: Database, label: 'Data Manager' },
@@ -24,6 +25,7 @@ const adminLinks = [
 const studentLinks = [
   { to: '/student', icon: LayoutDashboard, label: 'Dashboard', end: true },
   { to: '/student/courses', icon: GraduationCap, label: 'My Courses' },
+  { to: '/student/assessments', icon: ClipboardList, label: 'Assessments' },
   { to: '/student/chat', icon: MessageSquare, label: 'Study Chat' },
   { to: '/student/quiz', icon: BrainCircuit, label: 'Quizzes' },
   { to: '/student/performance', icon: BarChart3, label: 'Performance' },

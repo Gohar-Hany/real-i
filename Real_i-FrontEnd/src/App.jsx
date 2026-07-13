@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { SidebarProvider } from '@/contexts/SidebarContext';
+import { AssessmentProvider } from '@/contexts/AssessmentContext';
 import { ToastProvider } from '@/components/common/Toast';
 import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
@@ -33,6 +34,9 @@ const AdminAnalytics = lazy(() => import('@/pages/admin/AdminAnalytics'));
 const AdminProfile = lazy(() => import('@/pages/admin/AdminProfile'));
 const AdminSettings = lazy(() => import('@/pages/admin/AdminSettings'));
 const AdminStudentProfile = lazy(() => import('@/pages/admin/AdminStudentProfile'));
+const AdminAssessments = lazy(() => import('@/pages/admin/AdminAssessments'));
+const AdminAssessmentCreate = lazy(() => import('@/pages/admin/AdminAssessmentCreate'));
+const AdminAssessmentDetail = lazy(() => import('@/pages/admin/AdminAssessmentDetail'));
 
 // Student Pages
 const StudentDashboard = lazy(() => import('@/pages/student/StudentDashboard'));
@@ -41,6 +45,10 @@ const StudentQuiz = lazy(() => import('@/pages/student/StudentQuiz'));
 const StudentCourses = lazy(() => import('@/pages/student/StudentCourses'));
 const StudentProfile = lazy(() => import('@/pages/student/StudentProfile'));
 const StudentPerformance = lazy(() => import('@/pages/student/StudentPerformance'));
+const StudentAssessments = lazy(() => import('@/pages/student/StudentAssessments'));
+const StudentExamTake = lazy(() => import('@/pages/student/StudentExamTake'));
+const StudentAssignmentSubmit = lazy(() => import('@/pages/student/StudentAssignmentSubmit'));
+const StudentAssessmentResult = lazy(() => import('@/pages/student/StudentAssessmentResult'));
 
 function ProtectedRoute({ children, role }) {
   const { user, loading } = useAuth();
@@ -99,6 +107,10 @@ function AppRoutes() {
           <Route path="data" element={<AdminData />} />
           <Route path="upload" element={<AdminUpload />} />
           <Route path="guidelines" element={<AdminGuidelines />} />
+          <Route path="assessments" element={<AdminAssessments />} />
+          <Route path="assessments/create" element={<AdminAssessmentCreate />} />
+          <Route path="assessments/:id" element={<AdminAssessmentDetail />} />
+          <Route path="assessments/:id/edit" element={<AdminAssessmentCreate />} />
           <Route path="profile" element={<AdminProfile />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
@@ -110,6 +122,10 @@ function AppRoutes() {
           <Route path="chat" element={<StudentChat />} />
           <Route path="quiz" element={<StudentQuiz />} />
           <Route path="performance" element={<StudentPerformance />} />
+          <Route path="assessments" element={<StudentAssessments />} />
+          <Route path="assessments/:id/take" element={<StudentExamTake />} />
+          <Route path="assessments/:id/submit" element={<StudentAssignmentSubmit />} />
+          <Route path="assessments/:id/results" element={<StudentAssessmentResult />} />
           <Route path="profile" element={<StudentProfile />} />
         </Route>
 
@@ -130,9 +146,11 @@ export default function App() {
           <ThemeProvider>
             <SidebarProvider>
               <AuthProvider>
-                <ToastProvider>
-                  <AppRoutes />
-                </ToastProvider>
+                <AssessmentProvider>
+                  <ToastProvider>
+                    <AppRoutes />
+                  </ToastProvider>
+                </AssessmentProvider>
               </AuthProvider>
             </SidebarProvider>
           </ThemeProvider>
