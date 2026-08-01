@@ -1,40 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { getUsers, getUserResults, updateUserRole } from '@/services/api';
+import { getUsers, getUserResults, updateUserRole, getCourses } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
 import {
   ChevronLeft, Shield, GraduationCap, Mail, Calendar, Clock,
-  Target, TrendingUp, Trophy, Award, BrainCircuit, BarChart3,
-  CheckCircle, XCircle, ChevronDown, UserCircle, AlertTriangle,
-  FileText, BookOpen, ArrowUpRight, ArrowDownRight, Star,
-  Ban, ShieldCheck, Download, MoreHorizontal, Flame, Eye
+  Target, TrendingUp, Trophy, BrainCircuit, BarChart3,
+  CheckCircle, XCircle, ChevronDown, UserCircle,
+  FileText, BookOpen, ArrowUpRight, ArrowDownRight,
+  Ban, ShieldCheck, Download, MoreHorizontal, Eye
 } from 'lucide-react';
 
 const SUPER_ADMIN_EMAIL = 'goharhany@gmail.com';
-
-// Mock data — ready to be replaced with real API
-const MOCK_STUDENT_ASSIGNMENTS = [
-  { id: 1, title: 'Build a Linear Regression Model', course: 'AI Fundamentals', grade: 95, maxGrade: 100, status: 'graded', submittedOn: '2026-06-30' },
-  { id: 2, title: 'CNN Image Classifier', course: 'Deep Learning', grade: 88, maxGrade: 100, status: 'graded', submittedOn: '2026-07-04' },
-  { id: 3, title: 'Sentiment Analysis Pipeline', course: 'NLP Course', grade: null, maxGrade: 100, status: 'submitted', submittedOn: '2026-07-11' },
-  { id: 4, title: 'RAG System Implementation', course: 'RAG Systems', grade: null, maxGrade: 100, status: 'pending', submittedOn: null },
-  { id: 5, title: 'Data Visualization Dashboard', course: 'Data Science', grade: 72, maxGrade: 100, status: 'graded', submittedOn: '2026-06-24' },
-];
-
-const MOCK_ENROLLED_COURSES = [
-  { name: 'AI Fundamentals', progress: 78, grade: 'A', enrolledOn: '2026-05-01' },
-  { name: 'Deep Learning Mastery', progress: 45, grade: 'B+', enrolledOn: '2026-05-15' },
-  { name: 'Data Science Bootcamp', progress: 92, grade: 'A+', enrolledOn: '2026-04-20' },
-];
-
-const MOCK_ACTIVITY_LOG = [
-  { action: 'Completed Quiz', detail: 'AI Fundamentals — Neural Networks', time: '2 hours ago', type: 'success' },
-  { action: 'Submitted Assignment', detail: 'Sentiment Analysis Pipeline', time: '1 day ago', type: 'info' },
-  { action: 'Started Course', detail: 'RAG Systems & Vector Databases', time: '3 days ago', type: 'info' },
-  { action: 'Failed Quiz', detail: 'Deep Learning — Backpropagation', time: '5 days ago', type: 'danger' },
-  { action: 'Achieved 95%', detail: 'Data Science — Pandas Assignment', time: '1 week ago', type: 'success' },
-];
 
 export default function AdminStudentProfile() {
   const { id } = useParams();
@@ -43,6 +20,8 @@ export default function AdminStudentProfile() {
   const toast = useToast();
   const [student, setStudent] = useState(null);
   const [quizResults, setQuizResults] = useState([]);
+  const studentSubmissions = [];
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedQuiz, setExpandedQuiz] = useState(null);
   const [activeSection, setActiveSection] = useState('overview');
@@ -50,32 +29,46 @@ export default function AdminStudentProfile() {
 
   const isSuperAdmin = currentUser?.email === SUPER_ADMIN_EMAIL;
 
+
+
   useEffect(() => {
-    fetchStudentData();
-  }, [id]);
+    const fetchStudentData = async () => {
+      setLoading(true);
+      try {
+        const users = await getUsers();
+        const allUsers = Array.isArray(users) ? users : [];
+        const found = allUsers.find(u => u.id === id);
+        setStudent(found || null);
 
-  const fetchStudentData = async () => {
-    setLoading(true);
-    try {
-      const users = await getUsers();
-      const found = users.find(u => u.id === id);
-      setStudent(found || null);
+        if (found) {
+          try {
+            const data = await getUserResults(found.id);
+            const results = data?.results || [];
+            setQuizResults(Array.isArray(results) ? results : []);
+          } catch {
+            setQuizResults([]);
+          }
 
-      if (found) {
-        try {
-          const data = await getUserResults(found.id);
-          const results = data?.results || [];
-          setQuizResults(Array.isArray(results) ? results : []);
-        } catch (e) {
-          setQuizResults([]);
+          // Fetch courses for this student
+          try {
+            const courses = await getCourses();
+            setEnrolledCourses(Array.isArray(courses) ? courses.map(c => ({
+              name: c.title || c.project_id,
+              progress: 0,
+              grade: '-',
+              enrolledOn: c.created_at ? new Date(c.created_at).toLocaleDateString() : 'N/A',
+            })) : []);
+          } catch { setEnrolledCourses([]); }
         }
+      } catch {
+        toast.error('Failed to load student data');
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      toast.error('Failed to load student data');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchStudentData();
+  }, [id, toast]);
 
   const handleRoleChange = async (newRole) => {
     try {
@@ -128,17 +121,16 @@ export default function AdminStudentProfile() {
     ? Math.round(quizResults.filter(r => r.total > 0 && (r.score / r.total) * 100 >= 60).length / totalQuizzes * 100)
     : 0;
 
-  const gradedAssignments = MOCK_STUDENT_ASSIGNMENTS.filter(a => a.grade !== null);
-  const avgAssignmentGrade = gradedAssignments.length > 0
-    ? Math.round(gradedAssignments.reduce((acc, a) => acc + a.grade, 0) / gradedAssignments.length)
+  const gradedSubmissions = studentSubmissions.filter(s => s.score != null || s.percentage != null);
+  const avgAssignmentGrade = gradedSubmissions.length > 0
+    ? Math.round(gradedSubmissions.reduce((acc, s) => acc + (s.percentage || (s.score && s.total_marks ? (s.score / s.total_marks) * 100 : 0)), 0) / gradedSubmissions.length)
     : 0;
 
   const sections = [
     { id: 'overview', label: 'Overview' },
     { id: 'quizzes', label: `Quizzes (${totalQuizzes})` },
-    { id: 'assignments', label: `Assignments (${MOCK_STUDENT_ASSIGNMENTS.length})` },
+    { id: 'assignments', label: `Submissions (${studentSubmissions.length})` },
     { id: 'courses', label: 'Courses' },
-    { id: 'activity', label: 'Activity Log' },
   ];
 
   return (
@@ -243,7 +235,7 @@ export default function AdminStudentProfile() {
           { icon: TrendingUp, label: 'Avg Score', value: `${avgScore}%`, color: '#10B981' },
           { icon: Trophy, label: 'Best Score', value: `${bestScore}%`, color: '#F59E0B' },
           { icon: Target, label: 'Pass Rate', value: `${passRate}%`, color: '#3B82F6' },
-          { icon: FileText, label: 'Assignments', value: `${gradedAssignments.length}/${MOCK_STUDENT_ASSIGNMENTS.length}`, color: '#8B5CF6' },
+          { icon: FileText, label: 'Submissions', value: `${gradedSubmissions.length}/${studentSubmissions.length}`, color: '#8B5CF6' },
         ].map((s, i) => (
           <div
             key={i}
@@ -360,13 +352,16 @@ export default function AdminStudentProfile() {
                 </h3>
               </div>
               <div className="p-4 space-y-3 max-h-[400px] overflow-y-auto custom-scrollbar">
-                {MOCK_ACTIVITY_LOG.map((a, i) => (
+                {quizResults.length === 0 && (
+                  <p className="text-surface-500 text-xs italic px-1">No recent activity.</p>
+                )}
+                {quizResults.slice(0, 5).map((r, i) => (
                   <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-surface-800/30 border border-surface-700/50">
-                    <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${a.type === 'success' ? 'bg-emerald-500' : a.type === 'danger' ? 'bg-rose-500' : 'bg-blue-500'}`}></div>
+                    <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${(r.total > 0 && (r.score / r.total) * 100 >= 60) ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-white">{a.action}</p>
-                      <p className="text-[11px] text-surface-500 truncate">{a.detail}</p>
-                      <p className="text-[10px] text-surface-600 mt-1">{a.time}</p>
+                      <p className="text-xs font-bold text-white">{(r.total > 0 && (r.score / r.total) * 100 >= 60) ? 'Passed Quiz' : 'Failed Quiz'}</p>
+                      <p className="text-[11px] text-surface-500 truncate">{r.task_id || 'Quiz'} — Score: {r.score}/{r.total}</p>
+                      <p className="text-[10px] text-surface-600 mt-1">{r.timestamp ? new Date(r.timestamp).toLocaleDateString() : 'Recently'}</p>
                     </div>
                   </div>
                 ))}
@@ -394,7 +389,10 @@ export default function AdminStudentProfile() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-surface-700/50">
-                    {MOCK_ENROLLED_COURSES.map((c, i) => (
+                    {enrolledCourses.length === 0 && (
+                      <tr><td colSpan={4} className="px-6 py-6 text-center text-surface-500 text-xs">No courses found.</td></tr>
+                    )}
+                    {enrolledCourses.map((c, i) => (
                       <tr key={i} className="hover:bg-surface-800/30 transition-colors">
                         <td className="px-6 py-4 font-bold text-white">{c.name}</td>
                         <td className="px-6 py-4">
@@ -515,27 +513,30 @@ export default function AdminStudentProfile() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-700/50">
-                  {MOCK_STUDENT_ASSIGNMENTS.map(a => (
-                    <tr key={a.id} className="hover:bg-surface-800/30 transition-colors">
+                  {studentSubmissions.length === 0 && (
+                    <tr><td colSpan={4} className="px-6 py-8 text-center text-surface-500 text-sm">No submissions yet.</td></tr>
+                  )}
+                  {studentSubmissions.map((s, i) => (
+                    <tr key={s.id || i} className="hover:bg-surface-800/30 transition-colors">
                       <td className="px-6 py-4">
-                        <p className="font-bold text-white">{a.title}</p>
-                        {a.submittedOn && <p className="text-[10px] text-surface-500 mt-0.5">Submitted: {a.submittedOn}</p>}
+                        <p className="font-bold text-white">{s.assessment_title || 'Assessment'}</p>
+                        {s.submitted_at && <p className="text-[10px] text-surface-500 mt-0.5">Submitted: {new Date(s.submitted_at).toLocaleDateString()}</p>}
                       </td>
-                      <td className="px-6 py-4 hidden md:table-cell text-surface-400 text-xs">{a.course}</td>
+                      <td className="px-6 py-4 hidden md:table-cell text-surface-400 text-xs">{s.course_title || '—'}</td>
                       <td className="px-6 py-4 text-center">
                         <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${
-                          a.status === 'graded' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' :
-                          a.status === 'submitted' ? 'bg-amber-500/10 border border-amber-500/20 text-amber-400' :
+                          s.status === 'graded' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' :
+                          s.status === 'submitted' ? 'bg-amber-500/10 border border-amber-500/20 text-amber-400' :
                           'bg-surface-800 border border-surface-700 text-surface-400'
                         }`}>
-                          {a.status === 'graded' && <CheckCircle size={12} />}
-                          {a.status === 'submitted' && <Clock size={12} />}
-                          {a.status}
+                          {s.status === 'graded' && <CheckCircle size={12} />}
+                          {s.status === 'submitted' && <Clock size={12} />}
+                          {s.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        {a.grade !== null ? (
-                          <span className="text-lg font-black text-white">{a.grade}<span className="text-surface-500 text-xs">/{a.maxGrade}</span></span>
+                        {s.score != null ? (
+                          <span className="text-lg font-black text-white">{s.score}<span className="text-surface-500 text-xs">/{s.total_marks || 100}</span></span>
                         ) : (
                           <span className="text-surface-500 text-xs">—</span>
                         )}
@@ -551,7 +552,8 @@ export default function AdminStudentProfile() {
         {/* COURSES */}
         {activeSection === 'courses' && (
           <div className="space-y-4">
-            {MOCK_ENROLLED_COURSES.map((c, i) => (
+            {enrolledCourses.length === 0 && <p className="text-surface-500 text-sm italic">No courses found.</p>}
+            {enrolledCourses.map((c, i) => (
               <div key={i} className="glass-card rounded-2xl border border-surface-700/50 bg-surface-900/60 p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                   <div>
@@ -579,30 +581,6 @@ export default function AdminStudentProfile() {
                 </div>
               </div>
             ))}
-          </div>
-        )}
-
-        {/* ACTIVITY LOG */}
-        {activeSection === 'activity' && (
-          <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
-            <div className="p-6 space-y-4">
-              {MOCK_ACTIVITY_LOG.map((a, i) => (
-                <div key={i} className="flex items-start gap-4 p-4 rounded-2xl bg-surface-800/30 border border-surface-700/50 hover:bg-surface-800/50 transition-colors">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
-                    a.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
-                    a.type === 'danger' ? 'bg-rose-500/10 border-rose-500/20 text-rose-400' :
-                    'bg-blue-500/10 border-blue-500/20 text-blue-400'
-                  }`}>
-                    {a.type === 'success' ? <CheckCircle size={18} /> : a.type === 'danger' ? <AlertTriangle size={18} /> : <ArrowUpRight size={18} />}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-white">{a.action}</p>
-                    <p className="text-xs text-surface-400 mt-0.5">{a.detail}</p>
-                  </div>
-                  <span className="text-[10px] font-bold text-surface-500 uppercase tracking-wider shrink-0 bg-surface-950 px-2 py-1 rounded-md border border-surface-800">{a.time}</span>
-                </div>
-              ))}
-            </div>
           </div>
         )}
       </div>

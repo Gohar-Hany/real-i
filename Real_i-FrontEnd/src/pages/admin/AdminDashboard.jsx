@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { adminHealthCheck, getProjects, getUsers, getGuidelines, getUserResults } from '@/services/api';
+import { adminHealthCheck, getProjects, getUsers, getGuidelines, getCourses } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
 import {
   Users, BookOpen, BarChart3, MessageSquare, Upload, Shield,
-  Activity, ChevronRight, Sparkles, Server, Brain,
+  Activity, ChevronRight, Server, Brain,
   CheckCircle, XCircle, Zap, FolderOpen, GraduationCap,
   TrendingUp, AlertTriangle, Clock, Eye, ArrowUpRight
 } from 'lucide-react';
@@ -14,7 +14,7 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const toast = useToast();
-  const [stats, setStats] = useState({ users: 0, students: 0, admins: 0, projects: 0, guidelines: 0 });
+  const [stats, setStats] = useState({ users: 0, students: 0, admins: 0, projects: 0, courses: 0, guidelines: 0 });
   const [recentStudents, setRecentStudents] = useState([]);
   const [health, setHealth] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,26 +22,29 @@ export default function AdminDashboard() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [users, projects, guidelines] = await Promise.all([
+        const [users, projects, guidelines, courses] = await Promise.all([
           getUsers().catch(() => []),
           getProjects().catch(() => []),
           getGuidelines().catch(() => []),
+          getCourses().catch(() => []),
         ]);
 
-        const studentUsers = users.filter(u => u.role === 'student');
-        const adminUsers = users.filter(u => u.role === 'admin');
+        const studentUsers = Array.isArray(users) ? users.filter(u => u.role === 'student') : [];
+        const adminUsers = Array.isArray(users) ? users.filter(u => u.role === 'admin') : [];
 
         setStats({
-          users: users.length,
+          users: Array.isArray(users) ? users.length : 0,
           students: studentUsers.length,
           admins: adminUsers.length,
-          projects: projects.length,
-          guidelines: guidelines.filter(g => g.is_active).length,
+          projects: Array.isArray(projects) ? projects.length : 0,
+          courses: Array.isArray(courses) ? courses.length : 0,
+          guidelines: Array.isArray(guidelines) ? guidelines.filter(g => g.is_active).length : 0,
         });
+
 
         // Get recent students (last 5) for the activity widget
         setRecentStudents(studentUsers.slice(0, 6));
-      } catch (e) { /* ignore */ }
+      } catch { /* ignore */ }
       setLoading(false);
     };
     loadData();
@@ -53,7 +56,7 @@ export default function AdminDashboard() {
       setHealth(data);
       toast.success('System health check complete');
     } catch (err) {
-      toast.error('Health check failed');
+      toast.error(err?.message || 'Health check failed');
     }
   };
 
@@ -136,7 +139,7 @@ export default function AdminDashboard() {
           { icon: Users, label: 'Total Users', value: loading ? '...' : stats.users, sub: `${stats.students} students · ${stats.admins} admins`, color: '#3B82F6' },
           { icon: FolderOpen, label: 'Active Projects', value: loading ? '...' : stats.projects, sub: 'Learning modules', color: '#10B981' },
           { icon: BookOpen, label: 'Guidelines', value: loading ? '...' : stats.guidelines, sub: 'Active directives', color: '#F59E0B' },
-          { icon: Brain, label: 'AI Agents', value: '3', sub: 'Chat · Quiz · RAG', color: '#8B5CF6' },
+          { icon: Brain, label: 'AI Agents', value: 'Online', sub: 'Chat · Quiz · RAG', color: '#8B5CF6' },
         ].map((stat, i) => (
           <div
             key={i}

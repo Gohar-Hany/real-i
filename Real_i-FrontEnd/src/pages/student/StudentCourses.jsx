@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, ArrowRight, Clock, Search, SlidersHorizontal, ArrowUpDown, Grid3x3, List, Target, CheckCircle, Sparkles, BarChart3 } from 'lucide-react';
+import { BookOpen, ArrowRight, Clock, Search, Grid3x3, List, Target, CheckCircle, Sparkles, BarChart3 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { getProjects, getCompletedQuizzes, getAssignedQuizzes } from '@/services/api';
+import { getCourses, getUser } from '@/services/api';
 
 const COLORS = ['#D4AF37', '#10B981', '#3B82F6', '#8B5CF6', '#F59E0B', '#EF4444'];
 
@@ -19,44 +19,47 @@ export default function StudentCourses() {
   useEffect(() => {
     const fetchCoursesProgress = async () => {
       try {
-        const list = await getProjects();
-        if (list.length === 0) {
+        const list = await getCourses();
+        if (!list || list.length === 0) {
           setCoursesData([]);
           setLoading(false);
           return;
         }
 
-        let completedTaskIds = [];
+        let userCompletedLessons = [];
         try {
-          const res = await getCompletedQuizzes(user?.id);
-          completedTaskIds = res.completed_tasks ? res.completed_tasks.map(ct => ct.task_id) : [];
+          const userData = await getUser(user.id);
+          userCompletedLessons = userData.completed_lessons || [];
         } catch (e) {
-          console.error('Failed to fetch completed quizzes', e);
+          console.error('Failed to fetch user progress', e);
         }
 
         const data = [];
         for (let i = 0; i < list.length; i++) {
-          const project = list[i];
-          let totalQuizzes = 0;
+          const course = list[i];
+          const projectId = course.project_id || course.id;
+          
+          let totalLessons = 0;
           let completedInProject = 0;
 
-          try {
-            const quizzes = await getAssignedQuizzes(project.project_id);
-            if (quizzes && quizzes.length > 0) {
-              totalQuizzes = quizzes.length;
-              completedInProject = quizzes.filter(q => completedTaskIds.includes(q.task_id)).length;
-            }
-          } catch (e) { /* skip */ }
+          if (course.modules && Array.isArray(course.modules)) {
+            course.modules.forEach(mod => {
+              if (mod.lessons && Array.isArray(mod.lessons)) {
+                totalLessons += mod.lessons.length;
+                completedInProject += mod.lessons.filter(l => userCompletedLessons.includes(l.id)).length;
+              }
+            });
+          }
 
-          const progress = totalQuizzes === 0 ? 0 : Math.round((completedInProject / totalQuizzes) * 100);
+          const progress = totalLessons === 0 ? 0 : Math.round((completedInProject / totalLessons) * 100);
 
           data.push({
-            id: project.project_id,
-            title: project.project_id,
-            category: 'Course',
-            color: COLORS[i % COLORS.length],
+            id: projectId,
+            title: course.title || projectId,
+            category: course.category || 'Course',
+            color: course.color || COLORS[i % COLORS.length],
             progress,
-            totalQuizzes,
+            totalLessons,
             completedInProject,
             status: progress === 0 ? 'not-started' : progress === 100 ? 'completed' : 'in-progress',
           });
@@ -72,6 +75,7 @@ export default function StudentCourses() {
 
     if (user) fetchCoursesProgress();
   }, [user]);
+
 
   // ── Filtered & Sorted Data ──
   const filteredCourses = useMemo(() => {
@@ -94,7 +98,7 @@ export default function StudentCourses() {
         result.sort((a, b) => b.progress - a.progress);
         break;
       case 'tasks':
-        result.sort((a, b) => b.totalQuizzes - a.totalQuizzes);
+        result.sort((a, b) => b.totalLessons - a.totalLessons);
         break;
       case 'name':
       default:
@@ -317,14 +321,14 @@ export default function StudentCourses() {
                   <div className="flex items-center justify-between pt-4 border-t border-surface-800">
                     <div className="flex items-center gap-1.5 text-xs text-surface-400 font-medium">
                       <Clock size={14} className="text-surface-500" />
-                      {course.totalQuizzes > 0 ? (
-                        <span><strong className="text-white">{course.completedInProject}</strong> / {course.totalQuizzes} Tasks</span>
+                      {course.totalLessons > 0 ? (
+                        <span><strong className="text-white">{course.completedInProject}</strong> / {course.totalLessons} Lessons</span>
                       ) : (
                         <span>Pending</span>
                       )}
                     </div>
                     <button
-                      onClick={() => navigate(`/student/chat`)}
+                      onClick={() => navigate(`/student/courses/${course.id}/learn`)}
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-surface-950 px-4 py-2 rounded-xl transition-all shadow-sm hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] hover:scale-105 active:scale-95"
                       style={{ background: course.color }}
                     >

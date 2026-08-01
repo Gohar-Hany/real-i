@@ -1,74 +1,85 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { getCompletedQuizzes, getProjects, getAssignedQuizzes } from '@/services/api';
-import { useToast } from '@/components/common/Toast';
-import { COURSES } from '@/data/mockData';
+import { getCompletedQuizzes, getCourses, getAssignedQuizzes, getMySubmissions } from '@/services/api';
 import {
-  Target, TrendingUp, Trophy, Award, BrainCircuit, BookOpen,
-  CheckCircle, XCircle, Clock, Calendar, ChevronRight, Flame,
-  BarChart3, FileText, Star, ArrowUpRight, Sparkles, GraduationCap,
+  Trophy, BrainCircuit, BookOpen,
+  CheckCircle, XCircle, Clock, ChevronRight,
+  BarChart3, FileText, Sparkles, GraduationCap,
   ChevronDown, AlertCircle
 } from 'lucide-react';
 
-// Mock data for sections the backend doesn't support yet
-const MOCK_ASSIGNMENTS = [
-  { id: 1, title: 'Build a Linear Regression Model', course: 'AI Fundamentals', grade: 95, maxGrade: 100, status: 'graded', dueDate: '2026-07-01', submittedOn: '2026-06-30' },
-  { id: 2, title: 'CNN Image Classifier Project', course: 'Deep Learning Mastery', grade: 88, maxGrade: 100, status: 'graded', dueDate: '2026-07-05', submittedOn: '2026-07-04' },
-  { id: 3, title: 'Sentiment Analysis Pipeline', course: 'NLP Course', grade: null, maxGrade: 100, status: 'submitted', dueDate: '2026-07-15', submittedOn: '2026-07-11' },
-  { id: 4, title: 'RAG System Implementation', course: 'RAG Systems', grade: null, maxGrade: 100, status: 'pending', dueDate: '2026-07-20', submittedOn: null },
-  { id: 5, title: 'Data Visualization Dashboard', course: 'Data Science Bootcamp', grade: 72, maxGrade: 100, status: 'graded', dueDate: '2026-06-25', submittedOn: '2026-06-24' },
-];
-
-const MOCK_COURSE_PROGRESS = [
-  { id: 'ai-fundamentals', title: 'AI Fundamentals', progress: 78, lessonsCompleted: 25, totalLessons: 32, grade: 'A', lastAccessed: '2 hours ago' },
-  { id: 'deep-learning', title: 'Deep Learning Mastery', progress: 45, lessonsCompleted: 25, totalLessons: 56, grade: 'B+', lastAccessed: '1 day ago' },
-  { id: 'data-science', title: 'Data Science Bootcamp', progress: 92, lessonsCompleted: 44, totalLessons: 48, grade: 'A+', lastAccessed: '5 hours ago' },
-];
-
 export default function StudentPerformance() {
   const { user } = useAuth();
-  const toast = useToast();
   const [loading, setLoading] = useState(true);
   const [completedQuizzes, setCompletedQuizzes] = useState([]);
   const [assignedQuizzes, setAssignedQuizzes] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
+  const [courseProgress, setCourseProgress] = useState([]);
   const [expandedQuiz, setExpandedQuiz] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Fetch completed quizzes
+        try {
+          const res = await getCompletedQuizzes(user?.id);
+          const completed = res?.completed_tasks || res?.results || [];
+          setCompletedQuizzes(Array.isArray(completed) ? completed : []);
+        } catch {
+          setCompletedQuizzes([]);
+        }
+
+        // Fetch assigned quizzes from courses
+        try {
+          const courses = await getCourses();
+          let allQuizzes = [];
+          for (const c of courses) {
+            try {
+              const quizzes = await getAssignedQuizzes(c.project_id || c.id);
+              if (quizzes?.length > 0) allQuizzes.push(...quizzes);
+            } catch { /* skip */ }
+          }
+          setAssignedQuizzes(allQuizzes);
+        } catch {
+          setAssignedQuizzes([]);
+        }
+
+        // Fetch assignment submissions
+        try {
+          const subs = await getMySubmissions();
+          setSubmissions(Array.isArray(subs) ? subs : []);
+        } catch {
+          setSubmissions([]);
+        }
+
+        // Fetch courses for progress tab
+        try {
+          const courseList = await getCourses();
+          const progress = (Array.isArray(courseList) ? courseList : []).map(c => ({
+            id: c.project_id || c.id,
+            title: c.title || c.project_id,
+            progress: 0,
+            lessonsCompleted: 0,
+            totalLessons: c.lessons_count || 0,
+            grade: '-',
+            lastAccessed: 'Recently',
+          }));
+          setCourseProgress(progress);
+        } catch {
+          setCourseProgress([]);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchData();
   }, [user]);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      // Fetch completed quizzes
-      try {
-        const res = await getCompletedQuizzes(user?.id);
-        const completed = res?.completed_tasks || res?.results || [];
-        setCompletedQuizzes(Array.isArray(completed) ? completed : []);
-      } catch (e) {
-        setCompletedQuizzes([]);
-      }
 
-      // Fetch assigned quizzes
-      try {
-        const projects = await getProjects();
-        let allQuizzes = [];
-        for (const p of projects) {
-          try {
-            const quizzes = await getAssignedQuizzes(p.project_id);
-            if (quizzes?.length > 0) allQuizzes.push(...quizzes);
-          } catch (e) { /* skip */ }
-        }
-        setAssignedQuizzes(allQuizzes);
-      } catch (e) {
-        setAssignedQuizzes([]);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // ── Calculated Stats ──
   const totalQuizzes = completedQuizzes.length;
@@ -79,16 +90,17 @@ export default function StudentPerformance() {
     ? Math.max(...completedQuizzes.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0))
     : 0;
 
-  const gradedAssignments = MOCK_ASSIGNMENTS.filter(a => a.grade !== null);
-  const avgAssignmentGrade = gradedAssignments.length > 0
-    ? Math.round(gradedAssignments.reduce((acc, a) => acc + a.grade, 0) / gradedAssignments.length)
+  const gradedSubmissions = submissions.filter(s => s.percentage != null || s.score != null);
+  const avgAssignmentGrade = gradedSubmissions.length > 0
+    ? Math.round(gradedSubmissions.reduce((acc, s) => acc + (s.percentage || (s.score && s.total_marks ? (s.score / s.total_marks) * 100 : 0)), 0) / gradedSubmissions.length)
     : 0;
-  const submittedCount = MOCK_ASSIGNMENTS.filter(a => a.status !== 'pending').length;
-  const pendingCount = MOCK_ASSIGNMENTS.filter(a => a.status === 'pending').length;
+  const submittedCount = submissions.length;
+  const pendingCount = submissions.filter(s => s.status === 'submitted').length;
 
   const overallAvg = avgQuizScore && avgAssignmentGrade
     ? Math.round((avgQuizScore + avgAssignmentGrade) / 2)
     : avgQuizScore || avgAssignmentGrade || 0;
+
 
   const getLetterGrade = (pct) => {
     if (pct >= 93) return 'A';
@@ -174,9 +186,9 @@ export default function StudentPerformance() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { icon: BrainCircuit, label: 'Quizzes Passed', value: totalQuizzes, sub: `Best: ${bestQuizScore}%`, color: 'text-primary-400', bg: 'bg-primary-500/10', border: 'group-hover:border-primary-500/30' },
-          { icon: FileText, label: 'Assignments', value: `${submittedCount}/${MOCK_ASSIGNMENTS.length}`, sub: `${pendingCount} Pending`, color: 'text-emerald-400', bg: 'bg-emerald-400/10', border: 'group-hover:border-emerald-500/30' },
+          { icon: FileText, label: 'Submissions', value: `${submittedCount}`, sub: `${pendingCount} Pending`, color: 'text-emerald-400', bg: 'bg-emerald-400/10', border: 'group-hover:border-emerald-500/30' },
           { icon: Trophy, label: 'Quiz Average', value: `${avgQuizScore}%`, sub: getLetterGrade(avgQuizScore), color: 'text-amber-400', bg: 'bg-amber-400/10', border: 'group-hover:border-amber-500/30' },
-          { icon: Flame, label: 'Study Streak', value: '7 Days', sub: 'Personal Best!', color: 'text-rose-400', bg: 'bg-rose-400/10', border: 'group-hover:border-rose-500/30' },
+          { icon: BookOpen, label: 'Courses Enrolled', value: courseProgress.length, sub: 'Active Learning', color: 'text-rose-400', bg: 'bg-rose-400/10', border: 'group-hover:border-rose-500/30' },
         ].map((s, i) => (
           <div key={i} className={`glass-card rounded-2xl p-5 flex flex-col justify-center gap-3 transition-all duration-300 hover:-translate-y-1 group ${s.border}`}>
             <div className="flex items-center justify-between">
@@ -230,7 +242,7 @@ export default function StudentPerformance() {
               <div className="p-6 space-y-5">
                 {[
                   { label: 'Quiz Performance', value: avgQuizScore, count: `${totalQuizzes} completed`, color: 'primary' },
-                  { label: 'Assignment Grades', value: avgAssignmentGrade, count: `${gradedAssignments.length} graded`, color: 'emerald' },
+                  { label: 'Assignment Grades', value: avgAssignmentGrade, count: `${gradedSubmissions.length} graded`, color: 'emerald' },
                   { label: 'Overall Average', value: overallAvg, count: `Grade: ${getLetterGrade(overallAvg)}`, color: 'amber' },
                 ].map((item, i) => (
                   <div key={i}>
@@ -263,13 +275,16 @@ export default function StudentPerformance() {
                 <h3 className="text-base font-bold text-white">Upcoming</h3>
               </div>
               <div className="p-4 space-y-3">
-                {MOCK_ASSIGNMENTS.filter(a => a.status === 'pending').map(a => (
-                  <div key={a.id} className="p-4 rounded-2xl bg-surface-800/40 border border-surface-700">
-                    <p className="text-sm font-bold text-white mb-1">{a.title}</p>
-                    <p className="text-[11px] text-surface-500 mb-2">{a.course}</p>
-                    <div className="flex items-center gap-1.5 text-rose-400 text-[11px] font-bold">
-                      <Calendar size={12} />
-                      Due: {a.dueDate}
+                {submissions.filter(s => s.status === 'submitted').length === 0 && (
+                  <p className="text-surface-500 text-xs italic px-1">No pending submissions.</p>
+                )}
+                {submissions.filter(s => s.status === 'submitted').map(s => (
+                  <div key={s.id || s._id} className="p-4 rounded-2xl bg-surface-800/40 border border-surface-700">
+                    <p className="text-sm font-bold text-white mb-1">{s.assessment_title || 'Assessment'}</p>
+                    <p className="text-[11px] text-surface-500 mb-2">Awaiting grade</p>
+                    <div className="flex items-center gap-1.5 text-amber-400 text-[11px] font-bold">
+                      <Clock size={12} />
+                      Submitted: {s.submitted_at ? new Date(s.submitted_at).toLocaleDateString() : 'Recently'}
                     </div>
                   </div>
                 ))}
@@ -304,7 +319,8 @@ export default function StudentPerformance() {
                 </Link>
               </div>
               <div className="p-6 grid sm:grid-cols-3 gap-4">
-                {MOCK_COURSE_PROGRESS.map(c => (
+                {courseProgress.length === 0 && <p className="col-span-3 text-surface-500 text-xs italic">No courses enrolled yet.</p>}
+                {courseProgress.slice(0, 3).map(c => (
                   <div key={c.id} className="p-5 rounded-2xl bg-surface-800/40 border border-surface-700 hover:bg-surface-800/60 transition-colors group">
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors">{c.title}</span>
@@ -429,32 +445,36 @@ export default function StudentPerformance() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-700/50">
-                  {MOCK_ASSIGNMENTS.map(a => (
-                    <tr key={a.id} className="hover:bg-surface-800/30 transition-colors">
+                  {submissions.length === 0 && (
+                    <tr><td colSpan={5} className="px-6 py-8 text-center text-surface-500 text-sm">No submissions yet.</td></tr>
+                  )}
+                  {submissions.map(s => (
+                    <tr key={s.id || s._id} className="hover:bg-surface-800/30 transition-colors">
                       <td className="px-6 py-4">
-                        <p className="font-bold text-white">{a.title}</p>
-                        <p className="text-[11px] text-surface-500 md:hidden mt-0.5">{a.course}</p>
+                        <p className="font-bold text-white">{s.assessment_title || 'Assessment'}</p>
                       </td>
                       <td className="px-6 py-4 hidden md:table-cell">
-                        <span className="text-surface-400 text-xs">{a.course}</span>
+                        <span className="text-surface-400 text-xs">{s.course_title || '—'}</span>
                       </td>
                       <td className="px-6 py-4 hidden sm:table-cell">
-                        <span className="text-surface-400 text-xs font-mono">{a.dueDate}</span>
+                        <span className="text-surface-400 text-xs font-mono">{s.submitted_at ? new Date(s.submitted_at).toLocaleDateString() : '—'}</span>
                       </td>
                       <td className="px-6 py-4 text-center">
                         <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${
-                          a.status === 'graded' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' :
-                          a.status === 'submitted' ? 'bg-amber-500/10 border border-amber-500/20 text-amber-400' :
+                          s.status === 'graded' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' :
+                          s.status === 'submitted' ? 'bg-amber-500/10 border border-amber-500/20 text-amber-400' :
                           'bg-surface-800 border border-surface-700 text-surface-400'
                         }`}>
-                          {a.status === 'graded' && <CheckCircle size={12} />}
-                          {a.status === 'submitted' && <Clock size={12} />}
-                          {a.status}
+                          {s.status === 'graded' && <CheckCircle size={12} />}
+                          {s.status === 'submitted' && <Clock size={12} />}
+                          {s.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        {a.grade !== null ? (
-                          <span className="text-lg font-black text-white">{a.grade}<span className="text-surface-500 text-xs font-medium">/{a.maxGrade}</span></span>
+                        {s.score != null ? (
+                          <span className="text-lg font-black text-white">{s.score}<span className="text-surface-500 text-xs font-medium">/{s.total_marks || 100}</span></span>
+                        ) : s.percentage != null ? (
+                          <span className="text-lg font-black text-white">{s.percentage}%</span>
                         ) : (
                           <span className="text-surface-500 text-xs">—</span>
                         )}
@@ -470,7 +490,8 @@ export default function StudentPerformance() {
         {/* COURSES TAB */}
         {activeTab === 'courses' && (
           <div className="space-y-4">
-            {MOCK_COURSE_PROGRESS.map(c => (
+            {courseProgress.length === 0 && <p className="text-surface-500 text-sm italic">No courses enrolled yet.</p>}
+            {courseProgress.map(c => (
               <div key={c.id} className="glass-card rounded-2xl border border-surface-700/50 bg-surface-900/60 p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                   <div>

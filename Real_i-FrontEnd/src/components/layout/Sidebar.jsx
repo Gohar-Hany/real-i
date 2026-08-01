@@ -119,8 +119,12 @@ export default function Sidebar() {
         {/* User Profile */}
         {!collapsed && user && (
           <div className="flex items-center gap-3 px-3 py-2 animate-fade-in">
-            <div className="w-8 h-8 rounded-full gradient-primary flex items-center justify-center text-surface-950 text-xs font-bold">
-              {user.name?.charAt(0)?.toUpperCase()}
+            <div className="w-8 h-8 rounded-full gradient-primary flex items-center justify-center text-surface-950 text-xs font-bold overflow-hidden">
+              {user.avatar ? (
+                <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                user.name?.charAt(0)?.toUpperCase()
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-surface-200 truncate">{user.name}</p>

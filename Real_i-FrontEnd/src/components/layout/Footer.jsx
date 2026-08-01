@@ -1,40 +1,77 @@
 import { Link } from 'react-router-dom';
-import { Globe, MessageCircle, Briefcase, Mail, Heart, ExternalLink } from 'lucide-react';
+import { Globe, MessageCircle, Briefcase, Mail, Heart } from 'lucide-react';
 
-const footerLinks = {
-  platform: [
-    { label: 'Home', to: '/' },
-    { label: 'Courses', to: '/courses' },
-    { label: 'Student Portal', to: '/student' },
-    { label: 'Admin Panel', to: '/admin' },
-  ],
-  resources: [
-    { label: 'Documentation', to: '#', comingSoon: true },
-    { label: 'API Reference', to: '#', comingSoon: true },
-    { label: 'Community', to: '#', comingSoon: true },
-    { label: 'Blog', to: '#', comingSoon: true },
-  ],
-  company: [
-    { label: 'About Us', to: '/about' },
-    { label: 'Contact', to: '/contact' },
-    { label: 'Privacy Policy', to: '#', comingSoon: true },
-    { label: 'Terms of Service', to: '#', comingSoon: true },
-  ],
-};
+import { useAuth } from '@/contexts/AuthContext';
 
 const socialLinks = [
-  { icon: Globe, href: 'https://real-i.ai', label: 'Website', external: true },
-  { icon: MessageCircle, href: 'https://discord.gg/reali', label: 'Community', external: true },
-  { icon: Briefcase, href: 'https://linkedin.com/company/reali', label: 'Careers', external: true },
-  { icon: Mail, href: 'mailto:contact@real.ai', label: 'Email', external: false },
+  { icon: Globe, href: '#', label: 'Website', external: false },
+  { icon: MessageCircle, href: '#', label: 'Community', external: false },
+  { icon: Briefcase, href: '#', label: 'Careers', external: false },
+  { icon: Mail, href: 'mailto:contact@reali.edu', label: 'Email', external: false },
 ];
 
 export default function Footer() {
-  const handleComingSoon = (e, link) => {
-    if (link.comingSoon) {
-      e.preventDefault();
+  const { user } = useAuth();
+  
+
+  const getRoleBasedLinks = () => {
+    const role = user?.role || 'guest';
+    
+    const baseLinks = {
+      company: [
+        { label: 'About REAL_i', to: '/about' },
+        { label: 'Contact Support', to: '/contact' },
+        { label: 'Privacy Policy', to: '/privacy-policy' },
+        { label: 'Terms of Service', to: '/terms-of-service' },
+      ],
+    };
+
+    if (role === 'admin') {
+      return {
+        platform: [
+          { label: 'Home', to: '/' },
+          { label: 'Admin Dashboard', to: '/admin/dashboard' },
+          { label: 'Manage Users', to: '/admin/students' },
+          { label: 'Manage Courses', to: '/admin/courses' },
+        ],
+        admin_tools: [
+          { label: 'System Analytics', to: '/admin/analytics' },
+          { label: 'Command Chat', to: '/admin/chat' },
+          { label: 'AI Guidelines', to: '/admin/guidelines' },
+        ],
+        ...baseLinks
+      };
     }
+
+    if (role === 'student') {
+      return {
+        platform: [
+          { label: 'Home', to: '/' },
+          { label: 'Browse Courses', to: '/courses' },
+          { label: 'Student Dashboard', to: '/student/courses' },
+        ],
+        learning: [
+          { label: 'Study Chat (AI)', to: '/student/chat' },
+          { label: 'AI Quiz Engine', to: '/student/quiz' },
+          { label: 'My Performance', to: '/student/performance' },
+        ],
+        ...baseLinks
+      };
+    }
+
+    // Guest
+    return {
+      platform: [
+        { label: 'Home', to: '/' },
+        { label: 'Browse Courses', to: '/courses' },
+        { label: 'Login', to: '/login' },
+        { label: 'Sign Up', to: '/register' },
+      ],
+      ...baseLinks
+    };
   };
+
+  const currentLinks = getRoleBasedLinks();
 
   return (
     <footer className="relative overflow-hidden">
@@ -64,8 +101,8 @@ export default function Footer() {
                 </div>
               </Link>
               <p className="text-surface-400 text-sm leading-relaxed max-w-sm mb-6">
-                An AI-powered educational platform that builds real intelligence through 
-                adaptive learning, smart quizzes, and personalized AI study assistants.
+                A next-generation AI-powered Learning Management System. 
+                REAL_i adapts to your learning pace, evaluates your performance dynamically, and builds true intelligence.
               </p>
               {/* Social Links */}
               <div className="flex items-center gap-3">
@@ -85,7 +122,7 @@ export default function Footer() {
             </div>
 
             {/* Links Columns */}
-            {Object.entries(footerLinks).map(([title, links]) => (
+            {Object.entries(currentLinks).map(([title, links]) => (
               <div key={title}>
                 <h4 className="text-sm font-semibold text-surface-200 uppercase tracking-wider mb-4">
                   {title}
@@ -123,11 +160,26 @@ export default function Footer() {
                 Crafted with <Heart size={12} className="text-primary-500 fill-primary-500" /> by REAL_i Team
               </p>
               <div className="hidden sm:block h-3 w-px bg-surface-700"></div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-surface-500">Developed by</span>
-                <img src="/scorpius-logo.png" alt="SCORPIUS AI Logo" className="h-4 w-auto object-contain brightness-0 invert opacity-70 hover:opacity-100 transition-all duration-300" />
-                <span className="text-xs font-semibold tracking-wider text-surface-400">SCORPIUS AI</span>
-              </div>
+              <a 
+                href="https://scorpius-platform.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-surface-900/50 border border-surface-700/50 hover:bg-surface-800 hover:border-primary-500/50 transition-all duration-500 hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] cursor-pointer"
+              >
+                <span className="text-[10px] uppercase tracking-widest text-surface-500 group-hover:text-surface-400 transition-colors">
+                  Developed by
+                </span>
+                <div className="flex items-center gap-1.5">
+                  <img 
+                    src="/scorpius-logo.png" 
+                    alt="SCORPIUS AI Logo" 
+                    className="h-5 w-auto object-contain brightness-0 invert opacity-70 group-hover:opacity-100 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" 
+                  />
+                  <span className="text-xs font-black tracking-widest text-surface-200 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-primary-300 transition-all duration-300">
+                    SCORPIUS AI
+                  </span>
+                </div>
+              </a>
             </div>
           </div>
         </div>

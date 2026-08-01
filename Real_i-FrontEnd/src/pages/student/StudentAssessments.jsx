@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAssessments } from '@/contexts/AssessmentContext';
@@ -29,9 +29,12 @@ function getTimeRemaining(endDate) {
 
 export default function StudentAssessments() {
   const { user } = useAuth();
-  const { assessments, getStudentSubmission } = useAssessments();
+  const { assessments, fetchAssessments, getStudentSubmission } = useAssessments();
   const [activeTab, setActiveTab] = useState('all');
   const [search, setSearch] = useState('');
+
+  useEffect(() => { fetchAssessments(); }, [fetchAssessments]);
+
 
   const published = useMemo(() => assessments.filter(a => a.status === 'published'), [assessments]);
 

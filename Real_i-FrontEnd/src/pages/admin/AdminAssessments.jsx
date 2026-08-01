@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAssessments } from '@/contexts/AssessmentContext';
 import { useToast } from '@/components/common/Toast';
@@ -19,7 +19,7 @@ const TYPE_CONFIG = {
 const PAGE_SIZE = 8;
 
 export default function AdminAssessments() {
-  const { assessments, deleteAssessment, publishAssessment, duplicateAssessment, getAssessmentStats } = useAssessments();
+  const { assessments, fetchAssessments, deleteAssessment, publishAssessment, duplicateAssessment, getAssessmentStats, loading } = useAssessments();
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -28,6 +28,8 @@ export default function AdminAssessments() {
   const [sortBy, setSortBy] = useState('updatedAt');
   const [sortDir, setSortDir] = useState('desc');
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => { fetchAssessments(); }, [fetchAssessments]);
 
   const tabs = [
     { value: 'all', label: 'All' },
@@ -43,21 +45,24 @@ export default function AdminAssessments() {
     setCurrentPage(1);
   };
 
-  const handleDelete = (id, title) => {
+  const handleDelete = async (id, title) => {
     if (!window.confirm(`Delete "${title}"? This cannot be undone.`)) return;
-    deleteAssessment(id);
-    toast.success('Assessment deleted');
+    try { await deleteAssessment(id); toast.success('Assessment deleted'); }
+    catch { toast.error('Failed to delete'); }
   };
 
-  const handleDuplicate = (id) => {
-    const copy = duplicateAssessment(id);
-    if (copy) toast.success(`Duplicated as "${copy.title}"`);
+  const handleDuplicate = async (id) => {
+    try {
+      const copy = await duplicateAssessment(id);
+      if (copy) toast.success('Assessment duplicated');
+    } catch { toast.error('Failed to duplicate'); }
   };
 
-  const handlePublishToggle = (id) => {
-    publishAssessment(id);
-    toast.success('Status updated');
+  const handlePublishToggle = async (id) => {
+    try { await publishAssessment(id); toast.success('Status updated'); }
+    catch { toast.error('Failed to update status'); }
   };
+
 
   // ── Filtered, sorted, paginated ────────────────────────────
   const filtered = useMemo(() => {

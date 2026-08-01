@@ -70,7 +70,7 @@ class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
       if (error.name === 'AbortError') {
-        throw new Error('Request timed out. The server took too long to respond.');
+        throw new Error('Request timed out. The server took too long to respond.', { cause: error });
       }
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
         if (retries > 0) {
@@ -78,7 +78,7 @@ class ApiClient {
           await new Promise(r => setTimeout(r, backoff));
           return this.request(endpoint, options, retries - 1, backoff * 2);
         }
-        throw new Error('Network error: Unable to reach the server. Is the backend running?');
+        throw new Error('Network error: Unable to reach the server. Is the backend running?', { cause: error });
       }
       throw error;
     }
@@ -136,11 +136,14 @@ class ApiClient {
 
 export const api = new ApiClient();
 
-// ── Service Functions ────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+//  SERVICE FUNCTIONS
+// ══════════════════════════════════════════════════════════════
 
-export const healthCheck = () => api.get('/');
+// ── Health ───────────────────────────────────────────────────
+export const healthCheck = () => api.get('/health');
 
-// Data services
+// ── Data (Python AI Backend) ─────────────────────────────────
 export const uploadFile = (projectId, file, onProgress) =>
   api.upload(`/data/upload/${projectId}`, file, onProgress);
 
@@ -152,7 +155,7 @@ export const processFiles = (projectId, options = {}) =>
     file_id: options.fileId || null,
   });
 
-// NLP services
+// ── NLP (Python AI Backend) ──────────────────────────────────
 export const pushToIndex = (projectId, doReset = false) =>
   api.post(`/nlp/index/push/${projectId}`, { do_reset: doReset ? 1 : 0 });
 
@@ -165,7 +168,7 @@ export const searchIndex = (projectId, text, limit = 5) =>
 export const answerQuestion = (projectId, text, limit = 5) =>
   api.post(`/nlp/index/answer/${projectId}`, { text, limit });
 
-// Agent services
+// ── Agent (Python AI Backend) ────────────────────────────────
 export const chatWithAgent = (projectId, message, sessionId = null) =>
   api.post(`/agent/chat/${projectId}`, { message, session_id: sessionId });
 
@@ -187,14 +190,14 @@ export const submitQuizResult = (payload) =>
 export const getCompletedQuizzes = (studentId) =>
   api.get(`/agent/quizzes/completed/${studentId}`);
 
-// Admin services
+// ── Admin AI (Python AI Backend) ─────────────────────────────
 export const createTask = (request, sessionId = null) =>
   api.post('/admin/task/create', { request, session_id: sessionId });
 
 export const adminHealthCheck = () =>
   api.get('/admin/health');
 
-// Projects & Assets Services
+// ── Projects & Assets (Python AI Backend) ────────────────────
 export const getProjects = () =>
   api.get('/data/projects');
 
@@ -207,7 +210,7 @@ export const getAssets = () =>
 export const deleteAsset = (assetId) =>
   api.delete(`/data/assets/${assetId}`);
 
-// Guidelines Services
+// ── Guidelines (Python AI Backend) ───────────────────────────
 export const getGuidelines = () =>
   api.get('/admin/guidelines');
 
@@ -220,12 +223,142 @@ export const toggleGuideline = (taskId) =>
 export const deleteGuideline = (taskId) =>
   api.delete(`/admin/guidelines/${taskId}`);
 
-// Admin User Management Services
+// ══════════════════════════════════════════════════════════════
+//  NODE.JS BACKEND SERVICES
+// ══════════════════════════════════════════════════════════════
+
+// ── User Management (Node.js) ────────────────────────────────
 export const getUsers = () =>
-  api.get('/admin/users');
+  api.get('/users');
+
+export const getUser = (userId) =>
+  api.get(`/users/${userId}`);
 
 export const updateUserRole = (userId, role) =>
-  api.put(`/admin/users/${userId}/role`, { role });
+  api.put(`/users/${userId}/role`, { role });
+
+export const updateUserProfile = (userId, data) =>
+  api.put(`/users/${userId}/profile`, data);
 
 export const getUserResults = (userId) =>
-  api.get(`/admin/users/${userId}/results`);
+  api.get(`/users/${userId}/results`);
+
+export const toggleLessonComplete = (userId, lessonId) =>
+  api.post(`/users/${userId}/lessons/${lessonId}/toggle`);
+
+export const deleteUser = (userId) =>
+  api.delete(`/users/${userId}`);
+
+
+// ── Courses (Node.js) ────────────────────────────────────────
+export const getCourses = (params = {}) => {
+  const query = new URLSearchParams();
+  if (params.category) query.set('category', params.category);
+  if (params.level) query.set('level', params.level);
+  if (params.search) query.set('search', params.search);
+  const qs = query.toString();
+  return api.get(`/courses${qs ? `?${qs}` : ''}`);
+};
+
+export const getCourse = (courseId) =>
+  api.get(`/courses/${courseId}`);
+
+export const createCourse = (data) =>
+  api.post('/courses', data);
+
+export const updateCourse = (courseId, data) =>
+  api.put(`/courses/${courseId}`, data);
+
+export const deleteCourse = (courseId) =>
+  api.delete(`/courses/${courseId}`);
+
+export const enrollCourse = (courseId) =>
+  api.post(`/courses/${courseId}/enroll`);
+
+export const unenrollCourse = (courseId) =>
+  api.delete(`/courses/${courseId}/enroll`);
+
+// Admin Course Enrollment
+export const adminEnrollStudent = (courseId, studentId) =>
+  api.post(`/courses/${courseId}/enroll/${studentId}`);
+
+export const adminUnenrollStudent = (courseId, studentId) =>
+  api.delete(`/courses/${courseId}/enroll/${studentId}`);
+
+export const getCourseStudents = (courseId) =>
+  api.get(`/courses/${courseId}/students`);
+
+export const getCourseStats = () =>
+  api.get('/courses/stats');
+
+export const getCourseCategories = () =>
+  api.get('/courses/categories');
+
+// ── Assessments (Node.js) ────────────────────────────────────
+export const getAssessments = (params = {}) => {
+  const query = new URLSearchParams();
+  if (params.course_id) query.set('course_id', params.course_id);
+  if (params.type) query.set('type', params.type);
+  if (params.status) query.set('status', params.status);
+  const qs = query.toString();
+  return api.get(`/assessments${qs ? `?${qs}` : ''}`);
+};
+
+export const getAssessment = (id) =>
+  api.get(`/assessments/${id}`);
+
+export const createAssessment = (data) =>
+  api.post('/assessments', data);
+
+export const updateAssessment = (id, data) =>
+  api.put(`/assessments/${id}`, data);
+
+export const deleteAssessment = (id) =>
+  api.delete(`/assessments/${id}`);
+
+export const publishAssessment = (id) =>
+  api.request(`/assessments/${id}/publish`, { method: 'PATCH' });
+
+export const submitAssessment = (id, data) =>
+  api.post(`/assessments/${id}/submit`, data);
+
+export const getAssessmentSubmissions = (id) =>
+  api.get(`/assessments/${id}/submissions`);
+
+export const getMySubmissions = () =>
+  api.get('/assessments/student/me');
+
+export const gradeSubmission = (assessmentId, submissionId, data) =>
+  api.request(`/assessments/${assessmentId}/submissions/${submissionId}/grade`, {
+    method: 'PATCH',
+    body: data,
+  });
+
+// ── Calendar Events (Node.js) ────────────────────────────────
+export const getEvents = (params = {}) => {
+  const query = new URLSearchParams();
+  if (params.month) query.set('month', params.month);
+  if (params.year) query.set('year', params.year);
+  const qs = query.toString();
+  return api.get(`/events${qs ? `?${qs}` : ''}`);
+};
+
+export const createEvent = (data) =>
+  api.post('/events', data);
+
+export const updateEvent = (id, data) =>
+  api.put(`/events/${id}`, data);
+
+export const deleteEvent = (id) =>
+  api.delete(`/events/${id}`);
+
+// ── Analytics (Node.js) ──────────────────────────────────────
+export const getAnalyticsOverview = () =>
+  api.get('/analytics/overview');
+
+export const getStudentAnalytics = () =>
+  api.get('/analytics/students');
+
+export const getCourseAnalytics = (courseId) =>
+  api.get(`/analytics/courses/${courseId}`);
+

@@ -1,133 +1,153 @@
-import { useMemo } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect, useMemo } from 'react';
 import { useAssessments } from '@/contexts/AssessmentContext';
-import CalendarWidget from '@/components/common/CalendarWidget';
-import {
-  CalendarDays, Clock, AlertTriangle, CheckCircle
-} from 'lucide-react';
+import { getEvents } from '@/services/api';
+import CalendarWidget, { TYPE_CONFIG } from '@/components/common/CalendarWidget';
+import { Clock, CalendarDays, Filter } from 'lucide-react';
 
 export default function StudentCalendar() {
-  const { user } = useAuth();
-  const { assessments, getStudentSubmission } = useAssessments();
+  const { assessments, fetchAssessments } = useAssessments();
+  const [customEvents, setCustomEvents] = useState([]);
+  
+  const [filters, setFilters] = useState({
+    quiz: true, exam: true, assignment: true, task: true, custom: true
+  });
+
+  useEffect(() => { fetchAssessments(); }, [fetchAssessments]);
+
+  useEffect(() => {
+    getEvents()
+      .then(data => {
+        const custom = (Array.isArray(data) ? data : []).filter(e => !e.is_auto);
+        setCustomEvents(custom);
+      })
+      .catch(() => setCustomEvents([]));
+  }, []);
 
   const calendarEvents = useMemo(() => {
     const events = [];
-    const published = assessments.filter(a => a.status === 'published');
 
-    published.forEach(a => {
-      const sub = getStudentSubmission(a.id, user?.id);
+    // For students, we only care about published assessments
+    const publishedAssessments = assessments.filter(a => a.status === 'published');
 
-      // Start date
-      if (a.startDate) {
+    publishedAssessments.forEach(a => {
+      if (a.startDate || a.start_date) {
         events.push({
           id: `${a.id}-start`,
-          title: `📗 ${a.title} — Opens`,
-          date: new Date(a.startDate),
+          title: `${a.title} — Opens`,
+          date: new Date(a.startDate || a.start_date),
           type: a.type,
-          description: `This ${a.type} becomes available for you to start.`,
-          link: sub
-            ? `/student/assessments/${a.id}/results`
-            : (a.type === 'quiz' || a.type === 'exam')
-              ? `/student/assessments/${a.id}/take`
-              : `/student/assessments/${a.id}/submit`,
-          linkLabel: sub ? 'View Results' : 'Open',
+          description: `Assessment opens for students`,
+          link: `/student/assessments/${a.id}/take`,
+          linkLabel: 'Start Assessment',
           meta: [
-            a.timeLimit ? `${a.timeLimit} min` : null,
-            a.questions?.length ? `${a.questions.length} questions` : null,
-            sub ? '✓ Completed' : null,
+            a.timeLimit ? `${a.timeLimit}m` : null,
+            `${a.passingGrade || 60}% pass`,
           ].filter(Boolean),
         });
       }
 
-      // Deadline
-      if (a.endDate) {
-        const isExpired = new Date(a.endDate) < new Date();
+      if (a.endDate || a.end_date) {
         events.push({
-          id: `${a.id}-deadline`,
-          title: `⏰ ${a.title} — ${sub ? 'Submitted' : isExpired ? 'Expired' : 'Due'}`,
-          date: new Date(a.endDate),
+          id: `${a.id}-end`,
+          title: `${a.title} — Deadline`,
+          date: new Date(a.endDate || a.end_date),
           type: a.type,
-          description: sub
-            ? `You submitted this ${a.type}. ${sub.score != null ? `Score: ${sub.score}` : ''}`
-            : isExpired
-              ? `This ${a.type} deadline has passed.`
-              : `Submit before this deadline.`,
-          link: sub
-            ? `/student/assessments/${a.id}/results`
-            : !isExpired
-              ? (a.type === 'quiz' || a.type === 'exam')
-                ? `/student/assessments/${a.id}/take`
-                : `/student/assessments/${a.id}/submit`
-              : undefined,
-          linkLabel: sub ? 'View Results' : 'Submit Now',
+          description: `Submission deadline for ${a.title}`,
+          link: `/student/assessments/${a.id}/submit`,
+          linkLabel: 'Submit Assessment',
           meta: [
-            `${a.passingGrade}% to pass`,
-            sub?.score != null ? `Score: ${sub.score}` : null,
+            a.type,
           ].filter(Boolean),
         });
       }
     });
 
+    customEvents.forEach(ev => {
+      events.push({
+        id: ev.id,
+        title: ev.title,
+        date: new Date(ev.date),
+        type: 'custom',
+        description: ev.description,
+      });
+    });
+
     return events;
-  }, [assessments, user?.id, getStudentSubmission]);
+  }, [assessments, customEvents]);
 
-  // Stats
-  const now = new Date();
-  const upcomingDeadlines = calendarEvents.filter(e => {
-    const d = e.date instanceof Date ? e.date : new Date(e.date);
-    return d >= now && e.title.includes('Due');
-  }).length;
+  const toggleFilter = (type) => {
+    setFilters(prev => ({ ...prev, [type]: !prev[type] }));
+  };
 
-  const completedCount = calendarEvents.filter(e => e.title.includes('Submitted')).length;
-
-  const urgentCount = calendarEvents.filter(e => {
-    const d = e.date instanceof Date ? e.date : new Date(e.date);
-    const diff = d - now;
-    return diff > 0 && diff < 3 * 24 * 60 * 60 * 1000 && e.title.includes('Due');
-  }).length;
+  const upcomingEvents = [...customEvents]
+    .filter(e => new Date(e.date) >= new Date())
+    .sort((a,b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 5);
 
   return (
-    <div className="space-y-6 lg:space-y-8 animate-fade-in-up pb-10">
-      {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800/80 border border-surface-700 mb-4 backdrop-blur-md">
-          <CalendarDays size={14} className="text-primary-400" />
-          <span className="text-[11px] font-mono font-bold text-primary-400 uppercase tracking-widest">
-            My Calendar
-          </span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
-          Academic <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Calendar</span>
-        </h1>
-        <p className="text-surface-400 text-sm max-w-2xl leading-relaxed">
-          Stay on track with your assignments, quizzes, exams, and task deadlines all in one view.
-        </p>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        {[
-          { icon: Clock, label: 'Upcoming Due', value: upcomingDeadlines, color: '#3B82F6' },
-          { icon: AlertTriangle, label: 'Due in 3 Days', value: urgentCount, color: '#F59E0B' },
-          { icon: CheckCircle, label: 'Completed', value: completedCount, color: '#10B981' },
-        ].map((stat, i) => (
-          <div key={i} className="relative glass-card rounded-2xl p-5 bg-surface-900/60 border border-surface-700/50 overflow-hidden group hover:-translate-y-1 transition-all duration-300">
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none" style={{ background: `radial-gradient(circle at center, ${stat.color} 0%, transparent 70%)` }}></div>
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center border" style={{ background: `linear-gradient(135deg, ${stat.color}20, ${stat.color}05)`, borderColor: `${stat.color}40` }}>
-                <stat.icon size={20} style={{ color: stat.color }} />
-              </div>
-              <div>
-                <p className="text-2xl font-extrabold text-white">{stat.value}</p>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-surface-400 mt-0.5">{stat.label}</p>
-              </div>
+    <div className="flex flex-col lg:flex-row gap-6 animate-fade-in pb-10 min-h-[85vh]">
+      
+      {/* ── Left Sidebar ── */}
+      <div className="w-full lg:w-72 xl:w-80 shrink-0 space-y-6">
+        <div className="glass-card rounded-3xl p-6 border border-surface-700/50 bg-surface-900/60">
+          <div className="mb-8">
+            <h3 className="text-xs font-bold text-surface-400 uppercase tracking-widest flex items-center gap-2 mb-4">
+              <Filter size={14} /> Filter Calendar
+            </h3>
+            <div className="space-y-3">
+              {['quiz', 'exam', 'assignment', 'task', 'custom'].map(type => {
+                const conf = TYPE_CONFIG[type];
+                if(!conf) return null;
+                const Icon = conf.icon;
+                return (
+                  <label key={type} className="flex items-center justify-between p-2 rounded-xl hover:bg-surface-800/50 cursor-pointer transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${conf.bg} ${conf.border} ${conf.text}`}>
+                        <Icon size={16} />
+                      </div>
+                      <span className="text-sm font-semibold text-surface-200 group-hover:text-white transition-colors">{conf.label}s</span>
+                    </div>
+                    <input 
+                      type="checkbox" 
+                      checked={filters[type]} 
+                      onChange={() => toggleFilter(type)}
+                      className="w-4 h-4 accent-primary-500 rounded bg-surface-800 border-surface-600 focus:ring-0" 
+                    />
+                  </label>
+                )
+              })}
             </div>
           </div>
-        ))}
+
+          <div>
+            <h3 className="text-xs font-bold text-surface-400 uppercase tracking-widest flex items-center gap-2 mb-4">
+              <Clock size={14} /> Upcoming Events
+            </h3>
+            <div className="space-y-3">
+              {upcomingEvents.length === 0 ? (
+                <p className="text-sm text-surface-500 text-center py-4">No upcoming events</p>
+              ) : upcomingEvents.map(ev => (
+                <div key={ev.id} className="p-3 rounded-xl bg-surface-800/30 border border-surface-700/50">
+                  <p className="text-sm font-bold text-white mb-1">{ev.title}</p>
+                  <p className="text-xs text-surface-400 flex items-center gap-1">
+                    <CalendarDays size={12} />
+                    {new Date(ev.date).toLocaleDateString()} at {ev.time}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Calendar */}
-      <CalendarWidget events={calendarEvents} />
+      {/* ── Main Calendar Grid ── */}
+      <div className="flex-1 min-w-0">
+        <CalendarWidget 
+          events={calendarEvents} 
+          filters={filters}
+          // Note: onAddEvent is NOT passed, making it read-only for students
+        />
+      </div>
     </div>
   );
 }

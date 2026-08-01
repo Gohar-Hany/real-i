@@ -4,11 +4,10 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   Brain, BookOpen, MessageSquare, Trophy, ArrowRight,
-  Sparkles, Play, Users, GraduationCap, Star,
-  ChevronRight, Zap, Shield, Target, CheckCircle,
-  Bot, UserCircle,
+  Play, Users, GraduationCap, Star,
+  Bot
 } from 'lucide-react';
-import { PLATFORM_STATS, FEATURES, TESTIMONIALS, HOW_IT_WORKS } from '@/data/mockData';
+import { FEATURES, TESTIMONIALS, HOW_IT_WORKS, PLATFORM_STATS } from '@/data/staticContent';
 import { Helmet } from 'react-helmet-async';
 
 gsap.registerPlugin(ScrollTrigger);

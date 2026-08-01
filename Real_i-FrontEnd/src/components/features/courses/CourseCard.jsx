@@ -16,10 +16,10 @@ const LEVEL_COLORS = {
   Advanced: 'text-rose-400',
 };
 
-export default function CourseCard({ course, index = 0 }) {
+export default function CourseCard({ course }) {
   return (
     <Link
-      to={`/courses/${course.id}`}
+      to={`/courses/${course.project_id || course.id}`}
       className="course-card group block glass-card overflow-hidden hover:border-primary-500/20 transition-all duration-500 hover-lift"
     >
       {/* Thumbnail */}
@@ -80,22 +80,22 @@ export default function CourseCard({ course, index = 0 }) {
 
         {/* Subtitle */}
         <p className="text-sm text-surface-400 line-clamp-2 mb-4">
-          {course.subtitle}
+          {course.subtitle || ''}
         </p>
 
         {/* Meta */}
         <div className="flex items-center gap-4 text-xs text-surface-500 mb-4 font-mono">
           <span className="flex items-center gap-1">
             <BookOpen size={12} />
-            {course.lessonsCount} lessons
+            {course.lessonsCount || course.lessons_count || 0} lessons
           </span>
           <span className="flex items-center gap-1">
             <Clock size={12} />
-            {course.totalHours}h
+            {course.totalHours || course.total_hours || 0}h
           </span>
           <span className="flex items-center gap-1">
             <Users size={12} />
-            {course.studentsEnrolled.toLocaleString()}
+            {Number(course.studentsEnrolled || course.students_enrolled || 0).toLocaleString()}
           </span>
         </div>
 
@@ -104,8 +104,8 @@ export default function CourseCard({ course, index = 0 }) {
           {/* Rating */}
           <div className="flex items-center gap-1.5">
             <Star size={14} className="text-primary-400 fill-primary-400" />
-            <span className="text-sm font-bold text-surface-200">{course.rating}</span>
-            <span className="text-xs text-surface-500 font-mono">({course.reviewsCount})</span>
+            <span className="text-sm font-bold text-surface-200">{course.rating || 0}</span>
+            <span className="text-xs text-surface-500 font-mono">({course.reviewsCount || 0})</span>
           </div>
           {/* Price / CTA */}
           <div className="flex items-center gap-1 text-sm font-mono font-semibold text-primary-400 group-hover:text-primary-300 transition-colors uppercase tracking-wider">

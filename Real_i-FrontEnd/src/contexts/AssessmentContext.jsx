@@ -1,371 +1,244 @@
-import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import * as api from '@/services/api';
 
 const AssessmentContext = createContext(null);
-const STORAGE_KEY = 'reali_assessments';
-const SUBMISSIONS_KEY = 'reali_submissions';
-
-// ── Seed Data ────────────────────────────────────────────────
-const SEED_ASSESSMENTS = [
-  {
-    id: 'assess-1',
-    type: 'quiz',
-    assessmentSubType: 'mcq_exam',
-    title: 'Neural Networks Fundamentals Quiz',
-    description: 'Test your understanding of basic neural network architectures, activation functions, and backpropagation.',
-    courseId: 'testproject1',
-    startDate: '2025-01-01T00:00',
-    endDate: '2026-12-31T23:59',
-    timeLimit: 30,
-    attempts: 3,
-    passingGrade: 60,
-    totalMarks: 50,
-    randomizeQuestions: true,
-    showAnswersAfterSubmission: true,
-    autoGrade: true,
-    saveProgress: true,
-    status: 'published',
-    submissionType: null,
-    allowLateSubmission: false,
-    attachments: [],
-    questions: [
-      { id: 'q1', text: 'What is the primary purpose of an activation function in a neural network?', options: ['To normalize input data', 'To introduce non-linearity', 'To reduce overfitting', 'To speed up training'], correctAnswer: 1, marks: 10, shuffleOptions: true, explanation: 'Activation functions introduce non-linearity, allowing neural networks to learn complex patterns beyond linear relationships.' },
-      { id: 'q2', text: 'Which optimizer is known for adapting the learning rate for each parameter?', options: ['SGD', 'Adam', 'Batch Gradient Descent', 'Mini-batch GD'], correctAnswer: 1, marks: 10, shuffleOptions: false, explanation: 'Adam (Adaptive Moment Estimation) maintains per-parameter learning rates that are adapted based on first and second moments of gradients.' },
-      { id: 'q3', text: 'What does the term "epoch" mean in training?', options: ['One forward pass', 'One backward pass', 'One complete pass through the entire training dataset', 'One batch of data'], correctAnswer: 2, marks: 10, shuffleOptions: true, explanation: 'An epoch is one complete pass through the entire training dataset during the training process.' },
-      { id: 'q4', text: 'Which layer type is primarily used for image recognition tasks?', options: ['Fully Connected Layer', 'Convolutional Layer', 'Recurrent Layer', 'Embedding Layer'], correctAnswer: 1, marks: 10, shuffleOptions: true, explanation: 'Convolutional layers are designed to process spatial data like images by detecting local patterns through learned filters.' },
-      { id: 'q5', text: 'What is dropout used for in neural networks?', options: ['Faster training', 'Regularization to prevent overfitting', 'Increasing model capacity', 'Data augmentation'], correctAnswer: 1, marks: 10, shuffleOptions: false, explanation: 'Dropout randomly deactivates neurons during training, which acts as regularization to prevent overfitting.' },
-    ],
-    createdAt: '2025-09-01T10:00:00Z',
-    updatedAt: '2025-09-01T10:00:00Z',
-  },
-  {
-    id: 'assess-2',
-    type: 'exam',
-    assessmentSubType: 'midterm',
-    title: 'Midterm Exam — Machine Learning',
-    description: 'Comprehensive midterm examination covering supervised learning, unsupervised learning, and model evaluation.',
-    courseId: 'testproject1',
-    startDate: '2025-10-15T09:00',
-    endDate: '2026-12-20T11:00',
-    timeLimit: 90,
-    attempts: 1,
-    passingGrade: 50,
-    totalMarks: 100,
-    randomizeQuestions: true,
-    showAnswersAfterSubmission: false,
-    autoGrade: true,
-    saveProgress: true,
-    status: 'published',
-    submissionType: null,
-    allowLateSubmission: false,
-    attachments: [],
-    questions: [
-      { id: 'mq1', text: 'Which algorithm is used for classification tasks?', options: ['Linear Regression', 'K-Means', 'Logistic Regression', 'PCA'], correctAnswer: 2, marks: 20, shuffleOptions: true, explanation: 'Logistic Regression is a classification algorithm that predicts the probability of a categorical outcome.' },
-      { id: 'mq2', text: 'What is the bias-variance tradeoff?', options: ['Balancing training speed vs accuracy', 'Balancing model complexity vs generalization', 'Balancing data size vs features', 'Balancing CPU vs GPU usage'], correctAnswer: 1, marks: 20, shuffleOptions: true, explanation: 'The bias-variance tradeoff is about finding the right model complexity to minimize both underfitting (high bias) and overfitting (high variance).' },
-      { id: 'mq3', text: 'What metric is best for imbalanced classification?', options: ['Accuracy', 'F1 Score', 'Mean Squared Error', 'R-squared'], correctAnswer: 1, marks: 20, shuffleOptions: false, explanation: 'F1 Score balances precision and recall, making it suitable for imbalanced datasets where accuracy can be misleading.' },
-      { id: 'mq4', text: 'Which technique reduces dimensionality?', options: ['Gradient Boosting', 'Random Forest', 'PCA', 'Cross-Validation'], correctAnswer: 2, marks: 20, shuffleOptions: true, explanation: 'PCA (Principal Component Analysis) reduces dimensionality by projecting data onto the directions of maximum variance.' },
-      { id: 'mq5', text: 'What is cross-validation used for?', options: ['Feature selection', 'Model evaluation and hyperparameter tuning', 'Data cleaning', 'Normalization'], correctAnswer: 1, marks: 20, shuffleOptions: true, explanation: 'Cross-validation evaluates model performance by splitting data into multiple train/test folds to get a reliable estimate of generalization ability.' },
-    ],
-    createdAt: '2025-10-01T08:00:00Z',
-    updatedAt: '2025-10-01T08:00:00Z',
-  },
-  {
-    id: 'assess-3',
-    type: 'assignment',
-    assessmentSubType: null,
-    title: 'Build a Simple CNN Classifier',
-    description: 'Implement a Convolutional Neural Network using PyTorch or TensorFlow to classify the CIFAR-10 dataset. Your submission should include the code, a brief report on your architecture choices, and training curves.',
-    courseId: 'testproject1',
-    startDate: '2025-09-15T00:00',
-    endDate: '2026-12-25T23:59',
-    timeLimit: null,
-    attempts: 1,
-    passingGrade: 60,
-    totalMarks: 100,
-    randomizeQuestions: false,
-    showAnswersAfterSubmission: true,
-    autoGrade: false,
-    saveProgress: false,
-    status: 'published',
-    submissionType: 'both',
-    allowLateSubmission: true,
-    attachments: ['CIFAR10_Guidelines.pdf', 'Grading_Rubric.pdf'],
-    questions: [],
-    createdAt: '2025-09-10T12:00:00Z',
-    updatedAt: '2025-09-10T12:00:00Z',
-  },
-  {
-    id: 'assess-4',
-    type: 'task',
-    assessmentSubType: null,
-    title: 'Data Preprocessing Exercise',
-    description: 'Clean and preprocess the provided raw dataset. Handle missing values, encode categorical features, and normalize numerical columns. Submit your cleaned CSV file.',
-    courseId: 'testproject1',
-    startDate: '2025-09-20T00:00',
-    endDate: '2026-12-28T23:59',
-    timeLimit: null,
-    attempts: 1,
-    passingGrade: 0,
-    totalMarks: 30,
-    randomizeQuestions: false,
-    showAnswersAfterSubmission: true,
-    autoGrade: false,
-    saveProgress: false,
-    status: 'published',
-    submissionType: 'file',
-    allowLateSubmission: false,
-    attachments: ['raw_data.csv'],
-    questions: [],
-    createdAt: '2025-09-18T14:00:00Z',
-    updatedAt: '2025-09-18T14:00:00Z',
-  },
-  {
-    id: 'assess-5',
-    type: 'quiz',
-    assessmentSubType: 'practice',
-    title: 'Python Basics — Practice Test',
-    description: 'A low-stakes practice quiz to reinforce Python fundamentals. Unlimited attempts allowed.',
-    courseId: 'testproject1',
-    startDate: '2025-09-01T00:00',
-    endDate: '2027-01-01T00:00',
-    timeLimit: 15,
-    attempts: -1,
-    passingGrade: 0,
-    totalMarks: 30,
-    randomizeQuestions: true,
-    showAnswersAfterSubmission: true,
-    autoGrade: true,
-    saveProgress: false,
-    status: 'published',
-    submissionType: null,
-    allowLateSubmission: false,
-    attachments: [],
-    questions: [
-      { id: 'pq1', text: 'What is the output of print(type([]))?', options: ["<class 'list'>", "<class 'tuple'>", "<class 'dict'>", "<class 'set'>"], correctAnswer: 0, marks: 10, shuffleOptions: false, explanation: '[] creates an empty list, so type([]) returns <class \'list\'>.' },
-      { id: 'pq2', text: 'Which keyword is used to define a function in Python?', options: ['function', 'func', 'def', 'define'], correctAnswer: 2, marks: 10, shuffleOptions: true, explanation: 'Python uses the "def" keyword to define functions.' },
-      { id: 'pq3', text: 'What does "len()" return for the string "Hello"?', options: ['4', '5', '6', 'Error'], correctAnswer: 1, marks: 10, shuffleOptions: false, explanation: 'len("Hello") returns 5 because the string contains 5 characters.' },
-    ],
-    createdAt: '2025-08-25T09:00:00Z',
-    updatedAt: '2025-08-25T09:00:00Z',
-  },
-  {
-    id: 'assess-6',
-    type: 'exam',
-    assessmentSubType: 'final',
-    title: 'Final Exam — Deep Learning',
-    description: 'Comprehensive final examination covering all course material. This exam will test advanced concepts in deep learning.',
-    courseId: 'testproject1',
-    startDate: '2026-12-20T09:00',
-    endDate: '2027-01-15T17:00',
-    timeLimit: 120,
-    attempts: 1,
-    passingGrade: 50,
-    totalMarks: 150,
-    randomizeQuestions: true,
-    showAnswersAfterSubmission: false,
-    autoGrade: true,
-    saveProgress: true,
-    status: 'draft',
-    submissionType: null,
-    allowLateSubmission: false,
-    attachments: [],
-    questions: [
-      { id: 'fq1', text: 'What is the vanishing gradient problem?', options: ['Gradients grow too large', 'Gradients shrink to near zero in deep networks', 'Loss function diverges', 'Learning rate is too high'], correctAnswer: 1, marks: 30, shuffleOptions: true, explanation: 'In deep networks, gradients can become extremely small during backpropagation, effectively preventing early layers from learning.' },
-      { id: 'fq2', text: 'Which architecture introduced the attention mechanism?', options: ['ResNet', 'Transformer', 'LSTM', 'GAN'], correctAnswer: 1, marks: 30, shuffleOptions: true, explanation: 'The Transformer architecture, introduced in "Attention Is All You Need" (2017), pioneered the self-attention mechanism.' },
-    ],
-    createdAt: '2025-11-01T10:00:00Z',
-    updatedAt: '2025-11-01T10:00:00Z',
-  },
-];
 
 // ── Helper ───────────────────────────────────────────────────
-const generateId = () => `assess-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-const generateSubId = () => `sub-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const generateQId = () => `q-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-
-function loadFromStorage(key, fallback) {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : fallback;
-  } catch { return fallback; }
-}
-
-function saveToStorage(key, data) {
-  try { localStorage.setItem(key, JSON.stringify(data)); } catch { /* ignore quota errors */ }
-}
 
 // ── Provider ─────────────────────────────────────────────────
 export function AssessmentProvider({ children }) {
-  const [assessments, setAssessments] = useState(() => {
-    const stored = loadFromStorage(STORAGE_KEY, null);
-    return stored && stored.length > 0 ? stored : SEED_ASSESSMENTS;
-  });
+  const [assessments, setAssessments] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const [submissions, setSubmissions] = useState(() => loadFromStorage(SUBMISSIONS_KEY, []));
-
-  // Persist on change
-  useEffect(() => { saveToStorage(STORAGE_KEY, assessments); }, [assessments]);
-  useEffect(() => { saveToStorage(SUBMISSIONS_KEY, submissions); }, [submissions]);
+  // ── Fetch all assessments from backend ────────────────────
+  const fetchAssessments = useCallback(async (params = {}) => {
+    setLoading(true);
+    try {
+      const data = await api.getAssessments(params);
+      setAssessments(Array.isArray(data) ? data : []);
+      return data;
+    } catch (err) {
+      console.error('Failed to fetch assessments:', err);
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // ── Admin Actions ──────────────────────────────────────────
-  const createAssessment = useCallback((data) => {
-    const now = new Date().toISOString();
-    const assessment = {
-      ...data,
-      id: generateId(),
-      questions: (data.questions || []).map(q => ({ ...q, id: q.id || generateQId() })),
-      createdAt: now,
-      updatedAt: now,
-    };
-    setAssessments(prev => [assessment, ...prev]);
-    return assessment;
+  const createAssessment = useCallback(async (data) => {
+    try {
+      // Map frontend field names to backend field names
+      const payload = {
+        title: data.title,
+        type: data.type,
+        course_id: data.courseId || data.course_id,
+        description: data.description || '',
+        instructions: data.instructions || '',
+        start_date: data.startDate || data.start_date || null,
+        end_date: data.endDate || data.end_date || null,
+        time_limit: data.timeLimit || data.time_limit || 0,
+        passing_grade: data.passingGrade || data.passing_grade || 60,
+        total_marks: data.totalMarks || data.total_marks || 100,
+        max_attempts: data.attempts || data.max_attempts || 1,
+        shuffle_questions: data.randomizeQuestions || data.shuffle_questions || false,
+        show_results: data.showAnswersAfterSubmission ?? data.show_results ?? true,
+        status: data.status || 'draft',
+        questions: (data.questions || []).map(q => ({
+          question: q.text || q.question,
+          type: 'mcq',
+          options: q.options ? (
+            Array.isArray(q.options)
+              ? { A: q.options[0], B: q.options[1], C: q.options[2], D: q.options[3] }
+              : q.options
+          ) : {},
+          correct_answer: typeof q.correctAnswer === 'number'
+            ? ['A', 'B', 'C', 'D'][q.correctAnswer]
+            : (q.correct_answer || q.correctAnswer || ''),
+          explanation: q.explanation || '',
+          marks: q.marks || 1,
+        })),
+        settings: {
+          autoGrade: data.autoGrade ?? true,
+          saveProgress: data.saveProgress ?? false,
+          submissionType: data.submissionType || null,
+          allowLateSubmission: data.allowLateSubmission ?? false,
+          assessmentSubType: data.assessmentSubType || null,
+          attachments: data.attachments || [],
+        },
+      };
+
+      const result = await api.createAssessment(payload);
+      setAssessments(prev => [mapAssessmentToFrontend(result), ...prev]);
+      return result;
+    } catch (err) {
+      console.error('Failed to create assessment:', err);
+      throw err;
+    }
   }, []);
 
-  const updateAssessment = useCallback((id, data) => {
-    setAssessments(prev => prev.map(a =>
-      a.id === id ? { ...a, ...data, updatedAt: new Date().toISOString() } : a
-    ));
+  const updateAssessment = useCallback(async (id, data) => {
+    try {
+      const payload = { ...data };
+      // Map fields if needed
+      if (data.courseId) payload.course_id = data.courseId;
+      if (data.startDate) payload.start_date = data.startDate;
+      if (data.endDate) payload.end_date = data.endDate;
+      if (data.timeLimit !== undefined) payload.time_limit = data.timeLimit;
+      if (data.passingGrade !== undefined) payload.passing_grade = data.passingGrade;
+      if (data.totalMarks !== undefined) payload.total_marks = data.totalMarks;
+
+      if (data.questions) {
+        payload.questions = data.questions.map(q => ({
+          question: q.text || q.question,
+          type: 'mcq',
+          options: Array.isArray(q.options)
+            ? { A: q.options[0], B: q.options[1], C: q.options[2], D: q.options[3] }
+            : (q.options || {}),
+          correct_answer: typeof q.correctAnswer === 'number'
+            ? ['A', 'B', 'C', 'D'][q.correctAnswer]
+            : (q.correct_answer || q.correctAnswer || ''),
+          explanation: q.explanation || '',
+          marks: q.marks || 1,
+        }));
+      }
+
+      const result = await api.updateAssessment(id, payload);
+      setAssessments(prev => prev.map(a =>
+        a.id === id ? mapAssessmentToFrontend(result) : a
+      ));
+      return result;
+    } catch (err) {
+      console.error('Failed to update assessment:', err);
+      throw err;
+    }
   }, []);
 
-  const deleteAssessment = useCallback((id) => {
-    setAssessments(prev => prev.filter(a => a.id !== id));
-    setSubmissions(prev => prev.filter(s => s.assessmentId !== id));
+  const deleteAssessment = useCallback(async (id) => {
+    try {
+      await api.deleteAssessment(id);
+      setAssessments(prev => prev.filter(a => a.id !== id));
+    } catch (err) {
+      console.error('Failed to delete assessment:', err);
+      throw err;
+    }
   }, []);
 
-  const publishAssessment = useCallback((id) => {
-    setAssessments(prev => prev.map(a =>
-      a.id === id ? { ...a, status: a.status === 'published' ? 'draft' : 'published', updatedAt: new Date().toISOString() } : a
-    ));
+  const publishAssessment = useCallback(async (id) => {
+    try {
+      const result = await api.publishAssessment(id);
+      setAssessments(prev => prev.map(a =>
+        a.id === id ? { ...a, status: result.new_status } : a
+      ));
+      return result;
+    } catch (err) {
+      console.error('Failed to toggle publish:', err);
+      throw err;
+    }
   }, []);
 
-  const duplicateAssessment = useCallback((id) => {
+  const duplicateAssessment = useCallback(async (id) => {
     const original = assessments.find(a => a.id === id);
     if (!original) return null;
-    const now = new Date().toISOString();
-    const copy = {
+    // Create a copy via API
+    const copyData = {
       ...original,
-      id: generateId(),
       title: `${original.title} (Copy)`,
       status: 'draft',
-      questions: original.questions.map(q => ({ ...q, id: generateQId() })),
-      createdAt: now,
-      updatedAt: now,
+      id: undefined,
     };
-    setAssessments(prev => [copy, ...prev]);
-    return copy;
-  }, [assessments]);
+    return createAssessment(copyData);
+  }, [assessments, createAssessment]);
 
   // ── Student Actions ────────────────────────────────────────
-  const submitAssessment = useCallback((assessmentId, studentData) => {
-    const now = new Date().toISOString();
-    const assessment = assessments.find(a => a.id === assessmentId);
-    if (!assessment) return null;
+  const submitAssessmentAction = useCallback(async (assessmentId, studentData) => {
+    try {
+      // Map answers from index-based to letter-based for backend
+      const mappedAnswers = {};
+      if (studentData.answers) {
+        Object.entries(studentData.answers).forEach(([key, val]) => {
+          // Convert numeric index to letter: 0→A, 1→B, 2→C, 3→D
+          const answerLetter = typeof val === 'number' ? ['A', 'B', 'C', 'D'][val] : val;
+          mappedAnswers[key] = answerLetter;
+        });
+      }
 
-    // Auto-grade MCQ
-    let score = 0;
-    let totalMarks = assessment.totalMarks || 0;
-    if (assessment.autoGrade && assessment.questions.length > 0 && studentData.answers) {
-      assessment.questions.forEach((q, idx) => {
-        if (studentData.answers[idx] === q.correctAnswer) {
-          score += q.marks || 0;
-        }
+      const result = await api.submitAssessment(assessmentId, {
+        answers: mappedAnswers,
+        time_taken: studentData.timeTaken || 0,
+        files: studentData.files || [],
       });
+
+      // Update local assessments to mark as submitted
+      setAssessments(prev => prev.map(a =>
+        a.id === assessmentId ? { ...a, is_submitted: true, submission: result } : a
+      ));
+
+      return result;
+    } catch (err) {
+      console.error('Failed to submit assessment:', err);
+      throw err;
     }
+  }, []);
 
-    // Check for existing in-progress submission
-    const existingIdx = submissions.findIndex(
-      s => s.assessmentId === assessmentId && s.studentId === studentData.studentId && s.status === 'in_progress'
-    );
-
-    const submission = {
-      id: existingIdx >= 0 ? submissions[existingIdx].id : generateSubId(),
-      assessmentId,
-      studentId: studentData.studentId,
-      studentName: studentData.studentName,
-      studentEmail: studentData.studentEmail,
-      status: assessment.autoGrade ? 'graded' : 'submitted',
-      answers: studentData.answers || {},
-      score: assessment.autoGrade ? score : null,
-      totalMarks,
-      feedback: '',
-      startedAt: existingIdx >= 0 ? submissions[existingIdx].startedAt : studentData.startedAt || now,
-      submittedAt: now,
-      files: studentData.files || [],
-      textAnswer: studentData.textAnswer || '',
-    };
-
-    if (existingIdx >= 0) {
-      setSubmissions(prev => prev.map((s, i) => i === existingIdx ? submission : s));
-    } else {
-      setSubmissions(prev => [...prev, submission]);
-    }
-    return submission;
-  }, [assessments, submissions]);
-
-  const saveProgress = useCallback((assessmentId, studentData) => {
-    const now = new Date().toISOString();
-    const existingIdx = submissions.findIndex(
-      s => s.assessmentId === assessmentId && s.studentId === studentData.studentId && s.status === 'in_progress'
-    );
-
-    const progressData = {
-      id: existingIdx >= 0 ? submissions[existingIdx].id : generateSubId(),
-      assessmentId,
-      studentId: studentData.studentId,
-      studentName: studentData.studentName,
-      studentEmail: studentData.studentEmail,
-      status: 'in_progress',
-      answers: studentData.answers || {},
-      score: null,
-      totalMarks: null,
-      feedback: '',
-      startedAt: existingIdx >= 0 ? submissions[existingIdx].startedAt : now,
-      submittedAt: null,
-      files: studentData.files || [],
-      textAnswer: studentData.textAnswer || '',
-    };
-
-    if (existingIdx >= 0) {
-      setSubmissions(prev => prev.map((s, i) => i === existingIdx ? progressData : s));
-    } else {
-      setSubmissions(prev => [...prev, progressData]);
-    }
-  }, [submissions]);
+  const saveProgress = useCallback(() => {
+    // Progress saving can be handled client-side as it's temporary
+    console.log('Progress saved locally (not persisted to server until submit)');
+  }, []);
 
   // ── Queries ────────────────────────────────────────────────
-  const getAssessmentById = useCallback((id) => assessments.find(a => a.id === id) || null, [assessments]);
+  const getAssessmentById = useCallback((id) =>
+    assessments.find(a => a.id === id) || null,
+  [assessments]);
 
-  const getSubmissionsForAssessment = useCallback((assessmentId) =>
-    submissions.filter(s => s.assessmentId === assessmentId),
-  [submissions]);
+  const getSubmissionsForAssessment = useCallback(async (assessmentId) => {
+    try {
+      const data = await api.getAssessmentSubmissions(assessmentId);
+      return Array.isArray(data) ? data : [];
+    } catch { return []; }
+  }, []);
 
-  const getMySubmissions = useCallback((studentId) =>
-    submissions.filter(s => s.studentId === studentId),
-  [submissions]);
+  const getMySubmissionsAction = useCallback(async () => {
+    try {
+      const data = await api.getMySubmissions();
+      setSubmissions(Array.isArray(data) ? data : []);
+      return data;
+    } catch { return []; }
+  }, []);
 
-  const getStudentSubmission = useCallback((assessmentId, studentId) =>
-    submissions.find(s => s.assessmentId === assessmentId && s.studentId === studentId && s.status !== 'in_progress') || null,
-  [submissions]);
+  const getStudentSubmission = useCallback((assessmentId, studentId) => {
+    // Use the submission attached to the assessment (from the enriched list endpoint)
+    const assessment = assessments.find(a => a.id === assessmentId);
+    return assessment?.submission || null;
+  }, [assessments]);
 
-  const getInProgressSubmission = useCallback((assessmentId, studentId) =>
-    submissions.find(s => s.assessmentId === assessmentId && s.studentId === studentId && s.status === 'in_progress') || null,
-  [submissions]);
+  const getInProgressSubmission = useCallback(() => null, []);
 
-  const getAssessmentStats = useCallback((assessmentId) => {
-    const subs = submissions.filter(s => s.assessmentId === assessmentId && s.status !== 'in_progress');
-    if (subs.length === 0) return { submissions: 0, avgScore: 0, highest: 0, lowest: 0, completionRate: 0 };
-    const scores = subs.filter(s => s.score != null).map(s => s.score);
-    return {
-      submissions: subs.length,
-      avgScore: scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0,
-      highest: scores.length > 0 ? Math.max(...scores) : 0,
-      lowest: scores.length > 0 ? Math.min(...scores) : 0,
-      inProgress: submissions.filter(s => s.assessmentId === assessmentId && s.status === 'in_progress').length,
-    };
-  }, [submissions]);
+  const getAssessmentStats = useCallback(async (assessmentId) => {
+    try {
+      const subs = await api.getAssessmentSubmissions(assessmentId);
+      const list = Array.isArray(subs) ? subs : [];
+      if (list.length === 0) return { submissions: 0, avgScore: 0, highest: 0, lowest: 0 };
+      const scores = list.filter(s => s.score != null).map(s => s.score);
+      return {
+        submissions: list.length,
+        avgScore: scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0,
+        highest: scores.length > 0 ? Math.max(...scores) : 0,
+        lowest: scores.length > 0 ? Math.min(...scores) : 0,
+      };
+    } catch {
+      return { submissions: 0, avgScore: 0, highest: 0, lowest: 0 };
+    }
+  }, []);
 
   const value = useMemo(() => ({
     assessments,
     submissions,
+    loading,
+    // Fetch
+    fetchAssessments,
     // Admin
     createAssessment,
     updateAssessment,
@@ -373,19 +246,60 @@ export function AssessmentProvider({ children }) {
     publishAssessment,
     duplicateAssessment,
     // Student
-    submitAssessment,
+    submitAssessment: submitAssessmentAction,
     saveProgress,
     // Queries
     getAssessmentById,
     getSubmissionsForAssessment,
-    getMySubmissions,
+    getMySubmissions: getMySubmissionsAction,
     getStudentSubmission,
     getInProgressSubmission,
     getAssessmentStats,
     generateQId,
-  }), [assessments, submissions, createAssessment, updateAssessment, deleteAssessment, publishAssessment, duplicateAssessment, submitAssessment, saveProgress, getAssessmentById, getSubmissionsForAssessment, getMySubmissions, getStudentSubmission, getInProgressSubmission, getAssessmentStats]);
+  }), [assessments, submissions, loading, fetchAssessments, createAssessment, updateAssessment, deleteAssessment, publishAssessment, duplicateAssessment, submitAssessmentAction, saveProgress, getAssessmentById, getSubmissionsForAssessment, getMySubmissionsAction, getStudentSubmission, getInProgressSubmission, getAssessmentStats]);
 
   return <AssessmentContext.Provider value={value}>{children}</AssessmentContext.Provider>;
+}
+
+// ── Map backend assessment format to frontend-compatible format ──
+function mapAssessmentToFrontend(a) {
+  return {
+    ...a,
+    courseId: a.course_id || a.courseId,
+    startDate: a.start_date || a.startDate,
+    endDate: a.end_date || a.endDate,
+    timeLimit: a.time_limit || a.timeLimit || 0,
+    passingGrade: a.passing_grade || a.passingGrade || 60,
+    totalMarks: a.total_marks || a.totalMarks || 100,
+    attempts: a.max_attempts || a.attempts || 1,
+    randomizeQuestions: a.shuffle_questions || a.randomizeQuestions || false,
+    showAnswersAfterSubmission: a.show_results ?? a.showAnswersAfterSubmission ?? true,
+    autoGrade: a.settings?.autoGrade ?? ['quiz', 'exam'].includes(a.type),
+    saveProgress: a.settings?.saveProgress ?? false,
+    submissionType: a.settings?.submissionType || null,
+    allowLateSubmission: a.settings?.allowLateSubmission ?? false,
+    assessmentSubType: a.settings?.assessmentSubType || null,
+    attachments: a.settings?.attachments || [],
+    createdAt: a.created_at || a.createdAt,
+    updatedAt: a.updated_at || a.updatedAt,
+    questions: (a.questions || []).map((q, idx) => ({
+      id: `q-${idx}`,
+      text: q.question || q.text,
+      question: q.question || q.text,
+      options: q.options
+        ? (typeof q.options === 'object' && !Array.isArray(q.options)
+          ? [q.options.A, q.options.B, q.options.C, q.options.D].filter(Boolean)
+          : q.options)
+        : [],
+      correctAnswer: typeof q.correct_answer === 'string'
+        ? ['A', 'B', 'C', 'D'].indexOf(q.correct_answer)
+        : (q.correctAnswer ?? 0),
+      correct_answer: q.correct_answer,
+      explanation: q.explanation || '',
+      marks: q.marks || 1,
+      shuffleOptions: false,
+    })),
+  };
 }
 
 export function useAssessments() {

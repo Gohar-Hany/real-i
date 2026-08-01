@@ -1,11 +1,15 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { FolderOpen, Plus, Edit3, Trash2, Users, BookOpen, Eye, EyeOff, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import { COURSES } from '@/data/mockData';
-import { getProjects, getAssignedQuizzes, deleteProject } from '@/services/api';
+import { getCourses, deleteCourse } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
 
 const COLORS = ['#D4AF37', '#10B981', '#3B82F6', '#8B5CF6', '#F59E0B', '#EF4444'];
+
+const SortIcon = ({ col, sortBy, sortDir }) => {
+  if (sortBy !== col) return <ArrowUpDown size={11} className="text-surface-600" />;
+  return sortDir === 'asc' ? <ArrowUp size={11} className="text-primary-400" /> : <ArrowDown size={11} className="text-primary-400" />;
+};
 
 export default function AdminCourses() {
   const [search, setSearch] = useState('');
@@ -17,98 +21,44 @@ export default function AdminCourses() {
   const toast = useToast();
 
   useEffect(() => {
+    const loadCourses = async () => {
+      try {
+        const data = await getCourses();
+        const mapped = (Array.isArray(data) ? data : []).map((c, i) => ({
+          id: c.project_id || c.id,
+          title: c.title || c.project_id,
+          category: c.category || 'General',
+          level: c.level || 'Beginner',
+          lessonsCount: c.lessons_count || 0,
+          totalHours: c.total_hours || 0,
+          studentsEnrolled: c.students_enrolled || 0,
+          rating: c.rating || 0,
+          color: c.color || COLORS[i % COLORS.length],
+          status: c.is_published ? 'live' : 'draft',
+          source: 'api',
+        }));
+        setCourses(mapped);
+      } catch (err) {
+        console.error('Failed to load courses', err);
+        setCourses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
     loadCourses();
   }, []);
 
-  const loadCourses = async () => {
-    setLoading(true);
+  const handleDelete = async (courseId) => {
+    if (!window.confirm('Delete this course? This cannot be undone.')) return;
     try {
-      // Fetch real projects from API
-      const apiProjects = await getProjects().catch(() => []);
-
-      // Build a merged list: API projects + mock COURSES catalog
-      const merged = [];
-
-      // Add API projects first (real data)
-      for (let i = 0; i < apiProjects.length; i++) {
-        const proj = apiProjects[i];
-        let quizCount = 0;
-        try {
-          const quizzes = await getAssignedQuizzes(proj.project_id);
-          quizCount = quizzes?.length || 0;
-        } catch (e) { /* skip */ }
-
-        merged.push({
-          id: proj.project_id,
-          title: proj.project_id,
-          category: 'AI Course',
-          level: 'Intermediate',
-          lessonsCount: quizCount,
-          totalHours: Math.max(quizCount * 2, 5),
-          studentsEnrolled: 0,
-          rating: 0,
-          color: COLORS[i % COLORS.length],
-          status: 'live',
-          source: 'api',
-        });
-      }
-
-      // Add mock courses from catalog (for display richness)
-      COURSES.forEach(c => {
-        // Skip if an API project matches the mock course title
-        const alreadyExists = merged.some(m => m.title.toLowerCase() === c.title.toLowerCase());
-        if (!alreadyExists) {
-          merged.push({
-            id: c.id,
-            title: c.title,
-            category: c.category,
-            level: c.level,
-            lessonsCount: c.lessonsCount,
-            totalHours: c.totalHours,
-            studentsEnrolled: c.studentsEnrolled,
-            rating: c.rating,
-            color: c.color || COLORS[merged.length % COLORS.length],
-            status: c.id === 'rag-systems' ? 'draft' : 'live',
-            source: 'catalog',
-          });
-        }
-      });
-
-      setCourses(merged);
+      await deleteCourse(courseId);
+      setCourses(prev => prev.filter(c => c.id !== courseId));
+      toast.success('Course deleted');
     } catch (err) {
-      console.error('Failed to load courses', err);
-      // Fallback to mock only
-      setCourses(COURSES.map(c => ({
-        id: c.id,
-        title: c.title,
-        category: c.category,
-        level: c.level,
-        lessonsCount: c.lessonsCount,
-        totalHours: c.totalHours,
-        studentsEnrolled: c.studentsEnrolled,
-        rating: c.rating,
-        color: c.color,
-        status: 'live',
-        source: 'catalog',
-      })));
-    } finally {
-      setLoading(false);
+      toast.error(err.message || 'Failed to delete course');
     }
   };
 
-  const handleDelete = async (courseId, source) => {
-    if (source === 'api') {
-      try {
-        await deleteProject(courseId);
-        toast.success('Project deleted successfully');
-      } catch (err) {
-        toast.error('Failed to delete project');
-        return;
-      }
-    }
-    setCourses(prev => prev.filter(c => c.id !== courseId));
-    if (source !== 'api') toast.success('Course removed from catalog');
-  };
 
   const handleSort = (col) => {
     if (sortBy === col) {
@@ -150,11 +100,6 @@ export default function AdminCourses() {
   const liveCourses = courses.filter(c => c.status === 'live').length;
   const draftCourses = courses.filter(c => c.status === 'draft').length;
   const apiCourses = courses.filter(c => c.source === 'api').length;
-
-  const SortIcon = ({ col }) => {
-    if (sortBy !== col) return <ArrowUpDown size={11} className="text-surface-600" />;
-    return sortDir === 'asc' ? <ArrowUp size={11} className="text-primary-400" /> : <ArrowDown size={11} className="text-primary-400" />;
-  };
 
   return (
     <div className="space-y-6 lg:space-y-8 animate-fade-in-up pb-10">
@@ -261,13 +206,13 @@ export default function AdminCourses() {
               <thead>
                 <tr className="border-b border-surface-700/80 bg-surface-900/80">
                   <th className="text-left px-6 py-4 text-xs font-bold text-surface-400 uppercase tracking-widest cursor-pointer hover:text-surface-200 select-none" onClick={() => handleSort('title')}>
-                    <span className="flex items-center gap-2">Course <SortIcon col="title" /></span>
+                    <span className="flex items-center gap-2">Course <SortIcon col="title" sortBy={sortBy} sortDir={sortDir} /></span>
                   </th>
                   <th className="text-left px-6 py-4 text-xs font-bold text-surface-400 uppercase tracking-widest cursor-pointer hover:text-surface-200 select-none hidden lg:table-cell" onClick={() => handleSort('category')}>
-                    <span className="flex items-center gap-2">Category <SortIcon col="category" /></span>
+                    <span className="flex items-center gap-2">Category <SortIcon col="category" sortBy={sortBy} sortDir={sortDir} /></span>
                   </th>
                   <th className="text-center px-6 py-4 text-xs font-bold text-surface-400 uppercase tracking-widest cursor-pointer hover:text-surface-200 select-none hidden md:table-cell" onClick={() => handleSort('level')}>
-                    <span className="flex items-center gap-2 justify-center">Level <SortIcon col="level" /></span>
+                    <span className="flex items-center gap-2 justify-center">Level <SortIcon col="level" sortBy={sortBy} sortDir={sortDir} /></span>
                   </th>
                   <th className="text-center px-6 py-4 text-xs font-bold text-surface-400 uppercase tracking-widest">Status</th>
                   <th className="text-center px-6 py-4 text-xs font-bold text-surface-400 uppercase tracking-widest hidden sm:table-cell">Source</th>
@@ -286,7 +231,13 @@ export default function AdminCourses() {
                           <BookOpen size={18} style={{ color: course.color }} />
                         </div>
                         <div>
-                          <p className="font-bold text-white group-hover:text-primary-300 transition-colors">{course.title}</p>
+                          <Link 
+                            to={`/courses/${course.project_id || course.id}`}
+                            className="font-bold text-white group-hover:text-primary-400 hover:underline transition-colors block"
+                            title="View Public Course Page"
+                          >
+                            {course.title}
+                          </Link>
                           <div className="flex items-center gap-2 mt-0.5">
                             <span className="text-[10px] font-bold text-surface-500 uppercase tracking-wider">{course.lessonsCount} modules</span>
                             <span className="w-1 h-1 rounded-full bg-surface-600"></span>
@@ -325,13 +276,13 @@ export default function AdminCourses() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => toast.info('Course editing requires backend integration.')}
-                          className="p-2 rounded-lg text-surface-400 bg-surface-800/50 border border-surface-700 hover:text-primary-400 hover:bg-primary-500/10 hover:border-primary-500/30 transition-all active:scale-95"
-                          title="Edit"
+                        <Link
+                          to={`/admin/courses/${course.id}`}
+                          className="p-2 rounded-lg text-surface-400 bg-surface-800/50 border border-surface-700 hover:text-primary-400 hover:bg-primary-500/10 hover:border-primary-500/30 transition-all active:scale-95 flex items-center justify-center"
+                          title="View / Edit"
                         >
                           <Edit3 size={14} />
-                        </button>
+                        </Link>
                         <button
                           onClick={() => handleDelete(course.id, course.source)}
                           className="p-2 rounded-lg text-surface-400 bg-surface-800/50 border border-surface-700 hover:text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/30 transition-all active:scale-95"

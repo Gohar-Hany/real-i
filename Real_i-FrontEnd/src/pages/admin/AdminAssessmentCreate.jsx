@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAssessments, generateQId } from '@/contexts/AssessmentContext';
-import { getProjects } from '@/services/api';
+import { getCourses } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
 import {
   ClipboardList, ArrowLeft, ArrowRight, Check, Save, Eye,
@@ -79,9 +79,12 @@ export default function AdminAssessmentCreate() {
     ? ['Basic Info', 'Configuration', 'Questions', 'Review & Publish']
     : ['Basic Info', 'Configuration', 'Review & Publish'];
 
-  // Load projects for course dropdown
+  // Load courses for dropdown
   useEffect(() => {
-    getProjects().then(p => setProjects(p || [])).catch(() => {});
+    getCourses().then(list => {
+      const mapped = (list || []).map(c => ({ project_id: c.project_id || c.id, title: c.title || c.project_id }));
+      setProjects(mapped);
+    }).catch(() => {});
   }, []);
 
   // Load existing assessment for edit

@@ -1,69 +1,75 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getUsers, getProjects, getGuidelines, getUserResults } from '@/services/api';
+import { getUsers, getCourses, getUserResults } from '@/services/api';
 import {
-  BookOpen, BrainCircuit, TrendingUp, Activity, Award, Clock,
-  ArrowUpRight, ArrowDownRight, Users, BarChart3, GraduationCap,
-  Target, AlertTriangle, CheckCircle, Eye, ChevronRight
+  BookOpen, BrainCircuit, TrendingUp, Award,
+  BarChart3, GraduationCap, Target, AlertTriangle, CheckCircle, Eye, ChevronRight
 } from 'lucide-react';
 
 export default function AdminAnalytics() {
   const [loading, setLoading] = useState(true);
   const [kpis, setKpis] = useState({ totalStudents: 0, totalProjects: 0, totalQuizzesTaken: 0, avgScore: 0 });
   const [studentPerformance, setStudentPerformance] = useState([]);
-  const [projectBreakdown, setProjectBreakdown] = useState([]);
+  const [courseBreakdown, setCourseBreakdown] = useState([]);
   const [scoreDistribution, setScoreDistribution] = useState({ excellent: 0, good: 0, average: 0, poor: 0 });
 
   useEffect(() => {
-    loadAnalytics();
-  }, []);
+    const loadAnalytics = async () => {
+      setLoading(true);
+      try {
+        const [users, courses] = await Promise.all([
+          getUsers().catch(() => []),
+          getCourses().catch(() => []),
+        ]);
 
-  const loadAnalytics = async () => {
-    setLoading(true);
-    try {
-      const [users, projects, guidelines] = await Promise.all([
-        getUsers().catch(() => []),
-        getProjects().catch(() => []),
-        getGuidelines().catch(() => []),
-      ]);
+        const students = users.filter(u => u.role === 'student');
 
-      const students = users.filter(u => u.role === 'student');
+        // Fetch quiz results for each student
+        const performanceData = [];
+        let totalQuizzes = 0;
+        let totalScoreSum = 0;
+        let totalQuizCount = 0;
+        let excellent = 0, good = 0, average = 0, poor = 0;
 
-      // Fetch quiz results for each student
-      const performanceData = [];
-      let totalQuizzes = 0;
-      let totalScoreSum = 0;
-      let totalQuizCount = 0;
-      let excellent = 0, good = 0, average = 0, poor = 0;
+        for (const student of students) {
+          try {
+            const data = await getUserResults(student.id);
+            const results = Array.isArray(data?.results) ? data.results : [];
+            const quizCount = results.length;
+            totalQuizzes += quizCount;
 
-      for (const student of students) {
-        try {
-          const data = await getUserResults(student.id);
-          const results = Array.isArray(data?.results) ? data.results : [];
-          const quizCount = results.length;
-          totalQuizzes += quizCount;
+            if (quizCount > 0) {
+              const avg = Math.round(results.reduce((acc, r) => acc + (r.total > 0 ? (r.score / r.total) * 100 : 0), 0) / quizCount);
+              totalScoreSum += avg;
+              totalQuizCount++;
 
-          if (quizCount > 0) {
-            const avg = Math.round(results.reduce((acc, r) => acc + (r.total > 0 ? (r.score / r.total) * 100 : 0), 0) / quizCount);
-            totalScoreSum += avg;
-            totalQuizCount++;
+              // Score distribution
+              if (avg >= 90) excellent++;
+              else if (avg >= 75) good++;
+              else if (avg >= 60) average++;
+              else poor++;
 
-            // Score distribution
-            if (avg >= 90) excellent++;
-            else if (avg >= 75) good++;
-            else if (avg >= 60) average++;
-            else poor++;
-
-            performanceData.push({
-              id: student.id,
-              name: student.name,
-              email: student.email,
-              quizzes: quizCount,
-              avgScore: avg,
-              bestScore: Math.max(...results.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0)),
-              passRate: Math.round(results.filter(r => r.total > 0 && (r.score / r.total) * 100 >= 60).length / quizCount * 100),
-            });
-          } else {
+              performanceData.push({
+                id: student.id,
+                name: student.name,
+                email: student.email,
+                quizzes: quizCount,
+                avgScore: avg,
+                bestScore: Math.max(...results.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0)),
+                passRate: Math.round(results.filter(r => r.total > 0 && (r.score / r.total) * 100 >= 60).length / quizCount * 100),
+              });
+            } else {
+              performanceData.push({
+                id: student.id,
+                name: student.name,
+                email: student.email,
+                quizzes: 0,
+                avgScore: 0,
+                bestScore: 0,
+                passRate: 0,
+              });
+            }
+          } catch {
             performanceData.push({
               id: student.id,
               name: student.name,
@@ -74,37 +80,29 @@ export default function AdminAnalytics() {
               passRate: 0,
             });
           }
-        } catch (e) {
-          performanceData.push({
-            id: student.id,
-            name: student.name,
-            email: student.email,
-            quizzes: 0,
-            avgScore: 0,
-            bestScore: 0,
-            passRate: 0,
-          });
         }
+
+        const overallAvg = totalQuizCount > 0 ? Math.round(totalScoreSum / totalQuizCount) : 0;
+
+        setKpis({
+          totalStudents: students.length,
+          totalCourses: courses.length,
+          totalQuizzesTaken: totalQuizzes,
+          avgScore: overallAvg,
+        });
+
+        setStudentPerformance(performanceData.sort((a, b) => b.avgScore - a.avgScore));
+        setScoreDistribution({ excellent, good, average, poor });
+        setCourseBreakdown(courses.map(c => ({ id: c.id || c.project_id, name: c.title || c.project_id })));
+      } catch (err) {
+        console.error('Analytics load failed:', err);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const overallAvg = totalQuizCount > 0 ? Math.round(totalScoreSum / totalQuizCount) : 0;
-
-      setKpis({
-        totalStudents: students.length,
-        totalProjects: projects.length,
-        totalQuizzesTaken: totalQuizzes,
-        avgScore: overallAvg,
-      });
-
-      setStudentPerformance(performanceData.sort((a, b) => b.avgScore - a.avgScore));
-      setScoreDistribution({ excellent, good, average, poor });
-      setProjectBreakdown(projects.map(p => ({ id: p.project_id, name: p.project_id })));
-    } catch (err) {
-      console.error('Analytics load failed:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    loadAnalytics();
+  }, []);
 
   const distTotal = scoreDistribution.excellent + scoreDistribution.good + scoreDistribution.average + scoreDistribution.poor;
 
@@ -147,7 +145,7 @@ export default function AdminAnalytics() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { icon: GraduationCap, label: 'Total Students', value: kpis.totalStudents, color: '#3B82F6' },
-          { icon: BookOpen, label: 'Active Projects', value: kpis.totalProjects, color: '#10B981' },
+          { icon: BookOpen, label: 'Active Courses', value: kpis.totalCourses, color: '#10B981' },
           { icon: BrainCircuit, label: 'Quizzes Taken', value: kpis.totalQuizzesTaken, color: '#8B5CF6' },
           { icon: Award, label: 'Avg. Score', value: `${kpis.avgScore}%`, color: '#F59E0B' },
         ].map((kpi, i) => (
@@ -379,7 +377,7 @@ export default function AdminAnalytics() {
       </div>
 
       {/* Projects Overview */}
-      {projectBreakdown.length > 0 && (
+      {courseBreakdown.length > 0 && (
         <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
           <div className="p-6 border-b border-surface-800 bg-surface-900/80">
             <h3 className="text-base font-bold text-white flex items-center gap-3">
@@ -390,7 +388,7 @@ export default function AdminAnalytics() {
             </h3>
           </div>
           <div className="p-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {projectBreakdown.map((p, i) => (
+            {courseBreakdown.map((p, i) => (
               <div key={i} className="flex items-center gap-3 p-4 rounded-xl bg-surface-800/30 border border-surface-700/50 hover:bg-surface-800/60 transition-colors">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20 shrink-0">
                   <BookOpen size={18} />

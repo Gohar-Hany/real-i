@@ -4,7 +4,7 @@ import { useAssessments } from '@/contexts/AssessmentContext';
 import { useToast } from '@/components/common/Toast';
 import {
   ArrowLeft, Edit3, Eye, EyeOff, Trash2, Copy, BarChart3,
-  Users, Clock, Target, Trophy, TrendingDown, CheckCircle,
+  Users, Clock, Trophy, TrendingDown, CheckCircle,
   AlertCircle, Hourglass, FileText, BrainCircuit, GraduationCap, CheckSquare
 } from 'lucide-react';
 
@@ -38,8 +38,9 @@ export default function AdminAssessmentDetail() {
   const TypeIcon = tc.icon;
 
   // Stats
-  const completedSubs = submissions.filter(s => s.status !== 'in_progress');
-  const inProgressSubs = submissions.filter(s => s.status === 'in_progress');
+  const safeSubmissions = Array.isArray(submissions) ? submissions : [];
+  const completedSubs = safeSubmissions.filter(s => s.status !== 'in_progress');
+  const inProgressSubs = safeSubmissions.filter(s => s.status === 'in_progress');
   const scores = completedSubs.filter(s => s.score != null).map(s => s.score);
   const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
   const highest = scores.length > 0 ? Math.max(...scores) : 0;
@@ -146,10 +147,10 @@ export default function AdminAssessmentDetail() {
         <div className="lg:col-span-2 glass-card rounded-2xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
           <div className="p-5 border-b border-surface-700/50 flex items-center justify-between">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider">Submissions</h3>
-            <span className="text-xs text-surface-500">{submissions.length} total</span>
+            <span className="text-xs text-surface-500">{safeSubmissions.length} total</span>
           </div>
 
-          {submissions.length === 0 ? (
+          {safeSubmissions.length === 0 ? (
             <div className="p-12 text-center">
               <Users size={32} className="text-surface-600 mx-auto mb-3" />
               <p className="text-sm font-bold text-white mb-1">No submissions yet</p>
@@ -167,7 +168,7 @@ export default function AdminAssessmentDetail() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-700/50">
-                  {submissions.map(sub => (
+                  {safeSubmissions.map(sub => (
                     <tr key={sub.id} className="hover:bg-surface-800/30 transition-colors">
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-3">

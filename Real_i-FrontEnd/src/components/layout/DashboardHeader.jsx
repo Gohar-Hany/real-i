@@ -282,8 +282,12 @@ export default function DashboardHeader() {
                 <p className="text-sm font-bold text-surface-200 group-hover:text-white transition-colors">{user?.name}</p>
                 <p className="text-[10px] text-surface-500 capitalize font-medium">{user?.role}</p>
               </div>
-              <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center text-surface-950 text-sm font-extrabold shadow-glow-sm">
-                {user?.name?.charAt(0)?.toUpperCase() || '?'}
+              <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center text-surface-950 text-sm font-extrabold shadow-glow-sm overflow-hidden">
+                {user?.avatar ? (
+                  <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  user?.name?.charAt(0)?.toUpperCase() || '?'
+                )}
               </div>
             </button>
 

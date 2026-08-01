@@ -8,11 +8,12 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default defineConfig(({ mode }) => {
-  // Load env variables
   const env = loadEnv(mode, process.cwd(), '');
-  
-  // Use API_TARGET_URL from .env if available, otherwise default to Azure
-  const apiTarget = env.API_TARGET_URL || 'https://raaed-api-erfsgehsb6ashqh7.italynorth-01.azurewebsites.net';
+
+  // Python AI backend (RAG, Agents, NLP)
+  const aiTarget = env.AI_TARGET_URL || 'http://127.0.0.1:5000';
+  // Node.js API backend (Auth, Courses, Assessments, Events, Users, Analytics)
+  const apiTarget = env.API_TARGET_URL || 'http://127.0.0.1:4000';
 
   return {
     plugins: [
@@ -28,11 +29,17 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port: 5173,
       proxy: {
-        '/api': {
-          target: apiTarget,
-          changeOrigin: true,
-        },
+        // ── AI Backend (Python) ──────────────────────────
+        '/api/v1/agent': { target: aiTarget, changeOrigin: true },
+        '/api/v1/nlp':   { target: aiTarget, changeOrigin: true },
+        '/api/v1/data':  { target: aiTarget, changeOrigin: true },
+        '/api/v1/admin/task':       { target: aiTarget, changeOrigin: true },
+        '/api/v1/admin/guidelines': { target: aiTarget, changeOrigin: true },
+        '/api/v1/admin/health':     { target: aiTarget, changeOrigin: true },
+        // ── Node.js API (everything else) ────────────────
+        '/api': { target: apiTarget, changeOrigin: true },
       },
     },
   };
 })
+

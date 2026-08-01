@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CourseCard from '@/components/features/courses/CourseCard';
-import { COURSES, CATEGORIES } from '@/data/mockData';
+import { getCourses, getCourseCategories } from '@/services/api';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,19 +12,36 @@ export default function CoursesPage() {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeLevel, setActiveLevel] = useState('All');
+  const [courses, setCourses] = useState([]);
+  const [categories, setCategories] = useState(['All']);
   const containerRef = useRef(null);
 
   const levels = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
-  const filtered = COURSES.filter((c) => {
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const [data, cats] = await Promise.all([
+          getCourses().catch(() => []),
+          getCourseCategories().catch(() => ['All']),
+        ]);
+        setCourses(Array.isArray(data) ? data : []);
+        setCategories(Array.isArray(cats) ? cats : ['All']);
+      } catch { /* ignore */ }
+    };
+    load();
+  }, []);
+
+  const filtered = courses.filter((c) => {
     const matchSearch =
-      c.title.toLowerCase().includes(search.toLowerCase()) ||
-      c.subtitle.toLowerCase().includes(search.toLowerCase()) ||
-      c.tags.some((t) => t.toLowerCase().includes(search.toLowerCase()));
+      (c.title || '').toLowerCase().includes(search.toLowerCase()) ||
+      (c.subtitle || '').toLowerCase().includes(search.toLowerCase()) ||
+      (c.tags || []).some((t) => t.toLowerCase().includes(search.toLowerCase()));
     const matchCat = activeCategory === 'All' || c.category === activeCategory;
     const matchLevel = activeLevel === 'All' || c.level === activeLevel;
     return matchSearch && matchCat && matchLevel;
   });
+
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -86,13 +103,13 @@ export default function CoursesPage() {
               <div className="flex items-center gap-2">
                 <Cpu size={16} className="text-primary-500" />
                 <span className="font-mono text-xs text-surface-400 uppercase tracking-wider">
-                  {COURSES.length} Modules Available
+                  {courses.length} Modules Available
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <BookOpen size={16} className="text-primary-500" />
                 <span className="font-mono text-xs text-surface-400 uppercase tracking-wider">
-                  {CATEGORIES.length - 1} Categories
+                  {Math.max(0, categories.length - 1)} Categories
                 </span>
               </div>
             </div>
@@ -151,7 +168,7 @@ export default function CoursesPage() {
 
                 {/* Categories */}
                 <div className="flex items-center gap-2 mt-4 overflow-x-auto pb-1 scrollbar-hide">
-                  {CATEGORIES.map((cat) => (
+                  {categories.map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setActiveCategory(cat)}

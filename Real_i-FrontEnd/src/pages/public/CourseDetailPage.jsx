@@ -2,11 +2,11 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import {
-  ArrowLeft, Clock, Users, Star, BookOpen, Play, Lock,
+  ArrowLeft, Clock, Users, Star, Play, Lock,
   CheckCircle, ChevronDown, ChevronUp, GraduationCap,
-  Brain, BarChart3, Award, FileText,
+  Brain, BarChart3, Award,
 } from 'lucide-react';
-import { COURSES } from '@/data/mockData';
+import { getCourse } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Helmet } from 'react-helmet-async';
 
@@ -16,8 +16,12 @@ export default function CourseDetailPage() {
   const navigate = useNavigate();
   const headerRef = useRef(null);
   const [expandedModule, setExpandedModule] = useState(0);
+  const [course, setCourse] = useState(null);
 
-  const course = COURSES.find((c) => c.id === courseId);
+  useEffect(() => {
+    getCourse(courseId).then(setCourse).catch(() => setCourse(null));
+  }, [courseId]);
+
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -44,7 +48,8 @@ export default function CourseDetailPage() {
     );
   }
 
-  const totalLessons = course.modules.reduce((acc, m) => acc + m.lessons.length, 0);
+  const modules = course.modules || [];
+  const totalLessons = modules.reduce((acc, m) => acc + (m.lessons?.length || 0), 0);
 
   return (
     <>
@@ -120,17 +125,12 @@ export default function CourseDetailPage() {
             </div>
 
             {/* Curriculum */}
-            <div className="detail-card glass-card rounded-2xl p-7">
-              <h2 className="text-xl font-bold text-surface-100 mb-6 flex items-center gap-2">
-                <FileText size={20} className="text-primary-400" />
-                Course Curriculum
-                <span className="text-sm font-normal text-surface-500 ml-2">
-                  {course.modules.length} modules · {totalLessons} lessons
-                </span>
-              </h2>
-
-              <div className="space-y-3">
-                {course.modules.map((mod, i) => (
+            <div className="glass-card p-6 md:p-8 rounded-3xl border border-surface-700/50 mt-8" id="curriculum">
+              <h3 className="text-xl font-bold text-white mb-6">Course Curriculum</h3>
+              <div className="space-y-4">
+                {modules.length === 0 ? (
+                  <p className="text-surface-400 text-sm">Curriculum content is being updated. Check back soon.</p>
+                ) : modules.map((mod, i) => (
                   <div key={mod.id} className="rounded-xl border border-surface-800/50 overflow-hidden">
                     {/* Module Header */}
                     <button
@@ -207,13 +207,33 @@ export default function CourseDetailPage() {
 
               {/* CTA */}
               <button
-                onClick={() => {
-                  if (!user) navigate('/login?register=true');
-                  else navigate(`/student/courses`);
+                onClick={async () => {
+                  if (!user) {
+                    navigate('/login?register=true');
+                    return;
+                  }
+                  if (user.role === 'admin') {
+                    navigate(`/admin/courses/${course.project_id || course.id}`);
+                    return;
+                  }
+                  
+                  // Student logic
+                  if (course.enrolled_students?.includes(user.id)) {
+                    navigate(`/student/courses/${course.id || course.project_id}/learn`);
+                  } else {
+                    try {
+                      const { enrollCourse } = await import('@/services/api');
+                      await enrollCourse(course.id || course.project_id);
+                      window.location.href = `/student/courses/${course.id || course.project_id}/learn`;
+                    } catch (err) {
+                      console.error('Failed to enroll:', err);
+                      navigate('/student/courses');
+                    }
+                  }
                 }}
                 className="w-full py-4 rounded-xl gradient-primary text-surface-950 font-bold text-base shadow-glow hover:shadow-glow-lg transition-all duration-300 active:scale-95 mb-4"
               >
-                {user ? 'Start Learning' : 'Enroll Now — Free'}
+                {!user ? 'Enroll Now — Free' : (user.role === 'admin' ? 'Edit Course' : (course.enrolled_students?.includes(user?.id) ? 'Continue Learning' : 'Start Learning'))}
               </button>
 
               {!user && (
@@ -229,7 +249,7 @@ export default function CourseDetailPage() {
                 </p>
                 {[
                   { icon: Play, text: `${totalLessons} video lessons` },
-                  { icon: Clock, text: `${course.totalHours} hours of content` },
+                  { icon: Clock, text: `${course.totalHours || course.total_hours || 0} hours of content` },
                   { icon: Brain, text: 'AI-powered Q&A assistant' },
                   { icon: Award, text: 'Certificate of completion' },
                   { icon: Users, text: 'Community access' },
@@ -245,11 +265,11 @@ export default function CourseDetailPage() {
               {/* Stats */}
               <div className="grid grid-cols-2 gap-3 mt-6 pt-5 border-t border-surface-800/50">
                 <div className="text-center p-3 rounded-xl bg-surface-800/30">
-                  <p className="text-lg font-bold text-surface-200">{course.studentsEnrolled.toLocaleString()}</p>
+                  <p className="text-lg font-bold text-surface-200">{Number(course.studentsEnrolled || course.students_enrolled || 0).toLocaleString()}</p>
                   <p className="text-[10px] text-surface-500 uppercase">Students</p>
                 </div>
                 <div className="text-center p-3 rounded-xl bg-surface-800/30">
-                  <p className="text-lg font-bold text-surface-200">{course.rating}</p>
+                  <p className="text-lg font-bold text-surface-200">{course.rating || 0}</p>
                   <p className="text-[10px] text-surface-500 uppercase">Rating</p>
                 </div>
               </div>

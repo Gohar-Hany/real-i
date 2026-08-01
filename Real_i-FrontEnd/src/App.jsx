@@ -19,6 +19,8 @@ const AboutPage = lazy(() => import('@/pages/public/AboutPage'));
 const ContactPage = lazy(() => import('@/pages/public/ContactPage'));
 const CoursesPage = lazy(() => import('@/pages/public/CoursesPage'));
 const CourseDetailPage = lazy(() => import('@/pages/public/CourseDetailPage'));
+const PrivacyPolicy = lazy(() => import('@/pages/public/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('@/pages/public/TermsOfService'));
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const NotFound = lazy(() => import('@/pages/errors/NotFound'));
 
@@ -30,6 +32,7 @@ const AdminUpload = lazy(() => import('@/pages/admin/AdminUpload'));
 const AdminGuidelines = lazy(() => import('@/pages/admin/AdminGuidelines'));
 const AdminStudents = lazy(() => import('@/pages/admin/AdminStudents'));
 const AdminCourses = lazy(() => import('@/pages/admin/AdminCourses'));
+const AdminCourseDetail = lazy(() => import('@/pages/admin/AdminCourseDetail'));
 const AdminAnalytics = lazy(() => import('@/pages/admin/AdminAnalytics'));
 const AdminProfile = lazy(() => import('@/pages/admin/AdminProfile'));
 const AdminSettings = lazy(() => import('@/pages/admin/AdminSettings'));
@@ -44,6 +47,7 @@ const StudentDashboard = lazy(() => import('@/pages/student/StudentDashboard'));
 const StudentChat = lazy(() => import('@/pages/student/StudentChat'));
 const StudentQuiz = lazy(() => import('@/pages/student/StudentQuiz'));
 const StudentCourses = lazy(() => import('@/pages/student/StudentCourses'));
+const StudentCourseLearning = lazy(() => import('@/pages/student/StudentCourseLearning'));
 const StudentProfile = lazy(() => import('@/pages/student/StudentProfile'));
 const StudentPerformance = lazy(() => import('@/pages/student/StudentPerformance'));
 const StudentAssessments = lazy(() => import('@/pages/student/StudentAssessments'));
@@ -91,6 +95,8 @@ function AppRoutes() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:courseId" element={<CourseDetailPage />} />
         </Route>
@@ -104,6 +110,7 @@ function AppRoutes() {
           <Route path="students" element={<AdminStudents />} />
           <Route path="students/:id" element={<AdminStudentProfile />} />
           <Route path="courses" element={<AdminCourses />} />
+          <Route path="courses/:id" element={<AdminCourseDetail />} />
           <Route path="analytics" element={<AdminAnalytics />} />
           <Route path="chat" element={<AdminChat />} />
           <Route path="data" element={<AdminData />} />
@@ -122,6 +129,7 @@ function AppRoutes() {
         <Route path="/student" element={<ProtectedRoute role="student"><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<StudentDashboard />} />
           <Route path="courses" element={<StudentCourses />} />
+          <Route path="courses/:courseId/learn" element={<StudentCourseLearning />} />
           <Route path="chat" element={<StudentChat />} />
           <Route path="quiz" element={<StudentQuiz />} />
           <Route path="performance" element={<StudentPerformance />} />

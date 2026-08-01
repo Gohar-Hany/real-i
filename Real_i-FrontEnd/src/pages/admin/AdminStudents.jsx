@@ -1,16 +1,21 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { getUsers, updateUserRole } from '@/services/api';
+import { getUsers, updateUserRole, deleteUser } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
 import {
-  Users, Shield, GraduationCap, Search, Eye, Target,
+  Users, Shield, GraduationCap, Search, Eye, Target, Trash2,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight,
   ArrowUpDown, ArrowUp, ArrowDown
 } from 'lucide-react';
 
 const SUPER_ADMIN_EMAIL = 'goharhany@gmail.com';
 const PAGE_SIZE = 10;
+
+const SortIcon = ({ col, sortBy, sortDir }) => {
+  if (sortBy !== col) return <ArrowUpDown size={12} className="text-surface-600" />;
+  return sortDir === 'asc' ? <ArrowUp size={12} className="text-primary-400" /> : <ArrowDown size={12} className="text-primary-400" />;
+};
 
 export default function AdminStudents() {
   const { user: currentUser } = useAuth();
@@ -27,26 +32,20 @@ export default function AdminStudents() {
   const isSuperAdmin = currentUser?.email === SUPER_ADMIN_EMAIL;
 
   useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true);
+      try {
+        const data = await getUsers();
+        setUsers(data);
+      } catch {
+        toast.error('Failed to load users');
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchUsers();
-  }, []);
+  }, [toast]);
 
-  // Sync URL search param
-  useEffect(() => {
-    const urlSearch = searchParams.get('search');
-    if (urlSearch) setSearchQuery(urlSearch);
-  }, [searchParams]);
-
-  const fetchUsers = async () => {
-    setLoading(true);
-    try {
-      const data = await getUsers();
-      setUsers(data);
-    } catch (err) {
-      toast.error('Failed to load users');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleRoleChange = async (userId, newRole) => {
     try {
@@ -55,6 +54,19 @@ export default function AdminStudents() {
       toast.success(`Role updated to ${newRole}`);
     } catch (err) {
       toast.error(err.message || 'Failed to update role');
+    }
+  };
+
+  const handleDeleteUser = async (userId, userName) => {
+    if (!window.confirm(`Are you sure you want to permanently delete user "${userName}"? This cannot be undone.`)) {
+      return;
+    }
+    try {
+      await deleteUser(userId);
+      setUsers(prev => prev.filter(u => u.id !== userId));
+      toast.success('User deleted successfully');
+    } catch (err) {
+      toast.error(err.message || 'Failed to delete user');
     }
   };
 
@@ -101,16 +113,11 @@ export default function AdminStudents() {
   const totalPages = Math.max(1, Math.ceil(filteredUsers.length / PAGE_SIZE));
   const paginatedUsers = filteredUsers.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
-  // Reset page on filter/search change
-  useEffect(() => { setCurrentPage(1); }, [searchQuery, roleFilter]);
+
 
   const totalStudents = users.filter(u => u.role === 'student').length;
   const totalAdmins = users.filter(u => u.role === 'admin').length;
 
-  const SortIcon = ({ col }) => {
-    if (sortBy !== col) return <ArrowUpDown size={12} className="text-surface-600" />;
-    return sortDir === 'asc' ? <ArrowUp size={12} className="text-primary-400" /> : <ArrowDown size={12} className="text-primary-400" />;
-  };
 
   return (
     <div className="space-y-6 lg:space-y-8 animate-fade-in-up pb-10">
@@ -170,7 +177,10 @@ export default function AdminStudents() {
             type="text"
             placeholder="Search by name or email..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
             className="w-full pl-11 pr-4 py-3 rounded-xl bg-surface-900/60 border border-surface-700/50 text-sm text-white placeholder-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
           />
         </div>
@@ -178,7 +188,10 @@ export default function AdminStudents() {
           {['all', 'student', 'admin'].map(role => (
             <button
               key={role}
-              onClick={() => setRoleFilter(role)}
+              onClick={() => {
+                setRoleFilter(role);
+                setCurrentPage(1);
+              }}
               className={`px-4 py-3 rounded-xl text-xs font-bold transition-all shrink-0 ${
                 roleFilter === role
                   ? 'gradient-primary text-surface-950 shadow-[0_0_15px_rgba(212,175,55,0.3)]'
@@ -216,19 +229,19 @@ export default function AdminStudents() {
                       className="text-left px-6 py-4 text-xs font-bold text-surface-400 uppercase tracking-widest cursor-pointer hover:text-surface-200 transition-colors select-none"
                       onClick={() => handleSort('name')}
                     >
-                      <span className="flex items-center gap-2">User <SortIcon col="name" /></span>
+                      <span className="flex items-center gap-2">User <SortIcon col="name" sortBy={sortBy} sortDir={sortDir} /></span>
                     </th>
                     <th
                       className="text-left px-6 py-4 text-xs font-bold text-surface-400 uppercase tracking-widest cursor-pointer hover:text-surface-200 transition-colors select-none hidden md:table-cell"
                       onClick={() => handleSort('email')}
                     >
-                      <span className="flex items-center gap-2">Email <SortIcon col="email" /></span>
+                      <span className="flex items-center gap-2">Email <SortIcon col="email" sortBy={sortBy} sortDir={sortDir} /></span>
                     </th>
                     <th
                       className="text-center px-6 py-4 text-xs font-bold text-surface-400 uppercase tracking-widest cursor-pointer hover:text-surface-200 transition-colors select-none"
                       onClick={() => handleSort('role')}
                     >
-                      <span className="flex items-center gap-2 justify-center">Role <SortIcon col="role" /></span>
+                      <span className="flex items-center gap-2 justify-center">Role <SortIcon col="role" sortBy={sortBy} sortDir={sortDir} /></span>
                     </th>
                     <th className="text-right px-6 py-4 text-xs font-bold text-surface-400 uppercase tracking-widest">Actions</th>
                   </tr>
@@ -238,8 +251,14 @@ export default function AdminStudents() {
                     <tr key={u.id} className="hover:bg-surface-800/30 transition-colors group">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center text-surface-950 text-xs font-extrabold shrink-0 shadow-sm">
-                            {u.name?.charAt(0)?.toUpperCase() || '?'}
+                          <div className="w-9 h-9 rounded-lg overflow-hidden shrink-0 shadow-sm border border-surface-700/50">
+                            {u.avatar ? (
+                              <img src={u.avatar} alt={u.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full gradient-primary flex items-center justify-center text-surface-950 text-xs font-extrabold">
+                                {u.name?.charAt(0)?.toUpperCase() || '?'}
+                              </div>
+                            )}
                           </div>
                           <div>
                             <p className="font-bold text-white group-hover:text-primary-300 transition-colors">{u.name}</p>
@@ -270,17 +289,27 @@ export default function AdminStudents() {
                             <span className="hidden lg:inline">View</span>
                           </Link>
                           {isSuperAdmin && u.email !== SUPER_ADMIN_EMAIL && (
-                            <button
-                              onClick={() => handleRoleChange(u.id, u.role === 'admin' ? 'student' : 'admin')}
-                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95 ${
-                                u.role === 'admin'
-                                  ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20'
-                                  : 'bg-violet-500/10 text-violet-400 border border-violet-500/20 hover:bg-violet-500/20'
-                              }`}
-                            >
-                              <Target size={12} />
-                              <span className="hidden lg:inline">{u.role === 'admin' ? 'Demote' : 'Promote'}</span>
-                            </button>
+                            <>
+                              <button
+                                onClick={() => handleRoleChange(u.id, u.role === 'admin' ? 'student' : 'admin')}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95 ${
+                                  u.role === 'admin'
+                                    ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20'
+                                    : 'bg-violet-500/10 text-violet-400 border border-violet-500/20 hover:bg-violet-500/20'
+                                }`}
+                              >
+                                <Target size={12} />
+                                <span className="hidden lg:inline">{u.role === 'admin' ? 'Demote' : 'Promote'}</span>
+                              </button>
+                              <button
+                                onClick={() => handleDeleteUser(u.id, u.name)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20"
+                                title="Delete User"
+                              >
+                                <Trash2 size={12} />
+                                <span className="hidden lg:inline">Delete</span>
+                              </button>
+                            </>
                           )}
                         </div>
                       </td>
