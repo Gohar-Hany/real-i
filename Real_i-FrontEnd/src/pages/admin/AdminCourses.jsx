@@ -112,7 +112,7 @@ export default function AdminCourses() {
               Curriculum Control
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-50 tracking-tight mb-2">
             Course <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Management</span>
           </h1>
           <p className="text-surface-400 text-sm max-w-2xl leading-relaxed">
@@ -146,7 +146,7 @@ export default function AdminCourses() {
                 <stat.icon size={20} style={{ color: stat.color }} />
               </div>
               <div>
-                <p className="text-2xl font-extrabold text-white">{stat.value}</p>
+                <p className="text-2xl font-extrabold text-surface-50">{stat.value}</p>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-surface-400 mt-0.5">{stat.label}</p>
               </div>
             </div>
@@ -163,7 +163,7 @@ export default function AdminCourses() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search courses..."
-            className="w-full pl-11 pr-4 py-3 rounded-xl bg-surface-900/60 border border-surface-700/50 text-sm text-white placeholder-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
+            className="w-full pl-11 pr-4 py-3 rounded-xl bg-surface-900/60 border border-surface-700/50 text-sm text-surface-50 placeholder-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
           />
         </div>
         <div className="flex gap-2">
@@ -178,7 +178,7 @@ export default function AdminCourses() {
               className={`px-4 py-3 rounded-xl text-xs font-bold transition-all ${
                 filterBy === opt.value
                   ? 'gradient-primary text-surface-950 shadow-[0_0_15px_rgba(212,175,55,0.3)]'
-                  : 'bg-surface-900/60 border border-surface-700/50 text-surface-400 hover:text-white'
+                  : 'bg-surface-900/60 border border-surface-700/50 text-surface-400 hover:text-surface-50'
               }`}
             >
               {opt.label}
@@ -197,7 +197,7 @@ export default function AdminCourses() {
         ) : filteredCourses.length === 0 ? (
           <div className="p-16 text-center">
             <BookOpen size={32} className="text-surface-600 mx-auto mb-3" />
-            <p className="text-lg font-bold text-white mb-1">No courses found</p>
+            <p className="text-lg font-bold text-surface-50 mb-1">No courses found</p>
             <p className="text-sm text-surface-400">Try adjusting your search or filters.</p>
           </div>
         ) : (
@@ -233,7 +233,7 @@ export default function AdminCourses() {
                         <div>
                           <Link 
                             to={`/courses/${course.project_id || course.id}`}
-                            className="font-bold text-white group-hover:text-primary-400 hover:underline transition-colors block"
+                            className="font-bold text-surface-50 group-hover:text-primary-400 hover:underline transition-colors block"
                             title="View Public Course Page"
                           >
                             {course.title}

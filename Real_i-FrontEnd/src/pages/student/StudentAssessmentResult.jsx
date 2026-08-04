@@ -20,7 +20,7 @@ export default function StudentAssessmentResult() {
     return (
       <div className="flex flex-col items-center justify-center py-32 animate-fade-in-up">
         <AlertTriangle size={48} className="text-surface-600 mb-4" />
-        <p className="text-xl font-bold text-white mb-2">Assessment Not Found</p>
+        <p className="text-xl font-bold text-surface-50 mb-2">Assessment Not Found</p>
         <button onClick={() => navigate('/student/assessments')} className="text-sm text-primary-400 font-bold">← Back</button>
       </div>
     );
@@ -30,7 +30,7 @@ export default function StudentAssessmentResult() {
     return (
       <div className="flex flex-col items-center justify-center py-32 animate-fade-in-up">
         <FileText size={48} className="text-surface-600 mb-4" />
-        <p className="text-xl font-bold text-white mb-2">No Submission Found</p>
+        <p className="text-xl font-bold text-surface-50 mb-2">No Submission Found</p>
         <p className="text-sm text-surface-400 mb-4">You haven't submitted this assessment yet.</p>
         <Link to="/student/assessments" className="text-sm text-primary-400 font-bold">← Back to Assessments</Link>
       </div>
@@ -62,11 +62,11 @@ export default function StudentAssessmentResult() {
     <div className="max-w-4xl mx-auto animate-fade-in-up pb-10">
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
-        <button onClick={() => navigate('/student/assessments')} className="p-2 rounded-xl bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-white transition-all">
+        <button onClick={() => navigate('/student/assessments')} className="p-2 rounded-xl bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-surface-50 transition-all">
           <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-2xl font-extrabold text-white">{assessment.title}</h1>
+          <h1 className="text-2xl font-extrabold text-surface-50">{assessment.title}</h1>
           <p className="text-xs text-surface-500 mt-0.5">Results & Feedback</p>
         </div>
       </div>
@@ -115,7 +115,7 @@ export default function StudentAssessmentResult() {
                       <s.icon size={12} className="text-primary-500" />
                       <span className="text-[10px] text-surface-500 font-bold uppercase tracking-wider">{s.label}</span>
                     </div>
-                    <p className="text-sm font-extrabold text-white">{s.value}</p>
+                    <p className="text-sm font-extrabold text-surface-50">{s.value}</p>
                   </div>
                 ))}
               </div>
@@ -126,7 +126,7 @@ export default function StudentAssessmentResult() {
         /* Assignment/Task Result */
         <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 p-8 mb-8 text-center">
           <CheckCircle size={48} className="text-emerald-400 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-white mb-2">Submitted Successfully</h2>
+          <h2 className="text-xl font-bold text-surface-50 mb-2">Submitted Successfully</h2>
           <p className="text-sm text-surface-400 mb-4">
             Your {assessment.type} was submitted on {submission.submittedAt ? new Date(submission.submittedAt).toLocaleString() : '—'}.
           </p>
@@ -146,7 +146,7 @@ export default function StudentAssessmentResult() {
       {/* Question Review (quiz/exam only, if admin enabled) */}
       {isQuizOrExam && assessment.showAnswersAfterSubmission && assessment.questions?.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+          <h3 className="text-sm font-bold text-surface-50 uppercase tracking-wider flex items-center gap-2">
             <BarChart3 size={16} className="text-primary-400" /> Question Review
           </h3>
 
@@ -171,7 +171,7 @@ export default function StudentAssessmentResult() {
                      isCorrect ? <CheckCircle size={16} /> : <XCircle size={16} />}
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-bold text-white mb-1">{q.text}</p>
+                    <p className="text-sm font-bold text-surface-50 mb-1">{q.text}</p>
                     <span className="text-[10px] text-surface-500">{q.marks} marks</span>
                   </div>
                 </div>

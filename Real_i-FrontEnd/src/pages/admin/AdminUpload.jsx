@@ -121,7 +121,7 @@ export default function AdminUpload() {
               Data Ingestion Protocol
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 tracking-tight mb-3">
             RAG <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Pipeline</span>
           </h1>
           <p className="text-surface-400 text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -137,7 +137,7 @@ export default function AdminUpload() {
           <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative z-[60]">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/10 rounded-full blur-[50px] pointer-events-none"></div>
             
-            <h3 className="text-lg font-extrabold text-white flex items-center gap-2 mb-5 relative z-10">
+            <h3 className="text-lg font-extrabold text-surface-50 flex items-center gap-2 mb-5 relative z-10">
               <span className="w-1.5 h-6 bg-primary-500 rounded-full inline-block"></span>
               Target Course
             </h3>
@@ -148,7 +148,7 @@ export default function AdminUpload() {
                 onClick={() => setIsCreatingNew(false)}
                 className={`flex-1 flex justify-center items-center gap-2 py-2.5 rounded-lg text-xs font-bold transition-all ${
                   !isCreatingNew
-                    ? 'bg-surface-800 text-white shadow-md border border-surface-600'
+                    ? 'bg-surface-800 text-surface-50 shadow-md border border-surface-600'
                     : 'text-surface-500 hover:text-surface-300'
                 }`}
               >
@@ -175,7 +175,7 @@ export default function AdminUpload() {
                   value={newCourseName}
                   onChange={(e) => setNewCourseName(e.target.value)}
                   placeholder="Enter course name (e.g., Machine Learning)"
-                  className="w-full px-4 py-3.5 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-medium outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all text-white placeholder-surface-600"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-medium outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all text-surface-50 placeholder-surface-600"
                 />
                 {newCourseName.trim() && (
                   <p className="text-[10px] text-surface-400 mt-2 font-mono bg-surface-950 p-2 rounded-lg border border-surface-800">
@@ -212,7 +212,7 @@ export default function AdminUpload() {
 
           {/* File Upload Area */}
           <div className={`glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 sm:p-8 relative z-0 overflow-hidden transition-all duration-300 ${!effectiveProjectId ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
-            <h3 className="text-lg font-extrabold text-white flex items-center gap-2 mb-5 relative">
+            <h3 className="text-lg font-extrabold text-surface-50 flex items-center gap-2 mb-5 relative">
               <span className="w-1.5 h-6 bg-emerald-500 rounded-full inline-block"></span>
               Step 1: Ingest Files
             </h3>
@@ -250,7 +250,7 @@ export default function AdminUpload() {
             
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 relative z-10">
               <div>
-                <h3 className="text-xl font-extrabold text-white flex items-center gap-2">
+                <h3 className="text-xl font-extrabold text-surface-50 flex items-center gap-2">
                   <span className="w-1.5 h-6 bg-blue-500 rounded-full inline-block"></span>
                   Step 2: Process & Index
                 </h3>
@@ -335,7 +335,7 @@ export default function AdminUpload() {
                       </div>
                       
                       <p className={`text-sm font-black uppercase tracking-wider mb-1 ${
-                        status === 'running' ? 'text-white' :
+                        status === 'running' ? 'text-surface-50' :
                         status === 'done' ? 'text-emerald-50' :
                         status === 'error' ? 'text-rose-50' :
                         'text-surface-400'
@@ -358,11 +358,11 @@ export default function AdminUpload() {
                 <div className="grid grid-cols-3 gap-3">
                   <div className="bg-surface-950 p-4 rounded-xl border border-surface-800">
                     <p className="text-[10px] text-surface-500 uppercase tracking-widest mb-1 font-bold">Files Processed</p>
-                    <p className="text-2xl font-black text-white font-mono">{lastResult.processed_files || 0}</p>
+                    <p className="text-2xl font-black text-surface-50 font-mono">{lastResult.processed_files || 0}</p>
                   </div>
                   <div className="bg-surface-950 p-4 rounded-xl border border-surface-800">
                     <p className="text-[10px] text-surface-500 uppercase tracking-widest mb-1 font-bold">Chunks Extracted</p>
-                    <p className="text-2xl font-black text-white font-mono">{lastResult.inserted_chunks || 0}</p>
+                    <p className="text-2xl font-black text-surface-50 font-mono">{lastResult.inserted_chunks || 0}</p>
                   </div>
                   <div className="bg-surface-950 p-4 rounded-xl border border-surface-800">
                     <p className="text-[10px] text-surface-500 uppercase tracking-widest mb-1 font-bold">Vectors Indexed</p>

@@ -126,7 +126,7 @@ export default function CourseDetailPage() {
 
             {/* Curriculum */}
             <div className="glass-card p-6 md:p-8 rounded-3xl border border-surface-700/50 mt-8" id="curriculum">
-              <h3 className="text-xl font-bold text-white mb-6">Course Curriculum</h3>
+              <h3 className="text-xl font-bold text-surface-50 mb-6">Course Curriculum</h3>
               <div className="space-y-4">
                 {modules.length === 0 ? (
                   <p className="text-surface-400 text-sm">Curriculum content is being updated. Check back soon.</p>

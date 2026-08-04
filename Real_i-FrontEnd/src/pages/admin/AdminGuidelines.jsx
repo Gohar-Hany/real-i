@@ -109,7 +109,7 @@ export default function AdminGuidelines() {
               Agent Directives
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 tracking-tight mb-3">
             System <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Guidelines</span>
           </h1>
           <p className="text-surface-400 text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -130,7 +130,7 @@ export default function AdminGuidelines() {
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/10 rounded-full blur-[40px] pointer-events-none"></div>
         <AlertCircle size={24} className="text-primary-400 mt-0.5 shrink-0 relative z-10" />
         <div className="relative z-10">
-          <p className="text-sm font-black text-white uppercase tracking-wider mb-1">
+          <p className="text-sm font-black text-surface-50 uppercase tracking-wider mb-1">
             Operational Protocol
           </p>
           <p className="text-xs text-surface-400 leading-relaxed max-w-4xl font-medium">
@@ -172,7 +172,7 @@ export default function AdminGuidelines() {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <span className={`w-2 h-2 rounded-full ${g.is_active ? 'bg-primary-400 animate-pulse' : 'bg-surface-600'}`}></span>
-                    <span className="text-xs font-black font-mono text-white tracking-widest uppercase">
+                    <span className="text-xs font-black font-mono text-surface-50 tracking-widest uppercase">
                       {g.task_id}
                     </span>
                     <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-widest border ml-2 ${
@@ -194,7 +194,7 @@ export default function AdminGuidelines() {
                       className={`p-1.5 rounded-lg transition-all flex items-center justify-center w-8 h-8 ${
                         g.is_active
                           ? 'text-primary-400 hover:bg-primary-500/20 hover:text-primary-300'
-                          : 'text-surface-500 hover:bg-surface-800 hover:text-white'
+                          : 'text-surface-500 hover:bg-surface-800 hover:text-surface-50'
                       }`}
                       title={g.is_active ? 'Deactivate Directive' : 'Activate Directive'}
                     >
@@ -248,7 +248,7 @@ export default function AdminGuidelines() {
         }
         footer={
           <div className="flex gap-3 justify-end w-full">
-            <button onClick={() => setShowModal(false)} className="px-5 py-2.5 rounded-xl text-sm font-bold text-surface-400 bg-surface-800/50 border border-surface-700 hover:bg-surface-700 hover:text-white transition-all active:scale-95">
+            <button onClick={() => setShowModal(false)} className="px-5 py-2.5 rounded-xl text-sm font-bold text-surface-400 bg-surface-800/50 border border-surface-700 hover:bg-surface-700 hover:text-surface-50 transition-all active:scale-95">
               Abort
             </button>
             <button onClick={saveGuidelineData} className="px-5 py-2.5 rounded-xl text-sm font-bold gradient-primary text-surface-950 transition-all hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] active:scale-95">
@@ -272,7 +272,7 @@ export default function AdminGuidelines() {
               value={form.description}
               onChange={(e) => setForm(f => ({ ...f, description: e.target.value }))}
               rows={3}
-              className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-medium text-white outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all shadow-inner resize-none placeholder-surface-600"
+              className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-medium text-surface-50 outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all shadow-inner resize-none placeholder-surface-600"
               placeholder="Define the behavioral parameters for the AI agent..."
             />
           </div>
@@ -283,7 +283,7 @@ export default function AdminGuidelines() {
                 type="text"
                 value={form.course}
                 onChange={(e) => setForm(f => ({ ...f, course: e.target.value }))}
-                className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-medium text-white outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all shadow-inner placeholder-surface-600"
+                className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-medium text-surface-50 outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all shadow-inner placeholder-surface-600"
                 placeholder="e.g., Machine Learning (Leave blank for Global)"
               />
             </div>
@@ -302,7 +302,7 @@ export default function AdminGuidelines() {
               type="text"
               value={form.notes}
               onChange={(e) => setForm(f => ({ ...f, notes: e.target.value }))}
-              className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-mono text-white outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all shadow-inner placeholder-surface-600"
+              className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm font-mono text-surface-50 outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all shadow-inner placeholder-surface-600"
               placeholder="> additional parameters..."
             />
           </div>

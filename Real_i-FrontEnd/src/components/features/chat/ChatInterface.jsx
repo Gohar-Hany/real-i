@@ -58,7 +58,7 @@ export default function ChatInterface({
             <Bot size={20} className="text-surface-950" />
           </div>
           <div>
-            <h3 className="font-bold text-white text-lg tracking-tight">{botName}</h3>
+            <h3 className="font-bold text-surface-50 text-lg tracking-tight">{botName}</h3>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -89,7 +89,7 @@ export default function ChatInterface({
                 <Bot size={48} className="text-primary-400 drop-shadow-[0_0_15px_rgba(212,175,55,0.5)]" />
               </div>
             </div>
-            <h3 className="text-2xl font-extrabold text-white mb-3 tracking-tight">
+            <h3 className="text-2xl font-extrabold text-surface-50 mb-3 tracking-tight">
               Start a <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Conversation</span>
             </h3>
             <p className="text-surface-400 text-sm sm:text-base max-w-md leading-relaxed font-medium">
@@ -218,7 +218,7 @@ export default function ChatInterface({
             onChange={(e) => setInput(e.target.value)}
             placeholder={placeholder}
             disabled={loading}
-            className="flex-1 bg-transparent py-2 outline-none text-sm text-white placeholder:text-surface-500 disabled:opacity-50"
+            className="flex-1 bg-transparent py-2 outline-none text-sm text-surface-50 placeholder:text-surface-500 disabled:opacity-50"
           />
           <button
             type="submit"

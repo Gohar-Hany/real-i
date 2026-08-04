@@ -214,7 +214,7 @@ export default function AdminAssessmentCreate() {
     </div>
   );
 
-  const inputCls = 'w-full px-4 py-3 rounded-xl bg-surface-900/80 border border-surface-700 text-sm text-white placeholder-surface-500 outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all';
+  const inputCls = 'w-full px-4 py-3 rounded-xl bg-surface-900/80 border border-surface-700 text-sm text-surface-50 placeholder-surface-500 outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all';
 
   const Toggle = ({ checked, onChange, label }) => (
     <button type="button" onClick={() => onChange(!checked)} className={`flex items-center justify-between w-full p-3.5 rounded-xl border transition-all ${checked ? 'bg-primary-500/10 border-primary-500/30' : 'bg-surface-900/60 border-surface-700/50'}`}>
@@ -240,7 +240,7 @@ export default function AdminAssessmentCreate() {
               <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-3 border" style={{ background: `${t.color}15`, borderColor: `${t.color}30` }}>
                 <t.icon size={20} style={{ color: t.color }} />
               </div>
-              <p className={`text-sm font-bold ${form.type === t.value ? 'text-white' : 'text-surface-300'}`}>{t.label}</p>
+              <p className={`text-sm font-bold ${form.type === t.value ? 'text-surface-50' : 'text-surface-300'}`}>{t.label}</p>
               <p className="text-[10px] text-surface-500 mt-0.5">{t.desc}</p>
               {form.type === t.value && <div className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full gradient-primary flex items-center justify-center"><Check size={12} className="text-surface-950" /></div>}
             </button>
@@ -254,7 +254,7 @@ export default function AdminAssessmentCreate() {
           <div className="flex flex-wrap gap-2">
             {SUB_TYPES[form.type].map(st => (
               <button key={st.value} type="button" onClick={() => update('assessmentSubType', st.value)}
-                className={`px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${form.assessmentSubType === st.value ? 'gradient-primary text-surface-950 border-transparent' : 'bg-surface-900/60 border-surface-700/50 text-surface-400 hover:text-white'}`}>
+                className={`px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${form.assessmentSubType === st.value ? 'gradient-primary text-surface-950 border-transparent' : 'bg-surface-900/60 border-surface-700/50 text-surface-400 hover:text-surface-50'}`}>
                 {st.label}
               </button>
             ))}
@@ -292,7 +292,7 @@ export default function AdminAssessmentCreate() {
               <div className="flex gap-2">
                 {[15, 30, 60, 90, 120].map(t => (
                   <button key={t} type="button" onClick={() => update('timeLimit', t)}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold border transition-all ${form.timeLimit === t ? 'bg-primary-500/10 text-primary-400 border-primary-500/50' : 'bg-surface-900/60 border-surface-700/50 text-surface-400 hover:text-white'}`}>
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold border transition-all ${form.timeLimit === t ? 'bg-primary-500/10 text-primary-400 border-primary-500/50' : 'bg-surface-900/60 border-surface-700/50 text-surface-400 hover:text-surface-50'}`}>
                     {t}m
                   </button>
                 ))}
@@ -303,7 +303,7 @@ export default function AdminAssessmentCreate() {
               <div className="flex gap-2">
                 {[1, 2, 3, -1].map(n => (
                   <button key={n} type="button" onClick={() => update('attempts', n)}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold border transition-all ${form.attempts === n ? 'bg-primary-500/10 text-primary-400 border-primary-500/50' : 'bg-surface-900/60 border-surface-700/50 text-surface-400 hover:text-white'}`}>
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold border transition-all ${form.attempts === n ? 'bg-primary-500/10 text-primary-400 border-primary-500/50' : 'bg-surface-900/60 border-surface-700/50 text-surface-400 hover:text-surface-50'}`}>
                     {n === -1 ? '∞' : n}
                   </button>
                 ))}
@@ -351,7 +351,7 @@ export default function AdminAssessmentCreate() {
             <div className="flex gap-2">
               {[{ v: 'file', l: 'File Upload' }, { v: 'text', l: 'Text Answer' }, { v: 'both', l: 'Both' }].map(st => (
                 <button key={st.v} type="button" onClick={() => update('submissionType', st.v)}
-                  className={`flex-1 py-3 rounded-xl text-xs font-bold border transition-all ${form.submissionType === st.v ? 'gradient-primary text-surface-950 border-transparent' : 'bg-surface-900/60 border-surface-700/50 text-surface-400 hover:text-white'}`}>
+                  className={`flex-1 py-3 rounded-xl text-xs font-bold border transition-all ${form.submissionType === st.v ? 'gradient-primary text-surface-950 border-transparent' : 'bg-surface-900/60 border-surface-700/50 text-surface-400 hover:text-surface-50'}`}>
                   {st.l}
                 </button>
               ))}
@@ -372,7 +372,7 @@ export default function AdminAssessmentCreate() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-sm text-surface-400">
-          <strong className="text-white">{form.questions.length}</strong> questions · <strong className="text-primary-400">{form.questions.reduce((s, q) => s + (q.marks || 0), 0)}</strong> total marks
+          <strong className="text-surface-50">{form.questions.length}</strong> questions · <strong className="text-primary-400">{form.questions.reduce((s, q) => s + (q.marks || 0), 0)}</strong> total marks
         </p>
         <button type="button" onClick={addQuestion} className="flex items-center gap-1.5 px-4 py-2 rounded-xl gradient-primary text-surface-950 text-xs font-bold active:scale-95 transition-all">
           <Plus size={14} /> Add Question
@@ -391,7 +391,7 @@ export default function AdminAssessmentCreate() {
               </div>
               <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center text-xs font-extrabold text-surface-950 shrink-0">{qIdx + 1}</div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-white truncate">{q.text || 'Untitled Question'}</p>
+                <p className="text-sm font-bold text-surface-50 truncate">{q.text || 'Untitled Question'}</p>
                 <p className="text-[10px] text-surface-500">{q.options.length} options · {q.marks} marks</p>
               </div>
               <button type="button" onClick={e => { e.stopPropagation(); removeQuestion(qIdx); }} className="p-1.5 rounded-lg text-surface-500 hover:text-rose-400 hover:bg-rose-500/10 transition-all"><Trash2 size={14} /></button>
@@ -414,7 +414,7 @@ export default function AdminAssessmentCreate() {
                           {q.correctAnswer === oIdx ? <Check size={14} /> : <span className="text-[10px] font-bold">{String.fromCharCode(65 + oIdx)}</span>}
                         </button>
                         <input type="text" value={opt} onChange={e => updateOption(qIdx, oIdx, e.target.value)} placeholder={`Option ${String.fromCharCode(65 + oIdx)}`}
-                          className={`flex-1 px-3 py-2.5 rounded-xl text-sm outline-none transition-all border ${q.correctAnswer === oIdx ? 'bg-emerald-500/5 border-emerald-500/30 text-emerald-300' : 'bg-surface-900/80 border-surface-700 text-white'} placeholder-surface-500 focus:border-primary-500/50`} />
+                          className={`flex-1 px-3 py-2.5 rounded-xl text-sm outline-none transition-all border ${q.correctAnswer === oIdx ? 'bg-emerald-500/5 border-emerald-500/30 text-emerald-300' : 'bg-surface-900/80 border-surface-700 text-surface-50'} placeholder-surface-500 focus:border-primary-500/50`} />
                         {q.options.length > 2 && (
                           <button type="button" onClick={() => removeOption(qIdx, oIdx)} className="p-1.5 text-surface-500 hover:text-rose-400 transition-colors"><Trash2 size={12} /></button>
                         )}
@@ -455,7 +455,7 @@ export default function AdminAssessmentCreate() {
     return (
       <div className="space-y-6">
         <div className="glass-card rounded-2xl p-6 border border-surface-700/50 bg-surface-900/60 space-y-4">
-          <h3 className="text-lg font-bold text-white">{form.title || 'Untitled'}</h3>
+          <h3 className="text-lg font-bold text-surface-50">{form.title || 'Untitled'}</h3>
           <p className="text-sm text-surface-400">{form.description || 'No description'}</p>
           <div className="flex flex-wrap gap-2">
             {[
@@ -481,7 +481,7 @@ export default function AdminAssessmentCreate() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
-          <button onClick={() => handleSave(false)} className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-surface-800 border border-surface-700 text-white font-bold hover:bg-surface-700 transition-all active:scale-95">
+          <button onClick={() => handleSave(false)} className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-surface-800 border border-surface-700 text-surface-50 font-bold hover:bg-surface-700 transition-all active:scale-95">
             <Save size={16} /> Save as Draft
           </button>
           <button onClick={() => handleSave(true)} className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl gradient-primary text-surface-950 font-bold shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] transition-all active:scale-95">
@@ -503,11 +503,11 @@ export default function AdminAssessmentCreate() {
     <div className="space-y-6 animate-fade-in-up pb-10">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <button onClick={() => navigate('/admin/assessments')} className="p-2 rounded-xl bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-white transition-all">
+        <button onClick={() => navigate('/admin/assessments')} className="p-2 rounded-xl bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-surface-50 transition-all">
           <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-2xl font-extrabold text-white">
+          <h1 className="text-2xl font-extrabold text-surface-50">
             {isEdit ? 'Edit' : 'Create'} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Assessment</span>
           </h1>
           <p className="text-xs text-surface-500 mt-0.5">Step {step + 1} of {steps.length} — {steps[step]}</p>
@@ -525,7 +525,7 @@ export default function AdminAssessmentCreate() {
             }`}>
               {i < step ? <Check size={14} /> : i + 1}
             </button>
-            <span className={`text-xs font-bold hidden sm:block ${i === step ? 'text-white' : 'text-surface-500'}`}>{s}</span>
+            <span className={`text-xs font-bold hidden sm:block ${i === step ? 'text-surface-50' : 'text-surface-500'}`}>{s}</span>
             {i < steps.length - 1 && <div className={`flex-1 h-px ${i < step ? 'bg-primary-500' : 'bg-surface-700'}`} />}
           </div>
         ))}

@@ -26,7 +26,7 @@ export default function StudentAssignmentSubmit() {
     return (
       <div className="flex flex-col items-center justify-center py-32 animate-fade-in-up">
         <AlertTriangle size={48} className="text-surface-600 mb-4" />
-        <p className="text-xl font-bold text-white mb-2">Assessment Not Found</p>
+        <p className="text-xl font-bold text-surface-50 mb-2">Assessment Not Found</p>
         <button onClick={() => navigate('/student/assessments')} className="text-sm text-primary-400 font-bold">← Back</button>
       </div>
     );
@@ -37,7 +37,7 @@ export default function StudentAssignmentSubmit() {
       <div className="max-w-2xl mx-auto py-10 animate-fade-in-up">
         <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 p-8 text-center">
           <CheckCircle size={48} className="text-emerald-400 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-white mb-2">Already Submitted</h2>
+          <h2 className="text-xl font-bold text-surface-50 mb-2">Already Submitted</h2>
           <p className="text-sm text-surface-400 mb-6">You've already submitted this {assessment.type}.</p>
           <div className="flex gap-3 justify-center">
             <button onClick={() => navigate(`/student/assessments/${id}/results`)} className="px-5 py-2.5 rounded-xl gradient-primary text-surface-950 font-bold text-sm">View Results</button>
@@ -90,11 +90,11 @@ export default function StudentAssignmentSubmit() {
     <div className="max-w-3xl mx-auto animate-fade-in-up pb-10">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <button onClick={() => navigate('/student/assessments')} className="p-2 rounded-xl bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-white transition-all">
+        <button onClick={() => navigate('/student/assessments')} className="p-2 rounded-xl bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-surface-50 transition-all">
           <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-2xl font-extrabold text-white">{assessment.title}</h1>
+          <h1 className="text-2xl font-extrabold text-surface-50">{assessment.title}</h1>
           <p className="text-xs text-surface-500 mt-0.5">Submit your {assessment.type}</p>
         </div>
       </div>
@@ -145,7 +145,7 @@ export default function StudentAssignmentSubmit() {
 
       {/* Submission Area */}
       <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 p-6 sm:p-8 space-y-6">
-        <h3 className="text-sm font-bold text-white uppercase tracking-wider">Your Submission</h3>
+        <h3 className="text-sm font-bold text-surface-50 uppercase tracking-wider">Your Submission</h3>
 
         {/* File Upload */}
         {(assessment.submissionType === 'file' || assessment.submissionType === 'both') && (
@@ -182,7 +182,7 @@ export default function StudentAssignmentSubmit() {
               onChange={e => setTextAnswer(e.target.value)}
               placeholder="Type your answer here..."
               rows={8}
-              className="w-full px-4 py-3 rounded-xl bg-surface-900/80 border border-surface-700 text-sm text-white placeholder-surface-500 outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all resize-none"
+              className="w-full px-4 py-3 rounded-xl bg-surface-900/80 border border-surface-700 text-sm text-surface-50 placeholder-surface-500 outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all resize-none"
             />
             <p className="text-[10px] text-surface-500 mt-1">{textAnswer.length} characters</p>
           </div>

@@ -198,7 +198,7 @@ export default function AdminCalendar() {
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${conf.bg} ${conf.border} ${conf.text}`}>
                         <Icon size={16} />
                       </div>
-                      <span className="text-sm font-semibold text-surface-200 group-hover:text-white transition-colors">{conf.label}s</span>
+                      <span className="text-sm font-semibold text-surface-200 group-hover:text-surface-50 transition-colors">{conf.label}s</span>
                     </div>
                     <input 
                       type="checkbox" 
@@ -222,7 +222,7 @@ export default function AdminCalendar() {
               ) : upcomingEvents.map(ev => (
                 <div key={ev.id} className="p-3 rounded-xl bg-surface-800/30 border border-surface-700/50 group">
                   <div className="flex justify-between items-start">
-                    <p className="text-sm font-bold text-white mb-1">{ev.title}</p>
+                    <p className="text-sm font-bold text-surface-50 mb-1">{ev.title}</p>
                     <button onClick={() => handleDeleteEvent(ev.id)} className="text-surface-500 hover:text-rose-400 opacity-0 group-hover:opacity-100 transition-all">
                       <Trash2 size={14} />
                     </button>
@@ -252,8 +252,8 @@ export default function AdminCalendar() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="w-full max-w-md bg-surface-900 border border-surface-700 rounded-3xl overflow-hidden shadow-2xl">
             <div className="p-5 border-b border-surface-700 flex justify-between items-center bg-surface-800/50">
-              <h3 className="font-bold text-white flex items-center gap-2"><Bell size={18} className="text-primary-400" /> Schedule Custom Event</h3>
-              <button onClick={() => setShowModal(false)} className="text-surface-400 hover:text-white"><X size={20} /></button>
+              <h3 className="font-bold text-surface-50 flex items-center gap-2"><Bell size={18} className="text-primary-400" /> Schedule Custom Event</h3>
+              <button onClick={() => setShowModal(false)} className="text-surface-400 hover:text-surface-50"><X size={20} /></button>
             </div>
             
             <div className="p-6 space-y-4">
@@ -264,7 +264,7 @@ export default function AdminCalendar() {
                   value={newEvent.title}
                   onChange={e => setNewEvent({ ...newEvent, title: e.target.value })}
                   placeholder="e.g., Live Q&A Session"
-                  className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                  className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -274,7 +274,7 @@ export default function AdminCalendar() {
                     type="date"
                     value={newEvent.date}
                     onChange={e => setNewEvent({ ...newEvent, date: e.target.value })}
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                   />
                 </div>
                 <div>
@@ -283,7 +283,7 @@ export default function AdminCalendar() {
                     type="time"
                     value={newEvent.time}
                     onChange={e => setNewEvent({ ...newEvent, time: e.target.value })}
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                   />
                 </div>
               </div>
@@ -293,13 +293,13 @@ export default function AdminCalendar() {
                   value={newEvent.description}
                   onChange={e => setNewEvent({ ...newEvent, description: e.target.value })}
                   rows={3}
-                  className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none resize-none"
+                  className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none resize-none"
                 />
               </div>
             </div>
 
             <div className="p-5 border-t border-surface-700 bg-surface-800/50 flex justify-end gap-3">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 font-bold text-surface-400 hover:text-white">Cancel</button>
+              <button onClick={() => setShowModal(false)} className="px-4 py-2 font-bold text-surface-400 hover:text-surface-50">Cancel</button>
               <button onClick={handleAddEvent} className="px-6 py-2 rounded-xl gradient-primary text-surface-950 font-bold hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all">
                 <span className="flex items-center gap-2"><Save size={16} /> Save Event</span>
               </button>

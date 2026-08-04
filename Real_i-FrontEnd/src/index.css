@@ -623,6 +623,17 @@ html.dark {
     radial-gradient(ellipse at 20% 80%, rgba(168, 121, 40, 0.10) 0%, transparent 55%),
     radial-gradient(ellipse at 80% 20%, rgba(139, 101, 32, 0.07) 0%, transparent 55%),
     linear-gradient(135deg, #0a1628 0%, #1a2a44 100%);
+/* ── Cyber Cut Section (Option A Transition) ──
+   Creates a sharp, geometric diagonal cut at the top and bottom
+   of sections, bypassing color interpolation bugs. */
+.cyber-cut-section {
+  clip-path: polygon(0 4vw, 100% 0, 100% calc(100% - 4vw), 0 100%);
+  margin-top: -4vw;
+  margin-bottom: -4vw;
+  padding-top: calc(4vw + 4rem);
+  padding-bottom: calc(4vw + 4rem);
+  position: relative;
+  z-index: 10;
 }
 
 /* 2. SHADOW UTILITIES — replace black glows with soft navy shadows */

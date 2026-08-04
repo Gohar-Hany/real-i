@@ -301,7 +301,7 @@ export default function StudentQuiz() {
                 AI Testing Center
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-50 tracking-tight mb-2">
               Smart <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Quizzes</span>
             </h1>
             <p className="text-surface-400 text-sm sm:text-base max-w-xl leading-relaxed">
@@ -318,7 +318,7 @@ export default function StudentQuiz() {
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500/20 to-amber-500/5 border border-primary-500/30 flex items-center justify-center mb-8 shadow-[0_0_30px_rgba(212,175,55,0.15)] relative z-10">
               <Sparkles size={32} className="text-primary-400" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-8 relative z-10">
+            <h2 className="text-2xl font-bold text-surface-50 mb-8 relative z-10">
               Configure Your Quiz
             </h2>
 
@@ -347,7 +347,7 @@ export default function StudentQuiz() {
                   type="text"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
-                  className="w-full px-5 py-3.5 rounded-xl bg-surface-800/80 border border-surface-700 text-sm outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all text-white placeholder:text-surface-500 font-medium"
+                  className="w-full px-5 py-3.5 rounded-xl bg-surface-800/80 border border-surface-700 text-sm outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all text-surface-50 placeholder:text-surface-500 font-medium"
                   placeholder="e.g., Neural Networks, Sorting Algorithms..."
                   onKeyDown={(e) => e.key === 'Enter' && startQuiz()}
                 />
@@ -365,7 +365,7 @@ export default function StudentQuiz() {
                       className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all border ${
                         numQuestions === n
                           ? 'bg-primary-500/10 text-primary-400 border-primary-500/50 shadow-[0_0_15px_rgba(212,175,55,0.2)]'
-                          : 'bg-surface-800/50 text-surface-400 border-surface-700 hover:bg-surface-700 hover:text-white'
+                          : 'bg-surface-800/50 text-surface-400 border-surface-700 hover:bg-surface-700 hover:text-surface-50'
                       }`}
                     >
                       {n}
@@ -431,7 +431,7 @@ export default function StudentQuiz() {
                           </div>
                           <div>
                             <p className={`text-sm font-bold truncate transition-colors ${
-                              q.isCompleted ? 'text-surface-500 line-through decoration-surface-600' : 'text-white group-hover:text-blue-400'
+                              q.isCompleted ? 'text-surface-500 line-through decoration-surface-600' : 'text-surface-50 group-hover:text-blue-400'
                             }`}>
                               {q.topic}
                             </p>
@@ -481,7 +481,7 @@ export default function StudentQuiz() {
             <BrainCircuit size={32} className="text-primary-400 animate-pulse" />
           </div>
         </div>
-        <h2 className="text-2xl font-extrabold text-white mb-3 tracking-tight">
+        <h2 className="text-2xl font-extrabold text-surface-50 mb-3 tracking-tight">
           Synthesizing Intelligence...
         </h2>
         <p className="text-surface-400 text-sm max-w-sm text-center font-medium">
@@ -507,7 +507,7 @@ export default function StudentQuiz() {
                 <p className="text-xs font-mono text-primary-400 font-bold uppercase tracking-widest mb-1">
                   {quizData.topic}
                 </p>
-                <h2 className="text-xl sm:text-2xl font-bold text-white">
+                <h2 className="text-xl sm:text-2xl font-bold text-surface-50">
                   Question <span className="text-primary-400">{currentQuestion + 1}</span> <span className="text-surface-500 text-lg">/ {quizData.questions.length}</span>
                 </h2>
               </div>
@@ -524,7 +524,7 @@ export default function StudentQuiz() {
                 )}
                 <div className="flex items-center gap-2 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-700">
                   <Target size={14} className="text-emerald-400" />
-                  <span className="text-xs font-bold text-white">{correctSoFar} Correct</span>
+                  <span className="text-xs font-bold text-surface-50">{correctSoFar} Correct</span>
                 </div>
               </div>
             </div>
@@ -546,7 +546,7 @@ export default function StudentQuiz() {
             {/* Subtle Grid Bg */}
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay"></div>
             
-            <h3 className="text-xl sm:text-2xl font-bold text-white mb-8 leading-relaxed relative z-10 drop-shadow-sm">
+            <h3 className="text-xl sm:text-2xl font-bold text-surface-50 mb-8 leading-relaxed relative z-10 drop-shadow-sm">
               {question.question}
             </h3>
 
@@ -590,7 +590,7 @@ export default function StudentQuiz() {
                     <span className={`text-sm sm:text-base font-semibold ${
                        showResult && isCorrect ? 'text-emerald-400' :
                        showResult && isSelected && !isCorrect ? 'text-danger-400' :
-                       'text-surface-200 group-hover:text-white'
+                       'text-surface-200 group-hover:text-surface-50'
                     }`}>
                       {value}
                     </span>
@@ -608,7 +608,7 @@ export default function StudentQuiz() {
                     <Lightbulb size={20} className="text-primary-400" />
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-white mb-2">AI Explanation</p>
+                    <p className="text-sm font-bold text-surface-50 mb-2">AI Explanation</p>
                     <p className="text-sm text-surface-300 leading-relaxed">
                       {question.explanation}
                     </p>
@@ -671,7 +671,7 @@ export default function StudentQuiz() {
             {/* Background ambient glow based on score */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: gradeGlow }}></div>
             
-            <h2 className="text-3xl font-extrabold text-white mb-10 relative z-10 tracking-tight">Quiz Completed</h2>
+            <h2 className="text-3xl font-extrabold text-surface-50 mb-10 relative z-10 tracking-tight">Quiz Completed</h2>
             
             <div className="relative flex items-center justify-center mb-10 mx-auto w-48 h-48 z-10">
               <svg className="w-full h-full -rotate-90 filter drop-shadow-xl" viewBox="0 0 140 140">
@@ -696,7 +696,7 @@ export default function StudentQuiz() {
               <div className="w-10 h-10 rounded-xl bg-surface-800/80 border border-surface-700 flex items-center justify-center">
                  <Target size={20} className={gradeColor} />
               </div>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-2xl font-bold text-surface-50">
                 {correctCount} <span className="text-surface-500 text-lg">/ {totalCount} Correct</span>
               </p>
             </div>
@@ -706,7 +706,7 @@ export default function StudentQuiz() {
               {!activeTaskId && (
                 <button
                   onClick={retryQuiz}
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-surface-600 text-sm font-bold text-white hover:bg-surface-800 hover:border-surface-500 transition-all shadow-sm"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-surface-600 text-sm font-bold text-surface-50 hover:bg-surface-800 hover:border-surface-500 transition-all shadow-sm"
                 >
                   <RotateCcw size={16} />
                   Retake Quiz
@@ -728,7 +728,7 @@ export default function StudentQuiz() {
                <div className="w-8 h-8 rounded-lg bg-surface-800 border border-surface-700 flex items-center justify-center">
                   <CheckCircle size={16} className="text-primary-400" />
                </div>
-               <h3 className="text-xl font-bold text-white tracking-tight">Performance Review</h3>
+               <h3 className="text-xl font-bold text-surface-50 tracking-tight">Performance Review</h3>
             </div>
             
             <div className="space-y-4">
@@ -750,7 +750,7 @@ export default function StudentQuiz() {
                       {a.isCorrect ? <CheckCircle size={16} /> : <XCircle size={16} />}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-base font-bold text-white mb-4 leading-relaxed">
+                      <p className="text-base font-bold text-surface-50 mb-4 leading-relaxed">
                         <span className="text-surface-500 font-mono mr-2">{i + 1}.</span>
                         {a.question}
                       </p>

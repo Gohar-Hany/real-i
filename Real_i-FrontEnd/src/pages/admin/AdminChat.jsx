@@ -58,7 +58,7 @@ export default function AdminChat() {
               Agent Terminal Active
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 tracking-tight mb-3">
             Command <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-primary-500">Center</span>
           </h1>
           <p className="text-surface-400 text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -90,7 +90,7 @@ export default function AdminChat() {
           <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 relative overflow-hidden shrink-0">
             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[50px] pointer-events-none"></div>
             
-            <h3 className="text-lg font-extrabold text-white flex items-center gap-2 mb-5 relative z-10">
+            <h3 className="text-lg font-extrabold text-surface-50 flex items-center gap-2 mb-5 relative z-10">
               <span className="w-1.5 h-6 bg-emerald-500 rounded-full inline-block"></span>
               Execution Logs
             </h3>
@@ -126,7 +126,7 @@ export default function AdminChat() {
           <div className="glass-card rounded-3xl border border-surface-700/50 shadow-2xl bg-surface-900/60 p-6 relative overflow-hidden flex-1">
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary-500/10 rounded-full blur-[50px] pointer-events-none"></div>
             
-            <h3 className="text-lg font-extrabold text-white flex items-center gap-2 mb-5 relative z-10">
+            <h3 className="text-lg font-extrabold text-surface-50 flex items-center gap-2 mb-5 relative z-10">
               <span className="w-1.5 h-6 bg-primary-500 rounded-full inline-block"></span>
               Quick Directives
             </h3>

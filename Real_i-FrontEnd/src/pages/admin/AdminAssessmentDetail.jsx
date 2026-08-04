@@ -28,7 +28,7 @@ export default function AdminAssessmentDetail() {
     return (
       <div className="flex flex-col items-center justify-center py-32 animate-fade-in-up">
         <AlertCircle size={48} className="text-surface-600 mb-4" />
-        <p className="text-xl font-bold text-white mb-2">Assessment Not Found</p>
+        <p className="text-xl font-bold text-surface-50 mb-2">Assessment Not Found</p>
         <Link to="/admin/assessments" className="text-sm text-primary-400 hover:text-primary-300 font-bold">← Back to Assessments</Link>
       </div>
     );
@@ -59,7 +59,7 @@ export default function AdminAssessmentDetail() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div className="flex items-start gap-4">
-          <button onClick={() => navigate('/admin/assessments')} className="p-2 rounded-xl bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-white transition-all mt-1">
+          <button onClick={() => navigate('/admin/assessments')} className="p-2 rounded-xl bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-surface-50 transition-all mt-1">
             <ArrowLeft size={18} />
           </button>
           <div>
@@ -73,12 +73,12 @@ export default function AdminAssessmentDetail() {
                 {assessment.status === 'published' ? <Eye size={10} /> : <EyeOff size={10} />} {assessment.status}
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{assessment.title}</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-surface-50 tracking-tight">{assessment.title}</h1>
             <p className="text-sm text-surface-400 mt-1 max-w-xl">{assessment.description}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <Link to={`/admin/assessments/${id}/edit`} className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface-800/50 border border-surface-700 text-surface-300 text-xs font-bold hover:text-white transition-all">
+          <Link to={`/admin/assessments/${id}/edit`} className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface-800/50 border border-surface-700 text-surface-300 text-xs font-bold hover:text-surface-50 transition-all">
             <Edit3 size={14} /> Edit
           </Link>
           <button onClick={() => { publishAssessment(id); toast.success('Status updated'); }} className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${assessment.status === 'published' ? 'bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500/20' : 'gradient-primary text-surface-950'}`}>
@@ -105,7 +105,7 @@ export default function AdminAssessmentDetail() {
                 <stat.icon size={18} style={{ color: stat.color }} />
               </div>
               <div>
-                <p className="text-xl font-extrabold text-white">{stat.value}</p>
+                <p className="text-xl font-extrabold text-surface-50">{stat.value}</p>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-surface-400">{stat.label}</p>
               </div>
             </div>
@@ -117,7 +117,7 @@ export default function AdminAssessmentDetail() {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Details Card */}
         <div className="glass-card rounded-2xl border border-surface-700/50 bg-surface-900/60 p-6">
-          <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Details</h3>
+          <h3 className="text-sm font-bold text-surface-50 mb-4 uppercase tracking-wider">Details</h3>
           <div className="space-y-3 text-sm">
             {[
               { l: 'Course', v: assessment.courseId },
@@ -146,14 +146,14 @@ export default function AdminAssessmentDetail() {
         {/* Submissions Table */}
         <div className="lg:col-span-2 glass-card rounded-2xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
           <div className="p-5 border-b border-surface-700/50 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">Submissions</h3>
+            <h3 className="text-sm font-bold text-surface-50 uppercase tracking-wider">Submissions</h3>
             <span className="text-xs text-surface-500">{safeSubmissions.length} total</span>
           </div>
 
           {safeSubmissions.length === 0 ? (
             <div className="p-12 text-center">
               <Users size={32} className="text-surface-600 mx-auto mb-3" />
-              <p className="text-sm font-bold text-white mb-1">No submissions yet</p>
+              <p className="text-sm font-bold text-surface-50 mb-1">No submissions yet</p>
               <p className="text-xs text-surface-500">Submissions will appear here when students respond.</p>
             </div>
           ) : (
@@ -176,7 +176,7 @@ export default function AdminAssessmentDetail() {
                             {sub.studentName?.charAt(0)?.toUpperCase() || '?'}
                           </div>
                           <div>
-                            <p className="font-bold text-white text-xs">{sub.studentName || 'Unknown'}</p>
+                            <p className="font-bold text-surface-50 text-xs">{sub.studentName || 'Unknown'}</p>
                             <p className="text-[10px] text-surface-500 font-mono">{sub.studentEmail}</p>
                           </div>
                         </div>

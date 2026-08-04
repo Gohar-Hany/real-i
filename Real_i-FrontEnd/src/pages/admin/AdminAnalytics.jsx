@@ -133,7 +133,7 @@ export default function AdminAnalytics() {
             Data Intelligence
           </span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-50 tracking-tight mb-2">
           Platform <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Analytics</span>
         </h1>
         <p className="text-surface-400 text-sm max-w-2xl leading-relaxed">
@@ -166,7 +166,7 @@ export default function AdminAnalytics() {
                 >
                   <kpi.icon size={20} style={{ color: kpi.color }} />
                 </div>
-                <span className="text-2xl font-extrabold text-white">{kpi.value}</span>
+                <span className="text-2xl font-extrabold text-surface-50">{kpi.value}</span>
               </div>
               <p className="text-xs font-bold text-surface-300 uppercase tracking-wider">{kpi.label}</p>
             </div>
@@ -178,7 +178,7 @@ export default function AdminAnalytics() {
         {/* Score Distribution */}
         <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
           <div className="p-6 border-b border-surface-800 bg-surface-900/80">
-            <h3 className="text-base font-bold text-white flex items-center gap-3">
+            <h3 className="text-base font-bold text-surface-50 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-primary-500/10 flex items-center justify-center border border-primary-500/20">
                 <Target size={16} className="text-primary-400" />
               </div>
@@ -220,7 +220,7 @@ export default function AdminAnalytics() {
         {/* At-Risk Students */}
         <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
           <div className="p-6 border-b border-surface-800 bg-surface-900/80 flex items-center justify-between">
-            <h3 className="text-base font-bold text-white flex items-center gap-3">
+            <h3 className="text-base font-bold text-surface-50 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
                 <AlertTriangle size={16} className="text-rose-400" />
               </div>
@@ -261,7 +261,7 @@ export default function AdminAnalytics() {
         {/* Top Performers */}
         <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
           <div className="p-6 border-b border-surface-800 bg-surface-900/80 flex items-center justify-between">
-            <h3 className="text-base font-bold text-white flex items-center gap-3">
+            <h3 className="text-base font-bold text-surface-50 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
                 <Award size={16} className="text-emerald-400" />
               </div>
@@ -303,7 +303,7 @@ export default function AdminAnalytics() {
       {/* Full Student Leaderboard */}
       <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
         <div className="p-6 border-b border-surface-800 bg-surface-900/80 flex items-center justify-between">
-          <h3 className="text-base font-bold text-white flex items-center gap-3">
+          <h3 className="text-base font-bold text-surface-50 flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center border border-violet-500/20">
               <TrendingUp size={16} className="text-violet-400" />
             </div>
@@ -336,7 +336,7 @@ export default function AdminAnalytics() {
                         {s.name?.charAt(0)?.toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-bold text-white group-hover:text-primary-300 transition-colors">{s.name}</p>
+                        <p className="font-bold text-surface-50 group-hover:text-primary-300 transition-colors">{s.name}</p>
                         <p className="text-[10px] text-surface-500 font-mono">{s.email}</p>
                       </div>
                     </div>
@@ -380,7 +380,7 @@ export default function AdminAnalytics() {
       {courseBreakdown.length > 0 && (
         <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
           <div className="p-6 border-b border-surface-800 bg-surface-900/80">
-            <h3 className="text-base font-bold text-white flex items-center gap-3">
+            <h3 className="text-base font-bold text-surface-50 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
                 <BookOpen size={16} className="text-emerald-400" />
               </div>
@@ -394,7 +394,7 @@ export default function AdminAnalytics() {
                   <BookOpen size={18} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-bold text-white truncate">{p.name}</p>
+                  <p className="text-sm font-bold text-surface-50 truncate">{p.name}</p>
                   <p className="text-[10px] text-surface-500 uppercase tracking-wider">Active module</p>
                 </div>
               </div>

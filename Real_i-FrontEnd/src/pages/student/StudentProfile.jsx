@@ -126,7 +126,7 @@ export default function StudentProfile() {
               Student Identity
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 tracking-tight mb-3">
             My <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Profile</span>
           </h1>
           <p className="text-surface-400 text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -152,7 +152,7 @@ export default function StudentProfile() {
                 
                 {/* Upload Overlay */}
                 <div onClick={() => fileInputRef.current?.click()} className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
-                  <Camera size={24} className="text-white" />
+                  <Camera size={24} className="text-surface-50" />
                 </div>
               </div>
               
@@ -173,7 +173,7 @@ export default function StudentProfile() {
               />
             </div>
 
-            <h3 className="text-xl font-black text-white mb-1 relative z-10">{formData.name}</h3>
+            <h3 className="text-xl font-black text-surface-50 mb-1 relative z-10">{formData.name}</h3>
             <p className="text-sm font-medium text-surface-400 mb-4 relative z-10">{formData.email}</p>
             
             <span className="inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 relative z-10">
@@ -191,7 +191,7 @@ export default function StudentProfile() {
               </div>
               <div className="flex justify-between items-center pb-3 border-b border-surface-800">
                 <span className="text-sm text-surface-500 font-medium flex items-center gap-2"><BrainCircuit size={14}/> Quizzes</span>
-                <span className="text-sm text-white font-mono">{completedQuizzes.length} Completed</span>
+                <span className="text-sm text-surface-50 font-mono">{completedQuizzes.length} Completed</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-surface-500 font-medium flex items-center gap-2"><Target size={14}/> Avg Score</span>
@@ -201,7 +201,7 @@ export default function StudentProfile() {
             
             <Link 
               to="/student/performance" 
-              className="mt-5 w-full py-2.5 rounded-xl bg-surface-800 border border-surface-700 text-xs font-bold text-surface-300 hover:text-white hover:bg-surface-700 transition-all flex items-center justify-center gap-2"
+              className="mt-5 w-full py-2.5 rounded-xl bg-surface-800 border border-surface-700 text-xs font-bold text-surface-300 hover:text-surface-50 hover:bg-surface-700 transition-all flex items-center justify-center gap-2"
             >
               View Full Report <ArrowUpRight size={14} />
             </Link>
@@ -215,7 +215,7 @@ export default function StudentProfile() {
               
               {/* Personal Information */}
               <div>
-                <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-surface-50 mb-6 flex items-center gap-2">
                   <User size={18} className="text-primary-400" />
                   Personal Details
                 </h3>
@@ -233,7 +233,7 @@ export default function StudentProfile() {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full bg-surface-800 border border-surface-700 rounded-xl pl-11 pr-4 py-3 text-white focus:border-primary-500 outline-none transition-colors"
+                        className="w-full bg-surface-800 border border-surface-700 rounded-xl pl-11 pr-4 py-3 text-surface-50 focus:border-primary-500 outline-none transition-colors"
                         required
                       />
                     </div>
@@ -264,7 +264,7 @@ export default function StudentProfile() {
 
               {/* Password Management */}
               <div>
-                <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-surface-50 mb-6 flex items-center gap-2">
                   <Key size={18} className="text-primary-400" />
                   Security
                 </h3>
@@ -280,7 +280,7 @@ export default function StudentProfile() {
                         value={formData.newPassword}
                         onChange={handleChange}
                         placeholder="Leave blank to keep current"
-                        className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-white focus:border-primary-500 outline-none transition-colors"
+                        className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-surface-50 focus:border-primary-500 outline-none transition-colors"
                       />
                     </div>
                     <div>
@@ -293,7 +293,7 @@ export default function StudentProfile() {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         placeholder="Confirm new password"
-                        className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-white focus:border-primary-500 outline-none transition-colors"
+                        className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-surface-50 focus:border-primary-500 outline-none transition-colors"
                       />
                     </div>
                   </div>
@@ -305,7 +305,7 @@ export default function StudentProfile() {
             <div className="px-6 py-5 border-t border-surface-700/50 bg-surface-800/30 flex justify-end gap-3">
               <Link
                 to="/student"
-                className="px-6 py-2.5 rounded-xl font-bold text-surface-400 hover:text-white hover:bg-surface-800 transition-colors"
+                className="px-6 py-2.5 rounded-xl font-bold text-surface-400 hover:text-surface-50 hover:bg-surface-800 transition-colors"
               >
                 Cancel
               </Link>

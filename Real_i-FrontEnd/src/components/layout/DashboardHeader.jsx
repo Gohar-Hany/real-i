@@ -213,7 +213,7 @@ export default function DashboardHeader() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search students, courses..."
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-950 border border-surface-800 text-sm text-white placeholder-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-950 border border-surface-800 text-sm text-surface-50 placeholder-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
                     />
                   </div>
                   <p className="text-[10px] text-surface-600 mt-2 px-1">
@@ -261,7 +261,7 @@ export default function DashboardHeader() {
                     <div className="max-h-80 overflow-y-auto custom-scrollbar">
                       {notifications.map((n, i) => (
                         <div key={i} className={`p-4 border-b border-surface-800/50 hover:bg-surface-800/30 transition-colors cursor-pointer ${!n.read ? 'bg-primary-500/5' : ''}`}>
-                          <p className="text-sm text-white font-medium">{n.title}</p>
+                          <p className="text-sm text-surface-50 font-medium">{n.title}</p>
                           <p className="text-xs text-surface-400 mt-0.5">{n.message}</p>
                           <p className="text-[10px] text-surface-600 mt-1">{n.time}</p>
                         </div>
@@ -283,7 +283,7 @@ export default function DashboardHeader() {
               className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-xl hover:bg-surface-800/50 transition-all group"
             >
               <div className="hidden sm:block text-right">
-                <p className="text-sm font-bold text-surface-200 group-hover:text-white transition-colors">{user?.name}</p>
+                <p className="text-sm font-bold text-surface-200 group-hover:text-surface-50 transition-colors">{user?.name}</p>
                 <p className="text-[10px] text-surface-500 capitalize font-medium">{user?.role}</p>
               </div>
               <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center text-surface-950 text-sm font-extrabold shadow-glow-sm overflow-hidden">
@@ -301,7 +301,7 @@ export default function DashboardHeader() {
                 <div className="absolute right-0 top-full mt-2 w-56 bg-surface-900 border border-surface-700 rounded-xl shadow-modal z-50 animate-slide-down overflow-hidden">
                   {/* User Info */}
                   <div className="p-4 border-b border-surface-800/50">
-                    <p className="text-sm font-bold text-white truncate">{user?.name}</p>
+                    <p className="text-sm font-bold text-surface-50 truncate">{user?.name}</p>
                     <p className="text-[11px] text-surface-500 font-mono truncate mt-0.5">{user?.email}</p>
                   </div>
 
@@ -309,7 +309,7 @@ export default function DashboardHeader() {
                     <Link
                       to={`/${user?.role}/profile`}
                       onClick={() => setShowUserMenu(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-white transition-colors"
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors"
                     >
                       <User size={16} className="text-surface-500" /> My Profile
                     </Link>
@@ -317,7 +317,7 @@ export default function DashboardHeader() {
                       <Link
                         to="/admin/settings"
                         onClick={() => setShowUserMenu(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-white transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors"
                       >
                         <Settings size={16} className="text-surface-500" /> Settings
                       </Link>

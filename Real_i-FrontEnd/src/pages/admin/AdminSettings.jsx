@@ -78,7 +78,7 @@ export default function AdminSettings() {
               Global Configuration
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 tracking-tight mb-3">
             System <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Settings</span>
           </h1>
           <p className="text-surface-400 text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -117,7 +117,7 @@ export default function AdminSettings() {
               >
                 <div className="flex items-center gap-3 mb-1">
                   <Icon size={18} className={isActive ? 'text-primary-400' : 'text-surface-500'} />
-                  <span className={`font-bold ${isActive ? 'text-white' : 'text-surface-300'}`}>
+                  <span className={`font-bold ${isActive ? 'text-surface-50' : 'text-surface-300'}`}>
                     {tab.label}
                   </span>
                 </div>
@@ -133,7 +133,7 @@ export default function AdminSettings() {
           {/* General Tab */}
           {activeTab === 'general' && (
             <div className="space-y-6 animate-fade-in">
-              <h3 className="text-xl font-bold text-white mb-6 border-b border-surface-800 pb-4 flex items-center gap-2">
+              <h3 className="text-xl font-bold text-surface-50 mb-6 border-b border-surface-800 pb-4 flex items-center gap-2">
                 <Layout className="text-primary-400" size={20} /> General & Branding
               </h3>
               
@@ -145,7 +145,7 @@ export default function AdminSettings() {
                     name="academyName"
                     value={settings.academyName}
                     onChange={handleChange}
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-white focus:border-primary-500 outline-none transition-colors"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-surface-50 focus:border-primary-500 outline-none transition-colors"
                   />
                   <p className="text-[10px] text-surface-500 mt-2">This is the public name displayed on the homepage and student emails.</p>
                 </div>
@@ -157,7 +157,7 @@ export default function AdminSettings() {
                     name="supportEmail"
                     value={settings.supportEmail}
                     onChange={handleChange}
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-white focus:border-primary-500 outline-none transition-colors"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-surface-50 focus:border-primary-500 outline-none transition-colors"
                   />
                   <p className="text-[10px] text-surface-500 mt-2">Students will contact this address for technical issues.</p>
                 </div>
@@ -183,13 +183,13 @@ export default function AdminSettings() {
           {/* AI Tab */}
           {activeTab === 'ai' && (
             <div className="space-y-6 animate-fade-in">
-              <h3 className="text-xl font-bold text-white mb-6 border-b border-surface-800 pb-4 flex items-center gap-2">
+              <h3 className="text-xl font-bold text-surface-50 mb-6 border-b border-surface-800 pb-4 flex items-center gap-2">
                 <Bot className="text-blue-400" size={20} /> AI Configuration (Raaed)
               </h3>
               
               <div className="flex items-start justify-between p-5 rounded-2xl bg-blue-500/5 border border-blue-500/20">
                 <div className="pr-6">
-                  <p className="text-sm font-bold text-white mb-1">Enable Global AI Assistant</p>
+                  <p className="text-sm font-bold text-surface-50 mb-1">Enable Global AI Assistant</p>
                   <p className="text-xs text-surface-400 leading-relaxed">Turn this on to allow students to interact with Raaed in their courses. Turning this off will hide the chat widget for everyone.</p>
                 </div>
                 <button 
@@ -221,7 +221,7 @@ export default function AdminSettings() {
                   value={settings.aiPersonality}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none transition-colors font-mono text-sm"
+                  className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-surface-50 focus:border-blue-500 outline-none transition-colors font-mono text-sm"
                 />
                 <p className="text-[10px] text-surface-500 mt-2">These are the absolute rules the AI must follow. Use this to restrict the AI from giving direct answers to quizzes.</p>
               </div>
@@ -231,7 +231,7 @@ export default function AdminSettings() {
           {/* Security Tab */}
           {activeTab === 'security' && (
             <div className="space-y-6 animate-fade-in">
-              <h3 className="text-xl font-bold text-white mb-6 border-b border-surface-800 pb-4 flex items-center gap-2">
+              <h3 className="text-xl font-bold text-surface-50 mb-6 border-b border-surface-800 pb-4 flex items-center gap-2">
                 <ShieldCheck className="text-emerald-400" size={20} /> Security & Access
               </h3>
               
@@ -250,7 +250,7 @@ export default function AdminSettings() {
 
               <div className="flex items-start justify-between p-5 rounded-2xl bg-surface-800/30 border border-surface-700/50">
                 <div className="pr-6">
-                  <p className="text-sm font-bold text-white mb-1">Restrict New Enrollments</p>
+                  <p className="text-sm font-bold text-surface-50 mb-1">Restrict New Enrollments</p>
                   <p className="text-xs text-surface-400 leading-relaxed">If enabled, students cannot register themselves. Accounts must be manually created by an Admin.</p>
                 </div>
                 <button 
@@ -263,7 +263,7 @@ export default function AdminSettings() {
 
               <div className="flex items-start justify-between p-5 rounded-2xl bg-surface-800/30 border border-surface-700/50">
                 <div className="pr-6">
-                  <p className="text-sm font-bold text-white mb-1">Require 2FA for Admins</p>
+                  <p className="text-sm font-bold text-surface-50 mb-1">Require 2FA for Admins</p>
                   <p className="text-xs text-surface-400 leading-relaxed">Force all administrator accounts to use Two-Factor Authentication via Authenticator App.</p>
                 </div>
                 <button 
@@ -279,7 +279,7 @@ export default function AdminSettings() {
           {/* Integrations Tab */}
           {activeTab === 'integrations' && (
             <div className="space-y-6 animate-fade-in">
-              <h3 className="text-xl font-bold text-white mb-6 border-b border-surface-800 pb-4 flex items-center gap-2">
+              <h3 className="text-xl font-bold text-surface-50 mb-6 border-b border-surface-800 pb-4 flex items-center gap-2">
                 <Link2 className="text-amber-400" size={20} /> API & Integrations
               </h3>
               
@@ -289,7 +289,7 @@ export default function AdminSettings() {
                     <CreditCard size={20} className="text-[#635BFF]" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white">Stripe Payment Gateway</h4>
+                    <h4 className="text-sm font-bold text-surface-50">Stripe Payment Gateway</h4>
                     <p className="text-xs text-surface-500">Required for selling premium courses.</p>
                   </div>
                 </div>
@@ -302,7 +302,7 @@ export default function AdminSettings() {
                     value={settings.stripeKey}
                     onChange={handleChange}
                     placeholder="sk_test_..."
-                    className="w-full bg-surface-950 border border-surface-700 rounded-xl px-4 py-3 text-white focus:border-primary-500 outline-none transition-colors font-mono"
+                    className="w-full bg-surface-950 border border-surface-700 rounded-xl px-4 py-3 text-surface-50 focus:border-primary-500 outline-none transition-colors font-mono"
                   />
                 </div>
               </div>
@@ -313,7 +313,7 @@ export default function AdminSettings() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#2D8CFF]"><path d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14v-4z"/><rect width="12" height="12" x="3" y="6" rx="2" ry="2"/></svg>
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white">Zoom OAuth</h4>
+                    <h4 className="text-sm font-bold text-surface-50">Zoom OAuth</h4>
                     <p className="text-xs text-surface-500">Enable automatic meeting link generation for live classes.</p>
                   </div>
                 </div>
@@ -326,7 +326,7 @@ export default function AdminSettings() {
                     value={settings.zoomClient}
                     onChange={handleChange}
                     placeholder="Client ID from Zoom Marketplace"
-                    className="w-full bg-surface-950 border border-surface-700 rounded-xl px-4 py-3 text-white focus:border-primary-500 outline-none transition-colors font-mono"
+                    className="w-full bg-surface-950 border border-surface-700 rounded-xl px-4 py-3 text-surface-50 focus:border-primary-500 outline-none transition-colors font-mono"
                   />
                 </div>
               </div>

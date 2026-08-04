@@ -97,7 +97,7 @@ export default function AdminStudentProfile() {
         <div className="w-20 h-20 bg-surface-800/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-surface-700">
           <UserCircle size={32} className="text-surface-500" />
         </div>
-        <p className="text-lg font-bold text-white mb-1">Student Not Found</p>
+        <p className="text-lg font-bold text-surface-50 mb-1">Student Not Found</p>
         <p className="text-sm text-surface-400 mb-6">This user may have been removed.</p>
         <button onClick={() => navigate('/admin/students')} className="px-6 py-3 gradient-primary rounded-xl text-surface-950 text-sm font-bold">
           Return to Directory
@@ -138,7 +138,7 @@ export default function AdminStudentProfile() {
       {/* ── Back Button ── */}
       <button
         onClick={() => navigate('/admin/students')}
-        className="flex items-center gap-2 text-surface-400 hover:text-white transition-colors text-sm font-bold group"
+        className="flex items-center gap-2 text-surface-400 hover:text-surface-50 transition-colors text-sm font-bold group"
       >
         <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Student Directory
       </button>
@@ -158,7 +158,7 @@ export default function AdminStudentProfile() {
               </div>
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-white">{student.name}</h1>
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-surface-50">{student.name}</h1>
                   <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${
                     student.role === 'admin' ? 'bg-violet-500/20 text-violet-400 border border-violet-500/20' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20'
                   }`}>
@@ -207,13 +207,13 @@ export default function AdminStudentProfile() {
                 </button>
                 {showActions && (
                   <div className="absolute right-0 top-12 w-52 bg-surface-900 border border-surface-700 rounded-xl shadow-2xl z-50 py-2 animate-fade-in">
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-white transition-colors">
+                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors">
                       <Download size={14} /> Export Report
                     </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-white transition-colors">
+                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors">
                       <Mail size={14} /> Send Message
                     </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-white transition-colors">
+                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors">
                       <Eye size={14} /> View as Student
                     </button>
                     <div className="border-t border-surface-700 my-1"></div>
@@ -253,7 +253,7 @@ export default function AdminStudentProfile() {
               >
                 <s.icon size={18} style={{ color: s.color }} />
               </div>
-              <p className="text-2xl font-extrabold text-white tracking-tight">{s.value}</p>
+              <p className="text-2xl font-extrabold text-surface-50 tracking-tight">{s.value}</p>
               <p className="text-[10px] font-bold uppercase tracking-wider text-surface-400 mt-1">{s.label}</p>
             </div>
           </div>
@@ -268,8 +268,8 @@ export default function AdminStudentProfile() {
             onClick={() => setActiveSection(s.id)}
             className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
               activeSection === s.id
-                ? 'bg-surface-800 text-white border border-surface-600 shadow-lg'
-                : 'text-surface-400 hover:text-white hover:bg-surface-800/30'
+                ? 'bg-surface-800 text-surface-50 border border-surface-600 shadow-lg'
+                : 'text-surface-400 hover:text-surface-50 hover:bg-surface-800/30'
             }`}
           >
             {s.label}
@@ -285,7 +285,7 @@ export default function AdminStudentProfile() {
             {/* Performance Breakdown */}
             <div className="lg:col-span-2 glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
               <div className="p-6 border-b border-surface-800 bg-surface-900/80">
-                <h3 className="text-base font-bold text-white flex items-center gap-3">
+                <h3 className="text-base font-bold text-surface-50 flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-primary-500/10 flex items-center justify-center border border-primary-500/20">
                     <BarChart3 size={16} className="text-primary-400" />
                   </div>
@@ -302,7 +302,7 @@ export default function AdminStudentProfile() {
                   return (
                     <div key={i}>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-bold text-white">{item.label}</span>
+                        <span className="text-sm font-bold text-surface-50">{item.label}</span>
                         <div className="flex items-center gap-3">
                           <span className="text-[10px] text-surface-500">Benchmark: {item.benchmark}%</span>
                           <div className={`flex items-center gap-1 text-xs font-bold ${aboveBenchmark ? 'text-emerald-400' : 'text-rose-400'}`}>
@@ -344,7 +344,7 @@ export default function AdminStudentProfile() {
             {/* Activity Log Sidebar */}
             <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
               <div className="p-6 border-b border-surface-800 bg-surface-900/80">
-                <h3 className="text-base font-bold text-white flex items-center gap-3">
+                <h3 className="text-base font-bold text-surface-50 flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center border border-violet-500/20">
                     <Clock size={16} className="text-violet-400" />
                   </div>
@@ -359,7 +359,7 @@ export default function AdminStudentProfile() {
                   <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-surface-800/30 border border-surface-700/50">
                     <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${(r.total > 0 && (r.score / r.total) * 100 >= 60) ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-white">{(r.total > 0 && (r.score / r.total) * 100 >= 60) ? 'Passed Quiz' : 'Failed Quiz'}</p>
+                      <p className="text-xs font-bold text-surface-50">{(r.total > 0 && (r.score / r.total) * 100 >= 60) ? 'Passed Quiz' : 'Failed Quiz'}</p>
                       <p className="text-[11px] text-surface-500 truncate">{r.task_id || 'Quiz'} — Score: {r.score}/{r.total}</p>
                       <p className="text-[10px] text-surface-600 mt-1">{r.timestamp ? new Date(r.timestamp).toLocaleDateString() : 'Recently'}</p>
                     </div>
@@ -371,7 +371,7 @@ export default function AdminStudentProfile() {
             {/* Enrolled Courses */}
             <div className="lg:col-span-3 glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
               <div className="p-6 border-b border-surface-800 bg-surface-900/80">
-                <h3 className="text-base font-bold text-white flex items-center gap-3">
+                <h3 className="text-base font-bold text-surface-50 flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
                     <BookOpen size={16} className="text-blue-400" />
                   </div>
@@ -394,7 +394,7 @@ export default function AdminStudentProfile() {
                     )}
                     {enrolledCourses.map((c, i) => (
                       <tr key={i} className="hover:bg-surface-800/30 transition-colors">
-                        <td className="px-6 py-4 font-bold text-white">{c.name}</td>
+                        <td className="px-6 py-4 font-bold text-surface-50">{c.name}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3 justify-center">
                             <div className="w-24 h-1.5 bg-surface-800 rounded-full overflow-hidden border border-surface-700">
@@ -422,7 +422,7 @@ export default function AdminStudentProfile() {
             {quizResults.length === 0 ? (
               <div className="py-16 text-center glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60">
                 <BrainCircuit size={40} className="text-surface-600 mx-auto mb-4" />
-                <p className="text-lg font-bold text-white mb-1">No Quiz Data</p>
+                <p className="text-lg font-bold text-surface-50 mb-1">No Quiz Data</p>
                 <p className="text-sm text-surface-400">This student hasn't completed any quizzes yet.</p>
               </div>
             ) : (
@@ -445,7 +445,7 @@ export default function AdminStudentProfile() {
                           <span className={`text-lg font-black ${passed ? 'text-emerald-400' : 'text-rose-400'}`}>{pct}%</span>
                         </div>
                         <div>
-                          <p className="text-base font-bold text-white mb-1">Quiz #{result.task_id || (idx + 1)}</p>
+                          <p className="text-base font-bold text-surface-50 mb-1">Quiz #{result.task_id || (idx + 1)}</p>
                           <div className="flex items-center gap-3 text-[11px] font-bold text-surface-400">
                             <span className={passed ? 'text-emerald-400' : 'text-rose-400'}>{result.score}/{result.total} Correct</span>
                             <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${passed ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`}>
@@ -471,7 +471,7 @@ export default function AdminStudentProfile() {
                                 {a.isCorrect ? <CheckCircle size={14} /> : <XCircle size={14} />}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-bold text-white mb-2">
+                                <p className="text-sm font-bold text-surface-50 mb-2">
                                   <span className="text-surface-500 font-mono mr-2">Q{qi + 1}.</span>{a.question}
                                 </p>
                                 <div className="grid gap-2 sm:grid-cols-2">
@@ -519,7 +519,7 @@ export default function AdminStudentProfile() {
                   {studentSubmissions.map((s, i) => (
                     <tr key={s.id || i} className="hover:bg-surface-800/30 transition-colors">
                       <td className="px-6 py-4">
-                        <p className="font-bold text-white">{s.assessment_title || 'Assessment'}</p>
+                        <p className="font-bold text-surface-50">{s.assessment_title || 'Assessment'}</p>
                         {s.submitted_at && <p className="text-[10px] text-surface-500 mt-0.5">Submitted: {new Date(s.submitted_at).toLocaleDateString()}</p>}
                       </td>
                       <td className="px-6 py-4 hidden md:table-cell text-surface-400 text-xs">{s.course_title || '—'}</td>
@@ -536,7 +536,7 @@ export default function AdminStudentProfile() {
                       </td>
                       <td className="px-6 py-4 text-right">
                         {s.score != null ? (
-                          <span className="text-lg font-black text-white">{s.score}<span className="text-surface-500 text-xs">/{s.total_marks || 100}</span></span>
+                          <span className="text-lg font-black text-surface-50">{s.score}<span className="text-surface-500 text-xs">/{s.total_marks || 100}</span></span>
                         ) : (
                           <span className="text-surface-500 text-xs">—</span>
                         )}
@@ -557,7 +557,7 @@ export default function AdminStudentProfile() {
               <div key={i} className="glass-card rounded-2xl border border-surface-700/50 bg-surface-900/60 p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                   <div>
-                    <h3 className="text-lg font-bold text-white mb-1">{c.name}</h3>
+                    <h3 className="text-lg font-bold text-surface-50 mb-1">{c.name}</h3>
                     <p className="text-[11px] text-surface-500">Enrolled: {c.enrolledOn}</p>
                   </div>
                   <div className="flex items-center gap-4">
@@ -571,7 +571,7 @@ export default function AdminStudentProfile() {
                         <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray={`${c.progress}, 100`} className="text-blue-400" />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xs font-black text-white">{c.progress}%</span>
+                        <span className="text-xs font-black text-surface-50">{c.progress}%</span>
                       </div>
                     </div>
                   </div>

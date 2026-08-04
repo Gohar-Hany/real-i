@@ -85,7 +85,7 @@ export default function AdminDashboard() {
                 Central Command
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 tracking-tight mb-3">
               Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">{user?.name?.split(' ')[0] || 'Admin'}</span>
             </h1>
             <p className="text-surface-400 text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -95,7 +95,7 @@ export default function AdminDashboard() {
           <div className="flex gap-3 shrink-0">
             <button
               onClick={checkHealth}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-surface-800/50 text-surface-300 border border-surface-700 hover:bg-surface-700 hover:text-white hover:border-surface-600 transition-all active:scale-95"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-surface-800/50 text-surface-300 border border-surface-700 hover:bg-surface-700 hover:text-surface-50 hover:border-surface-600 transition-all active:scale-95"
             >
               <Activity size={16} className="text-emerald-500" />
               <span className="font-bold text-sm">Diagnostics</span>
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
       {health && (
         <div className="relative glass-card rounded-3xl p-6 bg-surface-900/60 border border-surface-700/50 overflow-hidden animate-fade-in">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-blue-500"></div>
-          <h3 className="text-base font-bold text-white mb-4 flex items-center gap-3">
+          <h3 className="text-base font-bold text-surface-50 mb-4 flex items-center gap-3">
             <Server size={18} className="text-emerald-400" />
             Live System Status
           </h3>
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
                 >
                   <stat.icon size={20} style={{ color: stat.color }} />
                 </div>
-                <span className="text-2xl font-extrabold text-white">{stat.value}</span>
+                <span className="text-2xl font-extrabold text-surface-50">{stat.value}</span>
               </div>
               <p className="text-xs font-bold text-surface-300 uppercase tracking-wider">{stat.label}</p>
               <p className="text-[10px] text-surface-500 mt-0.5">{stat.sub}</p>
@@ -174,7 +174,7 @@ export default function AdminDashboard() {
             <div className="w-8 h-8 rounded-lg bg-primary-500/10 border border-primary-500/20 flex items-center justify-center">
               <Zap size={16} className="text-primary-400" />
             </div>
-            <h2 className="text-lg font-bold text-white">Control Modules</h2>
+            <h2 className="text-lg font-bold text-surface-50">Control Modules</h2>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
@@ -192,7 +192,7 @@ export default function AdminDashboard() {
                     <action.icon size={20} style={{ color: action.color }} />
                   </div>
                   <div className="flex-1 pt-0.5">
-                    <p className="text-sm font-bold text-white mb-1 group-hover:text-primary-300 transition-colors">{action.label}</p>
+                    <p className="text-sm font-bold text-surface-50 mb-1 group-hover:text-primary-400 transition-colors">{action.label}</p>
                     <p className="text-[11px] text-surface-500 leading-relaxed">{action.desc}</p>
                   </div>
                   <div className="w-7 h-7 rounded-full bg-surface-800 flex items-center justify-center shrink-0 group-hover:bg-primary-500 group-hover:text-surface-950 text-surface-500 transition-all mt-0.5">
@@ -211,7 +211,7 @@ export default function AdminDashboard() {
               <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
                 <GraduationCap size={16} className="text-blue-400" />
               </div>
-              <h3 className="text-sm font-bold text-white">Recent Students</h3>
+              <h3 className="text-sm font-bold text-surface-50">Recent Students</h3>
             </div>
             <Link to="/admin/students" className="text-[10px] text-primary-400 font-bold hover:text-primary-300 uppercase tracking-wider flex items-center gap-1">
               View All <ChevronRight size={12} />
@@ -239,7 +239,7 @@ export default function AdminDashboard() {
                     {s.name?.charAt(0)?.toUpperCase() || '?'}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-surface-200 truncate group-hover:text-white transition-colors">{s.name}</p>
+                    <p className="text-sm font-bold text-surface-200 truncate group-hover:text-surface-50 transition-colors">{s.name}</p>
                     <p className="text-[10px] text-surface-500 font-mono truncate">{s.email}</p>
                   </div>
                   <Eye size={14} className="text-surface-600 group-hover:text-primary-400 shrink-0 transition-colors" />
@@ -282,7 +282,7 @@ export default function AdminDashboard() {
             <div className={`w-10 h-10 rounded-xl bg-${card.color}-500/10 flex items-center justify-center border border-${card.color}-500/20 mb-4`}>
               <card.icon size={20} className={`text-${card.color}-400`} />
             </div>
-            <h3 className="text-sm font-bold text-white mb-2">{card.title}</h3>
+            <h3 className="text-sm font-bold text-surface-50 mb-2">{card.title}</h3>
             <p className="text-xs text-surface-500 leading-relaxed mb-4">{card.desc}</p>
             <Link
               to={card.link}

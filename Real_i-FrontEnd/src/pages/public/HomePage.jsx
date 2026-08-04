@@ -387,7 +387,7 @@ export default function HomePage() {
       {/* ═══════════════════════════════════════════════════════
           STATS SECTION
           ═══════════════════════════════════════════════════════ */}
-      <section ref={statsRef} className="py-20 relative">
+      <section ref={statsRef} className="relative cyber-cut-section">
         <div className="absolute inset-0 gradient-mesh" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="glass-card rounded-3xl p-10 md:p-14 border border-primary-500/10 shadow-inner-gold">
@@ -684,7 +684,8 @@ export default function HomePage() {
       {/* ═══════════════════════════════════════════════════════
           CTA SECTION
           ═══════════════════════════════════════════════════════ */}
-      <section ref={ctaRef} className="py-24 relative">
+      <section ref={ctaRef} className="relative cyber-cut-section">
+        <div className="absolute inset-0 gradient-mesh" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden glass border border-primary-500/20 shadow-glow-lg group">
             {/* Animated Glow Background */}

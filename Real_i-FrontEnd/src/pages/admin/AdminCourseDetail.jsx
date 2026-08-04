@@ -168,12 +168,12 @@ export default function AdminCourseDetail() {
         <div className="flex items-center gap-4">
           <button 
             onClick={() => navigate('/admin/courses')}
-            className="w-10 h-10 shrink-0 rounded-xl bg-surface-800/50 flex items-center justify-center text-surface-400 hover:text-white hover:bg-surface-700 transition-colors"
+            className="w-10 h-10 shrink-0 rounded-xl bg-surface-800/50 flex items-center justify-center text-surface-400 hover:text-surface-50 hover:bg-surface-700 transition-colors"
           >
             <ArrowLeft size={20} />
           </button>
           <div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-white">{course.title}</h1>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-surface-50">{course.title}</h1>
             <p className="text-surface-400 text-sm mt-1 flex items-center gap-2">
               <span className="font-mono bg-surface-800 px-2 py-0.5 rounded text-xs">ID: {course.project_id}</span>
               • {editForm.modules.reduce((a,m)=>a+(m.lessons?.length||0),0)} Lessons
@@ -220,7 +220,7 @@ export default function AdminCourseDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             <div className="glass-card rounded-3xl p-6 md:p-8 border border-surface-700/50 bg-surface-900/60">
-              <h3 className="text-lg font-bold text-white mb-6">General Information</h3>
+              <h3 className="text-lg font-bold text-surface-50 mb-6">General Information</h3>
               <div className="space-y-5">
                 <div>
                   <label className="block text-xs font-bold text-surface-400 uppercase tracking-wider mb-2">Course Title</label>
@@ -228,7 +228,7 @@ export default function AdminCourseDetail() {
                     type="text"
                     value={editForm.title}
                     onChange={e => setEditForm({...editForm, title: e.target.value})}
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                   />
                 </div>
                 <div>
@@ -237,7 +237,7 @@ export default function AdminCourseDetail() {
                     type="text"
                     value={editForm.subtitle || ''}
                     onChange={e => setEditForm({...editForm, subtitle: e.target.value})}
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                   />
                 </div>
                 <div>
@@ -246,7 +246,7 @@ export default function AdminCourseDetail() {
                     value={editForm.description || ''}
                     onChange={e => setEditForm({...editForm, description: e.target.value})}
                     rows={5}
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none resize-none"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none resize-none"
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -256,7 +256,7 @@ export default function AdminCourseDetail() {
                       type="text"
                       value={editForm.instructor || ''}
                       onChange={e => setEditForm({...editForm, instructor: e.target.value})}
-                      className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                      className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                     />
                   </div>
                   <div>
@@ -266,7 +266,7 @@ export default function AdminCourseDetail() {
                       value={editForm.tags}
                       onChange={e => setEditForm({...editForm, tags: e.target.value})}
                       placeholder="AI, Python, Data"
-                      className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                      className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                     />
                   </div>
                 </div>
@@ -276,7 +276,7 @@ export default function AdminCourseDetail() {
 
           <div className="space-y-6">
             <div className="glass-card rounded-3xl p-6 border border-surface-700/50 bg-surface-900/60">
-              <h3 className="text-lg font-bold text-white mb-6">Settings</h3>
+              <h3 className="text-lg font-bold text-surface-50 mb-6">Settings</h3>
               <div className="space-y-5">
                 <div>
                   <label className="block text-xs font-bold text-surface-400 uppercase tracking-wider mb-2">Category</label>
@@ -284,7 +284,7 @@ export default function AdminCourseDetail() {
                     type="text"
                     value={editForm.category || ''}
                     onChange={e => setEditForm({...editForm, category: e.target.value})}
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                   />
                 </div>
                 <div>
@@ -292,7 +292,7 @@ export default function AdminCourseDetail() {
                   <select
                     value={editForm.level || 'Beginner'}
                     onChange={e => setEditForm({...editForm, level: e.target.value})}
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                   >
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
@@ -305,7 +305,7 @@ export default function AdminCourseDetail() {
                     type="number"
                     value={editForm.total_hours || 0}
                     onChange={e => setEditForm({...editForm, total_hours: Number(e.target.value)})}
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                   />
                 </div>
                 <div>
@@ -315,12 +315,12 @@ export default function AdminCourseDetail() {
                     value={editForm.thumbnail || ''}
                     onChange={e => setEditForm({...editForm, thumbnail: e.target.value})}
                     placeholder="https://example.com/image.jpg"
-                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-white focus:border-primary-500 outline-none"
+                    className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-2.5 text-surface-50 focus:border-primary-500 outline-none"
                   />
                 </div>
                 <div className="pt-4 border-t border-surface-700/50 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-bold text-white">Publish Course</p>
+                    <p className="text-sm font-bold text-surface-50">Publish Course</p>
                     <p className="text-xs text-surface-400">Make it visible to students</p>
                   </div>
                   <button
@@ -341,7 +341,7 @@ export default function AdminCourseDetail() {
         <div className="glass-card rounded-3xl p-6 md:p-8 border border-surface-700/50 bg-surface-900/60">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-xl font-bold text-white">Curriculum Builder</h3>
+              <h3 className="text-xl font-bold text-surface-50">Curriculum Builder</h3>
               <p className="text-sm text-surface-400 mt-1">Organize your course into modules and lessons.</p>
             </div>
             <button 
@@ -365,7 +365,7 @@ export default function AdminCourseDetail() {
                     value={module.title}
                     onChange={e => updateModule(mIdx, 'title', e.target.value)}
                     placeholder="Module Title"
-                    className="flex-1 bg-transparent text-lg font-bold text-white outline-none border-none placeholder-surface-600 focus:ring-0"
+                    className="flex-1 bg-transparent text-lg font-bold text-surface-50 outline-none border-none placeholder-surface-600 focus:ring-0"
                   />
                   <button onClick={() => deleteModule(mIdx)} className="p-2 text-surface-500 hover:text-rose-400 transition-colors">
                     <Trash2 size={18} />
@@ -394,7 +394,7 @@ export default function AdminCourseDetail() {
                           value={lesson.title}
                           onChange={e => updateLesson(mIdx, lIdx, 'title', e.target.value)}
                           placeholder="Lesson Title"
-                          className="flex-1 bg-transparent text-sm text-white outline-none border-none placeholder-surface-600 focus:ring-0"
+                          className="flex-1 bg-transparent text-sm text-surface-50 outline-none border-none placeholder-surface-600 focus:ring-0"
                         />
                       </div>
                       <div className="flex items-center gap-4 border-t border-surface-800 pt-3 md:border-none md:pt-0">
@@ -405,7 +405,7 @@ export default function AdminCourseDetail() {
                             value={lesson.duration || ''}
                             onChange={e => updateLesson(mIdx, lIdx, 'duration', e.target.value)}
                             placeholder="10m"
-                            className="w-16 bg-surface-800 text-sm text-white px-2 py-1 rounded border border-surface-700 outline-none text-center"
+                            className="w-16 bg-surface-800 text-sm text-surface-50 px-2 py-1 rounded border border-surface-700 outline-none text-center"
                           />
                         </div>
                         <label className="flex items-center gap-2 cursor-pointer">
@@ -453,7 +453,7 @@ export default function AdminCourseDetail() {
         <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
           <div className="p-6 md:p-8 border-b border-surface-700/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-bold text-white">Enrolled Students</h2>
+              <h2 className="text-xl font-bold text-surface-50">Enrolled Students</h2>
               <p className="text-sm text-surface-400 mt-1">Manage students assigned to this course.</p>
             </div>
             <button
@@ -467,7 +467,7 @@ export default function AdminCourseDetail() {
           {enrolledStudents.length === 0 ? (
             <div className="p-16 text-center">
               <Users size={32} className="text-surface-600 mx-auto mb-3" />
-              <p className="text-lg font-bold text-white mb-1">No students enrolled</p>
+              <p className="text-lg font-bold text-surface-50 mb-1">No students enrolled</p>
               <p className="text-sm text-surface-400">Assign a student to get started.</p>
             </div>
           ) : (
@@ -479,7 +479,7 @@ export default function AdminCourseDetail() {
                       {student.name?.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <p className="font-bold text-white text-lg">{student.name}</p>
+                      <p className="font-bold text-surface-50 text-lg">{student.name}</p>
                       <p className="text-sm text-surface-400 font-mono">{student.email}</p>
                     </div>
                   </div>
@@ -501,8 +501,8 @@ export default function AdminCourseDetail() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="w-full max-w-md bg-surface-900 border border-surface-700 rounded-3xl overflow-hidden shadow-2xl">
             <div className="p-5 border-b border-surface-700 flex justify-between items-center bg-surface-800/50">
-              <h3 className="font-bold text-white">Enroll Student</h3>
-              <button onClick={() => setShowEnrollModal(false)} className="text-surface-400 hover:text-white transition-colors">
+              <h3 className="font-bold text-surface-50">Enroll Student</h3>
+              <button onClick={() => setShowEnrollModal(false)} className="text-surface-400 hover:text-surface-50 transition-colors">
                 <X size={20} />
               </button>
             </div>
@@ -511,7 +511,7 @@ export default function AdminCourseDetail() {
               <select
                 value={selectedStudentId}
                 onChange={e => setSelectedStudentId(e.target.value)}
-                className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-white focus:border-primary-500 outline-none appearance-none"
+                className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-surface-50 focus:border-primary-500 outline-none appearance-none"
               >
                 <option value="">-- Choose a student --</option>
                 {availableStudents.map(s => (
@@ -523,7 +523,7 @@ export default function AdminCourseDetail() {
               )}
             </div>
             <div className="p-5 border-t border-surface-700 bg-surface-800/50 flex justify-end gap-3">
-              <button onClick={() => setShowEnrollModal(false)} className="px-4 py-2 font-bold text-surface-400 hover:text-white transition-colors">
+              <button onClick={() => setShowEnrollModal(false)} className="px-4 py-2 font-bold text-surface-400 hover:text-surface-50 transition-colors">
                 Cancel
               </button>
               <button

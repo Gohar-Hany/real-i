@@ -107,7 +107,7 @@ export default function FileUpload({
             ? 'gradient-primary shadow-glow-lg scale-110'
             : 'bg-surface-100 dark:bg-surface-800 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30'
         }`}>
-          <Upload size={28} className={`transition-colors ${dragActive ? 'text-white' : 'text-surface-400 group-hover:text-primary-500'}`} />
+          <Upload size={28} className={`transition-colors ${dragActive ? 'text-surface-50' : 'text-surface-400 group-hover:text-primary-500'}`} />
         </div>
         <p className="text-surface-900 dark:text-surface-100 font-semibold mb-1">
           {dragActive ? 'Drop files here' : 'Drag & drop files here'}

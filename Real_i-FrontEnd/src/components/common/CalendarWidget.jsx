@@ -140,7 +140,7 @@ export default function CalendarWidget({ events = [], filters = null, onAddEvent
             <CalendarIcon size={24} className="opacity-90" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-surface-50 tracking-tight">
               {MONTHS[viewMonth]} {viewYear}
             </h2>
             <p className="text-sm text-surface-400 mt-0.5">Manage your learning schedule</p>
@@ -150,20 +150,20 @@ export default function CalendarWidget({ events = [], filters = null, onAddEvent
         <div className="flex items-center gap-2">
           <button
             onClick={goToday}
-            className="px-4 py-2 rounded-xl bg-surface-800 border border-surface-700 text-sm font-bold text-surface-300 hover:text-white hover:bg-surface-700 transition-colors"
+            className="px-4 py-2 rounded-xl bg-surface-800 border border-surface-700 text-sm font-bold text-surface-300 hover:text-surface-50 hover:bg-surface-700 transition-colors"
           >
             Today
           </button>
           <div className="flex items-center rounded-xl bg-surface-800 border border-surface-700 p-1">
             <button
               onClick={prevMonth}
-              className="p-1.5 rounded-lg text-surface-400 hover:text-white hover:bg-surface-700 transition-colors"
+              className="p-1.5 rounded-lg text-surface-400 hover:text-surface-50 hover:bg-surface-700 transition-colors"
             >
               <ChevronLeft size={20} />
             </button>
             <button
               onClick={nextMonth}
-              className="p-1.5 rounded-lg text-surface-400 hover:text-white hover:bg-surface-700 transition-colors"
+              className="p-1.5 rounded-lg text-surface-400 hover:text-surface-50 hover:bg-surface-700 transition-colors"
             >
               <ChevronRight size={20} />
             </button>
@@ -211,7 +211,7 @@ export default function CalendarWidget({ events = [], filters = null, onAddEvent
                 <div className="flex items-start justify-between mb-1">
                   <span className={`w-7 h-7 flex items-center justify-center rounded-full text-sm font-bold transition-all ${
                     isToday ? 'gradient-primary text-surface-950 shadow-lg shadow-primary-500/20' : 
-                    (!cell.isCurrentMonth ? 'text-surface-600' : 'text-surface-300 group-hover:text-white')
+                    (!cell.isCurrentMonth ? 'text-surface-600' : 'text-surface-300 group-hover:text-surface-50')
                   }`}>
                     {cell.day}
                   </span>
@@ -277,14 +277,14 @@ function DayModal({ date, events, onClose, onAddEvent }) {
         {/* Header */}
         <div className="p-5 border-b border-surface-700 flex justify-between items-center bg-surface-800/50">
           <div>
-            <h3 className="font-bold text-white text-lg flex items-center gap-2">
+            <h3 className="font-bold text-surface-50 text-lg flex items-center gap-2">
               <CalendarIcon size={18} className="text-primary-400" />
               {dateStr}
               {isToday && <span className="text-[10px] bg-primary-500/20 text-primary-400 px-2 py-0.5 rounded-full uppercase tracking-wider ml-2">Today</span>}
             </h3>
             <p className="text-sm text-surface-400 mt-1">{events.length} event(s) scheduled</p>
           </div>
-          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-800 text-surface-400 hover:text-white transition-colors shrink-0">
+          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-800 text-surface-400 hover:text-surface-50 transition-colors shrink-0">
             <X size={18} />
           </button>
         </div>
@@ -294,7 +294,7 @@ function DayModal({ date, events, onClose, onAddEvent }) {
           {events.length === 0 ? (
             <div className="py-10 text-center">
               <Target size={40} className="text-surface-700 mx-auto mb-4" />
-              <p className="text-white font-bold text-lg mb-1">Clear Schedule!</p>
+              <p className="text-surface-50 font-bold text-lg mb-1">Clear Schedule!</p>
               <p className="text-sm text-surface-500">There are no events planned for this day.</p>
             </div>
           ) : (
@@ -310,7 +310,7 @@ function DayModal({ date, events, onClose, onAddEvent }) {
                         <Icon size={20} />
                       </div>
                       <div>
-                        <h4 className="font-bold text-white text-base leading-tight mb-1">{ev.title}</h4>
+                        <h4 className="font-bold text-surface-50 text-base leading-tight mb-1">{ev.title}</h4>
                         <div className="flex items-center gap-3 text-xs font-mono text-surface-400 mb-2">
                           <span className="flex items-center gap-1"><Clock size={12}/> {ev._date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                           <span className={`px-1.5 py-0.5 rounded font-sans uppercase tracking-wider text-[9px] ${conf.bg} ${conf.text}`}>{conf.label}</span>
@@ -333,7 +333,7 @@ function DayModal({ date, events, onClose, onAddEvent }) {
                       <Link 
                         to={ev.link} 
                         onClick={onClose}
-                        className="px-4 py-2 bg-surface-800 hover:bg-surface-700 text-white text-xs font-bold rounded-xl transition-colors border border-surface-700 whitespace-nowrap shrink-0"
+                        className="px-4 py-2 bg-surface-800 hover:bg-surface-700 text-surface-50 text-xs font-bold rounded-xl transition-colors border border-surface-700 whitespace-nowrap shrink-0"
                       >
                         {ev.linkLabel || 'View'}
                       </Link>

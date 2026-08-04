@@ -110,7 +110,7 @@ export default function StudentDashboard() {
                 Student Portal
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 tracking-tight mb-3">
               {user?.name ? (
                 <>Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">{user.name.split(' ')[0]}</span></>
               ) : (
@@ -150,7 +150,7 @@ export default function StudentDashboard() {
                 <stat.icon size={20} style={{ color: stat.color }} />
               </div>
               <div className="text-right">
-                <p className="text-2xl font-extrabold text-white">{stat.value}</p>
+                <p className="text-2xl font-extrabold text-surface-50">{stat.value}</p>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-surface-400 mt-0.5">{stat.label}</p>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default function StudentDashboard() {
       <div>
         <div className="flex items-center gap-3 mb-5">
           <div className="h-6 w-1.5 rounded-full bg-primary-500"></div>
-          <h2 className="text-lg font-bold text-white">Quick Actions</h2>
+          <h2 className="text-lg font-bold text-surface-50">Quick Actions</h2>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -183,7 +183,7 @@ export default function StudentDashboard() {
                   <ArrowRight size={14} className="group-hover:-rotate-45 transition-transform" />
                 </div>
               </div>
-              <h3 className="text-sm font-bold text-white mb-1 group-hover:text-primary-300 transition-colors">{action.title}</h3>
+              <h3 className="text-sm font-bold text-surface-50 mb-1 group-hover:text-primary-300 transition-colors">{action.title}</h3>
               <p className="text-[11px] text-surface-500 leading-relaxed">{action.desc}</p>
             </button>
           ))}
@@ -198,7 +198,7 @@ export default function StudentDashboard() {
               <div className="w-8 h-8 rounded-lg bg-primary-500/10 flex items-center justify-center border border-primary-500/20">
                 <Target size={16} className="text-primary-400" />
               </div>
-              <h3 className="text-sm font-bold text-white">Pending Quizzes</h3>
+              <h3 className="text-sm font-bold text-surface-50">Pending Quizzes</h3>
             </div>
             {pendingQuizzes.length > 0 && (
               <span className="px-2.5 py-1 rounded-lg text-[10px] font-black bg-primary-500/10 text-primary-400 border border-primary-500/20 uppercase">
@@ -212,7 +212,7 @@ export default function StudentDashboard() {
                 <div className="w-16 h-16 rounded-full bg-surface-800 flex items-center justify-center mb-3 mx-auto">
                   <Trophy size={28} className="text-primary-500/50" />
                 </div>
-                <p className="text-sm font-bold text-white mb-1">All caught up!</p>
+                <p className="text-sm font-bold text-surface-50 mb-1">All caught up!</p>
                 <p className="text-xs text-surface-500">No pending quizzes right now</p>
               </div>
             ) : (
@@ -227,7 +227,7 @@ export default function StudentDashboard() {
                       <BrainCircuit size={18} className="text-surface-400 group-hover:text-primary-400 transition-colors" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-surface-200 truncate group-hover:text-white transition-colors">{quiz.description || `Quiz ${quiz.task_id}`}</p>
+                      <p className="text-sm font-bold text-surface-200 truncate group-hover:text-surface-50 transition-colors">{quiz.description || `Quiz ${quiz.task_id}`}</p>
                       <p className="text-[10px] text-surface-500 font-mono">{quiz.project_id}</p>
                     </div>
                     <div className="w-7 h-7 rounded-full bg-surface-900 flex items-center justify-center group-hover:bg-primary-500 group-hover:text-surface-950 transition-colors shrink-0">
@@ -255,7 +255,7 @@ export default function StudentDashboard() {
                 }`}>
                   <Zap size={16} className={meetings.some(m => m.status === 'live') ? 'text-red-400' : 'text-primary-400'} />
                 </div>
-                <h3 className="text-sm font-bold text-white">Live Classes</h3>
+                <h3 className="text-sm font-bold text-surface-50">Live Classes</h3>
               </div>
               <Link to="/student/calendar" className="text-[10px] text-primary-400 font-bold hover:text-primary-300 uppercase tracking-wider flex items-center gap-1">
                 Schedule <ChevronRight size={12} />
@@ -271,7 +271,7 @@ export default function StudentDashboard() {
                       <Target size={18} className="text-surface-400" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white">{meeting.title}</p>
+                      <p className="text-sm font-bold text-surface-50">{meeting.title}</p>
                       <p className="text-xs text-surface-400">
                         {meeting.status === 'live' 
                           ? <span className="text-red-400 font-bold flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>Live Now</span>
@@ -302,7 +302,7 @@ export default function StudentDashboard() {
               <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
                 <TrendingUp size={16} className="text-blue-400" />
               </div>
-              <h3 className="text-sm font-bold text-white">Continue Learning</h3>
+              <h3 className="text-sm font-bold text-surface-50">Continue Learning</h3>
             </div>
             <Link to="/student/courses" className="text-[10px] text-primary-400 font-bold hover:text-primary-300 uppercase tracking-wider flex items-center gap-1">
               View All <ChevronRight size={12} />
@@ -314,7 +314,7 @@ export default function StudentDashboard() {
                 <div className="w-16 h-16 rounded-full bg-surface-800 flex items-center justify-center mb-3 mx-auto">
                   <BookOpen size={28} className="text-blue-500/50" />
                 </div>
-                <p className="text-sm font-bold text-white mb-1">No courses yet</p>
+                <p className="text-sm font-bold text-surface-50 mb-1">No courses yet</p>
                 <p className="text-xs text-surface-500">Courses will appear here once assigned</p>
               </div>
             ) : (
@@ -333,7 +333,7 @@ export default function StudentDashboard() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1.5">
-                        <p className="text-sm font-bold text-surface-200 truncate group-hover:text-white transition-colors">{proj.title}</p>
+                        <p className="text-sm font-bold text-surface-200 truncate group-hover:text-surface-50 transition-colors">{proj.title}</p>
                         <span className="text-xs font-bold shrink-0 ml-3" style={{ color: proj.color }}>{proj.progress}%</span>
                       </div>
                       <div className="w-full h-1.5 bg-surface-900 rounded-full overflow-hidden border border-surface-800">

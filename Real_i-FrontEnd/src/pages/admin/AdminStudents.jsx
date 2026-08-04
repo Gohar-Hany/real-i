@@ -122,19 +122,15 @@ export default function AdminStudents() {
   return (
     <div className="space-y-6 lg:space-y-8 animate-fade-in-up pb-10">
       {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800/80 border border-surface-700 mb-4 backdrop-blur-md">
-          <Users size={14} className="text-primary-400" />
-          <span className="text-[11px] font-mono font-bold text-primary-400 uppercase tracking-widest">
-            User Directory
-          </span>
+      <div className="mb-6 lg:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-50 tracking-tight mb-2">
+            Student <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Management</span>
+          </h1>
+          <p className="text-surface-400 text-sm max-w-2xl leading-relaxed">
+            Oversee user accounts, review performance metrics, and manage platform access.
+          </p>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
-          Student <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Management</span>
-        </h1>
-        <p className="text-surface-400 text-sm max-w-2xl leading-relaxed">
-          Oversee user accounts, review performance metrics, and manage platform access.
-        </p>
       </div>
 
       {/* Stats */}
@@ -161,7 +157,7 @@ export default function AdminStudents() {
                 <stat.icon size={22} style={{ color: stat.color }} />
               </div>
               <div>
-                <p className="text-2xl font-extrabold text-white">{stat.value}</p>
+                <p className="text-2xl font-extrabold text-surface-50">{stat.value}</p>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-surface-400 mt-0.5">{stat.label}</p>
               </div>
             </div>
@@ -181,7 +177,7 @@ export default function AdminStudents() {
               setSearchQuery(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full pl-11 pr-4 py-3 rounded-xl bg-surface-900/60 border border-surface-700/50 text-sm text-white placeholder-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
+            className="w-full pl-11 pr-4 py-3 rounded-xl bg-surface-900/60 border border-surface-700/50 text-sm text-surface-50 placeholder-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
           />
         </div>
         <div className="flex gap-2">
@@ -195,7 +191,7 @@ export default function AdminStudents() {
               className={`px-4 py-3 rounded-xl text-xs font-bold transition-all shrink-0 ${
                 roleFilter === role
                   ? 'gradient-primary text-surface-950 shadow-[0_0_15px_rgba(212,175,55,0.3)]'
-                  : 'bg-surface-900/60 border border-surface-700/50 text-surface-400 hover:text-white hover:border-surface-600'
+                  : 'bg-surface-900/60 border border-surface-700/50 text-surface-400 hover:text-surface-50 hover:border-surface-600'
               }`}
             >
               {role === 'all' ? 'All Roles' : role.charAt(0).toUpperCase() + role.slice(1) + 's'}
@@ -216,7 +212,7 @@ export default function AdminStudents() {
             <div className="w-20 h-20 bg-surface-800/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-surface-700">
               <Users size={32} className="text-surface-500" />
             </div>
-            <p className="text-lg font-bold text-white mb-1">No users found</p>
+            <p className="text-lg font-bold text-surface-50 mb-1">No users found</p>
             <p className="text-sm text-surface-400">Try adjusting your search or filters.</p>
           </div>
         ) : (
@@ -261,7 +257,7 @@ export default function AdminStudents() {
                             )}
                           </div>
                           <div>
-                            <p className="font-bold text-white group-hover:text-primary-300 transition-colors">{u.name}</p>
+                            <p className="font-bold text-surface-50 group-hover:text-primary-300 transition-colors">{u.name}</p>
                             <p className="text-[10px] text-surface-500 font-mono md:hidden">{u.email}</p>
                           </div>
                         </div>
@@ -283,7 +279,7 @@ export default function AdminStudents() {
                         <div className="flex items-center justify-end gap-2">
                           <Link
                             to={`/admin/students/${u.id}`}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-surface-400 bg-surface-800/50 hover:text-white hover:bg-surface-700 border border-surface-700 hover:border-surface-600 transition-all active:scale-95 text-xs font-bold"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-surface-400 bg-surface-800/50 hover:text-surface-50 hover:bg-surface-700 border border-surface-700 hover:border-surface-600 transition-all active:scale-95 text-xs font-bold"
                           >
                             <Eye size={14} className="text-primary-500" />
                             <span className="hidden lg:inline">View</span>
@@ -328,14 +324,14 @@ export default function AdminStudents() {
                 <button
                   onClick={() => setCurrentPage(1)}
                   disabled={currentPage === 1}
-                  className="p-2 rounded-lg bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-white hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  className="p-2 rounded-lg bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-surface-50 hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                 >
                   <ChevronsLeft size={14} />
                 </button>
                 <button
                   onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="p-2 rounded-lg bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-white hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  className="p-2 rounded-lg bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-surface-50 hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                 >
                   <ChevronLeft size={14} />
                 </button>
@@ -358,7 +354,7 @@ export default function AdminStudents() {
                       className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
                         currentPage === page
                           ? 'gradient-primary text-surface-950 shadow-[0_0_10px_rgba(212,175,55,0.3)]'
-                          : 'bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-white hover:bg-surface-700'
+                          : 'bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-surface-50 hover:bg-surface-700'
                       }`}
                     >
                       {page}
@@ -369,14 +365,14 @@ export default function AdminStudents() {
                 <button
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="p-2 rounded-lg bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-white hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  className="p-2 rounded-lg bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-surface-50 hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                 >
                   <ChevronRight size={14} />
                 </button>
                 <button
                   onClick={() => setCurrentPage(totalPages)}
                   disabled={currentPage === totalPages}
-                  className="p-2 rounded-lg bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-white hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  className="p-2 rounded-lg bg-surface-800/50 border border-surface-700 text-surface-400 hover:text-surface-50 hover:bg-surface-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                 >
                   <ChevronsRight size={14} />
                 </button>

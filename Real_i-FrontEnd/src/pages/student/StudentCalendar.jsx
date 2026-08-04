@@ -140,7 +140,7 @@ export default function StudentCalendar() {
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${conf.bg} ${conf.border} ${conf.text}`}>
                         <Icon size={16} />
                       </div>
-                      <span className="text-sm font-semibold text-surface-200 group-hover:text-white transition-colors">{conf.label}s</span>
+                      <span className="text-sm font-semibold text-surface-200 group-hover:text-surface-50 transition-colors">{conf.label}s</span>
                     </div>
                     <input 
                       type="checkbox" 
@@ -163,7 +163,7 @@ export default function StudentCalendar() {
                 <p className="text-sm text-surface-500 text-center py-4">No upcoming events</p>
               ) : upcomingEvents.map(ev => (
                 <div key={ev.id} className="p-3 rounded-xl bg-surface-800/30 border border-surface-700/50">
-                  <p className="text-sm font-bold text-white mb-1">{ev.title}</p>
+                  <p className="text-sm font-bold text-surface-50 mb-1">{ev.title}</p>
                   <p className="text-xs text-surface-400 flex items-center gap-1">
                     <CalendarDays size={12} />
                     {new Date(ev.date).toLocaleDateString()} at {ev.time}

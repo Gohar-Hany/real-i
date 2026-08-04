@@ -124,7 +124,7 @@ export default function StudentChat() {
               AI Study Assistant
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-50 tracking-tight mb-2">
             Chat with <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200 font-heading">REAL_i</span>
           </h1>
           <div className="flex flex-wrap items-center gap-3 mt-2 text-surface-400 text-sm">

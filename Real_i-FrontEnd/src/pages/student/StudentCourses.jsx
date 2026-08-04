@@ -133,7 +133,7 @@ export default function StudentCourses() {
               My Learning Path
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-50 tracking-tight mb-2">
             Active <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Courses</span>
           </h1>
           <p className="text-surface-400 text-sm sm:text-base max-w-xl leading-relaxed">
@@ -156,7 +156,7 @@ export default function StudentCourses() {
                 <s.icon size={18} className={s.color} />
               </div>
               <div>
-                <p className="text-xl font-extrabold text-white">{s.value}</p>
+                <p className="text-xl font-extrabold text-surface-50">{s.value}</p>
                 <p className="text-[10px] font-bold text-surface-500 uppercase tracking-wider">{s.label}</p>
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function StudentCourses() {
               placeholder="Search courses..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl bg-surface-900/60 border border-surface-700/50 text-sm text-white placeholder-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
+              className="w-full pl-11 pr-4 py-3 rounded-xl bg-surface-900/60 border border-surface-700/50 text-sm text-surface-50 placeholder-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
             />
           </div>
 
@@ -188,7 +188,7 @@ export default function StudentCourses() {
                 className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold transition-all whitespace-nowrap shrink-0 ${
                   filterBy === opt.value
                     ? 'gradient-primary text-surface-950 shadow-[0_0_15px_rgba(212,175,55,0.3)]'
-                    : 'bg-surface-900/60 border border-surface-700/50 text-surface-400 hover:text-white hover:border-surface-600'
+                    : 'bg-surface-900/60 border border-surface-700/50 text-surface-400 hover:text-surface-50 hover:border-surface-600'
                 }`}
               >
                 {opt.label}
@@ -212,13 +212,13 @@ export default function StudentCourses() {
             <div className="flex rounded-xl overflow-hidden border border-surface-700/50">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2.5 transition-colors ${viewMode === 'grid' ? 'bg-surface-700 text-white' : 'bg-surface-900/60 text-surface-500 hover:text-white'}`}
+                className={`p-2.5 transition-colors ${viewMode === 'grid' ? 'bg-surface-700 text-surface-50' : 'bg-surface-900/60 text-surface-500 hover:text-surface-50'}`}
               >
                 <Grid3x3 size={16} />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2.5 transition-colors ${viewMode === 'list' ? 'bg-surface-700 text-white' : 'bg-surface-900/60 text-surface-500 hover:text-white'}`}
+                className={`p-2.5 transition-colors ${viewMode === 'list' ? 'bg-surface-700 text-surface-50' : 'bg-surface-900/60 text-surface-500 hover:text-surface-50'}`}
               >
                 <List size={16} />
               </button>
@@ -242,7 +242,7 @@ export default function StudentCourses() {
           <div className="w-24 h-24 rounded-full bg-surface-800/80 border border-surface-700 flex items-center justify-center mb-6 relative z-10">
             <BookOpen size={40} className="text-surface-500" />
           </div>
-          <h3 className="text-2xl font-bold text-white mb-3 relative z-10">No Active Courses</h3>
+          <h3 className="text-2xl font-bold text-surface-50 mb-3 relative z-10">No Active Courses</h3>
           <p className="text-surface-400 max-w-md mx-auto mb-8 relative z-10">
             You haven't been assigned any courses yet. Check back soon or browse available courses.
           </p>
@@ -299,7 +299,7 @@ export default function StudentCourses() {
                 >
                   {course.category}
                 </span>
-                <h3 className="text-lg font-bold text-white group-hover:text-primary-400 transition-colors leading-tight mb-4 line-clamp-2">
+                <h3 className="text-lg font-bold text-surface-50 group-hover:text-primary-400 transition-colors leading-tight mb-4 line-clamp-2">
                   {course.title}
                 </h3>
 
@@ -322,7 +322,7 @@ export default function StudentCourses() {
                     <div className="flex items-center gap-1.5 text-xs text-surface-400 font-medium">
                       <Clock size={14} className="text-surface-500" />
                       {course.totalLessons > 0 ? (
-                        <span><strong className="text-white">{course.completedInProject}</strong> / {course.totalLessons} Lessons</span>
+                        <span><strong className="text-surface-50">{course.completedInProject}</strong> / {course.totalLessons} Lessons</span>
                       ) : (
                         <span>Pending</span>
                       )}
@@ -365,7 +365,7 @@ export default function StudentCourses() {
                         >
                           <BookOpen size={18} style={{ color: course.color }} />
                         </div>
-                        <span className="font-bold text-white group-hover:text-primary-300 transition-colors">{course.title}</span>
+                        <span className="font-bold text-surface-50 group-hover:text-primary-300 transition-colors">{course.title}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center hidden sm:table-cell">
@@ -387,7 +387,7 @@ export default function StudentCourses() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center hidden md:table-cell">
-                      <span className="text-sm font-bold text-white">{course.completedInProject}<span className="text-surface-500 font-normal">/{course.totalQuizzes}</span></span>
+                      <span className="text-sm font-bold text-surface-50">{course.completedInProject}<span className="text-surface-500 font-normal">/{course.totalQuizzes}</span></span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button

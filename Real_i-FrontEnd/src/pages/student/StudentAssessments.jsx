@@ -91,7 +91,7 @@ export default function StudentAssessments() {
           <ClipboardList size={14} className="text-primary-400" />
           <span className="text-[11px] font-mono font-bold text-primary-400 uppercase tracking-widest">Assessments</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-surface-50 tracking-tight mb-2">
           My <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Assessments</span>
         </h1>
         <p className="text-surface-400 text-sm max-w-2xl">
@@ -112,7 +112,7 @@ export default function StudentAssessments() {
                 <stat.icon size={18} style={{ color: stat.color }} />
               </div>
               <div>
-                <p className="text-2xl font-extrabold text-white">{stat.value}</p>
+                <p className="text-2xl font-extrabold text-surface-50">{stat.value}</p>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-surface-400">{stat.label}</p>
               </div>
             </div>
@@ -125,7 +125,7 @@ export default function StudentAssessments() {
         <div className="flex gap-1.5 overflow-x-auto pb-1 sm:pb-0">
           {tabs.map(tab => (
             <button key={tab.value} onClick={() => setActiveTab(tab.value)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${activeTab === tab.value ? 'gradient-primary text-surface-950' : 'bg-surface-900/60 border border-surface-700/50 text-surface-400 hover:text-white'}`}>
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${activeTab === tab.value ? 'gradient-primary text-surface-950' : 'bg-surface-900/60 border border-surface-700/50 text-surface-400 hover:text-surface-50'}`}>
               {tab.label}
             </button>
           ))}
@@ -133,7 +133,7 @@ export default function StudentAssessments() {
         <div className="relative flex-1 sm:max-w-xs ml-auto">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-500" />
           <input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-900/60 border border-surface-700/50 text-sm text-white placeholder-surface-500 focus:outline-none focus:border-primary-500/50 transition-all" />
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-900/60 border border-surface-700/50 text-sm text-surface-50 placeholder-surface-500 focus:outline-none focus:border-primary-500/50 transition-all" />
         </div>
       </div>
 
@@ -141,7 +141,7 @@ export default function StudentAssessments() {
       {filtered.length === 0 ? (
         <div className="glass-card rounded-3xl border border-surface-700/50 p-16 text-center">
           <ClipboardList size={40} className="text-surface-600 mx-auto mb-4" />
-          <p className="text-lg font-bold text-white mb-1">No assessments found</p>
+          <p className="text-lg font-bold text-surface-50 mb-1">No assessments found</p>
           <p className="text-sm text-surface-400">{search ? 'Try a different search.' : 'Check back later for new assessments.'}</p>
         </div>
       ) : (
@@ -168,7 +168,7 @@ export default function StudentAssessments() {
                     )}
                   </div>
 
-                  <h3 className="text-sm font-bold text-white mb-2 group-hover:text-primary-300 transition-colors line-clamp-2">{a.title}</h3>
+                  <h3 className="text-sm font-bold text-surface-50 mb-2 group-hover:text-primary-300 transition-colors line-clamp-2">{a.title}</h3>
                   <p className="text-xs text-surface-500 line-clamp-2 mb-3">{a.description}</p>
 
                   <div className="flex flex-wrap gap-2 text-[10px]">
@@ -218,7 +218,7 @@ export default function StudentAssessments() {
                   {/* Action */}
                   {actionLink ? (
                     <Link to={actionLink} className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 ${
-                      a.submission ? 'bg-surface-800 border border-surface-700 text-surface-300 hover:text-white'
+                      a.submission ? 'bg-surface-800 border border-surface-700 text-surface-300 hover:text-surface-50'
                         : 'gradient-primary text-surface-950 shadow-[0_0_10px_rgba(212,175,55,0.2)]'
                     }`}>
                       {a.submission ? <Trophy size={12} /> : <ArrowRight size={12} />}

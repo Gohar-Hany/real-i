@@ -155,7 +155,7 @@ export default function AdminData() {
               Data Core Access
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 tracking-tight mb-3">
             Data <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-primary-500">Manager</span>
           </h1>
           <p className="text-surface-400 text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -173,7 +173,7 @@ export default function AdminData() {
             className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
               activeTab === tab.key
                 ? 'bg-blue-500/10 border border-blue-500/30 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]'
-                : 'border border-transparent text-surface-400 hover:text-white hover:bg-surface-800/50'
+                : 'border border-transparent text-surface-400 hover:text-surface-50 hover:bg-surface-800/50'
             }`}
           >
             {tab.label}
@@ -225,7 +225,7 @@ export default function AdminData() {
           <div className="flex gap-3 justify-end w-full">
             <button
               onClick={() => setShowAddModal(false)}
-              className="px-5 py-2.5 rounded-xl text-sm font-bold text-surface-400 bg-surface-800/50 border border-surface-700 hover:bg-surface-700 hover:text-white transition-all active:scale-95"
+              className="px-5 py-2.5 rounded-xl text-sm font-bold text-surface-400 bg-surface-800/50 border border-surface-700 hover:bg-surface-700 hover:text-surface-50 transition-all active:scale-95"
             >
               Cancel
             </button>
@@ -248,7 +248,7 @@ export default function AdminData() {
                 type="text"
                 value={newRow[col.key] || ''}
                 onChange={(e) => setNewRow(prev => ({ ...prev, [col.key]: e.target.value }))}
-                className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm text-white outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all shadow-inner placeholder-surface-600"
+                className="w-full px-4 py-3 rounded-xl bg-surface-950/80 border border-surface-800 text-sm text-surface-50 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all shadow-inner placeholder-surface-600"
                 placeholder={`Enter ${col.label.toLowerCase()}...`}
               />
             </div>

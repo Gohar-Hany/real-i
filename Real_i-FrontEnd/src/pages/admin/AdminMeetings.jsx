@@ -175,7 +175,7 @@ export default function AdminMeetings() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Live Classes & Meetings</h1>
+          <h1 className="text-2xl font-bold text-surface-50">Live Classes & Meetings</h1>
           <p className="text-sm text-surface-400">Manage, schedule, and launch your virtual classrooms</p>
         </div>
         <button 
@@ -201,14 +201,14 @@ export default function AdminMeetings() {
 
       {/* Meetings List */}
       <div className="glass-card rounded-2xl bg-surface-900/60 border border-surface-700/50 overflow-hidden">
-        <div className="p-5 border-b border-surface-700/50 flex justify-between items-center">
-          <h2 className="font-bold text-white">All Sessions</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 border-b border-surface-700/50 bg-surface-900/30">
+          <h2 className="font-bold text-surface-50">All Sessions</h2>
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" />
             <input 
               type="text" 
               placeholder="Search meetings..." 
-              className="pl-9 pr-4 py-2 bg-surface-950/50 border border-surface-700/50 rounded-lg text-sm focus:outline-none focus:border-primary-500/50 text-white w-64 transition-colors"
+              className="pl-9 pr-4 py-2 bg-surface-950/50 border border-surface-700/50 rounded-lg text-sm focus:outline-none focus:border-primary-500/50 text-surface-50 w-64 transition-colors"
             />
           </div>
         </div>
@@ -217,14 +217,14 @@ export default function AdminMeetings() {
           <div className="p-8 text-center text-surface-400">Loading meetings...</div>
         ) : meetings.length === 0 ? (
           <div className="p-16 text-center flex flex-col items-center justify-center">
-            <div className="w-20 h-20 bg-surface-800/50 rounded-full flex items-center justify-center mb-5 border border-surface-700/50">
-              <Video className="w-10 h-10 text-surface-400" />
+            <div className="w-16 h-16 mx-auto bg-surface-800 rounded-full flex items-center justify-center mb-4">
+              <Video className="w-8 h-8 text-surface-500" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">No meetings yet</h3>
-            <p className="text-surface-400 mb-8 max-w-sm">Create your first virtual classroom session to get started with live interactions.</p>
+            <h3 className="text-xl font-bold text-surface-50 mb-2">No meetings yet</h3>
+            <p className="text-surface-400 mb-6">Schedule your first live session to get started with live interactions.</p>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="px-6 py-2.5 bg-surface-800 hover:bg-surface-700 text-white border border-surface-600 rounded-lg font-medium transition-colors"
+              className="px-6 py-2.5 bg-surface-800 hover:bg-surface-700 text-surface-50 border border-surface-600 rounded-lg font-medium transition-colors"
             >
               Create Meeting
             </button>
@@ -254,7 +254,7 @@ export default function AdminMeetings() {
                           {meeting.status === 'live' ? <Radio className="w-5 h-5 animate-pulse" /> : <Video className="w-5 h-5" />}
                         </div>
                         <div>
-                          <div className="font-bold text-white text-base">{meeting.title}</div>
+                          <div className="font-bold text-surface-50 text-base">{meeting.title}</div>
                           <div className="text-xs text-surface-400 flex items-center gap-1.5 mt-1">
                             <Clock className="w-3 h-3" /> {meeting.expectedDurationMinutes} mins
                           </div>
@@ -295,7 +295,7 @@ export default function AdminMeetings() {
                           <>
                             <button 
                               onClick={() => handleLaunchMeeting(meeting)}
-                              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600/90 hover:bg-primary-500 text-white rounded-lg text-sm font-bold transition-colors shadow-lg"
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600/90 hover:bg-primary-500 text-surface-50 rounded-lg text-sm font-bold transition-colors shadow-lg"
                             >
                               <Play className="w-4 h-4" />
                               Launch
@@ -312,7 +312,7 @@ export default function AdminMeetings() {
                         {meeting.status === 'live' && (
                           <button 
                             onClick={() => handleLaunchMeeting(meeting)}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg text-sm font-bold transition-colors shadow-lg animate-pulse-soft"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-surface-50 rounded-lg text-sm font-bold transition-colors shadow-lg animate-pulse-soft"
                           >
                             <Play className="w-4 h-4" />
                             Join Live
@@ -321,7 +321,7 @@ export default function AdminMeetings() {
                         {meeting.status === 'ended' && (
                           <button 
                             onClick={() => viewReport(meeting)}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-surface-800 hover:bg-surface-700 text-white border border-surface-700 rounded-lg text-sm font-bold transition-colors shadow-sm"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-surface-800 hover:bg-surface-700 text-surface-50 border border-surface-700 rounded-lg text-sm font-bold transition-colors shadow-sm"
                           >
                             <BarChart className="w-4 h-4 text-primary-400" />
                             View Report
@@ -349,12 +349,12 @@ export default function AdminMeetings() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-surface-900 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden border border-surface-700/50 transform transition-all">
             <div className="flex items-center justify-between p-5 border-b border-surface-800 bg-surface-950/30 shrink-0">
-              <h3 className="text-xl font-bold text-white">
+              <h3 className="text-xl font-bold text-surface-50">
                 {editingMeetingId ? 'Edit Session' : 'Schedule New Session'}
               </h3>
               <button 
                 onClick={() => setShowCreateModal(false)}
-                className="p-1.5 text-surface-400 hover:text-white rounded-full hover:bg-surface-800 transition-colors"
+                className="p-1.5 text-surface-400 hover:text-surface-50 rounded-full hover:bg-surface-800 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -371,7 +371,7 @@ export default function AdminMeetings() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Advanced AI Integration Workshop"
-                  className="w-full px-4 py-3 bg-surface-950 border border-surface-700 rounded-xl focus:outline-none focus:border-primary-500 text-white placeholder-surface-500 transition-colors"
+                  className="w-full px-4 py-3 bg-surface-950 border border-surface-700 rounded-xl focus:outline-none focus:border-primary-500 text-surface-50 placeholder-surface-500 transition-colors"
                 />
               </div>
 
@@ -384,7 +384,7 @@ export default function AdminMeetings() {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="What will this session cover?"
                   rows={2}
-                  className="w-full px-4 py-3 bg-surface-950 border border-surface-700 rounded-xl focus:outline-none focus:border-primary-500 text-white placeholder-surface-500 transition-colors resize-none"
+                  className="w-full px-4 py-3 bg-surface-950 border border-surface-700 rounded-xl focus:outline-none focus:border-primary-500 text-surface-50 placeholder-surface-500 transition-colors resize-none"
                 />
               </div>
               
@@ -417,7 +417,7 @@ export default function AdminMeetings() {
                     value={roomName}
                     onChange={(e) => setRoomName(e.target.value.replace(/\s+/g, '-'))}
                     placeholder="Auto-generated"
-                    className="flex-1 px-4 py-3 bg-surface-950 border border-surface-700 rounded-r-xl focus:outline-none focus:border-primary-500 text-white placeholder-surface-600 transition-colors"
+                    className="flex-1 px-4 py-3 bg-surface-950 border border-surface-700 rounded-r-xl focus:outline-none focus:border-primary-500 text-surface-50 placeholder-surface-600 transition-colors"
                   />
                 </div>
                 <p className="mt-1.5 text-xs text-surface-500">Only letters, numbers, and dashes allowed.</p>
@@ -448,7 +448,7 @@ export default function AdminMeetings() {
                       required={scheduleType === 'scheduled'}
                       value={scheduledFor}
                       onChange={(e) => setScheduledFor(e.target.value)}
-                      className="w-full px-4 py-[11px] bg-surface-950 border border-surface-700 rounded-xl focus:outline-none focus:border-primary-500 text-white transition-colors"
+                      className="w-full px-4 py-[11px] bg-surface-950 border border-surface-700 rounded-xl focus:outline-none focus:border-primary-500 text-surface-50 transition-colors"
                     />
                   </div>
                 )}
@@ -478,7 +478,7 @@ export default function AdminMeetings() {
                   className="flex items-center justify-between p-4 rounded-xl border border-surface-700 bg-surface-950/50 hover:border-primary-500/30 transition-colors cursor-pointer group"
                 >
                   <div>
-                    <div className="text-sm font-bold text-white mb-0.5">Enable Lobby</div>
+                    <div className="text-sm font-bold text-surface-50 mb-0.5">Enable Lobby</div>
                     <div className="text-xs text-surface-500">Admit attendees manually</div>
                   </div>
                   <button
@@ -503,7 +503,7 @@ export default function AdminMeetings() {
                   className="flex items-center justify-between p-4 rounded-xl border border-surface-700 bg-surface-950/50 hover:border-primary-500/30 transition-colors cursor-pointer group"
                 >
                   <div>
-                    <div className="text-sm font-bold text-white mb-0.5">Auto-Record</div>
+                    <div className="text-sm font-bold text-surface-50 mb-0.5">Auto-Record</div>
                     <div className="text-xs text-surface-500">Record when host joins</div>
                   </div>
                   <button
@@ -528,7 +528,7 @@ export default function AdminMeetings() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-3 bg-surface-800 hover:bg-surface-700 text-white rounded-xl font-bold transition-colors"
+                  className="flex-1 px-4 py-3 bg-surface-800 hover:bg-surface-700 text-surface-50 rounded-xl font-bold transition-colors"
                 >
                   Cancel
                 </button>

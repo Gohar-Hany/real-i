@@ -152,7 +152,7 @@ export default function StudentPerformance() {
                   <Sparkles size={12} className="text-primary-400" />
                   <span className="text-[10px] font-mono font-bold text-primary-400 uppercase tracking-widest">Academic Report</span>
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-1">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-surface-50 tracking-tight mb-1">
                   My Performance Report
                 </h1>
                 <p className="text-surface-400 text-sm">
@@ -165,7 +165,7 @@ export default function StudentPerformance() {
             <div className="flex items-center gap-6 shrink-0">
               <div className="hidden sm:block text-right">
                 <p className="text-[10px] font-bold text-surface-500 uppercase tracking-widest mb-1">Current GPA</p>
-                <p className="text-4xl font-black text-white">{getLetterGrade(overallAvg)}</p>
+                <p className="text-4xl font-black text-surface-50">{getLetterGrade(overallAvg)}</p>
               </div>
               <div className="w-24 h-24 relative">
                 <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
@@ -173,7 +173,7 @@ export default function StudentPerformance() {
                   <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray={`${overallAvg}, 100`} className="text-primary-500" />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-xl font-black text-white">{overallAvg}%</span>
+                  <span className="text-xl font-black text-surface-50">{overallAvg}%</span>
                   <span className="text-[8px] uppercase tracking-widest text-surface-400 font-bold">Average</span>
                 </div>
               </div>
@@ -195,7 +195,7 @@ export default function StudentPerformance() {
               <div className={`w-11 h-11 rounded-xl ${s.bg} flex items-center justify-center shrink-0 transition-transform group-hover:scale-110`}>
                 <s.icon size={20} className={s.color} />
               </div>
-              <span className="text-2xl font-extrabold text-white tracking-tight">{s.value}</span>
+              <span className="text-2xl font-extrabold text-surface-50 tracking-tight">{s.value}</span>
             </div>
             <div>
               <p className="text-xs font-bold text-surface-300 uppercase tracking-wider">{s.label}</p>
@@ -214,7 +214,7 @@ export default function StudentPerformance() {
             className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
               activeTab === tab.id
                 ? 'gradient-primary text-surface-950 shadow-[0_0_15px_rgba(212,175,55,0.3)]'
-                : 'text-surface-400 hover:text-white hover:bg-surface-800/50'
+                : 'text-surface-400 hover:text-surface-50 hover:bg-surface-800/50'
             }`}
           >
             <tab.icon size={16} />
@@ -235,7 +235,7 @@ export default function StudentPerformance() {
                   <BarChart3 size={20} className="text-primary-400" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white">Grade Summary</h3>
+                  <h3 className="text-base font-bold text-surface-50">Grade Summary</h3>
                   <p className="text-[11px] text-surface-400">Performance across all assessments</p>
                 </div>
               </div>
@@ -248,7 +248,7 @@ export default function StudentPerformance() {
                   <div key={i}>
                     <div className="flex items-center justify-between mb-2">
                       <div>
-                        <span className="text-sm font-bold text-white">{item.label}</span>
+                        <span className="text-sm font-bold text-surface-50">{item.label}</span>
                         <span className="text-[10px] text-surface-500 ml-2">({item.count})</span>
                       </div>
                       <span className={`text-sm font-black text-${item.color === 'primary' ? 'primary' : item.color}-400`}>{item.value}%</span>
@@ -272,7 +272,7 @@ export default function StudentPerformance() {
                 <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
                   <Clock size={20} className="text-rose-400" />
                 </div>
-                <h3 className="text-base font-bold text-white">Upcoming</h3>
+                <h3 className="text-base font-bold text-surface-50">Upcoming</h3>
               </div>
               <div className="p-4 space-y-3">
                 {submissions.filter(s => s.status === 'submitted').length === 0 && (
@@ -280,7 +280,7 @@ export default function StudentPerformance() {
                 )}
                 {submissions.filter(s => s.status === 'submitted').map(s => (
                   <div key={s.id || s._id} className="p-4 rounded-2xl bg-surface-800/40 border border-surface-700">
-                    <p className="text-sm font-bold text-white mb-1">{s.assessment_title || 'Assessment'}</p>
+                    <p className="text-sm font-bold text-surface-50 mb-1">{s.assessment_title || 'Assessment'}</p>
                     <p className="text-[11px] text-surface-500 mb-2">Awaiting grade</p>
                     <div className="flex items-center gap-1.5 text-amber-400 text-[11px] font-bold">
                       <Clock size={12} />
@@ -310,7 +310,7 @@ export default function StudentPerformance() {
                     <GraduationCap size={20} className="text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-white">Enrolled Courses</h3>
+                    <h3 className="text-base font-bold text-surface-50">Enrolled Courses</h3>
                     <p className="text-[11px] text-surface-400">Your active learning tracks</p>
                   </div>
                 </div>
@@ -323,7 +323,7 @@ export default function StudentPerformance() {
                 {courseProgress.slice(0, 3).map(c => (
                   <div key={c.id} className="p-5 rounded-2xl bg-surface-800/40 border border-surface-700 hover:bg-surface-800/60 transition-colors group">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors">{c.title}</span>
+                      <span className="text-sm font-bold text-surface-50 group-hover:text-blue-300 transition-colors">{c.title}</span>
                       <span className="text-lg font-black text-blue-400">{c.grade}</span>
                     </div>
                     <div className="w-full h-2 bg-surface-800 rounded-full overflow-hidden border border-surface-700 mb-3">
@@ -346,7 +346,7 @@ export default function StudentPerformance() {
             {completedQuizzes.length === 0 ? (
               <div className="py-16 text-center glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60">
                 <AlertCircle size={40} className="text-surface-600 mx-auto mb-4" />
-                <p className="text-lg font-bold text-white mb-1">No Quizzes Completed Yet</p>
+                <p className="text-lg font-bold text-surface-50 mb-1">No Quizzes Completed Yet</p>
                 <p className="text-sm text-surface-400 mb-6">Start taking quizzes to see your performance here.</p>
                 <Link to="/student/quiz" className="inline-flex items-center gap-2 px-6 py-3 gradient-primary rounded-xl text-surface-950 text-sm font-bold shadow-[0_0_15px_rgba(212,175,55,0.3)]">
                   <BrainCircuit size={18} /> Take a Quiz
@@ -372,7 +372,7 @@ export default function StudentPerformance() {
                           <span className={`text-lg font-black ${passed ? 'text-emerald-400' : 'text-rose-400'}`}>{pct}%</span>
                         </div>
                         <div>
-                          <p className="text-base font-bold text-white mb-1">Quiz #{result.task_id || (idx + 1)}</p>
+                          <p className="text-base font-bold text-surface-50 mb-1">Quiz #{result.task_id || (idx + 1)}</p>
                           <div className="flex items-center gap-3 text-[11px] font-bold text-surface-400">
                             <span className={passed ? 'text-emerald-400' : 'text-rose-400'}>{result.score}/{result.total} Correct</span>
                             <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${passed ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`}>
@@ -401,7 +401,7 @@ export default function StudentPerformance() {
                                 {a.isCorrect ? <CheckCircle size={14} /> : <XCircle size={14} />}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-bold text-white mb-2">
+                                <p className="text-sm font-bold text-surface-50 mb-2">
                                   <span className="text-surface-500 font-mono mr-2">Q{qi + 1}.</span>
                                   {a.question}
                                 </p>
@@ -451,7 +451,7 @@ export default function StudentPerformance() {
                   {submissions.map(s => (
                     <tr key={s.id || s._id} className="hover:bg-surface-800/30 transition-colors">
                       <td className="px-6 py-4">
-                        <p className="font-bold text-white">{s.assessment_title || 'Assessment'}</p>
+                        <p className="font-bold text-surface-50">{s.assessment_title || 'Assessment'}</p>
                       </td>
                       <td className="px-6 py-4 hidden md:table-cell">
                         <span className="text-surface-400 text-xs">{s.course_title || '—'}</span>
@@ -472,9 +472,9 @@ export default function StudentPerformance() {
                       </td>
                       <td className="px-6 py-4 text-right">
                         {s.score != null ? (
-                          <span className="text-lg font-black text-white">{s.score}<span className="text-surface-500 text-xs font-medium">/{s.total_marks || 100}</span></span>
+                          <span className="text-lg font-black text-surface-50">{s.score}<span className="text-surface-500 text-xs font-medium">/{s.total_marks || 100}</span></span>
                         ) : s.percentage != null ? (
-                          <span className="text-lg font-black text-white">{s.percentage}%</span>
+                          <span className="text-lg font-black text-surface-50">{s.percentage}%</span>
                         ) : (
                           <span className="text-surface-500 text-xs">—</span>
                         )}
@@ -495,7 +495,7 @@ export default function StudentPerformance() {
               <div key={c.id} className="glass-card rounded-2xl border border-surface-700/50 bg-surface-900/60 p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                   <div>
-                    <h3 className="text-lg font-bold text-white mb-1">{c.title}</h3>
+                    <h3 className="text-lg font-bold text-surface-50 mb-1">{c.title}</h3>
                     <p className="text-[11px] text-surface-500">Last accessed: {c.lastAccessed}</p>
                   </div>
                   <div className="flex items-center gap-4">
@@ -509,7 +509,7 @@ export default function StudentPerformance() {
                         <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray={`${c.progress}, 100`} className="text-blue-400" />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xs font-black text-white">{c.progress}%</span>
+                        <span className="text-xs font-black text-surface-50">{c.progress}%</span>
                       </div>
                     </div>
                   </div>

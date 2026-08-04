@@ -114,11 +114,11 @@ export default function StudentCourseLearning() {
       {/* ── Top Navigation Bar ── */}
       <header className="h-16 shrink-0 bg-surface-900 border-b border-surface-800 flex items-center justify-between px-4 z-20">
         <div className="flex items-center gap-4">
-          <Link to="/student/courses" className="p-2 text-surface-400 hover:text-white bg-surface-800 rounded-lg transition-colors">
+          <Link to="/student/courses" className="p-2 text-surface-400 hover:text-surface-50 bg-surface-800 rounded-lg transition-colors">
             <ArrowLeft size={18} />
           </Link>
           <div className="hidden sm:block">
-            <h1 className="text-sm font-bold text-white truncate max-w-md">{course.title}</h1>
+            <h1 className="text-sm font-bold text-surface-50 truncate max-w-md">{course.title}</h1>
             <p className="text-xs text-primary-400">{currentLesson?.title}</p>
           </div>
         </div>
@@ -135,7 +135,7 @@ export default function StudentCourseLearning() {
             <span className="text-xs font-bold text-surface-300">{progressPercent}%</span>
           </div>
 
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 text-white bg-surface-800 rounded-lg">
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 text-surface-50 bg-surface-800 rounded-lg">
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
@@ -164,14 +164,14 @@ export default function StudentCourseLearning() {
 
                 {/* Player Controls Placeholder */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 z-20 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity translate-y-4 group-hover:translate-y-0">
-                  <div className="flex items-center gap-4 text-white">
+                  <div className="flex items-center gap-4 text-surface-50">
                     <Play size={20} className="hover:text-primary-400 cursor-pointer" />
                     <span className="text-xs font-mono">02:14 / {currentLesson.duration}</span>
                   </div>
                   <div className="w-full max-w-md mx-4 h-1 bg-surface-600 rounded-full cursor-pointer relative">
                     <div className="absolute left-0 top-0 bottom-0 w-1/3 bg-primary-500 rounded-full shadow-[0_0_10px_rgba(212,175,55,0.5)]"></div>
                   </div>
-                  <div className="flex items-center gap-3 text-white">
+                  <div className="flex items-center gap-3 text-surface-50">
                     <Settings size={18} className="hover:text-primary-400 cursor-pointer" />
                     <Maximize size={18} className="hover:text-primary-400 cursor-pointer" />
                   </div>
@@ -181,7 +181,7 @@ export default function StudentCourseLearning() {
               {/* Lesson Details & Actions */}
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 bg-surface-900/60 p-6 rounded-2xl border border-surface-800">
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-2">{currentLesson.title}</h2>
+                  <h2 className="text-2xl font-bold text-surface-50 mb-2">{currentLesson.title}</h2>
                   <p className="text-sm text-surface-400 flex items-center gap-2">
                     <BookOpen size={14} /> Module {activeModuleIndex + 1}: {currentModule.title}
                   </p>
@@ -205,14 +205,14 @@ export default function StudentCourseLearning() {
                 <button
                   onClick={handlePrev}
                   disabled={!hasPrevLesson}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-surface-800 text-surface-300 font-medium hover:bg-surface-700 hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-surface-800 text-surface-300 font-medium hover:bg-surface-700 hover:text-surface-50 transition-colors disabled:opacity-30 disabled:pointer-events-none"
                 >
                   <ChevronLeft size={16} /> Previous Lesson
                 </button>
                 <button
                   onClick={handleNext}
                   disabled={!hasNextLesson}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-surface-800 text-surface-300 font-medium hover:bg-surface-700 hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-surface-800 text-surface-300 font-medium hover:bg-surface-700 hover:text-surface-50 transition-colors disabled:opacity-30 disabled:pointer-events-none"
                 >
                    Next Lesson <ChevronRight size={16} />
                 </button>
@@ -222,7 +222,7 @@ export default function StudentCourseLearning() {
           ) : (
             <div className="flex-1 flex items-center justify-center">
               <p className="text-surface-500 font-bold mb-4">No content has been added to this course yet.</p>
-              <Link to="/student/courses" className="px-6 py-2.5 bg-surface-800 rounded-xl text-white hover:bg-surface-700 transition-colors">
+              <Link to="/student/courses" className="px-6 py-2.5 bg-surface-800 rounded-xl text-surface-50 hover:bg-surface-700 transition-colors">
                 Back to Dashboard
               </Link>
             </div>
@@ -232,7 +232,7 @@ export default function StudentCourseLearning() {
         {/* ── Right Sidebar (Syllabus) ── */}
         <aside className={`absolute lg:static inset-y-0 right-0 w-80 bg-surface-900 border-l border-surface-800 z-10 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'} flex flex-col`}>
           <div className="p-4 border-b border-surface-800 flex items-center justify-between">
-            <h3 className="font-bold text-white">Course Content</h3>
+            <h3 className="font-bold text-surface-50">Course Content</h3>
             <span className="text-xs font-bold text-primary-400 bg-primary-500/10 px-2 py-1 rounded-md">
               {completedLessons.length}/{totalLessons}
             </span>
@@ -275,7 +275,7 @@ export default function StudentCourseLearning() {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className={`text-sm ${isActive ? 'text-white font-bold' : 'text-surface-300'} leading-tight`}>
+                          <p className={`text-sm ${isActive ? 'text-surface-50 font-bold' : 'text-surface-300'} leading-tight`}>
                             {lesson.title}
                           </p>
                           <div className="flex items-center gap-3 mt-1.5 text-[10px] text-surface-500 font-medium uppercase tracking-wider">

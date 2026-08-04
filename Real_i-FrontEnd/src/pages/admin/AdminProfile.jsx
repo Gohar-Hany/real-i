@@ -92,7 +92,7 @@ export default function AdminProfile() {
               Security Clearance: Level 5
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 tracking-tight mb-3">
             System <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Identity</span>
           </h1>
           <p className="text-surface-400 text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -117,7 +117,7 @@ export default function AdminProfile() {
                 
                 {/* Upload Overlay */}
                 <div onClick={() => fileInputRef.current?.click()} className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
-                  <Camera size={24} className="text-white" />
+                  <Camera size={24} className="text-surface-50" />
                 </div>
               </div>
               <button 
@@ -137,7 +137,7 @@ export default function AdminProfile() {
               />
             </div>
 
-            <h3 className="text-xl font-black text-white mb-1 relative z-10">{formData.name}</h3>
+            <h3 className="text-xl font-black text-surface-50 mb-1 relative z-10">{formData.name}</h3>
             <p className="text-sm font-medium text-surface-400 mb-4 relative z-10">{formData.email}</p>
             
             <span className="inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest bg-amber-500/10 text-amber-400 border border-amber-500/30 relative z-10">
@@ -151,11 +151,11 @@ export default function AdminProfile() {
             <div className="space-y-4">
               <div className="flex justify-between items-center pb-3 border-b border-surface-800">
                 <span className="text-sm text-surface-500 font-medium">Last Login</span>
-                <span className="text-sm text-white font-mono">Today, Just now</span>
+                <span className="text-sm text-surface-50 font-mono">Today, Just now</span>
               </div>
               <div className="flex justify-between items-center pb-3 border-b border-surface-800">
                 <span className="text-sm text-surface-500 font-medium">IP Address</span>
-                <span className="text-sm text-white font-mono">Secured</span>
+                <span className="text-sm text-surface-50 font-mono">Secured</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-surface-500 font-medium">Role</span>
@@ -172,7 +172,7 @@ export default function AdminProfile() {
               
               {/* Personal Information */}
               <div>
-                <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-surface-50 mb-6 flex items-center gap-2">
                   <User size={18} className="text-primary-400" />
                   Personal Details
                 </h3>
@@ -190,7 +190,7 @@ export default function AdminProfile() {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full bg-surface-800 border border-surface-700 rounded-xl pl-11 pr-4 py-3 text-white focus:border-primary-500 outline-none transition-colors"
+                        className="w-full bg-surface-800 border border-surface-700 rounded-xl pl-11 pr-4 py-3 text-surface-50 focus:border-primary-500 outline-none transition-colors"
                         required
                       />
                     </div>
@@ -221,7 +221,7 @@ export default function AdminProfile() {
 
               {/* Password Management */}
               <div>
-                <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-surface-50 mb-6 flex items-center gap-2">
                   <Key size={18} className="text-primary-400" />
                   Security
                 </h3>
@@ -237,7 +237,7 @@ export default function AdminProfile() {
                         value={formData.newPassword}
                         onChange={handleChange}
                         placeholder="Leave blank to keep current"
-                        className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-white focus:border-primary-500 outline-none transition-colors"
+                        className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-surface-50 focus:border-primary-500 outline-none transition-colors"
                       />
                     </div>
                     <div>
@@ -250,7 +250,7 @@ export default function AdminProfile() {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         placeholder="Confirm new password"
-                        className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-white focus:border-primary-500 outline-none transition-colors"
+                        className="w-full bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-surface-50 focus:border-primary-500 outline-none transition-colors"
                       />
                     </div>
                   </div>
@@ -262,7 +262,7 @@ export default function AdminProfile() {
             <div className="px-6 py-5 border-t border-surface-700/50 bg-surface-800/30 flex justify-end gap-3">
               <button
                 type="button"
-                className="px-6 py-2.5 rounded-xl font-bold text-surface-400 hover:text-white hover:bg-surface-800 transition-colors"
+                className="px-6 py-2.5 rounded-xl font-bold text-surface-400 hover:text-surface-50 hover:bg-surface-800 transition-colors"
               >
                 Cancel
               </button>

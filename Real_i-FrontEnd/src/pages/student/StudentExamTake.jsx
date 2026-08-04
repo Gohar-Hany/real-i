@@ -120,7 +120,7 @@ export default function StudentExamTake() {
     return (
       <div className="flex flex-col items-center justify-center py-32 animate-fade-in-up">
         <AlertTriangle size={48} className="text-surface-600 mb-4" />
-        <p className="text-xl font-bold text-white mb-2">Assessment Not Found</p>
+        <p className="text-xl font-bold text-surface-50 mb-2">Assessment Not Found</p>
         <button onClick={() => navigate('/student/assessments')} className="text-sm text-primary-400 font-bold">← Back</button>
       </div>
     );
@@ -135,7 +135,7 @@ export default function StudentExamTake() {
           <div className="w-20 h-20 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(212,175,55,0.2)]">
             <BrainCircuit size={36} className="text-surface-950" />
           </div>
-          <h1 className="text-2xl font-extrabold text-white mb-2">{assessment.title}</h1>
+          <h1 className="text-2xl font-extrabold text-surface-50 mb-2">{assessment.title}</h1>
           <p className="text-sm text-surface-400 mb-8 max-w-md mx-auto">{assessment.description}</p>
 
           <div className="flex flex-wrap justify-center gap-3 mb-8">
@@ -180,7 +180,7 @@ export default function StudentExamTake() {
           <div className="flex items-end justify-between mb-3">
             <div>
               <p className="text-xs font-mono text-primary-400 font-bold uppercase tracking-widest mb-1">{assessment.title}</p>
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold text-surface-50">
                 Question <span className="text-primary-400">{currentQ + 1}</span> <span className="text-surface-500 text-lg">/ {questions.length}</span>
               </h2>
             </div>
@@ -197,7 +197,7 @@ export default function StudentExamTake() {
               )}
               <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-surface-900 border border-surface-700">
                 <Target size={14} className="text-emerald-400" />
-                <span className="text-xs font-bold text-white">{answeredCount}/{questions.length}</span>
+                <span className="text-xs font-bold text-surface-50">{answeredCount}/{questions.length}</span>
               </div>
             </div>
           </div>
@@ -213,7 +213,7 @@ export default function StudentExamTake() {
               className={`w-8 h-8 rounded-lg text-[10px] font-bold transition-all ${
                 i === currentQ ? 'gradient-primary text-surface-950 shadow-[0_0_8px_rgba(212,175,55,0.3)]' :
                 answers[i] !== undefined ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-400' :
-                'bg-surface-800 border border-surface-700 text-surface-400 hover:text-white'
+                'bg-surface-800 border border-surface-700 text-surface-400 hover:text-surface-50'
               }`}>
               {i + 1}
             </button>
@@ -225,7 +225,7 @@ export default function StudentExamTake() {
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] font-bold text-surface-500 uppercase tracking-wider">Q{currentQ + 1} · {question.marks} marks</span>
           </div>
-          <h3 className="text-lg sm:text-xl font-bold text-white mb-6 leading-relaxed">{question.text}</h3>
+          <h3 className="text-lg sm:text-xl font-bold text-surface-50 mb-6 leading-relaxed">{question.text}</h3>
 
           <div className="space-y-3">
             {question.options.map((opt, oIdx) => {
@@ -277,9 +277,9 @@ export default function StudentExamTake() {
             <div className="w-16 h-16 rounded-2xl bg-primary-500/10 border border-primary-500/20 flex items-center justify-center mx-auto mb-5">
               <Send size={28} className="text-primary-400" />
             </div>
-            <h3 className="text-xl font-extrabold text-white text-center mb-2">Submit Exam?</h3>
+            <h3 className="text-xl font-extrabold text-surface-50 text-center mb-2">Submit Exam?</h3>
             <p className="text-sm text-surface-400 text-center mb-2">
-              You've answered <strong className="text-white">{answeredCount}</strong> of <strong className="text-white">{questions.length}</strong> questions.
+              You've answered <strong className="text-surface-50">{answeredCount}</strong> of <strong className="text-surface-50">{questions.length}</strong> questions.
             </p>
             {answeredCount < questions.length && (
               <p className="text-xs text-amber-400 text-center mb-4 flex items-center justify-center gap-1">

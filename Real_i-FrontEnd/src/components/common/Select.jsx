@@ -164,13 +164,13 @@ export default function Select({
           onClick={handleToggle}
           className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border text-sm font-medium outline-none transition-all duration-300 
             ${isOpen 
-              ? 'bg-surface-900 border-primary-500/60 ring-4 ring-primary-500/10 text-white shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
+              ? 'bg-surface-900 border-primary-500/60 ring-4 ring-primary-500/10 text-surface-50 shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
               : 'bg-surface-950/80 border-surface-800 text-surface-200 hover:border-surface-600 hover:bg-surface-900 shadow-inner'
             }
             ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer'}
           `}
         >
-          <span className={`transition-colors duration-300 ${!selectedOption ? 'text-surface-500' : 'text-white'} flex items-center gap-2`}>
+          <span className={`transition-colors duration-300 ${!selectedOption ? 'text-surface-500' : 'text-surface-50'} flex items-center gap-2`}>
             {selectedOption && <span className="w-1.5 h-1.5 rounded-full bg-primary-400 shadow-[0_0_8px_rgba(212,175,55,0.8)]"></span>}
             {selectedOption ? selectedOption.label : placeholder}
           </span>
@@ -217,7 +217,7 @@ export default function Select({
                     className={`relative flex items-center justify-between px-4 py-3 rounded-lg text-sm cursor-pointer transition-all duration-300 group/item overflow-hidden mb-1 last:mb-0
                       ${isSelected 
                         ? 'text-primary-400 font-bold' 
-                        : 'text-surface-300 hover:text-white'
+                        : 'text-surface-300 hover:text-surface-50'
                       }
                     `}
                   >
