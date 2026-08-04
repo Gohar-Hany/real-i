@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAssessments } from '@/contexts/AssessmentContext';
-import { getEvents, createEvent, deleteEvent } from '@/services/api';
+import { api, getEvents, createEvent, deleteEvent } from '@/services/api';
 import CalendarWidget, { TYPE_CONFIG } from '@/components/common/CalendarWidget';
 import {
   CalendarDays, Plus, X, Save, Clock, Bell, Trash2, Filter
@@ -11,6 +11,7 @@ export default function AdminCalendar() {
   const { assessments, fetchAssessments } = useAssessments();
   const toast = useToast();
   const [customEvents, setCustomEvents] = useState([]);
+  const [meetings, setMeetings] = useState([]);
   
   // Custom Event Modal
   const [showModal, setShowModal] = useState(false);
@@ -32,9 +33,23 @@ export default function AdminCalendar() {
       .catch(() => setCustomEvents([]));
   };
 
-  useEffect(() => { fetchCustomEvents(); }, []);
+  const fetchMeetings = async () => {
+    try {
+      const response = await api.get('/meetings');
+      if (response.success) {
+        setMeetings(response.meetings || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch meetings', err);
+    }
+  };
 
-  // Build calendar events from assessments + custom events
+  useEffect(() => { 
+    fetchCustomEvents(); 
+    fetchMeetings();
+  }, []);
+
+  // Build calendar events from assessments + custom events + meetings
   const calendarEvents = useMemo(() => {
     const events = [];
 
@@ -83,8 +98,26 @@ export default function AdminCalendar() {
       });
     });
 
+    meetings.forEach(m => {
+      if (m.scheduledFor) {
+        events.push({
+          id: m._id,
+          title: m.title,
+          date: new Date(m.scheduledFor),
+          type: 'meeting',
+          description: `Duration: ${m.expectedDurationMinutes} mins. Room: ${m.roomName}`,
+          link: `/admin/live?roomName=${encodeURIComponent(m.roomName)}`,
+          linkLabel: m.status === 'live' ? 'Join Live Now' : 'Launch Session',
+          meta: [
+            m.status === 'live' ? 'LIVE' : m.status,
+            `${m.expectedDurationMinutes}m`,
+          ],
+        });
+      }
+    });
+
     return events;
-  }, [assessments, customEvents]);
+  }, [assessments, customEvents, meetings]);
 
   const handleAddEvent = async () => {
     if (!newEvent.title.trim() || !newEvent.date) return;

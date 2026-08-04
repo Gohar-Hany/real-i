@@ -1,7 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { getProjects, getAssignedQuizzes, getCompletedQuizzes } from '@/services/api';
+import { api, getProjects, getAssignedQuizzes, getCompletedQuizzes } from '@/services/api';
 import {
   MessageSquare, BrainCircuit, BookOpen, Sparkles, ArrowRight,
   GraduationCap, Trophy, Target, TrendingUp, Zap,
@@ -16,6 +16,7 @@ export default function StudentDashboard() {
   const [assignedQuizzes, setAssignedQuizzes] = useState([]);
   const [projectsData, setProjectsData] = useState([]);
   const [completedQuizzes, setCompletedQuizzes] = useState([]);
+  const [meetings, setMeetings] = useState([]);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -66,6 +67,15 @@ export default function StudentDashboard() {
         }
       } catch (err) {
         console.error('Failed to load data', err);
+      }
+
+      try {
+        const response = await api.get('/meetings');
+        if (response.success) {
+          setMeetings(response.meetings || []);
+        }
+      } catch (err) {
+        console.error('Failed to load meetings', err);
       }
     };
     if (user) fetchAll();
@@ -229,6 +239,61 @@ export default function StudentDashboard() {
             )}
           </div>
         </div>
+
+        {/* Live Classes Widget */}
+        {meetings.filter(m => m.status === 'live' || m.status === 'scheduled').length > 0 && (
+          <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden relative">
+            {meetings.some(m => m.status === 'live') && (
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500/0 via-red-500 to-red-500/0 opacity-70"></div>
+            )}
+            <div className="p-6 border-b border-surface-800 bg-surface-900/80 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${
+                  meetings.some(m => m.status === 'live') 
+                    ? 'bg-red-500/10 border-red-500/20' 
+                    : 'bg-primary-500/10 border-primary-500/20'
+                }`}>
+                  <Zap size={16} className={meetings.some(m => m.status === 'live') ? 'text-red-400' : 'text-primary-400'} />
+                </div>
+                <h3 className="text-sm font-bold text-white">Live Classes</h3>
+              </div>
+              <Link to="/student/calendar" className="text-[10px] text-primary-400 font-bold hover:text-primary-300 uppercase tracking-wider flex items-center gap-1">
+                Schedule <ChevronRight size={12} />
+              </Link>
+            </div>
+            <div className="p-4 space-y-2">
+              {meetings
+                .filter(m => m.status === 'live' || m.status === 'scheduled')
+                .map((meeting, i) => (
+                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-surface-800/30 border border-surface-700/50 hover:bg-surface-800/60 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-surface-900 flex items-center justify-center border border-surface-700 shrink-0">
+                      <Target size={18} className="text-surface-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-white">{meeting.title}</p>
+                      <p className="text-xs text-surface-400">
+                        {meeting.status === 'live' 
+                          ? <span className="text-red-400 font-bold flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>Live Now</span>
+                          : meeting.scheduledFor ? new Date(meeting.scheduledFor).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Scheduled'}
+                      </p>
+                    </div>
+                  </div>
+                  <Link
+                    to={`/student/live?roomName=${encodeURIComponent(meeting.roomName)}`}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-lg ${
+                      meeting.status === 'live'
+                        ? 'bg-red-600 hover:bg-red-500 text-white animate-pulse-soft'
+                        : 'bg-primary-600 hover:bg-primary-500 text-white'
+                    }`}
+                  >
+                    Join
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Continue Learning — Real API Data */}
         <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">

@@ -12,6 +12,7 @@ export const TYPE_CONFIG = {
   assignment: { label: 'Assignment', icon: FileText, color: '#3B82F6', bg: 'bg-blue-500/10', border: 'border-blue-500/20', text: 'text-blue-400' },
   task: { label: 'Task', icon: CheckSquare, color: '#10B981', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', text: 'text-emerald-400' },
   custom: { label: 'Event', icon: Bell, color: '#F59E0B', bg: 'bg-amber-500/10', border: 'border-amber-500/20', text: 'text-amber-400' },
+  meeting: { label: 'Live Class', icon: Target, color: '#0EA5E9', bg: 'bg-sky-500/10', border: 'border-sky-500/20', text: 'text-sky-400' },
   start: { label: 'Start', icon: Clock, color: '#06B6D4', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20', text: 'text-cyan-400' },
   deadline: { label: 'Deadline', icon: AlertTriangle, color: '#F97316', bg: 'bg-orange-500/10', border: 'border-orange-500/20', text: 'text-orange-400' },
 };

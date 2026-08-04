@@ -1,26 +1,43 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAssessments } from '@/contexts/AssessmentContext';
-import { getEvents } from '@/services/api';
+import { api, getEvents } from '@/services/api';
 import CalendarWidget, { TYPE_CONFIG } from '@/components/common/CalendarWidget';
 import { Clock, CalendarDays, Filter } from 'lucide-react';
 
 export default function StudentCalendar() {
   const { assessments, fetchAssessments } = useAssessments();
   const [customEvents, setCustomEvents] = useState([]);
+  const [meetings, setMeetings] = useState([]);
   
   const [filters, setFilters] = useState({
-    quiz: true, exam: true, assignment: true, task: true, custom: true
+    quiz: true, exam: true, assignment: true, task: true, custom: true, meeting: true
   });
 
   useEffect(() => { fetchAssessments(); }, [fetchAssessments]);
 
-  useEffect(() => {
+  const fetchCustomEvents = () => {
     getEvents()
       .then(data => {
         const custom = (Array.isArray(data) ? data : []).filter(e => !e.is_auto);
         setCustomEvents(custom);
       })
       .catch(() => setCustomEvents([]));
+  };
+
+  const fetchMeetings = async () => {
+    try {
+      const response = await api.get('/meetings');
+      if (response.success) {
+        setMeetings(response.meetings || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch meetings', err);
+    }
+  };
+
+  useEffect(() => { 
+    fetchCustomEvents(); 
+    fetchMeetings();
   }, []);
 
   const calendarEvents = useMemo(() => {
@@ -72,8 +89,26 @@ export default function StudentCalendar() {
       });
     });
 
+    meetings.forEach(m => {
+      if (m.scheduledFor) {
+        events.push({
+          id: m._id,
+          title: m.title,
+          date: new Date(m.scheduledFor),
+          type: 'meeting',
+          description: `Duration: ${m.expectedDurationMinutes} mins. Room: ${m.roomName}`,
+          link: `/student/live?roomName=${encodeURIComponent(m.roomName)}`,
+          linkLabel: m.status === 'live' ? 'Join Live Now' : 'Join Session',
+          meta: [
+            m.status === 'live' ? 'LIVE' : m.status,
+            `${m.expectedDurationMinutes}m`,
+          ],
+        });
+      }
+    });
+
     return events;
-  }, [assessments, customEvents]);
+  }, [assessments, customEvents, meetings]);
 
   const toggleFilter = (type) => {
     setFilters(prev => ({ ...prev, [type]: !prev[type] }));
@@ -95,7 +130,7 @@ export default function StudentCalendar() {
               <Filter size={14} /> Filter Calendar
             </h3>
             <div className="space-y-3">
-              {['quiz', 'exam', 'assignment', 'task', 'custom'].map(type => {
+              {['quiz', 'exam', 'assignment', 'task', 'custom', 'meeting'].map(type => {
                 const conf = TYPE_CONFIG[type];
                 if(!conf) return null;
                 const Icon = conf.icon;

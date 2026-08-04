@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Video, Plus, Play, Calendar, Clock, Search, 
-  Users, MoreVertical, X, CheckCircle, Radio
+  Users, MoreVertical, X, CheckCircle, Radio, BarChart, Edit3, Trash2
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { api } from '@/services/api';
+import { api, getCourses } from '@/services/api';
+import Select from '@/components/common/Select';
 
 export default function AdminMeetings() {
   const navigate = useNavigate();
@@ -19,17 +20,40 @@ export default function AdminMeetings() {
   const [title, setTitle] = useState('');
   const [roomName, setRoomName] = useState('');
   const [duration, setDuration] = useState(60);
+  const [scheduleType, setScheduleType] = useState('immediate');
+  const [scheduledFor, setScheduledFor] = useState('');
+  
+  // New Enterprise Fields
+  const [description, setDescription] = useState('');
+  const [courseId, setCourseId] = useState('');
+  const [lobbyEnabled, setLobbyEnabled] = useState(false);
+  const [autoRecord, setAutoRecord] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [editingMeetingId, setEditingMeetingId] = useState(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     fetchMeetings();
+    fetchCourses();
   }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const data = await getCourses();
+      if (Array.isArray(data)) {
+        setCourses(data);
+      }
+    } catch (err) {
+      console.error('Failed to load courses', err);
+    }
+  };
 
   const fetchMeetings = async () => {
     try {
-      const response = await api.get('/api/meetings');
-      if (response.data.success) {
-        setMeetings(response.data.meetings);
+      const response = await api.get('/meetings');
+      if (response.success) {
+        setMeetings(response.meetings);
       }
     } catch (err) {
       console.error('Failed to fetch meetings', err);
@@ -51,30 +75,90 @@ export default function AdminMeetings() {
       // Prefix with REAL_i- if user typed custom but didn't include it
       const formattedRoomName = finalRoomName.startsWith('REAL_i-') ? finalRoomName : `REAL_i-${finalRoomName}`;
       
-      const response = await api.post('/api/meetings', {
+      const body = {
         title,
         roomName: formattedRoomName,
-        expectedDurationMinutes: parseInt(duration, 10)
-      });
+        expectedDurationMinutes: parseInt(duration, 10),
+        status: scheduleType === 'immediate' ? 'live' : 'scheduled',
+        scheduledFor: scheduleType === 'scheduled' && scheduledFor ? scheduledFor : undefined,
+        description,
+        courseId: courseId || undefined,
+        lobbyEnabled,
+        autoRecord
+      };
       
-      if (response.data.success) {
+      let response;
+      if (editingMeetingId) {
+        response = await api.put(`/meetings/${editingMeetingId}`, body);
+      } else {
+        response = await api.post('/meetings', body);
+      }
+      
+      if (response.success) {
         setShowCreateModal(false);
         setTitle('');
         setRoomName('');
         setDuration(60);
+        setScheduleType('immediate');
+        setScheduledFor('');
+        setDescription('');
+        setCourseId('');
+        setLobbyEnabled(false);
+        setAutoRecord(false);
+        setEditingMeetingId(null);
         fetchMeetings();
+
+        if (scheduleType === 'immediate') {
+          navigate(`/admin/live?roomName=${encodeURIComponent(formattedRoomName)}`);
+        }
       }
     } catch (err) {
-      console.error('Failed to create meeting', err);
+      console.error('Failed to create/update meeting', err);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleEdit = (meeting) => {
+    setEditingMeetingId(meeting._id);
+    setTitle(meeting.title || '');
+    setRoomName(meeting.roomName ? meeting.roomName.replace(/^REAL_i-/, '') : '');
+    setDuration(meeting.expectedDurationMinutes || 60);
+    setDescription(meeting.description || '');
+    setCourseId(meeting.courseId || '');
+    setLobbyEnabled(!!meeting.lobbyEnabled);
+    setAutoRecord(!!meeting.autoRecord);
+    setScheduleType(meeting.status === 'scheduled' ? 'scheduled' : 'immediate');
+    
+    if (meeting.scheduledFor) {
+      // Format date for datetime-local input
+      const date = new Date(meeting.scheduledFor);
+      date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+      setScheduledFor(date.toISOString().slice(0, 16));
+    } else {
+      setScheduledFor('');
+    }
+    
+    setShowCreateModal(true);
+  };
+
+  const handleDelete = async (meetingId) => {
+    if (!window.confirm('Are you sure you want to delete this session? This action cannot be undone.')) return;
+    try {
+      const response = await api.delete(`/meetings/${meetingId}`);
+      if (response.success) {
+        setMeetings(prev => prev.filter(m => m._id !== meetingId));
+      }
+    } catch (err) {
+      console.error('Failed to delete meeting', err);
+      alert('Failed to delete the session. Please try again.');
     }
   };
 
   const handleLaunchMeeting = async (meeting) => {
     if (meeting.status === 'scheduled') {
       try {
-        await api.put(`/api/meetings/${meeting._id}/launch`);
+        await api.put(`/meetings/${meeting._id}/launch`);
       } catch (err) {
         console.error('Failed to launch meeting', err);
       }
@@ -83,48 +167,64 @@ export default function AdminMeetings() {
     navigate(`/admin/live?roomName=${encodeURIComponent(meeting.roomName)}`);
   };
 
+  const viewReport = (meeting) => {
+    alert(`Analytics report for "${meeting.title}" will be generated soon. This will include attendance tracking, engagement metrics, and session recordings.`);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Live Classes & Meetings</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Manage, schedule, and launch your virtual classrooms</p>
+          <h1 className="text-2xl font-bold text-white">Live Classes & Meetings</h1>
+          <p className="text-sm text-surface-400">Manage, schedule, and launch your virtual classrooms</p>
         </div>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors shadow-sm"
+        <button 
+          onClick={() => {
+            setEditingMeetingId(null);
+            setTitle('');
+            setRoomName('');
+            setDuration(60);
+            setScheduleType('immediate');
+            setScheduledFor('');
+            setDescription('');
+            setCourseId('');
+            setLobbyEnabled(false);
+            setAutoRecord(false);
+            setShowCreateModal(true);
+          }}
+          className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-primary-500/20"
         >
           <Plus className="w-5 h-5" />
-          <span>New Meeting</span>
+          <span className="hidden sm:inline">Schedule Session</span>
         </button>
       </div>
 
       {/* Meetings List */}
-      <div className="bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-xl shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-gray-200 dark:border-dark-border flex justify-between items-center">
-          <h2 className="font-semibold text-gray-900 dark:text-white">All Sessions</h2>
+      <div className="glass-card rounded-2xl bg-surface-900/60 border border-surface-700/50 overflow-hidden">
+        <div className="p-5 border-b border-surface-700/50 flex justify-between items-center">
+          <h2 className="font-bold text-white">All Sessions</h2>
           <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" />
             <input 
               type="text" 
               placeholder="Search meetings..." 
-              className="pl-9 pr-4 py-2 bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 w-64"
+              className="pl-9 pr-4 py-2 bg-surface-950/50 border border-surface-700/50 rounded-lg text-sm focus:outline-none focus:border-primary-500/50 text-white w-64 transition-colors"
             />
           </div>
         </div>
         
         {isLoading ? (
-          <div className="p-8 text-center text-gray-500">Loading meetings...</div>
+          <div className="p-8 text-center text-surface-400">Loading meetings...</div>
         ) : meetings.length === 0 ? (
-          <div className="p-12 text-center flex flex-col items-center justify-center">
-            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
-              <Video className="w-8 h-8 text-gray-400" />
+          <div className="p-16 text-center flex flex-col items-center justify-center">
+            <div className="w-20 h-20 bg-surface-800/50 rounded-full flex items-center justify-center mb-5 border border-surface-700/50">
+              <Video className="w-10 h-10 text-surface-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">No meetings yet</h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">Create your first virtual classroom to get started.</p>
+            <h3 className="text-xl font-bold text-white mb-2">No meetings yet</h3>
+            <p className="text-surface-400 mb-8 max-w-sm">Create your first virtual classroom session to get started with live interactions.</p>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="px-4 py-2 bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400 rounded-lg font-medium hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors"
+              className="px-6 py-2.5 bg-surface-800 hover:bg-surface-700 text-white border border-surface-600 rounded-lg font-medium transition-colors"
             >
               Create Meeting
             </button>
@@ -133,76 +233,108 @@ export default function AdminMeetings() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-dark-border text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                  <th className="p-4 font-medium">Session Title</th>
-                  <th className="p-4 font-medium">Room Name</th>
-                  <th className="p-4 font-medium">Status</th>
-                  <th className="p-4 font-medium">Date</th>
-                  <th className="p-4 font-medium text-right">Actions</th>
+                <tr className="bg-surface-950/30 border-b border-surface-700/50 text-xs uppercase tracking-wider text-surface-400">
+                  <th className="p-5 font-bold">Session Title</th>
+                  <th className="p-5 font-bold">Room Name</th>
+                  <th className="p-5 font-bold">Status</th>
+                  <th className="p-5 font-bold">Date</th>
+                  <th className="p-5 font-bold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-dark-border">
+              <tbody className="divide-y divide-surface-700/50">
                 {meetings.map(meeting => (
-                  <tr key={meeting._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          meeting.status === 'live' ? 'bg-red-100 text-red-600 dark:bg-red-900/20' : 
-                          meeting.status === 'scheduled' ? 'bg-primary-100 text-primary-600 dark:bg-primary-900/20' : 
-                          'bg-gray-100 text-gray-500 dark:bg-gray-800'
+                  <tr key={meeting._id} className="hover:bg-surface-800/40 transition-colors group">
+                    <td className="p-5">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
+                          meeting.status === 'live' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 
+                          meeting.status === 'scheduled' ? 'bg-primary-500/10 text-primary-400 border-primary-500/20' : 
+                          'bg-surface-800 text-surface-400 border-surface-700'
                         }`}>
                           {meeting.status === 'live' ? <Radio className="w-5 h-5 animate-pulse" /> : <Video className="w-5 h-5" />}
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900 dark:text-white">{meeting.title}</div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-0.5">
+                          <div className="font-bold text-white text-base">{meeting.title}</div>
+                          <div className="text-xs text-surface-400 flex items-center gap-1.5 mt-1">
                             <Clock className="w-3 h-3" /> {meeting.expectedDurationMinutes} mins
                           </div>
                         </div>
                       </div>
                     </td>
-                    <td className="p-4">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                    <td className="p-5">
+                      <span className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-surface-950 border border-surface-800 text-surface-300 shadow-inner">
                         {meeting.roomName}
                       </span>
                     </td>
-                    <td className="p-4">
+                    <td className="p-5">
                       {meeting.status === 'live' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800/50">
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">
+                          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
                           Live Now
                         </span>
                       )}
                       {meeting.status === 'scheduled' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50">
-                          <Calendar className="w-3 h-3" />
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-primary-500/10 text-primary-400 border border-primary-500/20">
+                          <Calendar className="w-3.5 h-3.5" />
                           Scheduled
                         </span>
                       )}
                       {meeting.status === 'ended' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
-                          <CheckCircle className="w-3 h-3" />
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-surface-800 text-surface-400 border border-surface-700">
+                          <CheckCircle className="w-3.5 h-3.5" />
                           Completed
                         </span>
                       )}
                     </td>
-                    <td className="p-4 text-sm text-gray-600 dark:text-gray-400">
+                    <td className="p-5 text-sm text-surface-400 font-medium">
                       {new Date(meeting.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="p-4 text-right">
-                      {(meeting.status === 'scheduled' || meeting.status === 'live') ? (
-                        <button 
-                          onClick={() => handleLaunchMeeting(meeting)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
+                    <td className="p-5 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        {meeting.status === 'scheduled' && (
+                          <>
+                            <button 
+                              onClick={() => handleLaunchMeeting(meeting)}
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600/90 hover:bg-primary-500 text-white rounded-lg text-sm font-bold transition-colors shadow-lg"
+                            >
+                              <Play className="w-4 h-4" />
+                              Launch
+                            </button>
+                            <button
+                              onClick={() => handleEdit(meeting)}
+                              className="p-2 text-surface-400 hover:text-primary-400 rounded-lg hover:bg-primary-500/10 transition-colors"
+                              title="Edit Session"
+                            >
+                              <Edit3 className="w-4 h-4" />
+                            </button>
+                          </>
+                        )}
+                        {meeting.status === 'live' && (
+                          <button 
+                            onClick={() => handleLaunchMeeting(meeting)}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg text-sm font-bold transition-colors shadow-lg animate-pulse-soft"
+                          >
+                            <Play className="w-4 h-4" />
+                            Join Live
+                          </button>
+                        )}
+                        {meeting.status === 'ended' && (
+                          <button 
+                            onClick={() => viewReport(meeting)}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-surface-800 hover:bg-surface-700 text-white border border-surface-700 rounded-lg text-sm font-bold transition-colors shadow-sm"
+                          >
+                            <BarChart className="w-4 h-4 text-primary-400" />
+                            View Report
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleDelete(meeting._id)}
+                          className="p-2 text-surface-400 hover:text-red-400 rounded-lg hover:bg-red-500/10 transition-colors ml-2"
+                          title="Delete Session"
                         >
-                          <Play className="w-4 h-4" />
-                          {meeting.status === 'live' ? 'Join Live' : 'Launch'}
+                          <Trash2 className="w-4 h-4" />
                         </button>
-                      ) : (
-                        <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                          <MoreVertical className="w-5 h-5" />
-                        </button>
-                      )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -214,22 +346,24 @@ export default function AdminMeetings() {
 
       {/* Create Meeting Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white dark:bg-dark-card rounded-xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-200 dark:border-dark-border">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-dark-border">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Schedule New Session</h3>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-surface-900 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden border border-surface-700/50 transform transition-all">
+            <div className="flex items-center justify-between p-5 border-b border-surface-800 bg-surface-950/30 shrink-0">
+              <h3 className="text-xl font-bold text-white">
+                {editingMeetingId ? 'Edit Session' : 'Schedule New Session'}
+              </h3>
               <button 
                 onClick={() => setShowCreateModal(false)}
-                className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-1.5 text-surface-400 hover:text-white rounded-full hover:bg-surface-800 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             
-            <form onSubmit={handleCreateMeeting} className="p-4 space-y-4">
+            <form onSubmit={handleCreateMeeting} className="p-6 space-y-5 overflow-y-auto custom-scrollbar">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Session Title <span className="text-red-500">*</span>
+                <label className="block text-sm font-bold text-surface-300 mb-2">
+                  Session Title <span className="text-primary-500">*</span>
                 </label>
                 <input 
                   type="text" 
@@ -237,65 +371,178 @@ export default function AdminMeetings() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Advanced AI Integration Workshop"
-                  className="w-full px-4 py-2 bg-white dark:bg-dark-bg border border-gray-300 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white"
+                  className="w-full px-4 py-3 bg-surface-950 border border-surface-700 rounded-xl focus:outline-none focus:border-primary-500 text-white placeholder-surface-500 transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-surface-300 mb-2">
+                  Agenda / Description <span className="text-surface-500 font-normal">(Optional)</span>
+                </label>
+                <textarea 
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="What will this session cover?"
+                  rows={2}
+                  className="w-full px-4 py-3 bg-surface-950 border border-surface-700 rounded-xl focus:outline-none focus:border-primary-500 text-white placeholder-surface-500 transition-colors resize-none"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Custom Room URL (Optional)
+                <label className="block text-sm font-bold text-surface-300 mb-2">
+                  Link to Course <span className="text-surface-500 font-normal">(Optional)</span>
                 </label>
-                <div className="flex">
-                  <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 dark:border-dark-border bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-sm">
+                <Select
+                  value={courseId}
+                  onChange={setCourseId}
+                  className="w-full"
+                  placeholder="Select a course..."
+                  options={[
+                    { value: '', label: 'None (Standalone Session)' },
+                    ...courses.map(c => ({ value: c.id || c._id, label: c.title }))
+                  ]}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-bold text-surface-300 mb-2">
+                  Custom Room URL <span className="text-surface-500 font-normal">(Optional)</span>
+                </label>
+                <div className="flex group focus-within:border-primary-500">
+                  <span className="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-surface-700 bg-surface-800 text-surface-400 text-sm font-mono transition-colors group-focus-within:border-primary-500 group-focus-within:bg-surface-900 group-focus-within:text-surface-300">
                     REAL_i-
                   </span>
                   <input 
                     type="text" 
                     value={roomName}
                     onChange={(e) => setRoomName(e.target.value.replace(/\s+/g, '-'))}
-                    placeholder="Leave empty for auto-generation"
-                    className="flex-1 px-4 py-2 bg-white dark:bg-dark-bg border border-gray-300 dark:border-dark-border rounded-r-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white"
+                    placeholder="Auto-generated"
+                    className="flex-1 px-4 py-3 bg-surface-950 border border-surface-700 rounded-r-xl focus:outline-none focus:border-primary-500 text-white placeholder-surface-600 transition-colors"
                   />
                 </div>
-                <p className="mt-1 text-xs text-gray-500">Only letters, numbers, and dashes allowed.</p>
+                <p className="mt-1.5 text-xs text-surface-500">Only letters, numbers, and dashes allowed.</p>
+              </div>
+
+              <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-bold text-surface-300 mb-2">
+                    Timing
+                  </label>
+                  <Select
+                    value={scheduleType}
+                    onChange={setScheduleType}
+                    className="w-full"
+                    options={[
+                      { value: 'immediate', label: 'Start Immediately' },
+                      { value: 'scheduled', label: 'Schedule for Later' }
+                    ]}
+                  />
+                </div>
+                {scheduleType === 'scheduled' && (
+                  <div>
+                    <label className="block text-sm font-bold text-surface-300 mb-2">
+                      Start Date & Time
+                    </label>
+                    <input 
+                      type="datetime-local" 
+                      required={scheduleType === 'scheduled'}
+                      value={scheduledFor}
+                      onChange={(e) => setScheduledFor(e.target.value)}
+                      className="w-full px-4 py-[11px] bg-surface-950 border border-surface-700 rounded-xl focus:outline-none focus:border-primary-500 text-white transition-colors"
+                    />
+                  </div>
+                )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Expected Duration (Minutes)
+                <label className="block text-sm font-bold text-surface-300 mb-2">
+                  Expected Duration
                 </label>
-                <select 
+                <Select
                   value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
-                  className="w-full px-4 py-2 bg-white dark:bg-dark-bg border border-gray-300 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white"
+                  onChange={setDuration}
+                  className="w-full"
+                  options={[
+                    { value: '30', label: '30 Minutes' },
+                    { value: '45', label: '45 Minutes' },
+                    { value: '60', label: '60 Minutes (1 Hour)' },
+                    { value: '90', label: '90 Minutes (1.5 Hours)' },
+                    { value: '120', label: '120 Minutes (2 Hours)' },
+                  ]}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div 
+                  onClick={() => setLobbyEnabled(!lobbyEnabled)}
+                  className="flex items-center justify-between p-4 rounded-xl border border-surface-700 bg-surface-950/50 hover:border-primary-500/30 transition-colors cursor-pointer group"
                 >
-                  <option value="30">30 Minutes</option>
-                  <option value="45">45 Minutes</option>
-                  <option value="60">60 Minutes (1 Hour)</option>
-                  <option value="90">90 Minutes (1.5 Hours)</option>
-                  <option value="120">120 Minutes (2 Hours)</option>
-                </select>
+                  <div>
+                    <div className="text-sm font-bold text-white mb-0.5">Enable Lobby</div>
+                    <div className="text-xs text-surface-500">Admit attendees manually</div>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={lobbyEnabled}
+                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                      lobbyEnabled ? 'bg-primary-500' : 'bg-surface-700'
+                    }`}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                        lobbyEnabled ? 'translate-x-5' : 'translate-x-0'
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                <div 
+                  onClick={() => setAutoRecord(!autoRecord)}
+                  className="flex items-center justify-between p-4 rounded-xl border border-surface-700 bg-surface-950/50 hover:border-primary-500/30 transition-colors cursor-pointer group"
+                >
+                  <div>
+                    <div className="text-sm font-bold text-white mb-0.5">Auto-Record</div>
+                    <div className="text-xs text-surface-500">Record when host joins</div>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={autoRecord}
+                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                      autoRecord ? 'bg-primary-500' : 'bg-surface-700'
+                    }`}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                        autoRecord ? 'translate-x-5' : 'translate-x-0'
+                      }`}
+                    />
+                  </button>
+                </div>
               </div>
               
               <div className="pt-4 flex gap-3">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg font-medium transition-colors"
+                  className="flex-1 px-4 py-3 bg-surface-800 hover:bg-surface-700 text-white rounded-xl font-bold transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={isSubmitting || !title}
-                  className="flex-1 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                  disabled={isSubmitting}
+                  className="flex-[2] flex items-center justify-center gap-2 px-4 py-3 bg-primary-600 hover:bg-primary-500 text-white rounded-xl font-bold transition-colors shadow-lg shadow-primary-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                   ) : (
                     <>
-                      <Calendar className="w-4 h-4" />
-                      Create Session
+                      <Calendar className="w-5 h-5" />
+                      {editingMeetingId ? 'Save Changes' : 'Create Session'}
                     </>
                   )}
                 </button>
