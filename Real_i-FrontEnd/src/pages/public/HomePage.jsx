@@ -205,8 +205,8 @@ export default function HomePage() {
             <div className="absolute bottom-1/4 left-1/4 w-[1px] h-32 bg-gradient-to-t from-primary-500/30 to-transparent rotate-45 origin-bottom" />
           </div>
           {/* Diagnostic markers */}
-          <div className="absolute top-[15%] left-[5%] font-mono text-[10px] tracking-widest hidden md:block hero-sys-label" style={{ color: 'var(--sys-label-color, rgba(212,175,55,0.40))' }}>SYS.CORE.INIT // 0x7A4F</div>
-          <div className="absolute bottom-[10%] right-[10%] font-mono text-[10px] tracking-widest hidden md:block hero-sys-label" style={{ color: 'var(--sys-label-color, rgba(212,175,55,0.40))' }}>MEM_ALLOC_OK -&gt; 1024TB</div>
+          <div className="absolute top-[15%] left-[5%] font-mono text-[10px] tracking-widest hidden md:block hero-sys-label text-primary-500/70">SYS.CORE.INIT // 0x7A4F</div>
+          <div className="absolute bottom-[10%] right-[10%] font-mono text-[10px] tracking-widest hidden md:block hero-sys-label text-primary-500/70">MEM_ALLOC_OK -&gt; 1024TB</div>
           <div className="absolute top-[40%] right-[5%] hidden md:flex flex-col gap-1">
             <div className="w-8 h-[2px] bg-primary-500/20" />
             <div className="w-4 h-[2px] bg-primary-500/40" />
@@ -272,13 +272,13 @@ export default function HomePage() {
                 </svg>
                 {/* Floating Glass Data Panels */}
                 <div className="absolute top-[10%] left-[10%] glass-card p-4 border border-primary-500/30 w-32 animate-float">
-                  <div className="text-[10px] font-mono mb-1 hero-sys-label" style={{ color: 'var(--sys-label-color, rgba(212,175,55,0.70))' }}>DATA.STREAM_01</div>
+                  <div className="text-[10px] font-mono mb-1 hero-sys-label text-primary-500">DATA.STREAM_01</div>
                   <div className="h-1 bg-primary-500/20 w-full overflow-hidden">
                     <div className="h-full bg-primary-500 w-2/3" />
                   </div>
                 </div>
                 <div className="absolute bottom-[20%] right-[5%] glass-card p-4 border border-primary-400/30 w-40 animate-float" style={{ animationDelay: '2s' }}>
-                  <div className="text-[10px] font-mono mb-1 hero-sys-label" style={{ color: 'var(--sys-label-color, rgba(212,175,55,0.70))' }}>NEURAL_NET.ACT</div>
+                  <div className="text-[10px] font-mono mb-1 hero-sys-label text-primary-500">NEURAL_NET.ACT</div>
                   <div className="flex gap-1">
                     <div className="w-1 h-3 bg-primary-400/80" />
                     <div className="w-1 h-4 bg-primary-400/60" />
@@ -387,24 +387,35 @@ export default function HomePage() {
       {/* ═══════════════════════════════════════════════════════
           STATS SECTION
           ═══════════════════════════════════════════════════════ */}
-      <section ref={statsRef} className="relative cyber-cut-section">
-        <div className="absolute inset-0 gradient-mesh" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="glass-card rounded-3xl p-10 md:p-14 border border-primary-500/10 shadow-inner-gold">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+      <section ref={statsRef} className="py-24 relative">
+        <div className="max-w-[900px] mx-auto px-4 sm:px-6 relative z-10">
+          <div className="bg-surface-900 border border-[#D4AF37] rounded-[4px] p-10 md:p-14 relative overflow-hidden">
+            {/* Decorative SVG Circuit Pattern */}
+            <svg className="absolute top-0 right-0 w-48 h-48 opacity-[0.08] dark:opacity-10 text-[#0A1222] dark:text-[#D4AF37] pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
+              <circle cx="20" cy="20" r="1.5" fill="currentColor" />
+              <circle cx="50" cy="15" r="1.5" fill="currentColor" />
+              <circle cx="80" cy="40" r="1.5" fill="currentColor" />
+              <circle cx="30" cy="60" r="1.5" fill="currentColor" />
+              <circle cx="70" cy="80" r="1.5" fill="currentColor" />
+              <circle cx="40" cy="90" r="1.5" fill="currentColor" />
+              <path d="M20 20 L50 15 L80 40 L70 80 L30 60 Z" />
+              <path d="M50 15 L30 60" />
+              <path d="M70 80 L40 90 L30 60" />
+            </svg>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 relative z-10">
               {[
-                { icon: Users, value: PLATFORM_STATS.totalStudents, label: 'Active Students', suffix: '+' },
-                { icon: BookOpen, value: PLATFORM_STATS.totalCourses, label: 'Expert Courses', suffix: '+' },
-                { icon: GraduationCap, value: PLATFORM_STATS.completionRate, label: 'Completion Rate', suffix: '%' },
-                { icon: Star, value: PLATFORM_STATS.satisfactionRate, label: 'Satisfaction', suffix: '%' },
+                { value: PLATFORM_STATS.totalStudents, label: 'Active Students', suffix: '+', highlight: false },
+                { value: PLATFORM_STATS.totalCourses, label: 'Expert Courses', suffix: '+', highlight: false },
+                { value: PLATFORM_STATS.completionRate, label: 'Completion Rate', suffix: '%', highlight: true },
+                { value: PLATFORM_STATS.satisfactionRate, label: 'Satisfaction', suffix: '%', highlight: true },
               ].map((stat, i) => (
                 <div key={i} className="text-center">
-                  <stat.icon size={28} className="text-primary-400 mx-auto mb-3" />
-                  <p className="text-3xl md:text-4xl font-extrabold text-surface-100 tabular-nums">
+                  <p className={`text-[30px] font-medium font-sans tabular-nums ${stat.highlight ? 'text-[#B8860B] dark:text-primary-400' : 'text-[#0F1E33] dark:text-surface-100'}`}>
                     <span className="stat-number" data-target={stat.value}>0</span>
                     {stat.suffix}
                   </p>
-                  <p className="text-sm text-surface-400 mt-1 font-medium">{stat.label}</p>
+                  <p className="text-[12px] uppercase tracking-[0.05em] text-[#A2A2A2] mt-2">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -684,35 +695,43 @@ export default function HomePage() {
       {/* ═══════════════════════════════════════════════════════
           CTA SECTION
           ═══════════════════════════════════════════════════════ */}
-      <section ref={ctaRef} className="relative cyber-cut-section">
-        <div className="absolute inset-0 gradient-mesh" />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl overflow-hidden glass border border-primary-500/20 shadow-glow-lg group">
-            {/* Animated Glow Background */}
-            <div className="absolute inset-0 bg-surface-900/60" />
-            <div className="absolute inset-0 bg-grid-pattern opacity-30" />
-            <div className="absolute -top-1/2 -left-1/2 w-[150%] h-[150%] bg-primary-500/5 blur-[120px] rounded-full group-hover:bg-primary-500/10 transition-colors duration-700" />
-            <div className="absolute -bottom-1/2 -right-1/2 w-[150%] h-[150%] bg-primary-500/5 blur-[120px] rounded-full group-hover:bg-primary-500/10 transition-colors duration-700" />
-            
-            <div className="relative z-10 text-center px-8 py-16 sm:py-20">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 mb-4 tracking-tight">
+      <section ref={ctaRef} className="py-24 relative">
+        <div className="max-w-[900px] mx-auto px-4 sm:px-6 relative z-10">
+          <div className="bg-[#0A1222] rounded-[4px] p-10 md:p-14 relative overflow-hidden text-center">
+            {/* Decorative SVG Circuit Pattern */}
+            <svg className="absolute top-0 right-0 w-48 h-48 opacity-[0.15] text-[#D4AF37] pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
+              <circle cx="20" cy="20" r="1.5" fill="currentColor" />
+              <circle cx="50" cy="15" r="1.5" fill="currentColor" />
+              <circle cx="80" cy="40" r="1.5" fill="currentColor" />
+              <circle cx="30" cy="60" r="1.5" fill="currentColor" />
+              <circle cx="70" cy="80" r="1.5" fill="currentColor" />
+              <circle cx="40" cy="90" r="1.5" fill="currentColor" />
+              <path d="M20 20 L50 15 L80 40 L70 80 L30 60 Z" />
+              <path d="M50 15 L30 60" />
+              <path d="M70 80 L40 90 L30 60" />
+            </svg>
+
+            <div className="relative z-10">
+              <span className="block text-[12px] uppercase tracking-[0.15em] text-[#D4AF37] mb-3 font-mono">
+                &gt;_ SYSTEM ONLINE
+              </span>
+              <h2 className="text-[28px] font-medium text-[#FFFFFF] mb-4 font-sans tracking-tight">
                 Ready to Build Real Intelligence?
               </h2>
-              <p className="text-surface-300 text-lg max-w-xl mx-auto mb-8">
+              <p className="text-[15px] text-[#A2A2A2] max-w-xl mx-auto mb-8">
                 Join thousands of students already learning smarter with AI. 
                 Start your journey today — completely free.
               </p>
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-wrap justify-center gap-[12px]">
                 <Link
                   to="/login?register=true"
-                  className="btn-cyber-solid group"
+                  className="bg-[#D4AF37] text-[#0A1222] px-[24px] py-[11px] rounded-[4px] text-[14px] font-medium hover:bg-[#B8860B] transition-colors inline-flex items-center gap-2"
                 >
                   Get Started Free
-                  <ArrowRight size={20} />
                 </Link>
                 <Link
                   to="/courses"
-                  className="btn-cyber group"
+                  className="bg-transparent border border-[#D4AF37] text-[#D4AF37] px-[24px] py-[11px] rounded-[4px] text-[14px] font-medium hover:bg-[#D4AF37]/10 transition-colors inline-flex items-center gap-2"
                 >
                   Browse Courses
                 </Link>

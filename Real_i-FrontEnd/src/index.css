@@ -76,10 +76,10 @@
   --color-surface-950: var(--surface-950);
 
   /* ── Typography ──────────────────────────────────────── */
-  --font-sans: 'Montserrat', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Orbitron', 'Montserrat', system-ui, sans-serif;
+  --font-sans: 'Raleway', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Raleway', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', 'Fira Code', monospace;
-  --font-arabic: 'Tajawal', 'Montserrat', sans-serif;
+  --font-arabic: 'Tajawal', 'Raleway', sans-serif;
 
   /* ── Animations ──────────────────────────────────────── */
   --animate-fade-in: fade-in 0.4s ease-out forwards;
@@ -194,71 +194,66 @@
      All text/background pairs verified ≥ WCAG AA (4.5:1 body, 3:1 UI).
      ═══════════════════════════════════════════════════════════ */
 
-  /* ── Surface Scale (warm off-white → deep navy) ───────────
-     Used by: bg-surface-*, text-surface-* Tailwind utilities     */
-  --surface-50:  #0a1628;   /* Deepest navy — headings, H1             */
-  --surface-100: #1a2a44;   /* Deep navy — body text (contrast ≥6:1)   */
-  --surface-200: #2d4060;   /* Dark navy — subtitles, strong text      */
-  --surface-300: #3d5070;   /* Medium navy — secondary labels          */
-  --surface-400: #556070;   /* Mid slate — muted body (≥4.6:1 on bg)  */
-  --surface-500: #7a8898;   /* Muted slate — captions, helper text     */
-  --surface-600: #a8b6c4;   /* Light slate — placeholders, disabled    */
-  --surface-700: #dce4ee;   /* Pale slate — dividers, inactive rings   */
-  --surface-800: #ede9e0;   /* Warm tinted white — card hover          */
-  --surface-900: #f7f3ec;   /* Warm white — card backgrounds           */
-  --surface-950: #FAF8F4;   /* Warm off-white page background          */
+  /* ── Surface Scale (Brand-Accurate) ─────────── */
+  --surface-50:  #0A1222;   /* Navy Dark */
+  --surface-100: #0F1E33;   /* Navy */
+  --surface-200: #0F1E33;   
+  --surface-300: #A2A2A2;   /* Gray */
+  --surface-400: #A2A2A2;   
+  --surface-500: #A2A2A2;   
+  --surface-600: #A2A2A2;   
+  --surface-700: #A2A2A2;   
+  --surface-800: #FFFFFF;   /* Pure White */
+  --surface-900: #FFFFFF;   /* Pure White */
+  --surface-950: #FFFFFF;   /* Pure White */
 
-  /* ── Gold Accent — re-saturated for light mode ────────────
-     Dark-mode gold #D4AF37 fails 3:1 on white. Use #A87928.
-     #A87928 on #FAF8F4 = 4.72:1 ✅ (AA for large text & UI)
-     #8C6520 on #FAF8F4 = 6.1:1  ✅ (AA for body text)           */
-  --gold-accent:       #A87928;   /* Primary interactive gold            */
-  --gold-accent-dark:  #8C6520;   /* Gold for body-size text             */
-  --gold-accent-light: #C49B3A;   /* Gold for decorative / large text    */
-  --gold-stroke:       rgba(139, 101, 32, 0.65); /* SVG strokes        */
-  --gold-stroke-light: rgba(168, 121, 40, 0.35); /* Thin decorative    */
-  --gold-border:       rgba(139, 101, 32, 0.25); /* Borders/dividers   */
+  /* ── Gold Accent ──────────── */
+  --gold-accent:       #D4AF37;
+  --gold-accent-dark:  #B8860B;
+  --gold-accent-light: #D4AF37;
+  --gold-stroke:       #D4AF37;
+  --gold-stroke-light: #D4AF37;
+  --gold-border:       #D4AF37;
 
   /* ── Semantic Backgrounds ────────────────────────────────── */
-  --bg-page:        #FAF8F4;
+  --bg-page:        #FFFFFF;
   --bg-card:        #FFFFFF;
-  --bg-card-hover:  #F7F3EC;
+  --bg-card-hover:  #FFFFFF;
   --bg-elevated:    #FFFFFF;
   --bg-sidebar:     #FFFFFF;
-  --bg-navbar:      rgba(250, 248, 244, 0.90);
+  --bg-navbar:      #FFFFFF;
 
   /* ── Borders ─────────────────────────────────────────────── */
-  --border-subtle:  rgba(26, 42, 68,  0.08);
-  --border-card:    rgba(26, 42, 68,  0.12);
-  --border-strong:  rgba(26, 42, 68,  0.22);
+  --border-subtle:  #A2A2A2;
+  --border-card:    #D4AF37;
+  --border-strong:  #B8860B;
 
-  /* ── Shadows (replace glow effects with soft elevation) ──── */
-  --shadow-card-color:       rgba(26, 42, 68, 0.09);
-  --shadow-card-color-hover: rgba(26, 42, 68, 0.16);
+  /* ── Shadows (Removed soft glows, flat tech aesthetic) ──── */
+  --shadow-card-color:       transparent;
+  --shadow-card-color-hover: transparent;
 
   /* ── Semantic Text ───────────────────────────────────────── */
-  --text-primary-color:   #0a1628;  /* ≥9:1 on #FAF8F4 ✅            */
-  --text-secondary-color: #2d4060;  /* ≥6:1 on #FAF8F4 ✅            */
-  --text-muted-color:     #556070;  /* 4.6:1 on #FAF8F4 ✅ AA        */
+  --text-primary-color:   #0A1222;
+  --text-secondary-color: #0F1E33;
+  --text-muted-color:     #A2A2A2;
 
-  /* ── Glass Effects ───────────────────────────────────────── */
-  --glass-bg:          rgba(255, 255, 255, 0.72);
-  --glass-border:      rgba(139, 101, 32, 0.20);
-  --glass-card-bg:     rgba(255, 255, 255, 0.88);
-  --glass-navbar-bg:   rgba(250, 248, 244, 0.90);
+  /* ── Glass Effects (Replaced with solid tech aesthetic) ──── */
+  --glass-bg:          #FFFFFF;
+  --glass-border:      #D4AF37;
+  --glass-card-bg:     #FFFFFF;
+  --glass-navbar-bg:   #FFFFFF;
 
   /* ── Diagnostic/System Labels ────────────────────────────── */
-  /* Overrides the dark-mode gold-at-40% which fails on light   */
-  --sys-label-color: rgba(61, 80, 112, 0.70); /* navy at 70% ≥ 3:1    */
+  --sys-label-color: #D4AF37;
 
   /* ── Decorative strokes on SVG diagrams ─────────────────── */
-  --deco-ring-stroke:    rgba(139, 101, 32, 0.55);
-  --deco-line-stroke:    rgba(139, 101, 32, 0.40);
-  --deco-dash-stroke:    rgba(26, 42, 68,  0.15);
+  --deco-ring-stroke:    #D4AF37;
+  --deco-line-stroke:    #D4AF37;
+  --deco-dash-stroke:    #D4AF37;
 
   /* ── Skeleton Loading ────────────────────────────────────── */
-  --skeleton-from: #ECE8E0;
-  --skeleton-to:   #DDD9CF;
+  --skeleton-from: #FFFFFF;
+  --skeleton-to:   #A2A2A2;
 }
 
 html.dark {
@@ -653,103 +648,6 @@ html.dark {
   box-shadow: 0 4px 20px rgba(139, 101, 32, 0.18), 0 2px 8px rgba(139, 101, 32, 0.10);
 }
 
-:root:not(.dark) .shadow-inner-gold {
-  box-shadow: inset 0 0 30px rgba(139, 101, 32, 0.06);
-}
-
-/* 3. PRIMARY COLOR OVERRIDES — darken gold for light-bg contrast
-   primary-400 / primary-500 (#D4AF37) is the dark-mode value.
-   In light mode, override to #A87928 which passes AA on #FAF8F4. */
-:root:not(.dark) {
-  --color-primary-400: #C49B3A;
-  --color-primary-500: #A87928;
-  --color-primary-600: #8C6520;
-}
-
-/* 4. BUG: DIAGNOSTIC / SYS LABELS
-   text-primary-500/40 renders as ~14% opacity gold — fails on white.
-   Target font-mono system labels in the hero section.             */
-:root:not(.dark) [class*="text-primary"][class*="/40"],
-:root:not(.dark) [class*="text-primary"][class*="/30"] {
-  /* Can't override Tailwind opacity modifiers directly; use below  */
-}
-
-/* Direct fix for hero diagnostic labels (".font-mono text-[10px]") */
-:root:not(.dark) .hero-sys-label {
-  color: var(--sys-label-color) !important;
-}
-
-/* 5. BUG: HERO SUBHEADING (text-surface-400)
-   Light surface-400 = #556070 = 4.6:1 on #FAF8F4 ✔ AA already met.
-   No override needed — token is correct. */
-
-/* 6. BUG: “Explore Courses” SECONDARY CTA BUTTON
-   border-white/10 = 10% white = invisible on warm-white bg.
-   Replace with a visible navy border.                             */
-:root:not(.dark) .hero-cta-secondary {
-  border-color: rgba(26, 42, 68, 0.30) !important;
-  color: var(--text-secondary-color) !important;
-}
-:root:not(.dark) .hero-cta-secondary:hover {
-  border-color: rgba(26, 42, 68, 0.55) !important;
-  color: var(--text-primary-color) !important;
-}
-
-/* 7. BUG: “Start Learning” PRIMARY CTA BUTTON
-   border-primary-500/50 — now uses the lighter re-saturated gold.
-   bg-surface-950 fill on button is warm-white in light mode — set
-   it to deep navy so the fill-slide hover reads correctly.        */
-:root:not(.dark) .hero-cta-primary {
-  background: transparent;
-  border-color: var(--gold-accent) !important;
-  color: var(--gold-accent) !important;
-}
-:root:not(.dark) .hero-cta-primary:hover {
-  color: #FAF8F4 !important;
-}
-
-/* 8. BUG: FEATURE CARD BACKGROUNDS
-   bg-surface-950 on feature cards = warm-white in light mode, fine.
-   bg-surface-900/50 on hover = slightly warm — also fine.
-   The gap bg-surface-800/30 between cards needs a warm stroke.   */
-:root:not(.dark) [class*="bg-surface-800/30"] {
-  background-color: rgba(220, 215, 205, 0.35);
-}
-
-/* 9. BUG: HOW-IT-WORKS step nodes
-   border-surface-700 on step circles = pale slate, invisible on warm bg.
-   Use navy border instead.                                        */
-:root:not(.dark) .how-step [class*="border-surface-700"] {
-  border-color: rgba(61, 80, 112, 0.30);
-}
-:root:not(.dark) [class*="bg-surface-700"] {
-  --tw-bg-opacity: 0.25;
-}
-
-/* 10. AGENT CARDS — gradient-to-t from surface-950 is warm-white in
-    light mode, so text overlays become invisible.
-    Override the gradient overlay to use deep navy.               */
-:root:not(.dark) .agent-card [class*="from-surface-950"] {
-  background: linear-gradient(to top, rgba(10, 22, 40, 0.88) 0%, rgba(10, 22, 40, 0.50) 50%, transparent 100%);
-}
-
-/* 11. TEXT GRADIENT — update gold gradient to use light-mode gold */
-:root:not(.dark) .text-gradient {
-  background: linear-gradient(135deg, #A87928, #C49B3A, #8C6520);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* 12. bg-gradient-to-r from-primary-400 to-primary-600 (subheading gold text)
-    Tailwind generates inline CSS; override via specific selector. */
-:root:not(.dark) .bg-clip-text.bg-gradient-to-r,
-:root:not(.dark) .bg-clip-text.bg-gradient-to-br {
-  background: linear-gradient(135deg, #C49B3A 0%, #A87928 50%, #8C6520 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 /* ── Gradient Shift Animation ─────────────────────────────── */
 .animate-gradient {
@@ -775,152 +673,5 @@ html.dark {
   );
   pointer-events: none;
   border-radius: inherit;
-}
-
-/* ════════════════════════════════════════════════════════════
-   LIGHT MODE — VISUAL DENSITY & DEPTH SYSTEM
-   Authored by: 20yr senior design lead standard
-   Goal: eliminate the "empty white page" collapse that happens
-   when dark-mode glow/card-depth visual cues are removed.
-   Strategy: texture + section zoning + card surfaces + shadow
-   ════════════════════════════════════════════════════════════ */
-
-/* ── 1. PAGE BACKGROUND: Linen grain texture ─────────────── */
-/* Adds micro-noise so the warm white feels premium not blank  */
-:root:not(.dark) body {
-  background-color: #FAF8F4;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 300px 300px;
-}
-
-/* ── 2. HERO SECTION: Warm gradient anchor + sidebar marker ─ */
-:root:not(.dark) section[class*="min-h-screen"] {
-  background:
-    radial-gradient(ellipse 80% 60% at 10% 50%, rgba(168, 121, 40, 0.055) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 80% at 90% 30%, rgba(26, 42, 68, 0.04) 0%, transparent 60%),
-    linear-gradient(180deg, #FAF8F4 0%, #F5F0E8 60%, #FAF8F4 100%);
-}
-
-/* ── 3. FEATURE CARDS: Visible panels with gold left-edge ─── */
-/* The root issue: bg-surface-950 in light = warm white on warm 
-   white = invisible. Give each card an explicit white panel with 
-   shadow and a gold left-accent border.                        */
-:root:not(.dark) .feature-card {
-  background: #FFFFFF !important;
-  border-left: 3px solid rgba(168, 121, 40, 0.20);
-  box-shadow:
-    0 2px 0 0 rgba(168, 121, 40, 0.12),        /* top gold line   */
-    0 4px 16px rgba(26, 42, 68, 0.07),          /* card elevation  */
-    0 1px 3px rgba(26, 42, 68, 0.05);           /* base shadow     */
-  transition: box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
-}
-
-:root:not(.dark) .feature-card:hover {
-  background: #FDFBF7 !important;
-  border-left-color: rgba(168, 121, 40, 0.65);
-  box-shadow:
-    0 2px 0 0 rgba(168, 121, 40, 0.35),
-    0 12px 40px rgba(26, 42, 68, 0.12),
-    0 4px 8px rgba(26, 42, 68, 0.07);
-}
-
-/* Feature card grid separator — warm instead of pale slate      */
-:root:not(.dark) .grid.bg-surface-800\/30,
-:root:not(.dark) [class*="gap-\\[1px\\]"] {
-  background-color: rgba(180, 165, 140, 0.22) !important;
-  border-color: rgba(180, 165, 140, 0.30) !important;
-}
-
-/* ── 4. FEATURES SECTION BACKGROUND: alternating warm zone ─── */
-:root:not(.dark) [data-section="features"],
-:root:not(.dark) section:nth-of-type(2) {
-  background:
-    radial-gradient(ellipse 50% 40% at 75% 50%, rgba(168, 121, 40, 0.04) 0%, transparent 60%),
-    linear-gradient(180deg, #FAF8F4 0%, #F0EBE0 50%, #FAF8F4 100%);
-}
-
-/* ── 5. HOW-IT-WORKS CARDS: visible step panels ──────────────── */
-:root:not(.dark) .how-step > div:last-child {
-  background: #FFFFFF !important;
-  border-color: rgba(61, 80, 112, 0.14) !important;
-  box-shadow: 0 4px 20px rgba(26, 42, 68, 0.07), 0 1px 4px rgba(26, 42, 68, 0.05);
-}
-
-:root:not(.dark) .how-step:hover > div:last-child {
-  background: #FDFBF7 !important;
-  border-color: rgba(168, 121, 40, 0.30) !important;
-  box-shadow: 0 8px 32px rgba(26, 42, 68, 0.10), 0 2px 8px rgba(168, 121, 40, 0.08);
-}
-
-/* ── 6. HOW-IT-WORKS SECTION BACKGROUND: off-white tinted ───── */
-:root:not(.dark) section:nth-of-type(4) {
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(26, 42, 68, 0.03) 0%, transparent 70%),
-    linear-gradient(180deg, #F5F1E8 0%, #FAF8F4 50%, #F5F1E8 100%);
-}
-
-/* ── 7. AI AGENTS SECTION BACKGROUND ─────────────────────────── */
-:root:not(.dark) section:nth-of-type(5) {
-  background: linear-gradient(180deg, #FAF8F4 0%, #F0EBE0 100%);
-}
-
-/* ── 8. AGENT CARDS: white cards with navy gradient overlay ───── */
-/* glass-card in light = white with glass border, fine.
-   But the dark overlay gradient obscures images on light bg.
-   Add a visible card border for definition.                     */
-:root:not(.dark) .agent-card {
-  box-shadow: 0 8px 32px rgba(26, 42, 68, 0.12), 0 2px 8px rgba(26, 42, 68, 0.07);
-  border: 1px solid rgba(180, 165, 140, 0.30) !important;
-}
-
-/* ── 9. TESTIMONIALS SECTION ─────────────────────────────────── */
-:root:not(.dark) section:nth-of-type(6) {
-  background: linear-gradient(180deg, #F5F1E8 0%, #FAF8F4 100%);
-}
-
-/* ── 10. CTA SECTION: Deep navy band for visual closure ────────── */
-/* The final CTA section should be a deep navy anchor, giving the
-   page a strong visual close, like a footer-header weight.       */
-:root:not(.dark) section:last-of-type {
-  background:
-    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(168, 121, 40, 0.10) 0%, transparent 65%),
-    linear-gradient(180deg, #0a1628 0%, #1a2a44 100%);
-}
-
-/* ── 11. MOD labels in feature cards ─────────────────────────── */
-/* text-surface-700 in light = #dce4ee = almost invisible on white */
-:root:not(.dark) .feature-card [class*="text-surface-700"] {
-  color: rgba(85, 96, 112, 0.55) !important;
-}
-
-/* ── 12. HERO section min-h-screen bg override ───────────────── */
-:root:not(.dark) .bg-surface-950 {
-  background-color: transparent;
-}
-
-/* ── 13. SECTION separators: subtle warm horizontal rule ──────── */
-:root:not(.dark) section + section {
-  border-top: 1px solid rgba(180, 165, 140, 0.18);
-}
-
-/* ── 14. DECORATIVE scan-line in features: warm amber ──────────── */
-:root:not(.dark) .animate-\\[scan_4s_ease-in-out_infinite\\] {
-  background: linear-gradient(90deg, transparent, rgba(168, 121, 40, 0.12), transparent) !important;
-}
-
-/* ── 15. STATS CARD in light: white card on navy bg ────────────── */
-:root:not(.dark) .glass-card {
-  background: rgba(255, 255, 255, 0.92) !important;
-  box-shadow: 0 8px 40px rgba(10, 22, 40, 0.25), 0 2px 8px rgba(10, 22, 40, 0.12);
-  border-color: rgba(255, 255, 255, 0.30) !important;
-}
-
-/* ── 16. HeroText weight: make H1 even bolder in light context ─── */
-:root:not(.dark) h1.hero-title,
-:root:not(.dark) .hero-title {
-  text-shadow: none;
-  color: #0a1628;
 }
 

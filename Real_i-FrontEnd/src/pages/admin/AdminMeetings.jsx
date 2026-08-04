@@ -246,8 +246,8 @@ export default function AdminMeetings() {
                   <tr key={meeting._id} className="hover:bg-surface-800/40 transition-colors group">
                     <td className="p-5">
                       <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
-                          meeting.status === 'live' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 
+                        <div className={`w-12 h-12 rounded-[4px] flex items-center justify-center border ${
+                          meeting.status === 'live' ? 'bg-[#22c55e]/10 text-[#22c55e] border-[#22c55e]/30' : 
                           meeting.status === 'scheduled' ? 'bg-primary-500/10 text-primary-400 border-primary-500/20' : 
                           'bg-surface-800 text-surface-400 border-surface-700'
                         }`}>
@@ -268,8 +268,8 @@ export default function AdminMeetings() {
                     </td>
                     <td className="p-5">
                       {meeting.status === 'live' && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">
-                          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] text-xs font-bold bg-[#22c55e]/10 text-[#22c55e] border border-[#22c55e]/30">
+                          <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse"></span>
                           Live Now
                         </span>
                       )}
@@ -312,7 +312,7 @@ export default function AdminMeetings() {
                         {meeting.status === 'live' && (
                           <button 
                             onClick={() => handleLaunchMeeting(meeting)}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-surface-50 rounded-lg text-sm font-bold transition-colors shadow-lg animate-pulse-soft"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-transparent text-[#22c55e] border border-[#22c55e] hover:bg-[#22c55e]/10 rounded-[4px] text-sm font-bold transition-colors animate-pulse-soft"
                           >
                             <Play className="w-4 h-4" />
                             Join Live

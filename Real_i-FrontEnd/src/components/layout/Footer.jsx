@@ -88,7 +88,7 @@ export default function Footer() {
             {/* Brand Column */}
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center gap-3 group">
-                <div className="w-12 h-12 rounded-xl overflow-hidden shadow-glow group-hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300">
+                <div className="w-12 h-12 rounded-[4px] border border-[#D4AF37] overflow-hidden transition-all duration-300">
                   <img src="/logo.png" alt="REAL_i" loading="lazy" width="48" height="48" className="w-full h-full object-contain" />
                 </div>
                 <div>
@@ -112,8 +112,7 @@ export default function Footer() {
                     href={social.href}
                     target={social.external ? '_blank' : undefined}
                     rel={social.external ? 'noopener noreferrer' : undefined}
-                    aria-label={social.label}
-                    className="w-10 h-10 rounded-xl glass-light flex items-center justify-center text-surface-400 hover:text-primary-400 hover:border-primary-500/30 transition-all duration-300 hover:shadow-glow-sm"
+                    className="w-10 h-10 rounded-[4px] border border-surface-700 flex items-center justify-center text-surface-400 hover:text-[#D4AF37] hover:border-[#D4AF37] transition-colors"
                   >
                     <social.icon size={18} />
                   </a>

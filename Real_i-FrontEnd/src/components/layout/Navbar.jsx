@@ -69,21 +69,21 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div ref={linksRef} className="hidden md:flex items-center gap-8">
+          <div ref={linksRef} className="hidden md:flex items-center gap-8 px-8 py-3 rounded-full bg-surface-900 dark:bg-[#1A1A1A]/80 dark:backdrop-blur-md border border-[#D4AF37]/50 shadow-[0_4px_20px_rgba(212,175,55,0.1)]">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 className={`relative font-mono text-xs uppercase tracking-widest transition-all duration-300 transform active:scale-95 group ${
                   isActive(link.path)
-                    ? 'text-primary-500 font-bold'
-                    : 'text-surface-400 hover:text-primary-400'
+                    ? 'text-[#D4AF37] font-bold'
+                    : 'text-surface-500 hover:text-[#D4AF37]'
                 }`}
               >
                 {link.label}
                 {/* Non-layout-shifting underline */}
                 <span 
-                  className={`absolute -bottom-2 left-0 h-[2px] bg-primary-500 transition-all duration-300 ease-out ${
+                  className={`absolute -bottom-2 left-0 h-[2px] bg-[#D4AF37] transition-all duration-300 ease-out ${
                     isActive(link.path) ? 'w-full' : 'w-0 group-hover:w-1/2'
                   }`} 
                 />
