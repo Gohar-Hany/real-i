@@ -9,12 +9,15 @@ import {
 } from 'lucide-react';
 import { FEATURES, TESTIMONIALS, HOW_IT_WORKS, PLATFORM_STATS } from '@/data/staticContent';
 import { Helmet } from 'react-helmet-async';
+import { useTheme } from '@/contexts/ThemeContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const ICON_MAP = { Brain, BookOpen, MessageSquare, Trophy };
 
 export default function HomePage() {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
   const heroRef = useRef(null);
   const featuresRef = useRef(null);
   const howItWorksRef = useRef(null);
@@ -183,21 +186,27 @@ export default function HomePage() {
         {/* Layer 2: Abstract Nodes/Connections (Cinematic Depth) */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           {/* Node 1 */}
-          <div className="absolute top-[20%] right-[15%] w-32 h-32 border border-primary-500/20 rounded-full animate-spin-slow">
-            <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary-500 rounded-full shadow-[0_0_10px_rgba(212,175,55,1)] -translate-x-1/2 -translate-y-1/2" />
+          <div
+            className="absolute top-[20%] right-[15%] w-32 h-32 rounded-full animate-spin-slow"
+            style={{ border: '1px solid var(--deco-ring-stroke, rgba(212,175,55,0.20))' }}
+          >
+            <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary-500 rounded-full -translate-x-1/2 -translate-y-1/2" />
             <div className="absolute top-0 left-1/2 w-[1px] h-4 bg-primary-500/50 -translate-x-1/2" />
             <div className="absolute bottom-0 left-1/2 w-[1px] h-4 bg-primary-500/50 -translate-x-1/2" />
             <div className="absolute left-0 top-1/2 w-4 h-[1px] bg-primary-500/50 -translate-y-1/2" />
             <div className="absolute right-0 top-1/2 w-4 h-[1px] bg-primary-500/50 -translate-y-1/2" />
           </div>
           {/* Node 2 */}
-          <div className="absolute bottom-[30%] right-[30%] w-64 h-64 border border-white/5 rounded-full">
-            <div className="absolute top-1/4 right-0 w-2 h-2 bg-primary-400 rounded-full shadow-[0_0_15px_rgba(212,175,55,1)]" />
+          <div
+            className="absolute bottom-[30%] right-[30%] w-64 h-64 rounded-full"
+            style={{ border: '1px solid var(--deco-dash-stroke, rgba(255,255,255,0.05))' }}
+          >
+            <div className="absolute top-1/4 right-0 w-2 h-2 bg-primary-400 rounded-full" />
             <div className="absolute bottom-1/4 left-1/4 w-[1px] h-32 bg-gradient-to-t from-primary-500/30 to-transparent rotate-45 origin-bottom" />
           </div>
           {/* Diagnostic markers */}
-          <div className="absolute top-[15%] left-[5%] font-mono text-[10px] text-primary-500/40 tracking-widest hidden md:block">SYS.CORE.INIT // 0x7A4F</div>
-          <div className="absolute bottom-[10%] right-[10%] font-mono text-[10px] text-primary-500/40 tracking-widest hidden md:block">MEM_ALLOC_OK -&gt; 1024TB</div>
+          <div className="absolute top-[15%] left-[5%] font-mono text-[10px] tracking-widest hidden md:block hero-sys-label" style={{ color: 'var(--sys-label-color, rgba(212,175,55,0.40))' }}>SYS.CORE.INIT // 0x7A4F</div>
+          <div className="absolute bottom-[10%] right-[10%] font-mono text-[10px] tracking-widest hidden md:block hero-sys-label" style={{ color: 'var(--sys-label-color, rgba(212,175,55,0.40))' }}>MEM_ALLOC_OK -&gt; 1024TB</div>
           <div className="absolute top-[40%] right-[5%] hidden md:flex flex-col gap-1">
             <div className="w-8 h-[2px] bg-primary-500/20" />
             <div className="w-4 h-[2px] bg-primary-500/40" />
@@ -205,7 +214,10 @@ export default function HomePage() {
           </div>
         </div>
         {/* Layer 3: Radial Gradient Overlay for depth */}
-        <div className="absolute inset-0 bg-radial-gradient from-transparent via-surface-950/60 to-surface-950 z-0 pointer-events-none" />
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse at center, transparent 0%, var(--bg-page, #0a0a0a) 75%)' }}
+        />
         
         {/* Content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 hero-parallax">
@@ -230,16 +242,15 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row items-center gap-6 opacity-0 hero-action w-full sm:w-auto">
                 <Link
                   to="/login?register=true"
-                  className="relative group bg-surface-950 border border-primary-500/50 text-primary-400 px-8 py-4 font-mono uppercase font-bold tracking-widest overflow-hidden transition-all duration-300 hover:border-primary-500 hover:text-surface-950 w-full sm:w-auto flex items-center justify-center gap-3"
+                  className="hero-cta-primary relative group bg-surface-950 border border-primary-500/50 text-primary-400 px-8 py-4 font-mono uppercase font-bold tracking-widest overflow-hidden transition-all duration-300 hover:border-primary-500 hover:text-surface-950 w-full sm:w-auto flex items-center justify-center gap-3"
                 >
                   <span className="absolute inset-0 bg-primary-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0" />
-                  <span className="absolute inset-0 shadow-[0_0_20px_rgba(212,175,55,0.4)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" />
                   <span className="relative z-10">Start Learning</span>
                   <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
                   to="/courses"
-                  className="relative group bg-transparent border border-white/10 text-surface-400 px-8 py-4 font-mono uppercase font-bold tracking-widest transition-all duration-300 hover:border-white/30 hover:text-surface-100 w-full sm:w-auto flex items-center justify-center gap-3"
+                  className="hero-cta-secondary relative group bg-transparent border border-white/10 text-surface-400 px-8 py-4 font-mono uppercase font-bold tracking-widest transition-all duration-300 hover:border-white/30 hover:text-surface-100 w-full sm:w-auto flex items-center justify-center gap-3"
                 >
                   <span className="relative z-10">Explore Courses</span>
                   <Play size={20} className="relative z-10" />
@@ -253,21 +264,21 @@ export default function HomePage() {
               <div className="relative w-full aspect-square max-w-md">
                 {/* Connecting lines */}
                 <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
-                  <line stroke="rgba(212,175,55,0.2)" strokeWidth="0.5" x1="20" x2="80" y1="20" y2="80" />
-                  <line stroke="rgba(212,175,55,0.2)" strokeWidth="0.5" x1="80" x2="20" y1="20" y2="80" />
-                  <line stroke="rgba(255,255,255,0.1)" strokeDasharray="2,2" strokeWidth="0.5" x1="50" x2="50" y1="10" y2="90" />
-                  <circle cx="50" cy="50" fill="none" r="30" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" />
-                  <circle cx="50" cy="50" fill="none" r="40" stroke="rgba(255,255,255,0.05)" strokeDasharray="1,4" strokeWidth="0.5" />
+                  <line stroke="var(--deco-line-stroke, rgba(212,175,55,0.2))" strokeWidth="0.5" x1="20" x2="80" y1="20" y2="80" />
+                  <line stroke="var(--deco-line-stroke, rgba(212,175,55,0.2))" strokeWidth="0.5" x1="80" x2="20" y1="20" y2="80" />
+                  <line stroke="var(--deco-dash-stroke, rgba(255,255,255,0.1))" strokeDasharray="2,2" strokeWidth="0.5" x1="50" x2="50" y1="10" y2="90" />
+                  <circle cx="50" cy="50" fill="none" r="30" stroke="var(--deco-ring-stroke, rgba(212,175,55,0.3))" strokeWidth="0.5" />
+                  <circle cx="50" cy="50" fill="none" r="40" stroke="var(--deco-dash-stroke, rgba(255,255,255,0.05))" strokeDasharray="1,4" strokeWidth="0.5" />
                 </svg>
                 {/* Floating Glass Data Panels */}
                 <div className="absolute top-[10%] left-[10%] glass-card p-4 border border-primary-500/30 w-32 animate-float">
-                  <div className="text-[10px] font-mono text-primary-500/70 mb-1">DATA.STREAM_01</div>
+                  <div className="text-[10px] font-mono mb-1 hero-sys-label" style={{ color: 'var(--sys-label-color, rgba(212,175,55,0.70))' }}>DATA.STREAM_01</div>
                   <div className="h-1 bg-primary-500/20 w-full overflow-hidden">
                     <div className="h-full bg-primary-500 w-2/3" />
                   </div>
                 </div>
                 <div className="absolute bottom-[20%] right-[5%] glass-card p-4 border border-primary-400/30 w-40 animate-float" style={{ animationDelay: '2s' }}>
-                  <div className="text-[10px] font-mono text-primary-400/70 mb-1">NEURAL_NET.ACT</div>
+                  <div className="text-[10px] font-mono mb-1 hero-sys-label" style={{ color: 'var(--sys-label-color, rgba(212,175,55,0.70))' }}>NEURAL_NET.ACT</div>
                   <div className="flex gap-1">
                     <div className="w-1 h-3 bg-primary-400/80" />
                     <div className="w-1 h-4 bg-primary-400/60" />
@@ -277,7 +288,10 @@ export default function HomePage() {
                   </div>
                 </div>
                 {/* Central Core */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-surface-950 border border-primary-500 flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.2)]">
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 border border-primary-500 flex items-center justify-center"
+                  style={{ background: 'var(--bg-card)', boxShadow: '0 0 24px var(--shadow-card-color), 0 0 12px rgba(168,121,40,0.15)' }}
+                >
                   <Brain className="text-primary-500 animate-pulse" size={32} />
                 </div>
               </div>
@@ -306,7 +320,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-20">
             <div className="max-w-2xl features-header">
-              <div className="inline-flex items-center gap-3 px-5 py-2 mb-6 border border-primary-500/30 bg-surface-950/80 backdrop-blur-sm">
+              <div
+                className="inline-flex items-center gap-3 px-5 py-2 mb-6 border border-primary-500/30 backdrop-blur-sm"
+                style={{ background: 'var(--glass-card-bg)' }}
+              >
                 <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.6)]" />
                 <span className="font-mono text-[11px] text-primary-500 uppercase tracking-[0.3em]">SYS.CAPABILITIES // ACTIVE</span>
               </div>
@@ -430,7 +447,10 @@ export default function HomePage() {
                   <div className="flex items-center gap-4 mb-8">
                     <div className="relative">
                       <div className="absolute inset-0 rounded-full bg-primary-500/20 scale-0 group-hover:scale-150 transition-transform duration-700 blur-md" />
-                      <div className="relative w-[72px] h-[72px] border-2 border-surface-700 group-hover:border-primary-500 transition-all duration-500 rounded-full flex items-center justify-center bg-surface-950 z-10">
+                      <div
+                        className="relative w-[72px] h-[72px] border-2 border-surface-700 group-hover:border-primary-500 transition-all duration-500 rounded-full flex items-center justify-center z-10"
+                        style={{ background: 'var(--bg-page)' }}
+                      >
                         <span className="font-heading text-2xl font-bold text-surface-600 group-hover:text-primary-500 transition-colors duration-500">
                           0{step.step}
                         </span>
@@ -485,16 +505,20 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[600px]">
             {/* Admin Agent (Large Span) */}
             <div className="lg:col-span-8 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[450px] lg:min-h-0 h-full" style={{opacity: 1}}>
-              <div className="absolute inset-0 bg-surface-900/60 group-hover:bg-surface-900/20 transition-colors duration-500 z-10" />
+              {/* Light overlay tint — lighter in light mode so image shows */}
+              <div className={`absolute inset-0 transition-colors duration-500 z-10 ${isLight ? 'bg-surface-800/20 group-hover:bg-transparent' : 'bg-surface-900/60 group-hover:bg-surface-900/20'}`} />
               <img 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzgzOR4u6w0Sxdjjv_NUxG9UiXJeey13upASnvrEsQCuAl6Kg8xOwZvbxZUBS2PHK5678KNwKRprWsg89vmVXem1ONo9vfKHjqBEorNDL3620By2CQMNW73rxYJGMRNJVkAZH8Qfj56iBvGo9i_iFZfgWQ3OBzIvu-J5p_3M-r5c9rXpTzdNK8tiOH-6-vV4fCVdZKmkvvOl4EQWCkc37nEzh7Ad1vK7yV_q0W-xuG_GaNTYOnKvp-5aLS2qYeauwbLGwcgGoE1AA"
                 alt="Admin Agent"
                 loading="lazy"
                 width="800"
                 height="600"
-                className="absolute inset-0 w-full h-full object-cover object-top opacity-50 group-hover:opacity-100 transition-opacity duration-700 grayscale group-hover:grayscale-0 mix-blend-luminosity"
+                className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${isLight ? 'opacity-70 group-hover:opacity-100 grayscale-[30%] group-hover:grayscale-0' : 'opacity-50 group-hover:opacity-100 grayscale group-hover:grayscale-0 mix-blend-luminosity'}`}
               />
-              <div className="absolute bottom-0 left-0 p-8 md:p-12 z-20 w-full bg-gradient-to-t from-surface-950 via-surface-950/80 to-transparent">
+              {/* Bottom text gradient — dark navy in both modes so text is always readable */}
+              <div className="absolute bottom-0 left-0 p-8 md:p-12 z-20 w-full"
+                style={{ background: 'linear-gradient(to top, rgba(10,22,40,0.95) 0%, rgba(10,22,40,0.70) 50%, transparent 100%)' }}
+              >
                 <div className="flex items-center gap-3 mb-3">
                   <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
                   <span className="text-xs font-mono text-surface-400 uppercase tracking-widest">Class: Overseer</span>
@@ -521,9 +545,11 @@ export default function HomePage() {
                   loading="lazy"
                   width="400"
                   height="300"
-                  className="absolute inset-0 w-full h-full object-cover object-center opacity-40 group-hover:opacity-70 transition-opacity duration-500 mix-blend-overlay"
+                  className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 ${isLight ? 'opacity-60 group-hover:opacity-85' : 'opacity-40 group-hover:opacity-70 mix-blend-overlay'}`}
                 />
-                <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end z-20 bg-gradient-to-t from-surface-950/95 via-surface-950/60 to-transparent">
+                <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end z-20"
+                  style={{ background: 'linear-gradient(to top, rgba(10,22,40,0.95) 0%, rgba(10,22,40,0.65) 45%, transparent 100%)' }}
+                >
                   <div className="flex items-center gap-3 mb-2">
                     <span className="w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
                     <span className="text-xs font-mono text-surface-400 uppercase tracking-widest">Class: Peer</span>
@@ -545,9 +571,11 @@ export default function HomePage() {
                   loading="lazy"
                   width="400"
                   height="300"
-                  className="absolute inset-0 w-full h-full object-cover object-center opacity-40 group-hover:opacity-70 transition-opacity duration-500 mix-blend-overlay"
+                  className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 ${isLight ? 'opacity-60 group-hover:opacity-85' : 'opacity-40 group-hover:opacity-70 mix-blend-overlay'}`}
                 />
-                <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end z-20 bg-gradient-to-t from-surface-950/95 via-surface-950/60 to-transparent">
+                <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end z-20"
+                  style={{ background: 'linear-gradient(to top, rgba(10,22,40,0.95) 0%, rgba(10,22,40,0.65) 45%, transparent 100%)' }}
+                >
                   <div className="flex items-center gap-3 mb-2">
                     <span className="w-2 h-2 bg-primary-500 rounded-full shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
                     <span className="text-xs font-mono text-surface-400 uppercase tracking-widest">Class: Support</span>
@@ -569,7 +597,13 @@ export default function HomePage() {
           TESTIMONIALS SECTION — Premium Marquee
           ═══════════════════════════════════════════════════════ */}
       <section ref={testimonialsRef} className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-surface-950" />
+        {/* Background: adapts to theme */}
+        <div className="absolute inset-0" style={{ background: 'var(--bg-page)' }} />
+        {/* Subtle tinted overlay */}
+        <div className="absolute inset-0" style={{ background: isLight
+          ? 'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(168,121,40,0.05) 0%, transparent 60%)'
+          : 'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212,175,55,0.04) 0%, transparent 60%)'
+        }} />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-16">
           <div className="text-center max-w-2xl mx-auto section-title">
@@ -585,24 +619,30 @@ export default function HomePage() {
 
         {/* Marquee Container with fade masks */}
         <div className="relative flex overflow-hidden group w-full">
-          {/* Gradient Masks for smooth fade at edges */}
-          <div className="absolute top-0 bottom-0 left-0 w-32 md:w-64 bg-gradient-to-r from-surface-950 to-transparent z-20 pointer-events-none" />
-          <div className="absolute top-0 bottom-0 right-0 w-32 md:w-64 bg-gradient-to-l from-surface-950 to-transparent z-20 pointer-events-none" />
+          {/* Gradient Masks — fade to the actual page bg color, not hardcoded dark */}
+          <div className="absolute top-0 bottom-0 left-0 w-32 md:w-64 z-20 pointer-events-none"
+            style={{ background: `linear-gradient(to right, var(--bg-page) 0%, transparent 100%)` }} />
+          <div className="absolute top-0 bottom-0 right-0 w-32 md:w-64 z-20 pointer-events-none"
+            style={{ background: `linear-gradient(to left, var(--bg-page) 0%, transparent 100%)` }} />
 
-          {/* Marquee Track — using animate-[marquee_40s_linear_infinite] */}
+          {/* Marquee Track */}
           <div className="flex gap-6 min-w-max animate-[marquee_30s_linear_infinite] hover:[animation-play-state:paused] px-3">
-            {/* We duplicate the array to ensure continuous seamless looping. 
-                Using 4 sets ensures it covers ultra-wide screens. */}
             {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
               <div 
                 key={i} 
-                className="w-[280px] sm:w-[340px] flex-shrink-0 relative bg-surface-900/40 backdrop-blur-md rounded-xl p-6 sm:p-7 border border-surface-800/60 hover:border-primary-500/30 transition-all duration-500 hover:-translate-y-1 overflow-hidden group"
+                className={`w-[280px] sm:w-[340px] flex-shrink-0 relative backdrop-blur-md rounded-xl p-6 sm:p-7 border hover:border-primary-500/30 transition-all duration-500 hover:-translate-y-1 overflow-hidden group ${
+                  isLight
+                    ? 'bg-white/90 border-stone-200 shadow-[0_2px_16px_rgba(26,42,68,0.09)]'
+                    : 'bg-surface-900/40 border-surface-800/60'
+                }`}
               >
                 {/* Accent Line */}
-                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary-500/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-l-xl" />
                 
                 {/* Watermark Quote */}
-                <div className="absolute -top-6 -right-2 text-[120px] font-serif leading-none text-surface-800/30 pointer-events-none select-none group-hover:text-primary-500/10 transition-colors duration-500">
+                <div className={`absolute -top-6 -right-2 text-[120px] font-serif leading-none pointer-events-none select-none group-hover:text-primary-500/10 transition-colors duration-500 ${
+                  isLight ? 'text-stone-200' : 'text-surface-800/30'
+                }`}>
                   "
                 </div>
                 
@@ -614,17 +654,23 @@ export default function HomePage() {
                   </div>
                   
                   {/* Quote */}
-                  <p className="text-surface-300 text-[14px] leading-[1.7] mb-6 italic flex-1 font-light">
+                  <p className={`text-[14px] leading-[1.7] mb-6 italic flex-1 font-light ${
+                    isLight ? 'text-slate-600' : 'text-surface-300'
+                  }`}>
                     {t.content}
                   </p>
                   
                   {/* Author Info */}
-                  <div className="flex items-center gap-3 pt-4 border-t border-surface-800/40 mt-auto">
-                    <div className="w-9 h-9 rounded-full bg-surface-800 border border-primary-500/20 flex items-center justify-center text-primary-400 text-sm font-bold font-heading shadow-[0_0_10px_rgba(212,175,55,0.1)] group-hover:border-primary-500/50 transition-colors duration-500">
+                  <div className={`flex items-center gap-3 pt-4 border-t mt-auto ${
+                    isLight ? 'border-stone-100' : 'border-surface-800/40'
+                  }`}>
+                    <div className={`w-9 h-9 rounded-full border flex items-center justify-center text-primary-400 text-sm font-bold font-heading group-hover:border-primary-500/50 transition-colors duration-500 ${
+                      isLight ? 'bg-amber-50 border-amber-200/60' : 'bg-surface-800 border-primary-500/20 shadow-[0_0_10px_rgba(212,175,55,0.1)]'
+                    }`}>
                       {t.name.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-[13px] font-semibold text-surface-100">{t.name}</p>
+                      <p className={`text-[13px] font-semibold ${ isLight ? 'text-slate-800' : 'text-surface-100'}`}>{t.name}</p>
                       <p className="text-[10px] text-primary-500/70 uppercase tracking-wider mt-0.5">{t.role}</p>
                     </div>
                   </div>

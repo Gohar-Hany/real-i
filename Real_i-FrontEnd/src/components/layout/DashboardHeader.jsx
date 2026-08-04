@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useSidebar } from '@/contexts/SidebarContext';
 import { Menu, Bell, UserCircle, X, Search, ChevronRight, LogOut, Settings, User } from 'lucide-react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import ThemeToggle from '@/components/common/ThemeToggle';
 
 const BREADCRUMB_MAP = {
   admin: { label: 'Admin', icon: null },
@@ -189,6 +190,9 @@ export default function DashboardHeader() {
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-2">
+          {/* Theme Switcher Toggle */}
+          <ThemeToggle />
+
           {/* Search Toggle */}
           <div ref={searchRef} className="relative">
             <button

@@ -5,11 +5,13 @@ import {
   LayoutDashboard, MessageSquare, Database, Upload, BookOpen,
   BrainCircuit, LogOut, ChevronLeft, ChevronRight, Shield,
   Users, BarChart3, GraduationCap, UserCircle, FolderOpen,
-  Settings, ClipboardList, CalendarDays,
+  Settings, ClipboardList, CalendarDays, Video,
 } from 'lucide-react';
 
 const adminLinks = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
+  { to: '/admin/live', icon: Video, label: 'Live Classes' },
+  { to: '/admin/meetings', icon: CalendarDays, label: 'Manage Meetings' },
   { to: '/admin/students', icon: Users, label: 'Students' },
   { to: '/admin/courses', icon: FolderOpen, label: 'Courses' },
   { to: '/admin/assessments', icon: ClipboardList, label: 'Assessments' },
@@ -25,6 +27,7 @@ const adminLinks = [
 
 const studentLinks = [
   { to: '/student', icon: LayoutDashboard, label: 'Dashboard', end: true },
+  { to: '/student/live', icon: Video, label: 'Live Classes' },
   { to: '/student/courses', icon: GraduationCap, label: 'My Courses' },
   { to: '/student/assessments', icon: ClipboardList, label: 'Assessments' },
   { to: '/student/calendar', icon: CalendarDays, label: 'Calendar' },

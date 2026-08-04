@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Menu, X, ChevronRight } from 'lucide-react';
+import ThemeToggle from '@/components/common/ThemeToggle';
 import gsap from 'gsap';
 
 export default function Navbar() {
@@ -44,9 +45,14 @@ export default function Navbar() {
       ref={navRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-surface-950/80 backdrop-blur-xl border-b border-primary-500/20 shadow-[0_0_15px_rgba(212,175,55,0.1)] h-20 flex items-center'
-          : 'bg-transparent py-5 h-24 flex items-center'
+          ? 'backdrop-blur-xl border-b h-20 flex items-center'
+          : 'py-5 h-24 flex items-center'
       }`}
+      style={{
+        background: scrolled ? 'var(--glass-navbar-bg)' : 'transparent',
+        borderColor: scrolled ? 'var(--glass-border)' : 'transparent',
+        boxShadow: scrolled ? '0 4px 20px var(--shadow-card-color)' : 'none',
+      }}
     >
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
@@ -85,8 +91,9 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons & Theme Toggle */}
           <div className="hidden md:flex items-center gap-4">
+            <ThemeToggle />
             {user ? (
               <Link
                 to={user.role === 'admin' ? '/admin' : '/student'}

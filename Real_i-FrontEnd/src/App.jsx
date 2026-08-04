@@ -31,6 +31,7 @@ const AdminData = lazy(() => import('@/pages/admin/AdminData'));
 const AdminUpload = lazy(() => import('@/pages/admin/AdminUpload'));
 const AdminGuidelines = lazy(() => import('@/pages/admin/AdminGuidelines'));
 const AdminStudents = lazy(() => import('@/pages/admin/AdminStudents'));
+const AdminMeetings = lazy(() => import('@/pages/admin/AdminMeetings'));
 const AdminCourses = lazy(() => import('@/pages/admin/AdminCourses'));
 const AdminCourseDetail = lazy(() => import('@/pages/admin/AdminCourseDetail'));
 const AdminAnalytics = lazy(() => import('@/pages/admin/AdminAnalytics'));
@@ -55,6 +56,9 @@ const StudentExamTake = lazy(() => import('@/pages/student/StudentExamTake'));
 const StudentAssignmentSubmit = lazy(() => import('@/pages/student/StudentAssignmentSubmit'));
 const StudentAssessmentResult = lazy(() => import('@/pages/student/StudentAssessmentResult'));
 const StudentCalendar = lazy(() => import('@/pages/student/StudentCalendar'));
+
+// Shared Live Meeting Page
+const LiveMeetingPage = lazy(() => import('@/pages/shared/LiveMeetingPage'));
 
 function ProtectedRoute({ children, role }) {
   const { user, loading } = useAuth();
@@ -107,6 +111,8 @@ function AppRoutes() {
         {/* ── Admin Routes ── */}
         <Route path="/admin" element={<ProtectedRoute role="admin"><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<AdminDashboard />} />
+          <Route path="meetings" element={<AdminMeetings />} />
+          <Route path="live" element={<LiveMeetingPage />} />
           <Route path="students" element={<AdminStudents />} />
           <Route path="students/:id" element={<AdminStudentProfile />} />
           <Route path="courses" element={<AdminCourses />} />
@@ -128,6 +134,7 @@ function AppRoutes() {
         {/* ── Student Routes ── */}
         <Route path="/student" element={<ProtectedRoute role="student"><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<StudentDashboard />} />
+          <Route path="live" element={<LiveMeetingPage />} />
           <Route path="courses" element={<StudentCourses />} />
           <Route path="courses/:courseId/learn" element={<StudentCourseLearning />} />
           <Route path="chat" element={<StudentChat />} />
