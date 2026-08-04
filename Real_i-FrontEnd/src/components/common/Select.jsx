@@ -165,7 +165,7 @@ export default function Select({
           className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border text-sm font-medium outline-none transition-all duration-300 
             ${isOpen 
               ? 'bg-surface-900 border-primary-500/60 ring-4 ring-primary-500/10 text-surface-50 shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
-              : 'bg-surface-950/80 border-surface-800 text-surface-200 hover:border-surface-600 hover:bg-surface-900 shadow-inner'
+              : 'bg-surface-950/80 border-surface-700 text-surface-200 hover:border-surface-600 hover:bg-surface-900 shadow-inner'
             }
             ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer'}
           `}
@@ -190,11 +190,8 @@ export default function Select({
             ...getDropdownStyle(),
             perspective: '1000px',
           }}
-          className="rounded-xl overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.9),_0_0_2px_rgba(212,175,55,0.5)] border border-surface-700"
+          className="rounded-xl overflow-hidden shadow-2xl dark:shadow-[0_16px_40px_rgba(0,0,0,0.9),_0_0_2px_rgba(212,175,55,0.5)] border border-surface-700 bg-white dark:bg-[#0a0a0a]"
         >
-          {/* Solid Background Container - NO Transparency */}
-          <div className="absolute inset-0 bg-[#0a0a0a]"></div>
-          
           {/* Subtle gold accent lighting inside */}
           <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-primary-500/5 to-transparent pointer-events-none rounded-t-xl" />
           
@@ -225,7 +222,7 @@ export default function Select({
                     {isSelected && (
                       <div className="absolute inset-0 bg-gradient-to-r from-primary-500/20 to-transparent border-l-2 border-primary-500 rounded-lg"></div>
                     )}
-                    <div className="absolute inset-0 bg-surface-800/0 group-hover/item:bg-surface-800/40 rounded-lg transition-colors duration-300"></div>
+                    <div className="absolute inset-0 bg-transparent group-hover/item:bg-black/5 dark:group-hover/item:bg-white/5 rounded-lg transition-colors duration-300"></div>
 
                     <span className="relative z-10 flex items-center gap-3 transition-transform duration-300 group-hover/item:translate-x-1">
                       {isSelected ? (

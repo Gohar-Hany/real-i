@@ -3,11 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAssessments, generateQId } from '@/contexts/AssessmentContext';
 import { getCourses } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
+import Select from '@/components/common/Select';
 import {
   ClipboardList, ArrowLeft, ArrowRight, Check, Save, Eye,
   BrainCircuit, GraduationCap, FileText, CheckSquare,
   Plus, Trash2, GripVertical, ChevronDown, ChevronUp, Lightbulb,
-  Clock, Target, Shield, Shuffle, BookOpen, Calendar, Hash
+  Clock, Target, Shield, Shuffle, BookOpen, Calendar, Hash,
+  Upload, Download
 } from 'lucide-react';
 
 const TYPES = [
@@ -61,6 +63,25 @@ const INITIAL_FORM = {
   attachments: [],
   questions: [EMPTY_QUESTION()],
 };
+
+const inputCls = 'w-full px-4 py-3 rounded-xl bg-surface-900/80 border border-surface-700 text-sm text-surface-50 placeholder-surface-500 outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all';
+
+const Field = ({ label, children, hint, className = '' }) => (
+  <div className={className}>
+    <label className="block text-xs font-bold text-surface-400 uppercase tracking-wider mb-2">{label}</label>
+    {children}
+    {hint && <p className="text-[10px] text-surface-500 mt-1.5">{hint}</p>}
+  </div>
+);
+
+const Toggle = ({ checked, onChange, label }) => (
+  <button type="button" onClick={() => onChange(!checked)} className={`flex items-center justify-between w-full p-3.5 rounded-xl border transition-all ${checked ? 'bg-primary-500/10 border-primary-500/30' : 'bg-surface-900/60 border-surface-700/50'}`}>
+    <span className={`text-sm font-bold ${checked ? 'text-primary-400' : 'text-surface-400'}`}>{label}</span>
+    <div className={`w-10 h-6 rounded-full transition-all relative ${checked ? 'bg-primary-500' : 'bg-surface-700'}`}>
+      <div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-all ${checked ? 'left-5' : 'left-1'}`} />
+    </div>
+  </button>
+);
 
 export default function AdminAssessmentCreate() {
   const { id } = useParams();
@@ -205,25 +226,115 @@ export default function AdminAssessmentCreate() {
     navigate('/admin/assessments');
   };
 
-  // ── Field Component ────────────────────────────────────────
-  const Field = ({ label, children, hint, className = '' }) => (
-    <div className={className}>
-      <label className="block text-xs font-bold text-surface-400 uppercase tracking-wider mb-2">{label}</label>
-      {children}
-      {hint && <p className="text-[10px] text-surface-500 mt-1.5">{hint}</p>}
-    </div>
-  );
+  // ── CSV Upload & Download ─────────────────────────────────
+  const handleDownloadTemplate = () => {
+    const headers = "Question,Option A,Option B,Option C,Option D,Correct Answer (A/B/C/D),Marks,Explanation\n";
+    const sample = "What is the capital of France?,Paris,London,Berlin,Madrid,A,10,Paris is the capital of France.\n";
+    const blob = new Blob([headers + sample], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'REAL_i_Questions_Template.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
-  const inputCls = 'w-full px-4 py-3 rounded-xl bg-surface-900/80 border border-surface-700 text-sm text-surface-50 placeholder-surface-500 outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all';
+  const parseCSVRow = (text) => {
+    let result = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      let char = text[i];
+      if (inQuotes) {
+        if (char === '"') {
+          if (i + 1 < text.length && text[i + 1] === '"') {
+            cur += '"';
+            i++;
+          } else {
+            inQuotes = false;
+          }
+        } else {
+          cur += char;
+        }
+      } else {
+        if (char === '"') {
+          inQuotes = true;
+        } else if (char === ',') {
+          result.push(cur);
+          cur = '';
+        } else {
+          cur += char;
+        }
+      }
+    }
+    result.push(cur);
+    return result;
+  };
 
-  const Toggle = ({ checked, onChange, label }) => (
-    <button type="button" onClick={() => onChange(!checked)} className={`flex items-center justify-between w-full p-3.5 rounded-xl border transition-all ${checked ? 'bg-primary-500/10 border-primary-500/30' : 'bg-surface-900/60 border-surface-700/50'}`}>
-      <span className={`text-sm font-bold ${checked ? 'text-primary-400' : 'text-surface-400'}`}>{label}</span>
-      <div className={`w-10 h-6 rounded-full transition-all relative ${checked ? 'bg-primary-500' : 'bg-surface-700'}`}>
-        <div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-all ${checked ? 'left-5' : 'left-1'}`} />
-      </div>
-    </button>
-  );
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target.result;
+      // Split by lines, handle \r\n and \n
+      const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+      if (lines.length <= 1) {
+        toast.error('CSV file is empty or only contains headers.');
+        return;
+      }
+
+      const parsedQuestions = [];
+      for (let i = 1; i < lines.length; i++) {
+        const row = parseCSVRow(lines[i]);
+        if (row.length < 6) continue; // Skip malformed rows
+        
+        const text = row[0] || 'Untitled Question';
+        const options = [row[1] || '', row[2] || '', row[3] || '', row[4] || ''];
+        
+        let correctLetter = (row[5] || 'A').toUpperCase().trim();
+        let correctAnswer = 0;
+        if (correctLetter === 'B') correctAnswer = 1;
+        else if (correctLetter === 'C') correctAnswer = 2;
+        else if (correctLetter === 'D') correctAnswer = 3;
+
+        const marks = parseInt(row[6]) || 10;
+        const explanation = row[7] || '';
+
+        parsedQuestions.push({
+          id: generateQId(),
+          text,
+          options,
+          correctAnswer,
+          marks,
+          shuffleOptions: false,
+          explanation
+        });
+      }
+
+      if (parsedQuestions.length > 0) {
+        // If the current list only has one empty question, replace it. Otherwise append.
+        setForm(prev => {
+          let newQuestions = [...prev.questions];
+          if (newQuestions.length === 1 && newQuestions[0].text === '' && newQuestions[0].options[0] === '') {
+            newQuestions = parsedQuestions;
+          } else {
+            newQuestions = [...newQuestions, ...parsedQuestions];
+          }
+          return { ...prev, questions: newQuestions };
+        });
+        toast.success(`Successfully imported ${parsedQuestions.length} questions!`);
+      } else {
+        toast.warning('No valid questions found in the CSV.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = null; // Reset input
+  };
+
+
 
   // ═══════════════════════════════════════════════════════════
   // STEP RENDERERS
@@ -274,11 +385,13 @@ export default function AdminAssessmentCreate() {
 
       {/* Course */}
       <Field label="Course / Project">
-        <select value={form.courseId} onChange={e => update('courseId', e.target.value)} className={`${inputCls} cursor-pointer`}>
-          <option value="">Select a course...</option>
-          {projects.map(p => <option key={p.project_id} value={p.project_id}>{p.project_id}</option>)}
-          <option value="general">General (All Courses)</option>
-        </select>
+        <Select 
+          value={form.courseId} 
+          onChange={val => update('courseId', val)} 
+          options={[...projects.map(p => ({ value: p.project_id, label: p.project_id })), { value: 'general', label: 'General (All Courses)' }]}
+          placeholder="Select a course..."
+          className="w-full"
+        />
       </Field>
     </div>
   );
@@ -370,13 +483,24 @@ export default function AdminAssessmentCreate() {
 
   const renderQuestions = () => (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <p className="text-sm text-surface-400">
           <strong className="text-surface-50">{form.questions.length}</strong> questions · <strong className="text-primary-400">{form.questions.reduce((s, q) => s + (q.marks || 0), 0)}</strong> total marks
         </p>
-        <button type="button" onClick={addQuestion} className="flex items-center gap-1.5 px-4 py-2 rounded-xl gradient-primary text-surface-950 text-xs font-bold active:scale-95 transition-all">
-          <Plus size={14} /> Add Question
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" onClick={handleDownloadTemplate} className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-surface-700 bg-surface-900/60 text-surface-300 text-xs font-bold hover:text-surface-50 transition-all" title="Download CSV Template">
+            <Download size={14} /> Template
+          </button>
+          
+          <label className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-primary-500/30 bg-primary-500/5 text-primary-400 text-xs font-bold hover:bg-primary-500/10 cursor-pointer transition-all" title="Upload CSV">
+            <Upload size={14} /> Import CSV
+            <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} />
+          </label>
+
+          <button type="button" onClick={addQuestion} className="flex items-center gap-1.5 px-4 py-2 rounded-xl gradient-primary text-surface-950 text-xs font-bold active:scale-95 transition-all">
+            <Plus size={14} /> Add Question
+          </button>
+        </div>
       </div>
 
       {form.questions.map((q, qIdx) => {
