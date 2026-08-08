@@ -4,8 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   Brain, BookOpen, MessageSquare, Trophy, ArrowRight,
-  Play, Users, GraduationCap, Star,
-  Bot
+  Play, Star, Bot
 } from 'lucide-react';
 import { FEATURES, TESTIMONIALS, HOW_IT_WORKS, PLATFORM_STATS } from '@/data/staticContent';
 import { Helmet } from 'react-helmet-async';

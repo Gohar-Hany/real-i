@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAssessments } from '@/contexts/AssessmentContext';
 import { api, getEvents, createEvent, deleteEvent } from '@/services/api';
 import CalendarWidget, { TYPE_CONFIG } from '@/components/common/CalendarWidget';
@@ -24,16 +24,16 @@ export default function AdminCalendar() {
 
   useEffect(() => { fetchAssessments(); }, [fetchAssessments]);
 
-  const fetchCustomEvents = () => {
+  const fetchCustomEvents = useCallback(() => {
     getEvents()
       .then(data => {
         const custom = (Array.isArray(data) ? data : []).filter(e => !e.is_auto);
         setCustomEvents(custom);
       })
       .catch(() => setCustomEvents([]));
-  };
+  }, []);
 
-  const fetchMeetings = async () => {
+  const fetchMeetings = useCallback(async () => {
     try {
       const response = await api.get('/meetings');
       if (response.success) {
@@ -42,12 +42,12 @@ export default function AdminCalendar() {
     } catch (err) {
       console.error('Failed to fetch meetings', err);
     }
-  };
+  }, []);
 
   useEffect(() => { 
     fetchCustomEvents(); 
     fetchMeetings();
-  }, []);
+  }, [fetchCustomEvents, fetchMeetings]);
 
   // Build calendar events from assessments + custom events + meetings
   const calendarEvents = useMemo(() => {
