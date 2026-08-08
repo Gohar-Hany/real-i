@@ -169,12 +169,14 @@ export function AssessmentProvider({ children }) {
         answers: mappedAnswers,
         time_taken: studentData.timeTaken || 0,
         files: studentData.files || [],
+        student_email: studentData.studentEmail || studentData.student_email || '',
       });
 
-      // Update local assessments to mark as submitted
+      // Update local assessments & submissions to mark as submitted
       setAssessments(prev => prev.map(a =>
         a.id === assessmentId ? { ...a, is_submitted: true, submission: result } : a
       ));
+      setSubmissions(prev => [result, ...prev.filter(s => s.assessment_id !== assessmentId)]);
 
       return result;
     } catch (err) {
@@ -209,10 +211,11 @@ export function AssessmentProvider({ children }) {
   }, []);
 
   const getStudentSubmission = useCallback((assessmentId, studentId) => {
-    // Use the submission attached to the assessment (from the enriched list endpoint)
+    // Check assessment object first, then submissions state array
     const assessment = assessments.find(a => a.id === assessmentId);
-    return assessment?.submission || null;
-  }, [assessments]);
+    if (assessment?.submission) return assessment.submission;
+    return submissions.find(s => (s.assessment_id === assessmentId || s.assessment_id?.id === assessmentId || s.assessment?.id === assessmentId)) || null;
+  }, [assessments, submissions]);
 
   const getInProgressSubmission = useCallback(() => null, []);
 

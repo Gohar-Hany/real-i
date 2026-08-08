@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAssessments } from '@/contexts/AssessmentContext';
 import { useToast } from '@/components/common/Toast';
@@ -19,10 +19,30 @@ export default function AdminAssessmentDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
-  const { getAssessmentById, getSubmissionsForAssessment, publishAssessment, deleteAssessment, duplicateAssessment } = useAssessments();
+  const { getAssessmentById, getSubmissionsForAssessment, publishAssessment, deleteAssessment, duplicateAssessment, fetchAssessments } = useAssessments();
+
+  const [submissions, setSubmissions] = useState([]);
+  const [loadingSubs, setLoadingSubs] = useState(true);
+
+  useEffect(() => {
+    fetchAssessments();
+    let isMounted = true;
+    const loadSubmissions = async () => {
+      setLoadingSubs(true);
+      try {
+        const subs = await getSubmissionsForAssessment(id);
+        if (isMounted) setSubmissions(Array.isArray(subs) ? subs : []);
+      } catch (err) {
+        console.error("Failed to load submissions", err);
+      } finally {
+        if (isMounted) setLoadingSubs(false);
+      }
+    };
+    loadSubmissions();
+    return () => { isMounted = false; };
+  }, [id, getSubmissionsForAssessment, fetchAssessments]);
 
   const assessment = getAssessmentById(id);
-  const submissions = useMemo(() => getSubmissionsForAssessment(id), [id, getSubmissionsForAssessment]);
 
   if (!assessment) {
     return (
@@ -38,10 +58,10 @@ export default function AdminAssessmentDetail() {
   const TypeIcon = tc.icon;
 
   // Stats
-  const safeSubmissions = Array.isArray(submissions) ? submissions : [];
-  const completedSubs = safeSubmissions.filter(s => s.status !== 'in_progress');
-  const inProgressSubs = safeSubmissions.filter(s => s.status === 'in_progress');
-  const scores = completedSubs.filter(s => s.score != null).map(s => s.score);
+  const safeSubmissions = submissions;
+  const gradedSubs = safeSubmissions.filter(s => s.status === 'graded');
+  const pendingGrading = safeSubmissions.filter(s => s.status === 'submitted' || s.status === 'late');
+  const scores = safeSubmissions.filter(s => s.score != null).map(s => s.score);
   const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
   const highest = scores.length > 0 ? Math.max(...scores) : 0;
   const lowest = scores.length > 0 ? Math.min(...scores) : 0;
@@ -92,11 +112,11 @@ export default function AdminAssessmentDetail() {
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {[
-          { icon: Users, label: 'Submissions', value: completedSubs.length, color: '#3B82F6' },
+          { icon: Users, label: 'Submissions', value: safeSubmissions.length, color: '#3B82F6' },
           { icon: BarChart3, label: 'Avg Score', value: totalMarks > 0 ? `${Math.round((avgScore / totalMarks) * 100)}%` : '—', color: '#D4AF37' },
           { icon: Trophy, label: 'Highest', value: totalMarks > 0 ? `${highest}/${totalMarks}` : '—', color: '#10B981' },
           { icon: TrendingDown, label: 'Lowest', value: totalMarks > 0 ? `${lowest}/${totalMarks}` : '—', color: '#EF4444' },
-          { icon: Hourglass, label: 'In Progress', value: inProgressSubs.length, color: '#F59E0B' },
+          { icon: Hourglass, label: 'Pending Grading', value: pendingGrading.length, color: '#F59E0B' },
         ].map((stat, i) => (
           <div key={i} className="relative glass-card rounded-2xl p-4 bg-surface-900/60 border border-surface-700/50 overflow-hidden group hover:-translate-y-1 transition-all duration-300">
             <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none" style={{ background: `radial-gradient(circle at center, ${stat.color} 0%, transparent 70%)` }}></div>

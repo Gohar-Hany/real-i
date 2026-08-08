@@ -60,7 +60,7 @@ export default function StudentAssignmentSubmit() {
 
   const removeFile = (idx) => setFiles(prev => prev.filter((_, i) => i !== idx));
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (assessment.submissionType === 'file' && files.length === 0) {
       toast.warning('Please upload at least one file');
       return;
@@ -75,15 +75,21 @@ export default function StudentAssignmentSubmit() {
     }
 
     setSubmitting(true);
-    submitAssessment(id, {
-      studentId: user?.id,
-      studentName: user?.name,
-      studentEmail: user?.email,
-      files,
-      textAnswer,
-    });
-    toast.success('Submitted successfully!');
-    navigate(`/student/assessments/${id}/results`);
+    try {
+      await submitAssessment(id, {
+        studentId: user?.id,
+        studentName: user?.name,
+        studentEmail: user?.email,
+        files,
+        textAnswer,
+      });
+      toast.success('Submitted successfully!');
+      navigate(`/student/assessments/${id}/results`);
+    } catch (err) {
+      console.error("Assignment submission error", err);
+      toast.error(err?.message || 'Failed to submit assignment. Please try again.');
+      setSubmitting(false);
+    }
   };
 
   return (

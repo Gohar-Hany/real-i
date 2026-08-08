@@ -92,23 +92,32 @@ export default function StudentExamTake() {
     setAnswers(prev => ({ ...prev, [qIdx]: optIdx }));
   };
 
-  const handleSubmit = useCallback((forced = false) => {
-    if (submitted) return;
-    setSubmitted(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = useCallback(async (forced = false) => {
+    if (submitted || submitting) return;
+    setSubmitting(true);
     if (timerRef.current) clearInterval(timerRef.current);
     if (autoSaveRef.current) clearInterval(autoSaveRef.current);
 
-    submitAssessment(id, {
-      studentId: user?.id,
-      studentName: user?.name,
-      studentEmail: user?.email,
-      answers,
-      startedAt: new Date().toISOString(),
-    });
+    try {
+      await submitAssessment(id, {
+        studentId: user?.id,
+        studentName: user?.name,
+        studentEmail: user?.email,
+        answers,
+        startedAt: new Date().toISOString(),
+      });
 
-    toast.success(forced ? 'Time\'s up! Exam auto-submitted.' : 'Exam submitted successfully!');
-    navigate(`/student/assessments/${id}/results`);
-  }, [answers, submitted]);
+      setSubmitted(true);
+      toast.success(forced ? 'Time\'s up! Exam auto-submitted.' : 'Exam submitted successfully!');
+      navigate(`/student/assessments/${id}/results`);
+    } catch (err) {
+      console.error("Exam submission error", err);
+      toast.error(err?.message || 'Failed to submit exam. Please check your connection and try again.');
+      setSubmitting(false);
+    }
+  }, [answers, submitted, submitting, id, user, submitAssessment, toast, navigate]);
 
   const formatTime = (secs) => {
     const m = Math.floor(secs / 60);

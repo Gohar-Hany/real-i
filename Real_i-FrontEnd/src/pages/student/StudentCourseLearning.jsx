@@ -23,24 +23,28 @@ export default function StudentCourseLearning() {
   // Mobile sidebar toggle
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const [notEnrolled, setNotEnrolled] = useState(false);
+
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         setLoading(true);
         const data = await getCourse(courseId);
-        
-        // Use real backend data only
         setCourse(data);
         
         // Fetch actual user progress from backend
         if (user) {
           const userData = await getUser(user.id);
           setCompletedLessons(userData.completed_lessons || []);
+          const enrolledList = userData.enrolled_courses || [];
+          const isEnrolled = user.role === 'admin' || data.is_enrolled || enrolledList.includes(courseId) || enrolledList.includes(data.id) || enrolledList.includes(data.project_id);
+          if (!isEnrolled) {
+            setNotEnrolled(true);
+          }
         }
-        
       } catch (err) {
         console.error("Failed to load course", err);
-        toast.error('Failed to load course content');
+        toast.error(err?.message || 'Failed to load course content');
         navigate('/student/courses');
       } finally {
         setLoading(false);
@@ -54,6 +58,28 @@ export default function StudentCourseLearning() {
       <div className="min-h-screen bg-surface-950 flex flex-col items-center justify-center space-y-4">
         <div className="w-16 h-16 rounded-full border-t-2 border-primary-500 animate-spin"></div>
         <p className="text-surface-400 font-mono text-sm tracking-widest uppercase animate-pulse">Loading Course Player...</p>
+      </div>
+    );
+  }
+
+  if (notEnrolled) {
+    return (
+      <div className="min-h-screen bg-surface-950 flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
+          <BookOpen className="w-8 h-8 text-rose-400" />
+        </div>
+        <h2 className="text-2xl font-bold text-surface-50 mb-2">Enrollment Required</h2>
+        <p className="text-surface-400 text-sm max-w-md mb-6">
+          You are not enrolled in this course. Please enroll in this course to access the lessons and materials.
+        </p>
+        <div className="flex gap-4">
+          <Link to={`/courses/${courseId}`} className="px-6 py-3 rounded-xl gradient-primary text-surface-950 font-bold text-sm">
+            View Course Details
+          </Link>
+          <Link to="/student/courses" className="px-6 py-3 rounded-xl bg-surface-800 border border-surface-700 text-surface-300 font-bold text-sm">
+            Back to My Courses
+          </Link>
+        </div>
       </div>
     );
   }
@@ -101,9 +127,11 @@ export default function StudentCourseLearning() {
 
   const isCompleted = currentLesson && completedLessons.includes(currentLesson.id);
 
-  // Calculate Progress
-  const totalLessons = course.modules.reduce((acc, mod) => acc + mod.lessons.length, 0);
-  const progressPercent = Math.round((completedLessons.length / totalLessons) * 100) || 0;
+  // Calculate Progress accurately for THIS course only
+  const allCourseLessonIds = (course.modules || []).flatMap(m => (m.lessons || []).map(l => l.id));
+  const totalLessons = allCourseLessonIds.length;
+  const completedInThisCourse = completedLessons.filter(id => allCourseLessonIds.includes(id)).length;
+  const progressPercent = totalLessons > 0 ? Math.round((completedInThisCourse / totalLessons) * 100) : 0;
 
   return (
     <div className="flex flex-col h-screen bg-surface-950 overflow-hidden">

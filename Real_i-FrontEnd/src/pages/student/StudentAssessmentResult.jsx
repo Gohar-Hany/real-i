@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAssessments } from '@/contexts/AssessmentContext';
@@ -11,10 +11,36 @@ export default function StudentAssessmentResult() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { getAssessmentById, getStudentSubmission } = useAssessments();
+  const { getAssessmentById, getStudentSubmission, fetchAssessments, getMySubmissions } = useAssessments();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await Promise.all([
+          fetchAssessments(),
+          getMySubmissions(),
+        ]);
+      } catch (err) {
+        console.error("Error fetching results data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    init();
+  }, [fetchAssessments, getMySubmissions]);
 
   const assessment = getAssessmentById(id);
   const submission = getStudentSubmission(id, user?.id);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 animate-fade-in-up">
+        <div className="w-12 h-12 rounded-full border-2 border-primary-500 border-t-transparent animate-spin mb-4" />
+        <p className="text-surface-400 font-mono text-sm tracking-widest uppercase">Loading Assessment Results...</p>
+      </div>
+    );
+  }
 
   if (!assessment) {
     return (
