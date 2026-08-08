@@ -214,10 +214,7 @@ export default function HomePage() {
           </div>
         </div>
         {/* Layer 3: Radial Gradient Overlay for depth */}
-        <div
-          className="absolute inset-0 z-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at center, transparent 0%, var(--bg-page, #0a0a0a) 75%)' }}
-        />
+        <div className="absolute inset-0 bg-radial-gradient from-transparent via-surface-950/60 to-surface-950 z-0 pointer-events-none" />
         
         {/* Content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 hero-parallax">
