@@ -138,13 +138,13 @@ export default function LoginPage() {
         <meta name="description" content="Secure authentication for REAL_i platform." />
       </Helmet>
 
-      <div className="min-h-screen flex flex-col lg:flex-row bg-surface-950 text-surface-100 selection:bg-primary-500/30 selection:text-white">
+      <div className="min-h-screen lg:h-screen flex flex-col lg:flex-row bg-surface-950 text-surface-100 selection:bg-primary-500/30 selection:text-white lg:overflow-hidden">
         
         {/* ═══════════════════════════════════════════════════════
             LEFT COLUMN — BRAND SHOWCASE (Seeraty Style Hero)
             Always luminous luxury dark hero in both modes
             ═══════════════════════════════════════════════════════ */}
-        <div className="lg:w-1/2 min-h-screen relative hidden lg:flex flex-col justify-between p-12 xl:p-16 overflow-hidden border-r border-surface-600/30 dark:border-surface-800/80 bg-[#080E24] text-white">
+        <div className="lg:w-1/2 h-full relative hidden lg:flex flex-col justify-between p-8 xl:p-12 overflow-hidden border-r border-surface-600/30 dark:border-surface-800/80 bg-[#080E24] text-white">
           
           {/* Background Layers: Rich Deep Navy Gradient + Gold Mesh + Grid */}
           <div 
@@ -161,45 +161,45 @@ export default function LoginPage() {
 
           {/* Top: Brand Logo & Wordmark */}
           <div className="relative z-10">
-            <Link to="/" className="inline-flex items-center gap-3 group">
+            <Link to="/" className="inline-flex items-center gap-2.5 group">
               <img 
                 src="/logo.png" 
                 alt="REAL_i Logo" 
-                className="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(212,175,55,0.5)] transition-transform duration-300 group-hover:scale-105" 
+                className="w-9 h-9 object-contain drop-shadow-[0_0_12px_rgba(212,175,55,0.5)] transition-transform duration-300 group-hover:scale-105" 
               />
-              <span className="text-2xl font-bold font-heading tracking-wider text-white">
+              <span className="text-xl font-bold font-heading tracking-wider text-white">
                 REAL<span className="text-primary-400">_i</span>
               </span>
             </Link>
           </div>
 
           {/* Middle: Headline, Subtitle & Showcase Feature Card */}
-          <div className="relative z-10 my-auto py-12 max-w-xl">
-            <h1 className="text-4xl xl:text-5xl font-heading font-bold text-white tracking-tight leading-[1.15] mb-6">
+          <div className="relative z-10 my-auto py-4 max-w-xl">
+            <h1 className="text-3xl xl:text-4xl font-heading font-bold text-white tracking-tight leading-[1.2] mb-4">
               Your smart cognitive <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-400 to-primary-500">
                 journey starts here.
               </span>
             </h1>
 
-            <p className="text-base xl:text-lg text-slate-300 leading-relaxed mb-10 font-sans">
+            <p className="text-sm xl:text-base text-slate-300 leading-relaxed mb-6 font-sans">
               Join thousands of learners, researchers, and engineers building real intelligence through adaptive multi-agent RAG labs, cognitive simulations, and certified credentials.
             </p>
 
             {/* Showcase Floating Badge Card (Always dark frosted glass for contrast) */}
-            <div className="relative bg-[#0E1A3D]/85 backdrop-blur-xl border border-primary-500/30 hover:border-primary-500/60 rounded-2xl p-6 shadow-2xl transition-all duration-300 group">
+            <div className="relative bg-[#0E1A3D]/85 backdrop-blur-xl border border-primary-500/30 hover:border-primary-500/60 rounded-2xl p-5 shadow-2xl transition-all duration-300 group">
               
               {/* Gold Circular Score Badge */}
-              <div className="absolute top-5 right-5 bg-gradient-to-br from-primary-400 to-primary-600 text-surface-950 font-bold text-sm px-3.5 py-1 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] flex items-center gap-1 font-mono">
+              <div className="absolute top-4 right-4 bg-gradient-to-br from-primary-400 to-primary-600 text-surface-950 font-bold text-xs px-3 py-0.5 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] flex items-center gap-1 font-mono">
                 99%
               </div>
 
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-primary-500/15 border border-primary-500/35 flex items-center justify-center text-primary-400 shrink-0">
-                  <Brain size={24} className="group-hover:scale-110 transition-transform duration-300" />
+              <div className="flex items-start gap-3.5 mb-3.5">
+                <div className="w-10 h-10 rounded-xl bg-primary-500/15 border border-primary-500/35 flex items-center justify-center text-primary-400 shrink-0">
+                  <Brain size={20} className="group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <div className="pr-14">
-                  <h3 className="font-heading font-semibold text-lg text-white tracking-tight">
+                <div className="pr-12">
+                  <h3 className="font-heading font-semibold text-base text-white tracking-tight">
                     AI Cognitive Systems Specialist
                   </h3>
                   <p className="text-xs text-slate-300 mt-0.5">
@@ -209,16 +209,16 @@ export default function LoginPage() {
               </div>
 
               {/* Badges / Pill Tags */}
-              <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-700/60">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/15 border border-emerald-500/35 text-emerald-300">
-                  <CheckCircle2 size={13} />
+              <div className="flex flex-wrap items-center gap-2 pt-2.5 border-t border-slate-700/60">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/15 border border-emerald-500/35 text-emerald-300">
+                  <CheckCircle2 size={12} />
                   Cognitive Verified
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary-500/15 border border-primary-500/35 text-primary-300">
-                  <Sparkles size={13} className="text-primary-400" />
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-500/15 border border-primary-500/35 text-primary-300">
+                  <Sparkles size={12} className="text-primary-400" />
                   Top 1% Learner
                 </span>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 border border-slate-700/60">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 border border-slate-700/60">
                   Autonomous Agents
                 </span>
               </div>
@@ -236,10 +236,10 @@ export default function LoginPage() {
             RIGHT COLUMN — AUTHENTICATION FORM (Clean Modern UI)
             Adapts seamlessly between light and dark modes
             ═══════════════════════════════════════════════════════ */}
-        <div className="w-full lg:w-1/2 min-h-screen flex flex-col justify-between p-6 sm:p-12 lg:p-16 xl:p-20 bg-surface-950 text-surface-200 relative overflow-y-auto">
+        <div className="w-full lg:w-1/2 min-h-screen lg:h-screen flex flex-col justify-between p-5 sm:p-8 lg:p-8 xl:p-10 bg-surface-950 text-surface-200 relative overflow-y-auto">
           
           {/* Top Bar: Mobile Brand Header & Desktop Back Link */}
-          <div className="flex items-center justify-between w-full mb-8">
+          <div className="flex items-center justify-between w-full mb-3 lg:mb-4">
             {/* Mobile-only Logo */}
             <div className="flex lg:hidden items-center gap-2.5">
               <img src="/logo.png" alt="REAL_i" className="w-8 h-8 object-contain" />
@@ -251,16 +251,16 @@ export default function LoginPage() {
             <div className="ml-auto flex items-center gap-3">
               <Link
                 to="/"
-                className="inline-flex items-center gap-2 text-xs font-medium text-surface-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors py-2 px-3.5 rounded-lg border border-surface-600/40 dark:border-surface-800 bg-surface-900"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-surface-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors py-1.5 px-3 rounded-lg border border-surface-600/40 dark:border-surface-800 bg-surface-900"
               >
-                <ArrowLeft size={14} />
+                <ArrowLeft size={13} />
                 Back to Home
               </Link>
             </div>
           </div>
 
           {/* Center Form Container */}
-          <div className="w-full max-w-md mx-auto my-auto py-6">
+          <div className="w-full max-w-md mx-auto my-auto py-2">
             
             {/* Inactivity Timeout Notice */}
             {timeoutReason === 'timeout' && (
@@ -278,15 +278,15 @@ export default function LoginPage() {
             )}
 
             {/* Header */}
-            <div className="mb-8">
-              <h2 className="text-3xl sm:text-4xl font-heading font-bold text-surface-50 dark:text-white tracking-tight mb-2">
+            <div className="mb-4 sm:mb-5">
+              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-surface-50 dark:text-white tracking-tight mb-1.5">
                 {showForgotPassword
                   ? 'Reset Password'
                   : isRegistering
                   ? 'Create an account'
                   : 'Welcome back'}
               </h2>
-              <p className="text-sm text-surface-400">
+              <p className="text-xs sm:text-sm text-surface-400">
                 {showForgotPassword
                   ? 'Enter your email address and we will send you a link to reset your password.'
                   : isRegistering
@@ -297,20 +297,20 @@ export default function LoginPage() {
 
             {/* Forgot Password View */}
             {showForgotPassword ? (
-              <form onSubmit={handleForgotPassword} className="space-y-5 animate-fade-in">
+              <form onSubmit={handleForgotPassword} className="space-y-3.5 animate-fade-in">
                 <div>
-                  <label htmlFor="forgot-email" className="block text-xs font-semibold uppercase tracking-wider text-surface-200 dark:text-surface-300 mb-2">
+                  <label htmlFor="forgot-email" className="block text-xs font-semibold uppercase tracking-wider text-surface-200 dark:text-surface-300 mb-1.5">
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-400" size={18} />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400" size={17} />
                     <input
                       id="forgot-email"
                       type="email"
                       value={forgotEmail}
                       onChange={(e) => setForgotEmail(e.target.value)}
                       placeholder="name@example.com"
-                      className="w-full pl-11 pr-4 py-3.5 bg-surface-900 border border-surface-600/50 dark:border-surface-700/80 rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm"
+                      className="w-full pl-10 pr-4 py-2.5 sm:py-3 bg-surface-900 border border-surface-600/50 dark:border-surface-700/80 rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm"
                       required
                     />
                   </div>
@@ -318,7 +318,7 @@ export default function LoginPage() {
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-bold py-3.5 px-6 rounded-xl transition-all duration-200 shadow-lg shadow-primary-500/20 hover:shadow-primary-500/35 flex items-center justify-center gap-2 text-sm font-sans cursor-pointer"
+                  className="w-full bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-bold py-2.5 sm:py-3 px-5 rounded-xl transition-all duration-200 shadow-lg shadow-primary-500/20 hover:shadow-primary-500/35 flex items-center justify-center gap-2 text-sm font-sans cursor-pointer mt-2"
                 >
                   Send Reset Link
                   <ArrowRight size={16} />
@@ -336,51 +336,51 @@ export default function LoginPage() {
               </form>
             ) : (
               /* Main Sign In / Sign Up Form */
-              <form ref={formRef} onSubmit={handleSubmit} className="space-y-5 animate-fade-in">
+              <form ref={formRef} onSubmit={handleSubmit} className="space-y-3.5 animate-fade-in">
                 
                 {/* Full Name field (Register only) */}
                 {isRegistering && (
                   <div>
-                    <label htmlFor="auth-name" className="block text-xs font-semibold uppercase tracking-wider text-surface-200 dark:text-surface-300 mb-2">
+                    <label htmlFor="auth-name" className="block text-xs font-semibold uppercase tracking-wider text-surface-200 dark:text-surface-300 mb-1.5">
                       Full Name
                     </label>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-400" size={18} />
+                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400" size={17} />
                       <input
                         id="auth-name"
                         type="text"
                         value={name}
                         onChange={(e) => { setName(e.target.value); if (errors.name) setErrors({...errors, name: null}); }}
                         placeholder="John Doe"
-                        className={`w-full pl-11 pr-4 py-3.5 bg-surface-900 border ${errors.name ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
+                        className={`w-full pl-10 pr-4 py-2.5 sm:py-2.5 bg-surface-900 border ${errors.name ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
                       />
                     </div>
-                    {errors.name && <p className="text-danger-text text-xs mt-1.5">{errors.name}</p>}
+                    {errors.name && <p className="text-danger-text text-xs mt-1">{errors.name}</p>}
                   </div>
                 )}
 
                 {/* Email field */}
                 <div>
-                  <label htmlFor="auth-email" className="block text-xs font-semibold uppercase tracking-wider text-surface-200 dark:text-surface-300 mb-2">
+                  <label htmlFor="auth-email" className="block text-xs font-semibold uppercase tracking-wider text-surface-200 dark:text-surface-300 mb-1.5">
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-400" size={18} />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400" size={17} />
                     <input
                       id="auth-email"
                       type="email"
                       value={email}
                       onChange={(e) => { setEmail(e.target.value); if (errors.email) setErrors({...errors, email: null}); }}
                       placeholder="name@example.com"
-                      className={`w-full pl-11 pr-4 py-3.5 bg-surface-900 border ${errors.email ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
+                      className={`w-full pl-10 pr-4 py-2.5 sm:py-3 bg-surface-900 border ${errors.email ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
                     />
                   </div>
-                  {errors.email && <p className="text-danger-text text-xs mt-1.5">{errors.email}</p>}
+                  {errors.email && <p className="text-danger-text text-xs mt-1">{errors.email}</p>}
                 </div>
 
                 {/* Password field */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-1.5">
                     <label htmlFor="auth-password" className="block text-xs font-semibold uppercase tracking-wider text-surface-200 dark:text-surface-300">
                       Password
                     </label>
@@ -395,36 +395,36 @@ export default function LoginPage() {
                     )}
                   </div>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-400" size={18} />
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-surface-400" size={17} />
                     <input
                       id="auth-password"
                       type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => { setPassword(e.target.value); if (errors.password) setErrors({...errors, password: null}); }}
                       placeholder="••••••••"
-                      className={`w-full pl-11 pr-11 py-3.5 bg-surface-900 border ${errors.password ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
+                      className={`w-full pl-10 pr-10 py-2.5 sm:py-3 bg-surface-900 border ${errors.password ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-surface-400 hover:text-primary-500 transition-colors"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-surface-400 hover:text-primary-500 transition-colors"
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                     >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                     </button>
                   </div>
-                  {errors.password && <p className="text-danger-text text-xs mt-1.5">{errors.password}</p>}
+                  {errors.password && <p className="text-danger-text text-xs mt-1">{errors.password}</p>}
                 </div>
 
                 {/* Submit Button */}
                 <button
                   type="submit"
                   disabled={isSubmitting || lockedOut}
-                  className="w-full bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-bold py-3.5 px-6 rounded-xl transition-all duration-200 shadow-lg shadow-primary-500/20 hover:shadow-primary-500/35 flex items-center justify-center gap-2 text-sm font-sans mt-6 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-bold py-2.5 sm:py-3 px-5 rounded-xl transition-all duration-200 shadow-lg shadow-primary-500/20 hover:shadow-primary-500/35 flex items-center justify-center gap-2 text-sm font-sans mt-3.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="animate-spin" size={18} />
+                      <Loader2 className="animate-spin" size={17} />
                       <span>Processing...</span>
                     </>
                   ) : (
@@ -436,12 +436,12 @@ export default function LoginPage() {
                 </button>
 
                 {/* OR Divider */}
-                <div className="relative my-6">
+                <div className="relative my-3 sm:my-3.5">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-surface-600/30 dark:border-surface-800" />
                   </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-surface-950 px-4 text-surface-400 font-mono">OR</span>
+                  <div className="relative flex justify-center text-[11px] uppercase">
+                    <span className="bg-surface-950 px-3 text-surface-400 font-mono">OR</span>
                   </div>
                 </div>
 
@@ -449,7 +449,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={handleGoogleAuthMock}
-                  className="w-full py-3.5 px-4 bg-surface-900 hover:bg-surface-800/80 border border-surface-600/50 dark:border-surface-800 rounded-xl text-surface-200 dark:text-surface-200 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-3 cursor-pointer group shadow-sm"
+                  className="w-full py-2.5 sm:py-3 px-4 bg-surface-900 hover:bg-surface-800/80 border border-surface-600/50 dark:border-surface-800 rounded-xl text-surface-200 dark:text-surface-200 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2.5 cursor-pointer group shadow-sm"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path
@@ -473,8 +473,8 @@ export default function LoginPage() {
                 </button>
 
                 {/* Switch between Sign In / Sign Up */}
-                <div className="pt-4 text-center">
-                  <p className="text-sm text-surface-400">
+                <div className="pt-2 text-center">
+                  <p className="text-xs sm:text-sm text-surface-400">
                     {isRegistering ? 'Already have an account?' : "Don't have an account?"}{' '}
                     <button
                       type="button"
@@ -490,7 +490,7 @@ export default function LoginPage() {
           </div>
 
           {/* Bottom Footer Info */}
-          <div className="text-center lg:text-left text-xs text-surface-400 pt-6">
+          <div className="text-center lg:text-left text-[11px] sm:text-xs text-surface-400 pt-2 lg:pt-3">
             By signing in, you agree to our{' '}
             <Link to="/terms" className="text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 underline underline-offset-2 font-medium">
               Terms of Service
