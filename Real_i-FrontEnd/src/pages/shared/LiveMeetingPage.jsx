@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
   Video, Shield, Users, Copy, Check, ExternalLink, RefreshCw, 
@@ -7,41 +7,41 @@ import {
   Lock, Settings, Info, Radio, Zap, Globe, Layers, Eye, MicOff,
   UserCheck, UserX, Download, Clock, Play, Square, UserPlus, AlertCircle,
   FileSpreadsheet, X, Search, ChevronRight, User, Key, HelpCircle, BarChart2,
-  Send, Percent
+  Send, Percent, AlertTriangle, BookOpen, ArrowLeft
 } from 'lucide-react';
-
-const QUICK_ROOM_PRESETS = [
-  'REAL_i-Physics-101',
-  'REAL_i-AI-Workshop',
-  'REAL_i-Math-Seminar'
-];
+import { 
+  authorizeMeetingJoin, endMeeting, generateMeetingSummary, 
+  syncMeetingAttendance, createMeetingPoll, voteMeetingPoll, closeMeetingPoll 
+} from '@/services/api';
 
 const DEFAULT_POLL_PRESETS = [
   {
-    question: "Do you understand the core WebRTC SFU concept explained so far?",
-    options: ["Yes, 100% clear!", "Need another quick example", "A bit confusing", "Haven't followed yet"]
+    question: "Do you understand the core architecture pattern discussed in today's masterclass?",
+    options: ["Yes, 100% crystal clear!", "Need another quick practical example", "A bit confusing, will review notes", "Haven't followed yet"]
   },
   {
-    question: "Which feature should we test next in the virtual classroom?",
-    options: ["Excalidraw Whiteboard", "Screen Sharing Demo", "Breakout Rooms", "AI Audio Subtitles"]
+    question: "Which component should we implement next during the live interactive lab?",
+    options: ["Gatekeeper Authorization Tokens", "Recurrence Engine & Calendar Sync", "Real-Time AI Cognitive Synthesis", "Live WebRTC Screen Annotation"]
   }
 ];
 
 export default function LiveMeetingPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const jitsiContainerRef = useRef(null);
   const apiRef = useRef(null);
 
-  // ── STRICT AUTHENTICATION & AUTHORIZATION BINDING ─────────
-  const isAdmin = user?.role === 'admin';
-  const isInstructor = isAdmin;
+  const meetingIdParam = searchParams.get('meetingId');
+  const roomSlugParam = searchParams.get('roomSlug');
+  const legacyRoomName = searchParams.get('roomName');
 
-  const [searchParams] = useSearchParams();
-  const initialRoom = searchParams.get('roomName') || 'REAL_i-Demo-Classroom';
+  // Authorization & Gatekeeper State
+  const [authStatus, setAuthStatus] = useState('checking'); // 'checking', 'authorized', 'forbidden', 'waiting_host', 'error'
+  const [authErrorMsg, setAuthErrorMsg] = useState('');
+  const [authorizedData, setAuthorizedData] = useState(null);
 
-  // Room state
-  const [roomNameInput, setRoomNameInput] = useState(initialRoom);
-  const [activeRoom, setActiveRoom] = useState(initialRoom);
+  // Classroom State
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [jitsiLoaded, setJitsiLoaded] = useState(false);
@@ -53,12 +53,12 @@ export default function LiveMeetingPage() {
   const [showAttendanceDrawer, setShowAttendanceDrawer] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
-  // Live Attendance State
+  // Attendance & Duration State
   const [attendanceList, setAttendanceList] = useState([]);
   const [searchFilter, setSearchFilter] = useState('');
 
-  // ── IN-CLASS LIVE POLLS OVERLAY STATE ───────────────────────
-  const [activePoll, setActivePoll] = useState(null); // { pollId, question, options: [{optionId, text, votes}], timerSeconds }
+  // In-Class Live Polls State
+  const [activePoll, setActivePoll] = useState(null);
   const [showCreatePollModal, setShowCreatePollModal] = useState(false);
   const [pollQuestionInput, setPollQuestionInput] = useState('');
   const [pollOptionsInput, setPollOptionsInput] = useState(['', '', '', '']);
@@ -70,13 +70,54 @@ export default function LiveMeetingPage() {
   // Toast Helper
   const triggerToast = (msg) => {
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
-  // Load Jitsi External API Script dynamically
+  // ── 1. GATEKEEPER AUTHORIZATION ON LOAD ───────────────────────
   useEffect(() => {
+    let isMounted = true;
+
+    const performAuthorization = async () => {
+      setAuthStatus('checking');
+      try {
+        const payload = {
+          meetingId: meetingIdParam || undefined,
+          roomSlug: roomSlugParam || undefined,
+          roomName: legacyRoomName || undefined
+        };
+
+        const res = await authorizeMeetingJoin(payload);
+
+        if (!isMounted) return;
+
+        if (res.success && res.authorized) {
+          setAuthorizedData(res);
+          setIsLobbyEnabled(!!res.meeting?.lobbyEnabled);
+          setAuthStatus('authorized');
+        } else {
+          setAuthStatus(res.waitingForHost ? 'waiting_host' : 'forbidden');
+          setAuthErrorMsg(res.message || 'Access restricted.');
+        }
+      } catch (err) {
+        if (!isMounted) return;
+        console.error('Authorization failed:', err);
+        setAuthStatus('forbidden');
+        setAuthErrorMsg(err.message || 'You are not authorized to access this virtual classroom.');
+      }
+    };
+
+    performAuthorization();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [meetingIdParam, roomSlugParam, legacyRoomName]);
+
+  // ── 2. LOAD JITSI EXTERNAL API SCRIPT ────────────────────────
+  useEffect(() => {
+    if (authStatus !== 'authorized') return;
+
     const scriptId = 'jitsi-external-api-script';
-    
     if (window.JitsiMeetExternalAPI) {
       setJitsiLoaded(true);
       return;
@@ -87,48 +128,48 @@ export default function LiveMeetingPage() {
       script.id = scriptId;
       script.src = 'https://meet.jit.si/external_api.js';
       script.async = true;
-      script.onload = () => {
-        setJitsiLoaded(true);
-      };
+      script.onload = () => setJitsiLoaded(true);
       script.onerror = () => {
         console.error('Failed to load Jitsi API script');
         setIsLoading(false);
       };
       document.body.appendChild(script);
     }
-  }, []);
+  }, [authStatus]);
 
-  // Initialize Jitsi meeting
+  // ── 3. INITIALIZE WEBRTC MEETING SESSION ──────────────────────
   useEffect(() => {
-    if (!jitsiLoaded || !jitsiContainerRef.current) return;
+    if (authStatus !== 'authorized' || !jitsiLoaded || !jitsiContainerRef.current || !authorizedData) return;
 
     setIsLoading(true);
     setPendingKnockers([]);
 
-    // Clean up previous instance
     if (apiRef.current) {
       apiRef.current.dispose();
       apiRef.current = null;
     }
 
-    const domain = 'meet.jit.si';
-    const localUserName = user?.name 
-      ? `${user.name} (${isAdmin ? 'Instructor' : 'Student'})`
-      : isAdmin ? 'Instructor (REAL_i Admin)' : 'Student Participant';
+    const isHost = authorizedData.isHost;
+    const meetingInfo = authorizedData.meeting;
+    const verifiedUser = authorizedData.user;
+    const roomSlug = meetingInfo.roomSlug || meetingInfo.roomName || 'reali_cls_live';
 
-    // Seed local user into attendance list
-    const initialLocalUser = {
-      id: 'local-user',
-      name: localUserName,
-      role: isAdmin ? 'instructor' : 'student',
-      joinTime: new Date().toLocaleTimeString(),
+    const displayName = `${verifiedUser.name || 'User'} (${isHost ? 'Instructor' : 'Student'})`;
+
+    // Seed local user into attendance roster
+    const localRecord = {
+      id: verifiedUser.id || 'local-user',
+      name: verifiedUser.name || 'Self',
+      email: verifiedUser.email,
+      role: isHost ? 'instructor' : 'student',
+      joinTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       joinTimestamp: Date.now(),
       leaveTime: null,
       durationSeconds: 0,
       attendancePercentage: 100,
       status: 'present'
     };
-    setAttendanceList([initialLocalUser]);
+    setAttendanceList([localRecord]);
 
     const instructorToolbar = [
       'microphone', 'camera', 'closedcaptions', 'desktop', 'embedmeeting',
@@ -143,33 +184,33 @@ export default function LiveMeetingPage() {
     ];
 
     const options = {
-      roomName: activeRoom,
+      roomName: roomSlug,
       width: '100%',
       height: '100%',
       parentNode: jitsiContainerRef.current,
       userInfo: {
-        displayName: localUserName,
-        email: user?.email || 'demo@reali.com'
+        displayName,
+        email: verifiedUser.email || 'student@reali.com'
       },
       configOverwrite: {
-        startWithAudioMuted: false,
+        startWithAudioMuted: meetingInfo.security?.muteOnEntry !== false,
         startWithVideoMuted: false,
         prejoinPageEnabled: false,
         disableDeepLinking: true,
         enableWelcomePage: false,
-        toolbarButtons: isAdmin ? instructorToolbar : studentToolbar,
+        toolbarButtons: isHost ? instructorToolbar : studentToolbar,
       },
       interfaceConfigOverwrite: {
         SHOW_JITSI_WATERMARK: false,
         SHOW_WATERMARK_FOR_GUESTS: false,
-        DEFAULT_BACKGROUND: '#090d16',
+        DEFAULT_BACKGROUND: '#070D22',
         TOOLBAR_ALWAYS_VISIBLE: true,
         MOBILE_APP_PROMO: false
       }
     };
 
     try {
-      const api = new window.JitsiMeetExternalAPI(domain, options);
+      const api = new window.JitsiMeetExternalAPI('meet.jit.si', options);
       apiRef.current = api;
 
       api.addEventListener('videoConferenceJoined', () => {
@@ -187,7 +228,7 @@ export default function LiveMeetingPage() {
             id: participant.id,
             name: pName,
             role: 'student',
-            joinTime: new Date().toLocaleTimeString(),
+            joinTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
             joinTimestamp: Date.now(),
             leaveTime: null,
             durationSeconds: 0,
@@ -201,89 +242,69 @@ export default function LiveMeetingPage() {
       api.addEventListener('participantLeft', (participant) => {
         setAttendanceList(prev => prev.map(p => {
           if (p.id === participant.id) {
-            const duration = p.joinTimestamp ? Math.round((Date.now() - p.joinTimestamp) / 1000) : 0;
+            const durationSec = p.joinTimestamp ? Math.round((Date.now() - p.joinTimestamp) / 1000) : p.durationSeconds;
             return {
               ...p,
               status: 'left',
-              leaveTime: new Date().toLocaleTimeString(),
-              durationSeconds: duration
+              leaveTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+              durationSeconds: durationSec
             };
           }
           return p;
         }));
+        triggerToast(`Participant left session`);
       });
 
-      if (isAdmin) {
-        api.addEventListener('knockingParticipant', (data) => {
-          setPendingKnockers(prev => {
-            if (prev.find(k => k.id === data.id)) return prev;
-            return [...prev, { id: data.id, name: data.name || 'Student Waiting' }];
-          });
-          triggerToast(`Lobby alert: ${data.name || 'Student'} is waiting for approval`);
-        });
-      }
-
-      api.addEventListener('recordingStatusChanged', (data) => {
-        setIsRecording(data.on);
+      api.addEventListener('knockingParticipant', (knocker) => {
+        if (isHost) {
+          setPendingKnockers(prev => [...prev, { id: knocker.id, name: knocker.name || 'Waiting Student' }]);
+          triggerToast(`Student waiting in lobby: ${knocker.name}`);
+        }
       });
 
-      const timer = setTimeout(() => setIsLoading(false), 1800);
-
-      return () => clearTimeout(timer);
     } catch (err) {
-      console.error('Error initializing Jitsi Meet:', err);
+      console.error('Error initializing WebRTC:', err);
       setIsLoading(false);
     }
-  }, [jitsiLoaded, activeRoom, isAdmin, user]);
 
-  // Clean up on unmount
-  useEffect(() => {
     return () => {
       if (apiRef.current) {
         apiRef.current.dispose();
+        apiRef.current = null;
       }
     };
-  }, []);
+  }, [authStatus, jitsiLoaded, authorizedData]);
 
-  // Update session durations & attendance % periodically + auto-sync to MongoDB
+  // ── 4. AUTO-SYNC ATTENDANCE TO MONGODB ────────────────────────
   useEffect(() => {
-    const expectedSessionSeconds = 60 * 60; // 60 mins default session
+    if (!authorizedData || !authorizedData.isHost) return;
 
     const interval = setInterval(() => {
       setAttendanceList(prev => {
         const updated = prev.map(p => {
           if (p.status === 'present' && p.joinTimestamp) {
-            const secs = Math.round((Date.now() - p.joinTimestamp) / 1000);
-            const percentage = Math.min(100, Math.round((secs / expectedSessionSeconds) * 100));
-            return {
-              ...p,
-              durationSeconds: secs,
-              attendancePercentage: percentage
-            };
+            const currentDuration = Math.round((Date.now() - p.joinTimestamp) / 1000);
+            return { ...p, durationSeconds: currentDuration };
           }
           return p;
         });
 
-        // Background Auto-sync to MongoDB
-        try {
-          fetch('/api/v1/meetings/attendance/sync', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              roomName: activeRoom,
-              attendanceList: updated
-            })
-          }).catch(() => {});
-        } catch (e) {}
+        // Sync with backend
+        const identifier = authorizedData.meeting.roomSlug || authorizedData.meeting.roomName;
+        syncMeetingAttendance({
+          roomSlug: identifier,
+          attendanceList: updated,
+          expectedDurationMinutes: authorizedData.meeting.expectedDurationMinutes || 60
+        }).catch(e => console.warn('Attendance auto-sync warning:', e.message));
 
         return updated;
       });
-    }, 3000);
+    }, 10000); // sync every 10s
 
     return () => clearInterval(interval);
-  }, [activeRoom]);
+  }, [authorizedData]);
 
-  // Poll timer countdown effect
+  // ── 5. LIVE POLL COUNTDOWN TIMER ─────────────────────────────
   useEffect(() => {
     if (!activePoll || pollTimeRemaining <= 0) return;
     const timer = setInterval(() => {
@@ -298,455 +319,344 @@ export default function LiveMeetingPage() {
     return () => clearInterval(timer);
   }, [activePoll, pollTimeRemaining]);
 
-  // ── MODERATOR ACTIONS ──────────────────────────────────────
-
-  const handleMuteEveryone = () => {
-    if (!isAdmin) return;
-    if (apiRef.current) {
-      apiRef.current.executeCommand('muteEveryone');
-      triggerToast('Muted audio for all participants in the room');
-    }
-  };
-
-  const handleToggleLobby = () => {
-    if (!isAdmin) return;
-    if (apiRef.current) {
-      const nextState = !isLobbyEnabled;
-      apiRef.current.executeCommand('toggleLobby', nextState);
-      setIsLobbyEnabled(nextState);
-      triggerToast(nextState ? 'Lobby Waiting Room ENABLED' : 'Lobby Waiting Room DISABLED');
-    }
-  };
-
-  const handleApproveAccess = (knockerId) => {
-    if (!isAdmin) return;
-    if (apiRef.current) {
-      apiRef.current.executeCommand('approveAccess', knockerId);
-      setPendingKnockers(prev => prev.filter(k => k.id !== knockerId));
-      triggerToast('Student approved into meeting room');
-    }
-  };
-
-  const handleDenyAccess = (knockerId) => {
-    if (!isAdmin) return;
-    if (apiRef.current) {
-      apiRef.current.executeCommand('denyAccess', knockerId);
-      setPendingKnockers(prev => prev.filter(k => k.id !== knockerId));
-      triggerToast('Student entry request denied');
-    }
-  };
-
-  const handleToggleRecording = () => {
-    if (!isAdmin) return;
-    if (apiRef.current) {
-      if (!isRecording) {
-        apiRef.current.executeCommand('startRecording', { mode: 'file' });
-        triggerToast('Lecture recording started');
-      } else {
-        apiRef.current.executeCommand('stopRecording', 'file');
-        triggerToast('Lecture recording stopped');
-      }
-    }
-  };
-
-  const handleKickParticipant = (participantId) => {
-    if (!isAdmin) return;
-    if (apiRef.current) {
-      apiRef.current.executeCommand('kickParticipant', participantId);
-      triggerToast('Participant removed from session');
-    }
-  };
-
-  // ── LIVE POLL ACTIONS ──────────────────────────────────────
-
-  const handleCreatePollSubmit = (e) => {
-    e.preventDefault();
-    const validOptions = pollOptionsInput.filter(o => o.trim() !== '');
-    if (!pollQuestionInput.trim() || validOptions.length < 2) {
-      triggerToast('Please provide a question and at least 2 options');
-      return;
-    }
-
-    const createdPoll = {
-      pollId: `poll-${Date.now()}`,
-      question: pollQuestionInput,
-      options: validOptions.map((text, i) => ({ optionId: `opt-${i + 1}`, text, votes: 0 })),
-      timerSeconds: pollTimerSeconds
-    };
-
-    setActivePoll(createdPoll);
-    setPollTimeRemaining(pollTimerSeconds);
-    setHasVoted(false);
-    setSelectedOptionId(null);
-    setShowCreatePollModal(false);
-    triggerToast('Live In-Class Poll broadcasted to all students!');
-  };
-
-  const handleSelectPresetPoll = (preset) => {
-    setPollQuestionInput(preset.question);
-    setPollOptionsInput(preset.options);
-  };
-
-  const handleStudentVote = (optionId) => {
-    if (hasVoted || !activePoll) return;
-    setSelectedOptionId(optionId);
-    setHasVoted(true);
-
-    setActivePoll(prev => ({
-      ...prev,
-      options: prev.options.map(o => o.optionId === optionId ? { ...o, votes: o.votes + 1 } : o)
-    }));
-
-    triggerToast('Your response has been submitted!');
-  };
-
-  const handleClosePoll = () => {
-    setActivePoll(null);
-    triggerToast('Live Poll session ended');
-  };
-
-  // ── ROOM ACTIONS ──────────────────────────────────────────
-
-  const handleJoinRoom = (e) => {
-    e.preventDefault();
-    const formatted = roomNameInput.trim().replace(/\s+/g, '-');
-    if (formatted) {
-      setActiveRoom(formatted);
-    }
-  };
-
-  const handlePresetSelect = (preset) => {
-    setRoomNameInput(preset);
-    setActiveRoom(preset);
-  };
-
+  // Copy Link Handler
   const handleCopyLink = () => {
-    const directJitsiUrl = `https://meet.jit.si/${activeRoom}`;
-    navigator.clipboard.writeText(directJitsiUrl);
+    const meetingId = authorizedData?.meeting?.id;
+    const roomSlug = authorizedData?.meeting?.roomSlug;
+    const shareUrl = `${window.location.origin}/student/live?meetingId=${encodeURIComponent(meetingId)}&roomSlug=${encodeURIComponent(roomSlug)}`;
+    navigator.clipboard.writeText(shareUrl);
     setCopied(true);
+    triggerToast('Secure classroom link copied to clipboard!');
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const formatSeconds = (totalSecs) => {
-    const mins = Math.floor(totalSecs / 60);
-    const secs = totalSecs % 60;
-    return `${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
+  // Moderator: Mute Everyone
+  const handleMuteEveryone = () => {
+    if (apiRef.current) {
+      apiRef.current.executeCommand('muteEveryone', 'audio');
+      triggerToast('🔇 Muted audio for all participants.');
+    }
   };
 
-  const handleExportCSV = () => {
-    const headers = ['Participant Name', 'Role', 'Status', 'Join Time', 'Leave Time', 'Duration', 'Attendance %'];
-    const rows = attendanceList.map(a => [
-      `"${a.name}"`,
-      a.role,
-      a.status,
-      a.joinTime || 'N/A',
-      a.leaveTime || 'N/A',
-      `"${formatSeconds(a.durationSeconds)}"`,
-      `"${a.attendancePercentage}%"`
-    ]);
-    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `Attendance_Report_${activeRoom}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    triggerToast('Attendance report exported to CSV!');
+  // Moderator: Toggle Lobby
+  const handleToggleLobby = () => {
+    const nextState = !isLobbyEnabled;
+    setIsLobbyEnabled(nextState);
+    if (apiRef.current) {
+      apiRef.current.executeCommand('toggleLobby', nextState);
+    }
+    triggerToast(`Lobby waiting room ${nextState ? 'ENABLED' : 'DISABLED'}.`);
   };
 
-  const filteredAttendance = attendanceList.filter(a => 
-    a.name.toLowerCase().includes(searchFilter.toLowerCase())
-  );
+  // Moderator: End Class & Trigger AI Summary
+  const handleEndClass = async () => {
+    if (!window.confirm('Are you sure you want to end this live session for all attendees?')) return;
+    try {
+      const meetingId = authorizedData?.meeting?.id;
+      if (meetingId) {
+        await endMeeting(meetingId);
+        triggerToast('Session concluded. Generating AI Lecture Summary...');
+        await generateMeetingSummary(meetingId);
+      }
+      navigate('/admin/meetings');
+    } catch (err) {
+      console.error('Error ending class:', err);
+      navigate('/admin/meetings');
+    }
+  };
 
+  // Poll: Broadcast New Poll
+  const handleCreatePollSubmit = async (e) => {
+    e.preventDefault();
+    const cleanOptions = pollOptionsInput.filter(opt => opt.trim() !== '');
+    if (cleanOptions.length < 2) {
+      alert('Please provide at least 2 answer choices.');
+      return;
+    }
+
+    try {
+      const identifier = authorizedData.meeting.roomSlug || authorizedData.meeting.roomName;
+      const res = await createMeetingPoll({
+        roomSlug: identifier,
+        question: pollQuestionInput,
+        options: cleanOptions,
+        timerSeconds: pollTimerSeconds
+      });
+
+      if (res.success && res.poll) {
+        setActivePoll(res.poll);
+        setPollTimeRemaining(res.poll.timerSeconds || 45);
+        setHasVoted(false);
+        setSelectedOptionId(null);
+        setShowCreatePollModal(false);
+        setPollQuestionInput('');
+        setPollOptionsInput(['', '', '', '']);
+        triggerToast('In-class Live Poll broadcasted!');
+      }
+    } catch (err) {
+      console.error('Failed to create poll:', err);
+      alert('Failed to broadcast live poll.');
+    }
+  };
+
+  // Poll: Student Vote
+  const handleStudentVote = async (optionId) => {
+    if (hasVoted || !activePoll) return;
+    try {
+      setSelectedOptionId(optionId);
+      setHasVoted(true);
+
+      const identifier = authorizedData.meeting.roomSlug || authorizedData.meeting.roomName;
+      const res = await voteMeetingPoll({
+        roomSlug: identifier,
+        pollId: activePoll.pollId,
+        optionId,
+        userName: user?.name
+      });
+
+      if (res.success && res.poll) {
+        setActivePoll(res.poll);
+        triggerToast('Your response has been registered!');
+      }
+    } catch (err) {
+      console.error('Failed to record vote:', err);
+      alert(err.message || 'Failed to submit vote.');
+    }
+  };
+
+  // Format Seconds
+  const formatSeconds = (sec = 0) => {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}m ${s < 10 ? '0' : ''}${s}s`;
+  };
+
+  // ── RENDER ACCESS RESTRICTION / GATEKEEPER LOCK SCREENS ─────
+  if (authStatus === 'checking') {
+    return (
+      <div className="h-[75vh] flex flex-col items-center justify-center gap-4 text-surface-300 animate-fade-in">
+        <div className="w-12 h-12 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
+        <div className="text-center">
+          <h3 className="text-base font-bold text-surface-100">Verifying Security Credentials...</h3>
+          <p className="text-xs text-surface-400 mt-1">Validating course enrollment & gatekeeper token authorization.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (authStatus === 'forbidden') {
+    return (
+      <div className="h-[75vh] flex items-center justify-center p-4 animate-fade-in">
+        <div className="max-w-md w-full bg-surface-900/90 border border-rose-500/30 p-8 rounded-3xl text-center space-y-5 shadow-2xl backdrop-blur-xl">
+          <div className="w-16 h-16 mx-auto bg-rose-500/10 text-rose-400 rounded-2xl flex items-center justify-center border border-rose-500/20">
+            <Lock className="w-8 h-8" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-surface-50 font-heading">Access Restricted</h2>
+            <p className="text-xs text-surface-300 mt-2 leading-relaxed">
+              {authErrorMsg || 'You are not enrolled in the required course cohort to access this virtual classroom session.'}
+            </p>
+          </div>
+
+          <div className="p-3 bg-surface-950 rounded-2xl border border-surface-800 text-[11px] text-surface-400 font-mono">
+            Error Code: 403_COURSE_ENROLLMENT_GUARD
+          </div>
+
+          <div className="flex flex-col gap-2 pt-2">
+            <Link
+              to="/student/courses"
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-400 hover:to-primary-500 text-surface-950 font-bold text-xs transition-all shadow-md"
+            >
+              Browse Course Catalog
+            </Link>
+            <Link
+              to="/student/dashboard"
+              className="w-full py-2.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-surface-300 font-semibold text-xs transition-colors"
+            >
+              Return to Student Portal
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (authStatus === 'waiting_host') {
+    return (
+      <div className="h-[75vh] flex items-center justify-center p-4 animate-fade-in">
+        <div className="max-w-md w-full bg-surface-900/90 border border-amber-500/30 p-8 rounded-3xl text-center space-y-5 shadow-2xl backdrop-blur-xl">
+          <div className="w-16 h-16 mx-auto bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center border border-amber-500/20 animate-pulse">
+            <Clock className="w-8 h-8" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-surface-50 font-heading">Waiting for Instructor</h2>
+            <p className="text-xs text-surface-300 mt-2 leading-relaxed">
+              This classroom is locked until your instructor officially launches the session.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2 pt-2">
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full py-3 rounded-xl bg-primary-500 hover:bg-primary-400 text-surface-950 font-bold text-xs transition-all shadow-md flex items-center justify-center gap-2"
+            >
+              <RefreshCw className="w-4 h-4" />
+              <span>Check if Session Started</span>
+            </button>
+            <Link
+              to="/student/dashboard"
+              className="w-full py-2.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-surface-300 font-semibold text-xs transition-colors"
+            >
+              Back to Dashboard
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const isHost = authorizedData?.isHost;
+  const meetingInfo = authorizedData?.meeting;
   const presentCount = attendanceList.filter(a => a.status === 'present').length;
   const totalPollVotes = activePoll ? activePoll.options.reduce((sum, o) => sum + o.votes, 0) : 0;
 
   return (
-    <div className="space-y-6 pb-12 animate-fade-in relative">
+    <div className="space-y-4 animate-fade-in pb-8">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-surface-900/95 text-surface-100 border border-primary-500/40 px-4 py-3 rounded-xl shadow-2xl backdrop-blur-lg animate-bounce">
-          <Sparkles size={16} className="text-primary-400 shrink-0" />
-          <span className="text-sm font-medium">{toastMessage}</span>
+        <div className="fixed top-6 right-6 z-50 bg-surface-900/95 border border-primary-500/40 text-surface-100 text-xs px-4 py-3 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center gap-3 animate-slide-down font-medium">
+          <Sparkles className="w-4 h-4 text-primary-400" />
+          <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-surface-900 via-surface-900/90 to-primary-950/40 border border-surface-800/80 p-6 shadow-2xl">
-        <div className="absolute -right-12 -top-12 w-72 h-72 bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute left-1/3 -bottom-12 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                LIVE CLASSROOM SESSION
-              </span>
-              {isRecording && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse">
-                  <Square size={10} className="fill-rose-400" />
-                  RECORDING IN PROGRESS
-                </span>
-              )}
-              <span className="inline-flex items-center gap-1.5 text-xs text-surface-300 bg-surface-800/70 px-3 py-1 rounded-full border border-surface-700/50">
-                <Users size={13} className="text-primary-400" />
-                {presentCount} Active Attendees
-              </span>
-            </div>
-
-            <h1 className="text-2xl md:text-3xl font-bold text-gradient font-heading tracking-tight">
-              Virtual Classroom & Attendance Engine
-            </h1>
-            <p className="text-sm text-surface-400 mt-1 max-w-2xl leading-relaxed">
-              Enterprise WebRTC suite with automated attendance tracking, instructor moderator controls, and cloud lecture recording.
-            </p>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center gap-3">
-            {/* Live Attendance Drawer Trigger Button */}
-            <button
-              onClick={() => setShowAttendanceDrawer(true)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-primary-600/20 hover:bg-primary-600/30 text-primary-300 border border-primary-500/40 transition-all hover:scale-[1.02] shadow-md active:scale-95"
-            >
-              <FileSpreadsheet size={16} />
-              <span>Attendance Log ({attendanceList.length})</span>
-            </button>
-
-            <button
-              onClick={handleCopyLink}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-surface-800/80 hover:bg-surface-700 text-surface-100 border border-surface-700/80 transition-all hover:scale-[1.02] shadow-md active:scale-95"
-            >
-              {copied ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} />}
-              <span>{copied ? 'Link Copied!' : 'Copy Invite Link'}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── INSTRUCTOR MODERATOR CONTROL CENTER (ADMIN ONLY) ── */}
-      {isAdmin && (
-        <div className="bg-gradient-to-r from-surface-900 via-surface-900/95 to-surface-900 border border-primary-500/30 p-4 rounded-2xl shadow-xl space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-bold text-primary-400 uppercase tracking-wider">
-              <Shield size={16} className="text-amber-400" />
-              <span>Instructor Moderator Control Center</span>
-            </div>
-            <span className="text-xs text-surface-400">
-              Session Moderator: <strong className="text-surface-200">{user?.name || 'Instructor'}</strong>
+      {/* Top Banner: Session Info & Security Status */}
+      <div className="bg-surface-900/80 backdrop-blur-xl border border-surface-700/60 p-4 rounded-3xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <span className="p-2 rounded-xl bg-primary-500/10 text-primary-400 border border-primary-500/20">
+              <Video className="w-5 h-5" />
             </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 pt-1">
-            {/* Action: Launch Live Poll */}
-            <button
-              onClick={() => setShowCreatePollModal(true)}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border border-violet-500/40 transition-all active:scale-95 shadow-sm"
-            >
-              <HelpCircle size={15} />
-              <span>Launch Live Poll</span>
-            </button>
-
-            {/* Action 1: Mute Everyone */}
-            <button
-              onClick={handleMuteEveryone}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/25 transition-all active:scale-95 shadow-sm"
-              title="Mute audio for all participants in the meeting"
-            >
-              <MicOff size={15} />
-              <span>Mute Everyone</span>
-            </button>
-
-            {/* Action 2: Lobby Waiting Room Toggle */}
-            <button
-              onClick={handleToggleLobby}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all active:scale-95 shadow-sm ${
-                isLobbyEnabled
-                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                  : 'bg-surface-800/80 hover:bg-surface-700 text-surface-300 border-surface-700'
-              }`}
-            >
-              <Lock size={15} />
-              <span>Lobby Waiting Room: {isLobbyEnabled ? 'ENABLED' : 'DISABLED'}</span>
-            </button>
-
-            {/* Action 3: Cloud Lecture Recording Toggle */}
-            <button
-              onClick={handleToggleRecording}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all active:scale-95 shadow-sm ${
-                isRecording
-                  ? 'bg-rose-600 text-white border-rose-500 animate-pulse'
-                  : 'bg-surface-800/80 hover:bg-surface-700 text-surface-300 border-surface-700'
-              }`}
-            >
-              <Radio size={15} />
-              <span>{isRecording ? 'Stop Recording' : 'Start Lecture Recording'}</span>
-            </button>
-
-            {/* Action 4: Export Attendance CSV */}
-            <button
-              onClick={handleExportCSV}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/25 transition-all active:scale-95 shadow-sm"
-            >
-              <Download size={15} />
-              <span>Export Attendance CSV</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Lobby Approval Request Banner (ADMIN ONLY) */}
-      {isAdmin && pendingKnockers.length > 0 && (
-        <div className="bg-amber-500/10 border border-amber-500/30 p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 animate-pulse">
-          <div className="flex items-center gap-3">
-            <UserPlus size={20} className="text-amber-400" />
             <div>
-              <h4 className="text-sm font-bold text-amber-300">
-                {pendingKnockers.length} Student(s) Waiting in Lobby
-              </h4>
-              <p className="text-xs text-surface-300">
-                Approve or deny access for students requesting entry to this live lecture.
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg font-bold text-surface-50 font-heading">
+                  {meetingInfo?.title || 'Live Virtual Classroom'}
+                </h1>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Live Stream
+                </span>
+              </div>
+              <p className="text-xs text-surface-400 mt-0.5">
+                {meetingInfo?.courseName ? (
+                  <span className="text-primary-400 font-semibold">{meetingInfo.courseName} • </span>
+                ) : null}
+                Role: <strong className="text-surface-200 capitalize">{isHost ? 'Instructor / Moderator' : 'Enrolled Student'}</strong>
               </p>
             </div>
           </div>
+        </div>
 
-          <div className="flex items-center gap-2">
-            {pendingKnockers.map(knocker => (
-              <div key={knocker.id} className="flex items-center gap-2 bg-surface-900 px-3 py-1.5 rounded-xl border border-surface-700">
-                <span className="text-xs font-medium text-surface-200">{knocker.name}</span>
-                <button
-                  onClick={() => handleApproveAccess(knocker.id)}
-                  className="p-1 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
-                  title="Approve student entry"
-                >
-                  <UserCheck size={14} />
-                </button>
-                <button
-                  onClick={() => handleDenyAccess(knocker.id)}
-                  className="p-1 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-500/30"
-                  title="Deny student entry"
-                >
-                  <UserX size={14} />
-                </button>
-              </div>
-            ))}
+        {/* Action Controls */}
+        <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+          <button
+            onClick={() => setShowAttendanceDrawer(true)}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-surface-800 hover:bg-surface-700 text-surface-200 border border-surface-700 transition-all shadow-sm"
+          >
+            <FileSpreadsheet className="w-4 h-4 text-primary-400" />
+            <span>Attendance Log ({attendanceList.length})</span>
+          </button>
+
+          <button
+            onClick={handleCopyLink}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-surface-800 hover:bg-surface-700 text-surface-200 border border-surface-700 transition-all shadow-sm"
+          >
+            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+            <span>{copied ? 'Copied' : 'Invite Link'}</span>
+          </button>
+
+          {isHost && (
+            <button
+              onClick={handleEndClass}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-600/90 hover:bg-rose-500 text-white transition-all shadow-sm"
+            >
+              <Square className="w-3.5 h-3.5 fill-current" />
+              <span>End Lecture</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ── INSTRUCTOR MODERATOR CONTROL CENTER (INSTRUCTOR ONLY) ── */}
+      {isHost && (
+        <div className="bg-gradient-to-r from-surface-900 via-surface-900/95 to-surface-900 border border-primary-500/30 p-4 rounded-2xl shadow-xl space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs font-bold text-primary-400 uppercase tracking-wider">
+              <Shield className="w-4 h-4 text-primary-400" />
+              <span>Instructor Moderator Command Center</span>
+            </div>
+            <span className="text-xs text-surface-400 font-mono">
+              Active Slug: <strong className="text-emerald-400">{meetingInfo?.roomSlug?.slice(0, 16)}...</strong>
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5 pt-1">
+            <button
+              onClick={() => setShowCreatePollModal(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border border-violet-500/40 transition-all shadow-sm"
+            >
+              <HelpCircle className="w-4 h-4" />
+              <span>Broadcast Live Poll</span>
+            </button>
+
+            <button
+              onClick={handleMuteEveryone}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/25 transition-all shadow-sm"
+            >
+              <MicOff className="w-4 h-4" />
+              <span>Mute All</span>
+            </button>
+
+            <button
+              onClick={handleToggleLobby}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                isLobbyEnabled
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  : 'bg-surface-800 hover:bg-surface-700 text-surface-300 border-surface-700'
+              }`}
+            >
+              <Lock className="w-4 h-4" />
+              <span>Lobby Waiting Room: {isLobbyEnabled ? 'ENABLED' : 'DISABLED'}</span>
+            </button>
           </div>
         </div>
       )}
 
-      {/* Control Bar: Room Switcher & Auth Identity Panel */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-        {/* Room Switch Form */}
-        <div className="md:col-span-8 flex flex-col justify-between bg-surface-900/80 backdrop-blur-md p-3 rounded-2xl border border-surface-800 shadow-lg space-y-3">
-          <form onSubmit={handleJoinRoom} className="flex items-center gap-2">
-            <div className="flex items-center gap-2 px-2 text-surface-400 shrink-0">
-              <Video size={18} className="text-primary-400" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-surface-300">Room Name:</span>
-            </div>
-            <input
-              type="text"
-              value={roomNameInput}
-              onChange={(e) => setRoomNameInput(e.target.value)}
-              placeholder="Enter room name..."
-              className="flex-1 bg-surface-950/90 border border-surface-800 rounded-xl px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:outline-none focus:border-primary-500 transition-colors"
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium transition-all shadow-md shadow-primary-950/30 shrink-0 flex items-center gap-1.5 active:scale-95"
-            >
-              <RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} />
-              <span>Update Room</span>
-            </button>
-          </form>
-
-          {/* Quick Presets */}
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-surface-400 font-medium">Presets:</span>
-            <div className="flex flex-wrap gap-1.5">
-              {QUICK_ROOM_PRESETS.map((preset) => (
-                <button
-                  key={preset}
-                  onClick={() => handlePresetSelect(preset)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all border ${
-                    activeRoom === preset
-                      ? 'bg-primary-500/20 text-primary-300 border-primary-500/40'
-                      : 'bg-surface-950 text-surface-400 border-surface-800 hover:text-surface-200 hover:border-surface-700'
-                  }`}
-                >
-                  {preset.replace('REAL_i-', '')}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* STRICT AUTHENTICATED IDENTITY & AUTHORIZATION PANEL */}
-        <div className="md:col-span-4 flex flex-col justify-between bg-surface-900/80 backdrop-blur-md p-3 rounded-2xl border border-surface-800 shadow-lg">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-semibold text-surface-300">
-              <Key size={15} className="text-primary-400" />
-              <span>Authenticated Role:</span>
-            </div>
-            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold border uppercase tracking-wider ${
-              isAdmin 
-                ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                : 'bg-blue-500/10 text-blue-400 border-blue-500/30'
-            }`}>
-              {isAdmin ? <Shield size={12} /> : <User size={12} />}
-              {isAdmin ? 'Instructor / Admin' : 'Student'}
-            </span>
-          </div>
-
-          <div className="bg-surface-950 p-2.5 rounded-xl border border-surface-800 mt-2 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center font-bold text-xs">
-                {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
-              </div>
-              <div>
-                <span className="block text-xs font-semibold text-surface-200 leading-tight">
-                  {user?.name || 'User Session'}
-                </span>
-                <span className="text-[10px] text-surface-400">
-                  {user?.email || 'authenticated'}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20">
-              <Lock size={11} />
-              <span>RBAC Enforced</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── MAIN JITSI CONTAINER + LIVE POLL OVERLAY ── */}
-      <div className="relative rounded-2xl overflow-hidden bg-surface-950 border border-surface-800/90 shadow-2xl h-[72vh] min-h-[520px]">
+      {/* ── MAIN WEBRTC CONTAINER + LIVE POLL OVERLAY ── */}
+      <div className="relative rounded-3xl overflow-hidden bg-surface-950 border border-surface-800 shadow-2xl h-[72vh] min-h-[520px]">
         {/* Loading Overlay */}
         {isLoading && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-surface-950/95 backdrop-blur-md transition-opacity duration-300">
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-surface-950/95 backdrop-blur-md">
             <div className="relative flex items-center justify-center mb-4">
               <div className="w-14 h-14 rounded-full border-3 border-primary-500/30 border-t-primary-500 animate-spin" />
-              <Video size={22} className="absolute text-primary-400 animate-pulse" />
+              <Video className="w-6 h-6 absolute text-primary-400 animate-pulse" />
             </div>
-            <p className="text-base font-semibold text-surface-200">
-              Initializing Virtual Classroom...
+            <p className="text-sm font-semibold text-surface-200 font-heading">
+              Connecting to Secure WebRTC Classroom...
             </p>
             <p className="text-xs text-surface-400 mt-1 font-mono">
-              Room: <span className="text-primary-400 font-semibold">{activeRoom}</span>
+              Course: <span className="text-primary-400 font-semibold">{meetingInfo?.courseName || 'REAL_i Live'}</span>
             </p>
           </div>
         )}
 
-        {/* ── IN-CLASS LIVE POLL OVERLAY (STUDENT & INSTRUCTOR VIEW) ── */}
+        {/* ── IN-CLASS LIVE POLL OVERLAY (STUDENT & INSTRUCTOR) ── */}
         {activePoll && (
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-md bg-surface-900/95 backdrop-blur-xl border border-violet-500/40 p-5 rounded-2xl shadow-2xl animate-fade-in">
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-md bg-surface-900/95 backdrop-blur-xl border border-violet-500/40 p-5 rounded-3xl shadow-2xl animate-fade-in">
             <div className="flex items-center justify-between border-b border-surface-800 pb-3 mb-3">
               <div className="flex items-center gap-2">
                 <span className="p-1.5 rounded-lg bg-violet-500/20 text-violet-300">
-                  <HelpCircle size={16} />
+                  <HelpCircle className="w-4 h-4" />
                 </span>
                 <span className="text-xs font-bold uppercase tracking-wider text-violet-300">
                   In-Class Live Poll
@@ -755,22 +665,22 @@ export default function LiveMeetingPage() {
 
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-950 border border-surface-800 text-xs font-mono text-amber-400">
-                  <Clock size={12} />
+                  <Clock className="w-3.5 h-3.5" />
                   <span>00:{pollTimeRemaining < 10 ? '0' : ''}{pollTimeRemaining}s</span>
                 </div>
-                {isAdmin && (
+                {isHost && (
                   <button
-                    onClick={handleClosePoll}
+                    onClick={() => setActivePoll(null)}
                     className="text-surface-400 hover:text-surface-200"
                     title="Close Poll"
                   >
-                    <X size={16} />
+                    <X className="w-4 h-4" />
                   </button>
                 )}
               </div>
             </div>
 
-            <h3 className="text-sm font-bold text-surface-100 mb-3 leading-snug">
+            <h3 className="text-sm font-bold text-surface-100 mb-3 leading-snug font-heading">
               {activePoll.question}
             </h3>
 
@@ -783,15 +693,14 @@ export default function LiveMeetingPage() {
                 return (
                   <button
                     key={option.optionId}
-                    disabled={hasVoted}
+                    disabled={hasVoted || isHost}
                     onClick={() => handleStudentVote(option.optionId)}
-                    className={`w-full relative overflow-hidden text-left p-3 rounded-xl border text-xs font-medium transition-all ${
+                    className={`w-full relative overflow-hidden text-left p-3 rounded-2xl border text-xs font-medium transition-all ${
                       isSelected
                         ? 'bg-primary-500/20 text-primary-300 border-primary-500/60 shadow-md'
                         : 'bg-surface-950 text-surface-200 border-surface-800 hover:border-surface-700'
                     }`}
                   >
-                    {/* Vote Percentage Progress Bar Background */}
                     <div 
                       className="absolute left-0 top-0 bottom-0 bg-primary-500/15 transition-all duration-500"
                       style={{ width: `${votePercentage}%` }}
@@ -799,13 +708,13 @@ export default function LiveMeetingPage() {
 
                     <div className="relative z-10 flex items-center justify-between">
                       <span>{option.text}</span>
-                      <div className="flex items-center gap-2">
-                        {hasVoted && (
-                          <span className="text-[11px] font-mono font-bold text-surface-400">
+                      <div className="flex items-center gap-2 font-mono">
+                        {(hasVoted || isHost) && (
+                          <span className="text-[11px] font-bold text-surface-400">
                             {votePercentage}% ({option.votes})
                           </span>
                         )}
-                        {isSelected && <CheckCircle2 size={14} className="text-primary-400" />}
+                        {isSelected && <CheckCircle2 className="w-4 h-4 text-primary-400" />}
                       </div>
                     </div>
                   </button>
@@ -815,35 +724,35 @@ export default function LiveMeetingPage() {
 
             <div className="mt-3 pt-2 flex items-center justify-between text-[11px] text-surface-400 border-t border-surface-800/60">
               <span>{totalPollVotes} Response(s) Received</span>
-              <span>{hasVoted ? '✓ Answer Submitted' : 'Click an option to vote'}</span>
+              <span>{hasVoted ? '✓ Answer Submitted' : isHost ? 'Broadcasting live' : 'Click an option to vote'}</span>
             </div>
           </div>
         )}
 
-        {/* Jitsi External Iframe Target */}
+        {/* Jitsi Target Iframe Container */}
         <div ref={jitsiContainerRef} className="w-full h-full" />
       </div>
 
       {/* ── CREATE POLL MODAL (INSTRUCTOR ONLY) ── */}
       {showCreatePollModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-950/80 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="w-full max-w-lg bg-surface-900 border border-surface-800 rounded-2xl p-6 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-950/80 backdrop-blur-md p-4 animate-fade-in">
+          <div className="w-full max-w-lg bg-surface-900 border border-surface-800 rounded-3xl p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-surface-800 pb-3">
               <div className="flex items-center gap-2">
-                <HelpCircle size={20} className="text-violet-400" />
+                <HelpCircle className="w-5 h-5 text-violet-400" />
                 <h3 className="text-lg font-bold text-surface-100 font-heading">
                   Create In-Class Live Poll
                 </h3>
               </div>
               <button
                 onClick={() => setShowCreatePollModal(false)}
-                className="text-surface-400 hover:text-surface-200"
+                className="text-surface-400 hover:text-surface-200 p-1"
               >
-                <X size={20} />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Quick Poll Presets */}
+            {/* Quick Templates */}
             <div className="space-y-1.5">
               <span className="text-xs text-surface-400 font-medium">Quick Question Templates:</span>
               <div className="flex flex-col gap-1.5">
@@ -851,8 +760,11 @@ export default function LiveMeetingPage() {
                   <button
                     key={i}
                     type="button"
-                    onClick={() => handleSelectPresetPoll(preset)}
-                    className="text-left text-xs p-2 rounded-lg bg-surface-950 hover:bg-surface-800 text-surface-300 border border-surface-800 hover:border-surface-700 transition-colors"
+                    onClick={() => {
+                      setPollQuestionInput(preset.question);
+                      setPollOptionsInput([...preset.options]);
+                    }}
+                    className="text-left text-xs p-2.5 rounded-xl bg-surface-950 hover:bg-surface-800 text-surface-300 border border-surface-800 transition-colors"
                   >
                     💡 {preset.question}
                   </button>
@@ -870,7 +782,7 @@ export default function LiveMeetingPage() {
                   required
                   value={pollQuestionInput}
                   onChange={(e) => setPollQuestionInput(e.target.value)}
-                  placeholder="Enter your question for the class..."
+                  placeholder="Enter question for the active class..."
                   className="w-full bg-surface-950 border border-surface-800 rounded-xl px-3 py-2 text-sm text-surface-100 focus:outline-none focus:border-primary-500"
                 />
               </div>
@@ -897,7 +809,7 @@ export default function LiveMeetingPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-surface-300 uppercase mb-1">
-                  Countdown Timer (Seconds):
+                  Timer Countdown (Seconds):
                 </label>
                 <select
                   value={pollTimerSeconds}
@@ -923,8 +835,8 @@ export default function LiveMeetingPage() {
                   type="submit"
                   className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold transition-all shadow-md"
                 >
-                  <Send size={14} />
-                  <span>Broadcast Poll Live</span>
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Broadcast Poll</span>
                 </button>
               </div>
             </form>
@@ -932,108 +844,73 @@ export default function LiveMeetingPage() {
         </div>
       )}
 
-      {/* ── LIVE ATTENDANCE DRAWER / MODAL ── */}
+      {/* ── LIVE ATTENDANCE DRAWER ── */}
       {showAttendanceDrawer && (
         <div className="fixed inset-0 z-50 flex justify-end bg-surface-950/80 backdrop-blur-sm animate-fade-in">
           <div className="w-full max-w-xl bg-surface-900 border-l border-surface-800 h-full p-6 overflow-y-auto flex flex-col justify-between shadow-2xl">
             <div>
-              {/* Drawer Header */}
               <div className="flex items-center justify-between pb-4 border-b border-surface-800">
                 <div className="flex items-center gap-2">
-                  <FileSpreadsheet size={20} className="text-primary-400" />
+                  <FileSpreadsheet className="w-5 h-5 text-primary-400" />
                   <h3 className="text-lg font-bold text-surface-100 font-heading">
-                    Live Session Attendance Report
+                    Live Session Attendance Log
                   </h3>
                 </div>
                 <button
                   onClick={() => setShowAttendanceDrawer(false)}
                   className="p-1 rounded-lg text-surface-400 hover:bg-surface-800 hover:text-surface-200"
                 >
-                  <X size={20} />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Attendance Summary Cards */}
+              {/* Stats */}
               <div className="grid grid-cols-3 gap-3 my-4">
-                <div className="bg-surface-950 p-3 rounded-xl border border-surface-800 text-center">
+                <div className="bg-surface-950 p-3 rounded-2xl border border-surface-800 text-center">
                   <span className="text-xs text-surface-400 block font-medium">Total Attendees</span>
                   <span className="text-xl font-bold text-surface-100 font-mono mt-0.5 block">{attendanceList.length}</span>
                 </div>
-                <div className="bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20 text-center">
-                  <span className="text-xs text-emerald-400 block font-medium">Active Present</span>
+                <div className="bg-emerald-500/10 p-3 rounded-2xl border border-emerald-500/20 text-center">
+                  <span className="text-xs text-emerald-400 block font-medium">Present Now</span>
                   <span className="text-xl font-bold text-emerald-400 font-mono mt-0.5 block">{presentCount}</span>
                 </div>
-                <div className="bg-surface-950 p-3 rounded-xl border border-surface-800 text-center">
+                <div className="bg-surface-950 p-3 rounded-2xl border border-surface-800 text-center">
                   <span className="text-xs text-surface-400 block font-medium">Left Session</span>
                   <span className="text-xl font-bold text-surface-400 font-mono mt-0.5 block">{attendanceList.length - presentCount}</span>
                 </div>
               </div>
 
-              {/* Search Filter Input */}
-              <div className="relative mb-4">
-                <Search size={16} className="absolute left-3 top-3 text-surface-500" />
-                <input
-                  type="text"
-                  placeholder="Search student name..."
-                  value={searchFilter}
-                  onChange={(e) => setSearchFilter(e.target.value)}
-                  className="w-full bg-surface-950 border border-surface-800 rounded-xl pl-9 pr-4 py-2 text-sm text-surface-200 focus:outline-none focus:border-primary-500"
-                />
-              </div>
-
-              {/* Attendance Table */}
-              <div className="overflow-hidden rounded-xl border border-surface-800 bg-surface-950">
+              {/* Table */}
+              <div className="overflow-hidden rounded-2xl border border-surface-800 bg-surface-950">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-surface-900 border-b border-surface-800 text-surface-400 uppercase font-semibold">
+                  <thead className="bg-surface-900 border-b border-surface-800 text-surface-400 uppercase font-semibold text-[10px]">
                     <tr>
-                      <th className="p-3">Student Name</th>
+                      <th className="p-3">Participant</th>
                       <th className="p-3">Status</th>
                       <th className="p-3">Joined At</th>
                       <th className="p-3">Duration</th>
-                      <th className="p-3">Ratio %</th>
-                      {isAdmin && <th className="p-3 text-right">Action</th>}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-surface-800/60">
-                    {filteredAttendance.map((student) => (
-                      <tr key={student.id} className="hover:bg-surface-900/50 transition-colors">
-                        <td className="p-3 font-medium text-surface-200 flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center font-bold text-xs uppercase">
-                            {student.name.charAt(0)}
-                          </div>
-                          <div>
-                            <span className="block font-semibold">{student.name}</span>
-                            <span className="text-[10px] text-surface-500 uppercase">{student.role}</span>
-                          </div>
+                  <tbody className="divide-y divide-surface-800/60 text-surface-300">
+                    {attendanceList.map((student, i) => (
+                      <tr key={i} className="hover:bg-surface-900/50">
+                        <td className="p-3 font-medium text-surface-200">
+                          <span className="block font-semibold">{student.name}</span>
+                          <span className="text-[10px] text-surface-400 uppercase">{student.role}</span>
                         </td>
                         <td className="p-3">
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${
                             student.status === 'present'
-                              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                              : 'bg-surface-800 text-surface-400 border-surface-700'
+                              ? 'bg-emerald-500/10 text-emerald-400'
+                              : 'bg-surface-800 text-surface-400'
                           }`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${student.status === 'present' ? 'bg-emerald-400 animate-pulse' : 'bg-surface-500'}`} />
                             {student.status === 'present' ? 'Present' : 'Left'}
                           </span>
                         </td>
-                        <td className="p-3 text-surface-300 font-mono">{student.joinTime}</td>
-                        <td className="p-3 text-primary-400 font-mono font-semibold">{formatSeconds(student.durationSeconds)}</td>
-                        <td className="p-3 font-mono font-bold text-emerald-400">
-                          {student.attendancePercentage || 100}%
+                        <td className="p-3 font-mono">{student.joinTime}</td>
+                        <td className="p-3 font-mono font-semibold text-primary-400">
+                          {formatSeconds(student.durationSeconds)}
                         </td>
-                        {isAdmin && (
-                          <td className="p-3 text-right">
-                            {student.status === 'present' && student.id !== 'local-user' && (
-                              <button
-                                onClick={() => handleKickParticipant(student.id)}
-                                className="px-2 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-lg text-[10px] border border-rose-500/20"
-                                title="Remove participant from session"
-                              >
-                                Kick
-                              </button>
-                            )}
-                          </td>
-                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -1041,77 +918,20 @@ export default function LiveMeetingPage() {
               </div>
             </div>
 
-            {/* Export Action Footer */}
             <div className="pt-4 border-t border-surface-800 flex items-center justify-between">
-              <span className="text-xs text-surface-400">
-                Session: <strong className="text-primary-400">{activeRoom}</strong>
+              <span className="text-xs text-surface-400 font-mono">
+                Room: <strong className="text-primary-400">{meetingInfo?.roomSlug?.slice(0, 16)}...</strong>
               </span>
               <button
-                onClick={handleExportCSV}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all shadow-md"
+                onClick={() => setShowAttendanceDrawer(false)}
+                className="px-4 py-2 rounded-xl bg-surface-800 hover:bg-surface-700 text-surface-200 text-xs font-semibold"
               >
-                <Download size={14} />
-                <span>Export CSV Report</span>
+                Close Drawer
               </button>
             </div>
           </div>
         </div>
       )}
-
-      {/* Feature Highlights Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {/* Feature 1 */}
-        <div className="bg-surface-900/60 p-4 rounded-xl border border-surface-800/80 flex items-start gap-3 hover:border-surface-700 transition-colors">
-          <div className="p-2.5 rounded-lg bg-primary-500/10 text-primary-400 shrink-0">
-            <Percent size={20} />
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-surface-200">MongoDB Auto-Sync %</h3>
-            <p className="text-xs text-surface-400 mt-1 leading-relaxed">
-              Auto-calculates attendance percentage & persists logs into MongoDB database.
-            </p>
-          </div>
-        </div>
-
-        {/* Feature 2 */}
-        <div className="bg-surface-900/60 p-4 rounded-xl border border-surface-800/80 flex items-start gap-3 hover:border-surface-700 transition-colors">
-          <div className="p-2.5 rounded-lg bg-violet-500/10 text-violet-400 shrink-0">
-            <HelpCircle size={20} />
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-surface-200">In-Class Live Poll Overlay</h3>
-            <p className="text-xs text-surface-400 mt-1 leading-relaxed">
-              Broadcast interactive multiple-choice questions live over the video screen.
-            </p>
-          </div>
-        </div>
-
-        {/* Feature 3 */}
-        <div className="bg-surface-900/60 p-4 rounded-xl border border-surface-800/80 flex items-start gap-3 hover:border-surface-700 transition-colors">
-          <div className="p-2.5 rounded-lg bg-rose-500/10 text-rose-400 shrink-0">
-            <MicOff size={20} />
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-surface-200">Mute All Controls</h3>
-            <p className="text-xs text-surface-400 mt-1 leading-relaxed">
-              Instant instructor override to mute audio for all active attendees.
-            </p>
-          </div>
-        </div>
-
-        {/* Feature 4 */}
-        <div className="bg-surface-900/60 p-4 rounded-xl border border-surface-800/80 flex items-start gap-3 hover:border-surface-700 transition-colors">
-          <div className="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-400 shrink-0">
-            <Download size={20} />
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-surface-200">CSV Report Export</h3>
-            <p className="text-xs text-surface-400 mt-1 leading-relaxed">
-              Download formal lecture attendance spreadsheets in one click.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

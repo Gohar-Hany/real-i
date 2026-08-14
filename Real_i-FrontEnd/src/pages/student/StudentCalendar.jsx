@@ -97,7 +97,7 @@ export default function StudentCalendar() {
           date: new Date(m.scheduledFor),
           type: 'meeting',
           description: `Duration: ${m.expectedDurationMinutes} mins. Room: ${m.roomName}`,
-          link: `/student/live?roomName=${encodeURIComponent(m.roomName)}`,
+          link: `/student/live?meetingId=${encodeURIComponent(m._id)}&roomSlug=${encodeURIComponent(m.roomSlug || m.roomName)}`,
           linkLabel: m.status === 'live' ? 'Join Live Now' : 'Join Session',
           meta: [
             m.status === 'live' ? 'LIVE' : m.status,

@@ -27,7 +27,7 @@ const adminLinks = [
 
 const studentLinks = [
   { to: '/student', icon: LayoutDashboard, label: 'Dashboard', end: true },
-  { to: '/student/live', icon: Video, label: 'Live Classes' },
+  { to: '/student/meetings', icon: Video, label: 'Live Classes' },
   { to: '/student/courses', icon: GraduationCap, label: 'My Courses' },
   { to: '/student/assessments', icon: ClipboardList, label: 'Assessments' },
   { to: '/student/calendar', icon: CalendarDays, label: 'Calendar' },

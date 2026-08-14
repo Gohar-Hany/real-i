@@ -362,3 +362,58 @@ export const getStudentAnalytics = () =>
 export const getCourseAnalytics = (courseId) =>
   api.get(`/analytics/courses/${courseId}`);
 
+// ── Meetings & Live Classroom (Node.js) ─────────────────────
+export const getMeetings = (params = {}) => {
+  const query = new URLSearchParams();
+  if (params.status) query.set('status', params.status);
+  if (params.courseId) query.set('courseId', params.courseId);
+  if (params.seriesId) query.set('seriesId', params.seriesId);
+  const qs = query.toString();
+  return api.get(`/meetings${qs ? `?${qs}` : ''}`);
+};
+
+export const getMeeting = (id) =>
+  api.get(`/meetings/${id}`);
+
+export const authorizeMeetingJoin = (data) =>
+  api.post('/meetings/authorize-join', data);
+
+export const createMeeting = (data) =>
+  api.post('/meetings', data);
+
+export const updateMeeting = (id, data) =>
+  api.put(`/meetings/${id}`, data);
+
+export const deleteMeeting = (id) =>
+  api.delete(`/meetings/${id}`);
+
+export const launchMeeting = (id) =>
+  api.put(`/meetings/${id}/launch`);
+
+export const endMeeting = (id) =>
+  api.put(`/meetings/${id}/end`);
+
+export const updateMeetingSeries = (seriesId, data) =>
+  api.put(`/meetings/series/${seriesId}`, data);
+
+export const deleteMeetingSeries = (seriesId) =>
+  api.delete(`/meetings/series/${seriesId}`);
+
+export const generateMeetingSummary = (id) =>
+  api.post(`/meetings/${id}/generate-summary`);
+
+export const syncMeetingAttendance = (data) =>
+  api.post('/meetings/attendance/sync', data);
+
+export const getMeetingAttendance = (identifier) =>
+  api.get(`/meetings/${identifier}/attendance`);
+
+export const createMeetingPoll = (data) =>
+  api.post('/meetings/polls/create', data);
+
+export const voteMeetingPoll = (data) =>
+  api.post('/meetings/polls/vote', data);
+
+export const closeMeetingPoll = (pollId, data) =>
+  api.put(`/meetings/polls/${pollId}/close`, data);
+

@@ -56,6 +56,7 @@ const StudentExamTake = lazy(() => import('@/pages/student/StudentExamTake'));
 const StudentAssignmentSubmit = lazy(() => import('@/pages/student/StudentAssignmentSubmit'));
 const StudentAssessmentResult = lazy(() => import('@/pages/student/StudentAssessmentResult'));
 const StudentCalendar = lazy(() => import('@/pages/student/StudentCalendar'));
+const StudentMeetings = lazy(() => import('@/pages/student/StudentMeetings'));
 
 // Shared Live Meeting Page
 const LiveMeetingPage = lazy(() => import('@/pages/shared/LiveMeetingPage'));
@@ -134,6 +135,7 @@ function AppRoutes() {
         {/* ── Student Routes ── */}
         <Route path="/student" element={<ProtectedRoute role="student"><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<StudentDashboard />} />
+          <Route path="meetings" element={<StudentMeetings />} />
           <Route path="live" element={<LiveMeetingPage />} />
           <Route path="courses" element={<StudentCourses />} />
           <Route path="courses/:courseId/learn" element={<StudentCourseLearning />} />

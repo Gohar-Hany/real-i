@@ -257,8 +257,8 @@ export default function StudentDashboard() {
                 </div>
                 <h3 className="text-sm font-bold text-surface-50 dark:text-surface-100 font-heading">Live Classes</h3>
               </div>
-              <Link to="/student/calendar" className="text-[10px] text-primary-600 dark:text-primary-400 font-bold hover:text-primary-500 uppercase tracking-wider flex items-center gap-1 font-mono">
-                Schedule <ChevronRight size={12} />
+              <Link to="/student/meetings" className="text-[10px] text-primary-600 dark:text-primary-400 font-bold hover:text-primary-500 uppercase tracking-wider flex items-center gap-1 font-mono">
+                View All <ChevronRight size={12} />
               </Link>
             </div>
             <div className="p-4 space-y-2">
@@ -280,7 +280,7 @@ export default function StudentDashboard() {
                     </div>
                   </div>
                   <Link
-                    to={`/student/live?roomName=${encodeURIComponent(meeting.roomName)}`}
+                    to={`/student/live?meetingId=${encodeURIComponent(meeting._id)}&roomSlug=${encodeURIComponent(meeting.roomSlug || meeting.roomName)}`}
                     className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
                       meeting.status === 'live'
                         ? 'bg-red-600 hover:bg-red-500 text-white animate-pulse-soft'
