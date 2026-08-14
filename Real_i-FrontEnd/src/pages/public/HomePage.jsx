@@ -203,9 +203,7 @@ export default function HomePage() {
             <div className="absolute top-1/4 right-0 w-2 h-2 bg-primary-400 rounded-full" />
             <div className="absolute bottom-1/4 left-1/4 w-[1px] h-32 bg-gradient-to-t from-primary-500/30 to-transparent rotate-45 origin-bottom" />
           </div>
-          {/* Diagnostic markers */}
-          <div className="absolute top-[15%] left-[5%] font-mono text-[10px] tracking-widest hidden md:block hero-sys-label text-primary-500/70">SYS.CORE.INIT // 0x7A4F</div>
-          <div className="absolute bottom-[10%] right-[10%] font-mono text-[10px] tracking-widest hidden md:block hero-sys-label text-primary-500/70">MEM_ALLOC_OK -&gt; 1024TB</div>
+          {/* Decorative gold accent marks — brand identity, not terminal */}
           <div className="absolute top-[40%] right-[5%] hidden md:flex flex-col gap-1">
             <div className="w-8 h-[2px] bg-primary-500/20" />
             <div className="w-4 h-[2px] bg-primary-500/40" />
@@ -266,16 +264,16 @@ export default function HomePage() {
                   <circle cx="50" cy="50" fill="none" r="30" stroke="var(--deco-ring-stroke, rgba(212,175,55,0.3))" strokeWidth="0.5" />
                   <circle cx="50" cy="50" fill="none" r="40" stroke="var(--deco-dash-stroke, rgba(255,255,255,0.05))" strokeDasharray="1,4" strokeWidth="0.5" />
                 </svg>
-                {/* Floating Glass Data Panels */}
-                <div className="absolute top-[10%] left-[10%] glass-card p-4 border border-primary-500/30 w-32 animate-float">
-                  <div className="text-[10px] font-mono mb-1 hero-sys-label text-primary-500">DATA.STREAM_01</div>
-                  <div className="h-1 bg-primary-500/20 w-full overflow-hidden">
-                    <div className="h-full bg-primary-500 w-2/3" />
-                  </div>
+                {/* Metric card */}
+                <div className="absolute top-[10%] left-[10%] glass-card p-4 border border-primary-500/30 w-36 animate-float">
+                  <div className="text-[9px] uppercase tracking-widest mb-2 text-primary-500/70">Courses</div>
+                  <div className="text-xl font-semibold text-primary-400 font-heading">200+</div>
+                  <div className="h-[1px] w-full bg-primary-500/20 mt-2" />
                 </div>
+                {/* Engagement bar card */}
                 <div className="absolute bottom-[20%] right-[5%] glass-card p-4 border border-primary-400/30 w-40 animate-float" style={{ animationDelay: '2s' }}>
-                  <div className="text-[10px] font-mono mb-1 hero-sys-label text-primary-500">NEURAL_NET.ACT</div>
-                  <div className="flex gap-1">
+                  <div className="text-[9px] uppercase tracking-widest mb-2 text-primary-500/70">Engagement</div>
+                  <div className="flex gap-1 items-end">
                     <div className="w-1 h-3 bg-primary-400/80" />
                     <div className="w-1 h-4 bg-primary-400/60" />
                     <div className="w-1 h-2 bg-primary-400/40" />
@@ -298,7 +296,7 @@ export default function HomePage() {
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-8 flex items-center gap-4 opacity-0 animate-pulse hidden md:flex hero-action">
           <ArrowRight className="text-primary-500 rotate-90 animate-bounce" size={16} />
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-surface-400">Scroll to execute</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-surface-400">Scroll to explore</span>
         </div>
       </section>
 
@@ -693,9 +691,9 @@ export default function HomePage() {
           ═══════════════════════════════════════════════════════ */}
       <section ref={ctaRef} className="py-24 relative">
         <div className="max-w-[900px] mx-auto px-4 sm:px-6 relative z-10">
-          <div className="bg-[#0A1222] rounded-[4px] p-10 md:p-14 relative overflow-hidden text-center">
-            {/* Decorative SVG Circuit Pattern */}
-            <svg className="absolute top-0 right-0 w-48 h-48 opacity-[0.15] text-[#D4AF37] pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
+          <div className="bg-bg-card rounded-[4px] p-10 md:p-14 relative overflow-hidden text-center" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-card)' }}>
+            {/* Decorative SVG geometric mark */}
+            <svg className="absolute top-0 right-0 w-48 h-48 opacity-[0.12] text-primary-500 pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
               <circle cx="20" cy="20" r="1.5" fill="currentColor" />
               <circle cx="50" cy="15" r="1.5" fill="currentColor" />
               <circle cx="80" cy="40" r="1.5" fill="currentColor" />
@@ -708,26 +706,26 @@ export default function HomePage() {
             </svg>
 
             <div className="relative z-10">
-              <span className="block text-[12px] uppercase tracking-[0.15em] text-[#D4AF37] mb-3 font-mono">
-                &gt;_ SYSTEM ONLINE
+              <span className="block text-[12px] uppercase tracking-[0.15em] text-primary-500 mb-3">
+                Start your journey
               </span>
-              <h2 className="text-[28px] font-medium text-[#FFFFFF] mb-4 font-sans tracking-tight">
+              <h2 className="text-[28px] font-medium text-surface-100 mb-4 font-heading tracking-tight">
                 Ready to Build Real Intelligence?
               </h2>
-              <p className="text-[15px] text-[#A2A2A2] max-w-xl mx-auto mb-8">
+              <p className="text-[15px] text-surface-400 max-w-xl mx-auto mb-8">
                 Join thousands of students already learning smarter with AI. 
                 Start your journey today — completely free.
               </p>
               <div className="flex flex-wrap justify-center gap-[12px]">
                 <Link
                   to="/login?register=true"
-                  className="bg-[#D4AF37] text-[#0A1222] px-[24px] py-[11px] rounded-[4px] text-[14px] font-medium hover:bg-[#B8860B] transition-colors inline-flex items-center gap-2"
+                  className="bg-primary-500 text-surface-950 px-[24px] py-[11px] rounded-[4px] text-[14px] font-medium hover:bg-primary-600 transition-colors inline-flex items-center gap-2"
                 >
                   Get Started Free
                 </Link>
                 <Link
                   to="/courses"
-                  className="bg-transparent border border-[#D4AF37] text-[#D4AF37] px-[24px] py-[11px] rounded-[4px] text-[14px] font-medium hover:bg-[#D4AF37]/10 transition-colors inline-flex items-center gap-2"
+                  className="bg-transparent border border-primary-500/50 text-primary-400 px-[24px] py-[11px] rounded-[4px] text-[14px] font-medium hover:bg-primary-500/10 hover:border-primary-500 transition-colors inline-flex items-center gap-2"
                 >
                   Browse Courses
                 </Link>

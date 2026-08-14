@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, ArrowLeft, Brain } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/components/common/Toast';
 import { Helmet } from 'react-helmet-async';
 
@@ -19,6 +19,7 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({});
   const [attempts, setAttempts] = useState(0);
   const [lockoutEnd, setLockoutEnd] = useState(null);
+  const [now, setNow] = useState(() => Date.now());
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const { login, register } = useAuth();
@@ -27,19 +28,22 @@ export default function LoginPage() {
   const cardRef = useRef(null);
   const formRef = useRef(null);
 
-  // Check if user is locked out
-  const isLockedOut = () => {
-    if (!lockoutEnd) return false;
-    if (Date.now() < lockoutEnd) return true;
-    setLockoutEnd(null);
-    setAttempts(0);
-    return false;
-  };
+  // Lockout countdown timer effect
+  useEffect(() => {
+    if (!lockoutEnd) return;
+    const interval = setInterval(() => {
+      const currentTimestamp = Date.now();
+      setNow(currentTimestamp);
+      if (currentTimestamp >= lockoutEnd) {
+        setLockoutEnd(null);
+        setAttempts(0);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [lockoutEnd]);
 
-  const getRemainingLockout = () => {
-    if (!lockoutEnd) return 0;
-    return Math.max(0, Math.ceil((lockoutEnd - Date.now()) / 1000));
-  };
+  const remainingSeconds = lockoutEnd ? Math.max(0, Math.ceil((lockoutEnd - now) / 1000)) : 0;
+  const lockedOut = Boolean(lockoutEnd && remainingSeconds > 0);
 
   const validate = () => {
     const newErrors = {};
@@ -60,8 +64,8 @@ export default function LoginPage() {
     e.preventDefault();
     if (!validate()) return;
 
-    if (isLockedOut()) {
-      toast.error(`Too many attempts. Try again in ${getRemainingLockout()} seconds.`);
+    if (lockedOut) {
+      toast.error(`Too many attempts. Try again in ${remainingSeconds} seconds.`);
       return;
     }
     
@@ -84,7 +88,9 @@ export default function LoginPage() {
       const newAttempts = attempts + 1;
       setAttempts(newAttempts);
       if (newAttempts >= MAX_ATTEMPTS) {
-        setLockoutEnd(Date.now() + LOCKOUT_DURATION * 1000);
+        const currentTimestamp = Date.now();
+        setNow(currentTimestamp);
+        setLockoutEnd(currentTimestamp + LOCKOUT_DURATION * 1000);
         toast.error(`Account locked for ${LOCKOUT_DURATION}s due to too many failed attempts.`);
       } else {
         toast.error(result?.error || 'Authentication failed. Access denied.');
@@ -270,15 +276,15 @@ export default function LoginPage() {
                 </div>
 
                 {/* Lockout Warning */}
-                {isLockedOut() && (
+                {lockedOut && (
                   <div className="p-3 rounded-lg bg-danger-500/10 border border-danger-500/30 text-danger-400 text-xs font-mono text-center">
-                    Too many failed attempts. Try again in {getRemainingLockout()} seconds.
+                    Too many failed attempts. Try again in {remainingSeconds} seconds.
                   </div>
                 )}
 
                 <button
                   type="submit"
-                  disabled={isSubmitting || isLockedOut()}
+                  disabled={isSubmitting || lockedOut}
                   className="w-full btn-cyber-solid group mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
