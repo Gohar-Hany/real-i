@@ -97,34 +97,34 @@ export default function StudentDashboard() {
   return (
     <div className="space-y-6 lg:space-y-8 animate-fade-in-up pb-10">
       {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-surface-900 border border-surface-700/50 shadow-2xl group">
+      <div className="relative overflow-hidden rounded-3xl bg-surface-900 border border-surface-600/40 dark:border-surface-700/50 shadow-md group">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary-500/10 rounded-full blur-[120px] group-hover:bg-primary-500/20 transition-all duration-700"></div>
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px]"></div>
 
         <div className="relative z-10 p-8 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800/80 border border-surface-700 mb-4 backdrop-blur-md">
-              <Sparkles size={14} className="text-primary-400" />
-              <span className="text-[11px] font-mono font-bold text-primary-400 uppercase tracking-widest">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800/80 border border-surface-600/40 dark:border-surface-700 mb-4 backdrop-blur-md">
+              <Sparkles size={14} className="text-primary-600 dark:text-primary-400" />
+              <span className="text-[11px] font-mono font-bold text-primary-600 dark:text-primary-400 uppercase tracking-widest">
                 Student Portal
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 tracking-tight mb-3">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 dark:text-surface-100 tracking-tight mb-3 font-heading">
               {user?.name ? (
-                <>Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">{user.name.split(' ')[0]}</span></>
+                <>Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500">{user.name.split(' ')[0]}</span></>
               ) : (
-                <>Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">REAL_i</span></>
+                <>Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500">REAL_i</span></>
               )}
             </h1>
-            <p className="text-surface-400 text-sm sm:text-base max-w-xl leading-relaxed">
+            <p className="text-surface-400 text-sm sm:text-base max-w-xl leading-relaxed font-sans">
               Your AI-powered learning environment is ready. Dive into courses, track progress, or challenge yourself.
             </p>
           </div>
 
           <div className="hidden lg:flex shrink-0">
-            <div className="w-28 h-28 rounded-full border-4 border-surface-800 flex items-center justify-center bg-surface-900/50 backdrop-blur-sm relative shadow-[0_0_30px_rgba(212,175,55,0.1)]">
-              <BrainCircuit size={40} className="text-primary-400 drop-shadow-[0_0_15px_rgba(212,175,55,0.5)]" />
+            <div className="w-28 h-28 rounded-full border-4 border-surface-600/30 dark:border-surface-800 flex items-center justify-center bg-surface-800/50 backdrop-blur-sm relative shadow-sm">
+              <BrainCircuit size={40} className="text-primary-600 dark:text-primary-400 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" />
               <div className="absolute inset-0 rounded-full border border-primary-500/30 animate-[spin_10s_linear_infinite]"></div>
             </div>
           </div>
@@ -141,17 +141,17 @@ export default function StudentDashboard() {
         ].map((stat, i) => (
           <div
             key={i}
-            className="relative glass-card rounded-2xl p-5 bg-surface-900/60 border border-surface-700/50 overflow-hidden group hover:-translate-y-1 transition-all duration-300"
+            className="relative bg-surface-900 rounded-2xl p-5 border border-surface-600/40 dark:border-surface-700/50 shadow-sm overflow-hidden group hover:-translate-y-1 transition-all duration-300"
             style={{ boxShadow: `0 4px 30px ${stat.color}08` }}
           >
             <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none" style={{ background: `radial-gradient(circle at center, ${stat.color} 0%, transparent 70%)` }}></div>
             <div className="flex items-center justify-between relative z-10">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center border" style={{ background: `linear-gradient(135deg, ${stat.color}20, ${stat.color}05)`, borderColor: `${stat.color}40` }}>
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center border shadow-sm" style={{ background: `linear-gradient(135deg, ${stat.color}20, ${stat.color}05)`, borderColor: `${stat.color}40` }}>
                 <stat.icon size={20} style={{ color: stat.color }} />
               </div>
               <div className="text-right">
-                <p className="text-2xl font-extrabold text-surface-50">{stat.value}</p>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-surface-400 mt-0.5">{stat.label}</p>
+                <p className="text-2xl font-extrabold text-surface-50 dark:text-surface-100 font-heading">{stat.value}</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-surface-400 mt-0.5 font-mono">{stat.label}</p>
               </div>
             </div>
           </div>
@@ -162,7 +162,7 @@ export default function StudentDashboard() {
       <div>
         <div className="flex items-center gap-3 mb-5">
           <div className="h-6 w-1.5 rounded-full bg-primary-500"></div>
-          <h2 className="text-lg font-bold text-surface-50">Quick Actions</h2>
+          <h2 className="text-lg font-bold text-surface-50 dark:text-surface-100 font-heading">Quick Actions</h2>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -170,21 +170,21 @@ export default function StudentDashboard() {
             <button
               key={i}
               onClick={() => navigate(action.path)}
-              className="group relative overflow-hidden rounded-2xl bg-surface-900 border border-surface-700/50 p-5 text-left transition-all duration-300 hover:border-primary-500/50 hover:shadow-[0_0_30px_rgba(212,175,55,0.1)] hover:-translate-y-1"
+              className="group relative overflow-hidden rounded-2xl bg-surface-900 border border-surface-600/40 dark:border-surface-700/50 p-5 text-left transition-all duration-300 hover:border-primary-500 hover:shadow-md hover:-translate-y-1 cursor-pointer"
             >
               <div className="flex items-start justify-between mb-3 relative z-10">
                 <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg border transition-transform group-hover:scale-110"
+                  className="w-12 h-12 rounded-xl flex items-center justify-center shadow-sm border transition-transform group-hover:scale-110"
                   style={{ background: `linear-gradient(135deg, ${action.color}20, ${action.color}05)`, borderColor: `${action.color}40` }}
                 >
                   <action.icon size={22} style={{ color: action.color }} />
                 </div>
-                <div className="w-7 h-7 rounded-full bg-surface-800 flex items-center justify-center group-hover:bg-primary-500 group-hover:text-surface-950 text-surface-500 transition-all">
+                <div className="w-7 h-7 rounded-full bg-surface-800 flex items-center justify-center group-hover:bg-primary-500 group-hover:text-surface-950 text-surface-400 transition-all">
                   <ArrowRight size={14} className="group-hover:-rotate-45 transition-transform" />
                 </div>
               </div>
-              <h3 className="text-sm font-bold text-surface-50 mb-1 group-hover:text-primary-300 transition-colors">{action.title}</h3>
-              <p className="text-[11px] text-surface-500 leading-relaxed">{action.desc}</p>
+              <h3 className="text-sm font-bold text-surface-50 dark:text-surface-100 mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors font-heading">{action.title}</h3>
+              <p className="text-[11px] text-surface-400 leading-relaxed font-sans">{action.desc}</p>
             </button>
           ))}
         </div>
@@ -192,16 +192,16 @@ export default function StudentDashboard() {
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Pending Quizzes */}
-        <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
-          <div className="p-6 border-b border-surface-800 bg-surface-900/80 flex items-center justify-between">
+        <div className="rounded-3xl border border-surface-600/40 dark:border-surface-700/50 bg-surface-900 shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-surface-600/30 dark:border-surface-800 bg-surface-800/40 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-primary-500/10 flex items-center justify-center border border-primary-500/20">
-                <Target size={16} className="text-primary-400" />
+                <Target size={16} className="text-primary-600 dark:text-primary-400" />
               </div>
-              <h3 className="text-sm font-bold text-surface-50">Pending Quizzes</h3>
+              <h3 className="text-sm font-bold text-surface-50 dark:text-surface-100 font-heading">Pending Quizzes</h3>
             </div>
             {pendingQuizzes.length > 0 && (
-              <span className="px-2.5 py-1 rounded-lg text-[10px] font-black bg-primary-500/10 text-primary-400 border border-primary-500/20 uppercase">
+              <span className="px-2.5 py-1 rounded-lg text-[10px] font-black bg-primary-500/15 text-primary-700 dark:text-primary-300 border border-primary-500/30 uppercase font-mono">
                 {pendingQuizzes.length} pending
               </span>
             )}
@@ -209,11 +209,11 @@ export default function StudentDashboard() {
           <div className="p-4">
             {pendingQuizzes.length === 0 ? (
               <div className="py-10 text-center">
-                <div className="w-16 h-16 rounded-full bg-surface-800 flex items-center justify-center mb-3 mx-auto">
-                  <Trophy size={28} className="text-primary-500/50" />
+                <div className="w-16 h-16 rounded-full bg-surface-800 flex items-center justify-center mb-3 mx-auto shadow-sm">
+                  <Trophy size={28} className="text-primary-500" />
                 </div>
-                <p className="text-sm font-bold text-surface-50 mb-1">All caught up!</p>
-                <p className="text-xs text-surface-500">No pending quizzes right now</p>
+                <p className="text-sm font-bold text-surface-50 dark:text-surface-100 mb-1 font-heading">All caught up!</p>
+                <p className="text-xs text-surface-400 font-sans">No pending quizzes right now</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -221,17 +221,17 @@ export default function StudentDashboard() {
                   <button
                     key={i}
                     onClick={() => navigate('/student/quiz', { state: { projectId: quiz.project_id, taskId: quiz.task_id } })}
-                    className="w-full flex items-center gap-3 p-3 rounded-xl bg-surface-800/30 border border-surface-700/50 hover:bg-surface-800/60 hover:border-primary-500/30 transition-all text-left group"
+                    className="w-full flex items-center gap-3 p-3 rounded-xl bg-surface-800/40 border border-surface-600/30 dark:border-surface-700/50 hover:bg-surface-800/80 hover:border-primary-500/40 transition-all text-left group cursor-pointer"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-surface-900 border border-surface-700 flex items-center justify-center shrink-0 group-hover:border-primary-500/30 transition-all">
-                      <BrainCircuit size={18} className="text-surface-400 group-hover:text-primary-400 transition-colors" />
+                    <div className="w-10 h-10 rounded-xl bg-surface-900 border border-surface-600/40 dark:border-surface-700 flex items-center justify-center shrink-0 group-hover:border-primary-500/30 transition-all">
+                      <BrainCircuit size={18} className="text-surface-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-surface-200 truncate group-hover:text-surface-50 transition-colors">{quiz.description || `Quiz ${quiz.task_id}`}</p>
-                      <p className="text-[10px] text-surface-500 font-mono">{quiz.project_id}</p>
+                      <p className="text-sm font-bold text-surface-50 dark:text-surface-200 truncate group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors font-heading">{quiz.description || `Quiz ${quiz.task_id}`}</p>
+                      <p className="text-[10px] text-surface-400 font-mono">{quiz.project_id}</p>
                     </div>
-                    <div className="w-7 h-7 rounded-full bg-surface-900 flex items-center justify-center group-hover:bg-primary-500 group-hover:text-surface-950 transition-colors shrink-0">
-                      <ArrowRight size={12} className="text-surface-500 group-hover:text-surface-950" />
+                    <div className="w-7 h-7 rounded-full bg-surface-900 border border-surface-600/30 dark:border-surface-800 flex items-center justify-center group-hover:bg-primary-500 group-hover:text-surface-950 transition-colors shrink-0">
+                      <ArrowRight size={12} className="text-surface-400 group-hover:text-surface-950" />
                     </div>
                   </button>
                 ))}
@@ -242,22 +242,22 @@ export default function StudentDashboard() {
 
         {/* Live Classes Widget */}
         {meetings.filter(m => m.status === 'live' || m.status === 'scheduled').length > 0 && (
-          <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden relative">
+          <div className="rounded-3xl border border-surface-600/40 dark:border-surface-700/50 bg-surface-900 shadow-sm overflow-hidden relative">
             {meetings.some(m => m.status === 'live') && (
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500/0 via-red-500 to-red-500/0 opacity-70"></div>
             )}
-            <div className="p-6 border-b border-surface-800 bg-surface-900/80 flex items-center justify-between">
+            <div className="p-6 border-b border-surface-600/30 dark:border-surface-800 bg-surface-800/40 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${
                   meetings.some(m => m.status === 'live') 
                     ? 'bg-red-500/10 border-red-500/20' 
                     : 'bg-primary-500/10 border-primary-500/20'
                 }`}>
-                  <Zap size={16} className={meetings.some(m => m.status === 'live') ? 'text-red-400' : 'text-primary-400'} />
+                  <Zap size={16} className={meetings.some(m => m.status === 'live') ? 'text-red-500' : 'text-primary-600 dark:text-primary-400'} />
                 </div>
-                <h3 className="text-sm font-bold text-surface-50">Live Classes</h3>
+                <h3 className="text-sm font-bold text-surface-50 dark:text-surface-100 font-heading">Live Classes</h3>
               </div>
-              <Link to="/student/calendar" className="text-[10px] text-primary-400 font-bold hover:text-primary-300 uppercase tracking-wider flex items-center gap-1">
+              <Link to="/student/calendar" className="text-[10px] text-primary-600 dark:text-primary-400 font-bold hover:text-primary-500 uppercase tracking-wider flex items-center gap-1 font-mono">
                 Schedule <ChevronRight size={12} />
               </Link>
             </div>
@@ -265,26 +265,26 @@ export default function StudentDashboard() {
               {meetings
                 .filter(m => m.status === 'live' || m.status === 'scheduled')
                 .map((meeting, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-surface-800/30 border border-surface-700/50 hover:bg-surface-800/60 transition-colors">
+                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-surface-800/40 border border-surface-600/30 dark:border-surface-700/50 hover:bg-surface-800/70 transition-colors">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-surface-900 flex items-center justify-center border border-surface-700 shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-surface-900 flex items-center justify-center border border-surface-600/40 dark:border-surface-700 shrink-0">
                       <Target size={18} className="text-surface-400" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-surface-50">{meeting.title}</p>
-                      <p className="text-xs text-surface-400">
+                      <p className="text-sm font-bold text-surface-50 dark:text-surface-100 font-heading">{meeting.title}</p>
+                      <p className="text-xs text-surface-400 font-sans">
                         {meeting.status === 'live' 
-                          ? <span className="text-red-400 font-bold flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>Live Now</span>
+                          ? <span className="text-red-500 font-bold flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>Live Now</span>
                           : meeting.scheduledFor ? new Date(meeting.scheduledFor).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Scheduled'}
                       </p>
                     </div>
                   </div>
                   <Link
                     to={`/student/live?roomName=${encodeURIComponent(meeting.roomName)}`}
-                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-lg ${
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
                       meeting.status === 'live'
                         ? 'bg-red-600 hover:bg-red-500 text-white animate-pulse-soft'
-                        : 'bg-primary-600 hover:bg-primary-500 text-white'
+                        : 'bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950'
                     }`}
                   >
                     Join
@@ -296,26 +296,26 @@ export default function StudentDashboard() {
         )}
 
         {/* Continue Learning — Real API Data */}
-        <div className="glass-card rounded-3xl border border-surface-700/50 bg-surface-900/60 overflow-hidden">
-          <div className="p-6 border-b border-surface-800 bg-surface-900/80 flex items-center justify-between">
+        <div className="rounded-3xl border border-surface-600/40 dark:border-surface-700/50 bg-surface-900 shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-surface-600/30 dark:border-surface-800 bg-surface-800/40 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                <TrendingUp size={16} className="text-blue-400" />
+                <TrendingUp size={16} className="text-blue-500 dark:text-blue-400" />
               </div>
-              <h3 className="text-sm font-bold text-surface-50">Continue Learning</h3>
+              <h3 className="text-sm font-bold text-surface-50 dark:text-surface-100 font-heading">Continue Learning</h3>
             </div>
-            <Link to="/student/courses" className="text-[10px] text-primary-400 font-bold hover:text-primary-300 uppercase tracking-wider flex items-center gap-1">
+            <Link to="/student/courses" className="text-[10px] text-primary-600 dark:text-primary-400 font-bold hover:text-primary-500 uppercase tracking-wider flex items-center gap-1 font-mono">
               View All <ChevronRight size={12} />
             </Link>
           </div>
           <div className="p-4">
             {projectsData.length === 0 ? (
               <div className="py-10 text-center">
-                <div className="w-16 h-16 rounded-full bg-surface-800 flex items-center justify-center mb-3 mx-auto">
-                  <BookOpen size={28} className="text-blue-500/50" />
+                <div className="w-16 h-16 rounded-full bg-surface-800 flex items-center justify-center mb-3 mx-auto shadow-sm">
+                  <BookOpen size={28} className="text-blue-500" />
                 </div>
-                <p className="text-sm font-bold text-surface-50 mb-1">No courses yet</p>
-                <p className="text-xs text-surface-500">Courses will appear here once assigned</p>
+                <p className="text-sm font-bold text-surface-50 dark:text-surface-100 mb-1 font-heading">No courses yet</p>
+                <p className="text-xs text-surface-400 font-sans">Courses will appear here once assigned</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -323,20 +323,20 @@ export default function StudentDashboard() {
                   <button
                     key={proj.id}
                     onClick={() => navigate('/student/chat')}
-                    className="w-full flex items-center gap-3 p-3 rounded-xl bg-surface-800/30 border border-surface-700/50 hover:bg-surface-800/60 transition-all text-left group"
+                    className="w-full flex items-center gap-3 p-3 rounded-xl bg-surface-800/40 border border-surface-600/30 dark:border-surface-700/50 hover:bg-surface-800/80 transition-all text-left group cursor-pointer"
                   >
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border"
+                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border shadow-sm"
                       style={{ background: `${proj.color}15`, borderColor: `${proj.color}30` }}
                     >
                       <BookOpen size={18} style={{ color: proj.color }} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1.5">
-                        <p className="text-sm font-bold text-surface-200 truncate group-hover:text-surface-50 transition-colors">{proj.title}</p>
-                        <span className="text-xs font-bold shrink-0 ml-3" style={{ color: proj.color }}>{proj.progress}%</span>
+                        <p className="text-sm font-bold text-surface-50 dark:text-surface-200 truncate group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors font-heading">{proj.title}</p>
+                        <span className="text-xs font-bold shrink-0 ml-3 font-mono" style={{ color: proj.color }}>{proj.progress}%</span>
                       </div>
-                      <div className="w-full h-1.5 bg-surface-900 rounded-full overflow-hidden border border-surface-800">
+                      <div className="w-full h-2 bg-surface-950 rounded-full overflow-hidden border border-surface-600/30 dark:border-surface-800">
                         <div className="h-full rounded-full" style={{ width: `${proj.progress}%`, background: proj.color }}></div>
                       </div>
                     </div>

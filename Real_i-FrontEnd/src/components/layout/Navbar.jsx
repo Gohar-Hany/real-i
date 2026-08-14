@@ -59,31 +59,31 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" ref={logoRef} className="flex items-center gap-3 group">
             <div className="w-10 h-10 overflow-hidden group-hover:shadow-glow transition-shadow duration-300 flex items-center justify-center">
-              <img src="/logo.png" alt="REAL_i Logo" className="w-full h-full object-contain" />
+              <img src="/logo.png" alt="REAL_i Logo" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-primary-500 font-heading tracking-[0.2em] leading-none">
-                REAL_i
+              <h1 className="text-xl font-bold text-white font-heading tracking-[0.2em] leading-none">
+                REAL<span className="text-primary-400">_i</span>
               </h1>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div ref={linksRef} className="hidden md:flex items-center gap-8 px-8 py-3 rounded-full bg-surface-900 dark:bg-[#0B132B]/80 dark:backdrop-blur-md border border-[#D4AF37]/50 shadow-[0_4px_20px_rgba(212,175,55,0.1)]">
+          <div ref={linksRef} className="hidden md:flex items-center gap-8 px-8 py-3 rounded-full bg-surface-900/90 dark:bg-surface-900/85 backdrop-blur-xl border border-primary-500/35 shadow-[0_4px_25px_rgba(212,175,55,0.15)]">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 className={`relative font-mono text-xs uppercase tracking-widest transition-all duration-300 transform active:scale-95 group ${
                   isActive(link.path)
-                    ? 'text-[#D4AF37] font-bold'
-                    : 'text-surface-500 hover:text-[#D4AF37]'
+                    ? 'text-primary-300 font-bold'
+                    : 'text-surface-300 hover:text-primary-300'
                 }`}
               >
                 {link.label}
                 {/* Non-layout-shifting underline */}
                 <span 
-                  className={`absolute -bottom-2 left-0 h-[2px] bg-[#D4AF37] transition-all duration-300 ease-out ${
+                  className={`absolute -bottom-2 left-0 h-[2px] bg-primary-400 shadow-[0_0_8px_rgba(212,175,55,0.8)] transition-all duration-300 ease-out ${
                     isActive(link.path) ? 'w-full' : 'w-0 group-hover:w-1/2'
                   }`} 
                 />
@@ -97,7 +97,7 @@ export default function Navbar() {
             {user ? (
               <Link
                 to={user.role === 'admin' ? '/admin' : '/student'}
-                className="flex items-center gap-2 px-6 py-2 bg-transparent border border-primary-500 text-primary-500 font-mono text-xs uppercase font-bold tracking-widest hover:bg-primary-500/10 hover:shadow-[0_0_10px_rgba(212,175,55,0.2)] transition-all duration-300 rounded-none"
+                className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-mono text-xs uppercase font-bold tracking-widest hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 rounded-lg"
               >
                 Dashboard
                 <ChevronRight size={16} />
@@ -106,15 +106,15 @@ export default function Navbar() {
               <>
                 <Link
                   to="/login"
-                  className="font-mono text-xs text-surface-400 uppercase tracking-widest hover:text-primary-500 transition-colors duration-300"
+                  className="font-mono text-xs text-surface-300 uppercase tracking-widest hover:text-primary-300 transition-colors duration-300 px-3 py-2"
                 >
                   Login
                 </Link>
                 <Link
                   to="/login?register=true"
-                  className="btn-cyber-solid group"
+                  className="px-6 py-2.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-mono text-xs uppercase font-bold tracking-widest hover:shadow-[0_0_20px_rgba(212,175,55,0.5)] hover:scale-[1.02] transition-all duration-300 rounded-lg cursor-pointer"
                 >
-                  <span className="relative z-10">Get Started</span>
+                  <span>Get Started</span>
                 </Link>
               </>
             )}

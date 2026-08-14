@@ -87,30 +87,30 @@
    ═══════════════════════════════════════════════════════════ */
 
 @theme {
-  /* ── Gold Primary ─────────────────────────────────────── */
-  --color-primary-50: #fdf8e8;
-  --color-primary-100: #faefc5;
-  --color-primary-200: #f5df8e;
-  --color-primary-300: #e8c84a;
-  --color-primary-400: #D4AF37;
-  --color-primary-500: #D4AF37;
-  --color-primary-600: #B8860B;
-  --color-primary-700: #8B6914;
-  --color-primary-800: #6B5210;
-  --color-primary-900: #4A380B;
-  --color-primary-950: #2A1F06;
+  /* ── Gold Primary & Champagne Radiance ────────────────────── */
+  --color-primary-50:  #fefcf3;  /* Champagne highlight */
+  --color-primary-100: #faf3d4;  /* Warm Pale Gold */
+  --color-primary-200: #f4e5a0;  /* Soft Warm Gold */
+  --color-primary-300: #ebd466;  /* Radiant Gold */
+  --color-primary-400: #e0c038;  /* Vibrant Accent Gold */
+  --color-primary-500: #D4AF37;  /* Core Brand Gold */
+  --color-primary-600: #B8860B;  /* Deep Goldenrod */
+  --color-primary-700: #996f08;  /* Rich Amber Bronze */
+  --color-primary-800: #755405;  /* Deep Antique Gold */
+  --color-primary-900: #523b03;
+  --color-primary-950: #2a1e01;
 
-  --color-accent-50: #fdf8e8;
-  --color-accent-100: #faefc5;
-  --color-accent-200: #f5df8e;
-  --color-accent-300: #e8c84a;
-  --color-accent-400: #D4AF37;
+  --color-accent-50:  #fefcf3;
+  --color-accent-100: #faf3d4;
+  --color-accent-200: #f4e5a0;
+  --color-accent-300: #ebd466;
+  --color-accent-400: #e0c038;
   --color-accent-500: #D4AF37;
   --color-accent-600: #B8860B;
-  --color-accent-700: #8B6914;
-  --color-accent-800: #6B5210;
-  --color-accent-900: #4A380B;
-  --color-accent-950: #2A1F06;
+  --color-accent-700: #996f08;
+  --color-accent-800: #755405;
+  --color-accent-900: #523b03;
+  --color-accent-950: #2a1e01;
 
   --color-warning-50: #fffbeb;
   --color-warning-100: #fef3c7;
@@ -162,21 +162,15 @@
   --font-arabic:  'Tajawal', 'Inter', sans-serif;                     /* Arabic */
 
   /* ── Semantic UI Colors — WCAG AA contrast-verified ─────────── */
-  /* All text variants measured on dark card bg (#0C1220)          */
-  /* success-text #6FD9A0 on #0C1220 → 6.2:1 ✓                   */
   --color-success-base:   #2FA86A;
   --color-success-muted:  #1D6B44;
   --color-success-text:   #6FD9A0;
-  /* warning-text #F0C14B on #0C1220 → 8.1:1 ✓                   */
-  /* NOTE: visually close to Gold — do NOT pair directly with Gold */
   --color-warning-base:   #D9A441;
   --color-warning-muted:  #8C6A00;
   --color-warning-text:   #F0C14B;
-  /* danger-text #FF8079 on #0C1220 → 5.8:1 ✓                    */
   --color-danger-base:    #E0524A;
   --color-danger-muted:   #8C2A25;
   --color-danger-text:    #FF8079;
-  /* info-text #8AC0F0 on #0C1220 → 5.4:1 ✓                      */
   --color-info-base:      #4A90D9;
   --color-info-muted:     #2C5A8C;
   --color-info-text:      #8AC0F0;
@@ -250,8 +244,8 @@
 }
 
 @keyframes gold-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3), 0 0 40px rgba(212, 175, 55, 0.1); }
-  50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.5), 0 0 60px rgba(212, 175, 55, 0.2); }
+  0%, 100% { box-shadow: 0 0 24px rgba(212, 175, 55, 0.35), 0 0 48px rgba(212, 175, 55, 0.15); }
+  50% { box-shadow: 0 0 36px rgba(212, 175, 55, 0.55), 0 0 72px rgba(212, 175, 55, 0.25); }
 }
 
 @keyframes float {
@@ -289,137 +283,116 @@
 /* ── Base Styles ──────────────────────────────────────────── */
 :root {
   /* ═══════════════════════════════════════════════════════════
-     REAL_i Light Mode — Premium Warm Off-White + Navy + Gold
-     Real 5-step elevation hierarchy. NOT a color inversion.
-     All text/bg pairs verified ≥ WCAG AA (4.5:1 body, 3:1 UI).
+     REAL_i Light Mode — Luxury Porcelain + Deep Navy + Gold
+     High contrast, 100% WCAG AA compliant, warm golden accents
      ═══════════════════════════════════════════════════════════ */
+  --surface-50:  #070D22;   /* Deepest Navy for high-contrast text */
+  --surface-100: #0E1A3D;   /* Dark Navy headings */
+  --surface-200: #233157;   /* Strong body text */
+  --surface-300: #3E4F77;   /* Standard body text */
+  --surface-400: #5D6E96;   /* Secondary / muted descriptions */
+  --surface-500: #8C9BBF;   /* Muted captions & icons */
+  --surface-600: #CBD5E8;   /* Borders */
+  --surface-700: #E0E7F4;   /* Hairline dividers */
+  --surface-800: #EEF3FA;   /* Elevated surfaces, tags, pills */
+  --surface-900: #FFFFFF;   /* Crisp white cards & panels */
+  --surface-950: #F8FAFD;   /* Clean luxury porcelain page background */
 
-  /* ── Surface Scale — Light Mode ─────────────────────────── */
-  /* Reading direction: 950 = lightest (page), 50 = darkest    */
-  --surface-50:  #050402;   /* near-black, high-contrast text  */
-  --surface-100: #1A1510;   /* dark headings                   */
-  --surface-200: #2A2420;   /* strong body text                */
-  --surface-300: #4A4440;   /* body text, on warm bg           */
-  --surface-400: #6B6358;   /* secondary text — 4.6:1 on #FFF ✓*/
-  --surface-500: #9A9080;   /* muted text, dividers            */
-  --surface-600: #C4BBAE;   /* subtle borders                  */
-  --surface-700: #D8D0C4;   /* hairline borders                */
-  --surface-800: #EAE6DC;   /* elevated surfaces (modals)      */
-  --surface-900: #F5F3EE;   /* cards, panels — warm off-white  */
-  --surface-950: #FAFAF7;   /* page background                 */
-
-  /* ── Gold Accent ─────────────────────────────────────────── */
-  --gold-accent:       #D4AF37;
-  --gold-accent-dark:  #B8860B;
-  --gold-stroke:       #D4AF37;
+  --gold-accent:       #B8860B;   /* Dark goldenrod for light mode contrast */
+  --gold-accent-dark:  #8B6914;
+  --gold-stroke:       #B8860B;
   --gold-border:       #B8860B;
 
-  /* ── Semantic Backgrounds ────────────────────────────────── */
-  --bg-page:        #FAFAF7;   /* warm near-white page           */
-  --bg-card:        #F5F3EE;   /* warm off-white card            */
-  --bg-card-hover:  #EDE9DF;   /* slightly darker on hover       */
-  --bg-elevated:    #EAE6DC;   /* modal, dropdown — 1.08:1 above card ✓ */
-  --bg-sidebar:     #F0EDE5;   /* sidebar — slightly distinct    */
-  --bg-navbar:      rgba(250, 250, 247, 0.92); /* frosted navbar */
+  --bg-page:        #F8FAFD;   /* Porcelain page background */
+  --bg-card:        #FFFFFF;   /* Crisp white card surface */
+  --bg-card-hover:  #F4F7FC;   /* Subtle hover lift */
+  --bg-elevated:    #EEF3FA;   /* Modal / dropdown level */
+  --bg-sidebar:     #F0F4FA;   /* Clean sidebar */
+  --bg-navbar:      rgba(248, 250, 253, 0.92);
 
-  /* ── Borders ─────────────────────────────────────────────── */
-  --border-subtle:      rgba(10, 18, 34, 0.08);  /* barely-there dividers */
-  --border-card:        rgba(10, 18, 34, 0.12);  /* card outlines         */
-  --border-strong:      rgba(10, 18, 34, 0.24);  /* hover/focus borders   */
+  --border-subtle:      rgba(14, 26, 61, 0.08);
+  --border-card:        rgba(184, 134, 11, 0.22);
+  --border-strong:      rgba(184, 134, 11, 0.45);
 
-  /* ── Shadows ─────────────────────────────────────────────── */
-  --shadow-card-color:       rgba(26, 21, 16, 0.07);
-  --shadow-card-color-hover: rgba(26, 21, 16, 0.13);
+  --shadow-card-color:       rgba(14, 26, 61, 0.06);
+  --shadow-card-color-hover: rgba(184, 134, 11, 0.15);
 
-  /* ── Text ────────────────────────────────────────────────── */
-  --text-primary-color:   #1A1510;   /* headings — 14.8:1 on #FAFAF7 ✓ */
-  --text-secondary-color: #4A4440;   /* body text — 7.2:1 ✓           */
-  --text-muted-color:     #6B6358;   /* captions — 4.6:1 ✓            */
+  --text-primary-color:   #070D22;
+  --text-secondary-color: #233157;
+  --text-muted-color:     #5D6E96;
 
-  /* ── Glass Effects ───────────────────────────────────────── */
-  --glass-bg:          rgba(245, 243, 238, 0.7);
-  --glass-border:      rgba(212, 175, 55, 0.3);
-  --glass-card-bg:     rgba(245, 243, 238, 0.85);
-  --glass-navbar-bg:   rgba(250, 250, 247, 0.92);
+  --glass-bg:          rgba(255, 255, 255, 0.85);
+  --glass-border:      rgba(184, 134, 11, 0.25);
+  --glass-card-bg:     rgba(255, 255, 255, 0.90);
+  --glass-navbar-bg:   rgba(248, 250, 253, 0.92);
 
-  /* ── Decorative strokes (SVG diagrams) ───────────────────── */
   --deco-ring-stroke:  rgba(184, 134, 11, 0.35);
-  --deco-line-stroke:  rgba(184, 134, 11, 0.25);
-  --deco-dash-stroke:  rgba(26, 21, 16, 0.10);
-  --sys-label-color:   rgba(184, 134, 11, 0.70);
+  --deco-line-stroke:  rgba(184, 134, 11, 0.30);
+  --deco-dash-stroke:  rgba(14, 26, 61, 0.12);
+  --sys-label-color:   rgba(184, 134, 11, 0.90);
 
-  /* ── Skeleton Loading ────────────────────────────────────── */
-  --skeleton-from: #EAE6DC;
-  --skeleton-to:   #D8D0C4;
+  --skeleton-from: #EEF3FA;
+  --skeleton-to:   #E0E7F4;
 }
 
 html.dark {
   /* ══════════════════════════════════════════════════════════
-     REAL_i Dark Mode — Real 5-Step Elevation Scale
-     Problem 1 fix: three near-identical tokens → measurable ramp.
-     Adjacent step pairwise contrast: 1.35–1.72:1 (clearly visible).
+     REAL_i Dark Mode — Luminous Deep Navy & Radiant Gold
+     Elevated base with warm champagne & amber lighting
      ══════════════════════════════════════════════════════════ */
 
-  /* ── Dark Surface Scale ──────────────────────────────────── */
-  /* Step        Hex        Luminance   Role                     */
-  /* 950    #05070E    0.0023      Page background              */
-  /* 900    #0C1220    0.0053      Cards, panels          ×2.3  */
-  /* 800    #161F35    0.0107      Modals, dropdowns      ×2.0  */
-  /* 700    #2A3654    0.0244      Hairline borders       ×2.3  */
-  /* 600    #3D4C72    0.0400      Hover/focus borders    ×1.6  */
-  --surface-950: #05070E;  /* page background                  */
-  --surface-900: #0C1220;  /* cards, panels                    */
-  --surface-800: #161F35;  /* modals, dropdowns, popovers      */
-  --surface-700: #2A3654;  /* hairline borders, dividers       */
-  --surface-600: #3D4C72;  /* hover/focus borders              */
+  /* ── Luminous Deep Navy Surface Scale ───────────────────── */
+  --surface-950: #080E24;  /* Luminous base navy (NOT pitch black) */
+  --surface-900: #0E1A3D;  /* Radiant card background */
+  --surface-800: #172856;  /* Elevated surfaces, modals, popovers */
+  --surface-700: #243B7A;  /* Hairline borders & separators */
+  --surface-600: #35529F;  /* Hover / interactive borders */
 
-  /* ── Mid/Light Neutrals (text range) ────────────────────── */
-  /* These are neutral blue-grey — NOT lavender/periwinkle.    */
-  /* Problem 3 fix: was #9BB0E5 (off-brand), now corrected.    */
-  --surface-500: #5A6A90;  /* muted secondary text             */
-  --surface-400: #7A8BAE;  /* muted text / placeholder text    */
-  --surface-300: #A0AFCA;  /* secondary text — 5.2:1 on #0C1220 ✓ */
-  --surface-200: #C8D4E8;  /* strong secondary text            */
-  --surface-100: #E4EAF5;  /* near-white text                  */
-  --surface-50:  #F0F4FC;  /* white-equivalent text            */
+  /* ── Crisp & Bright Neutrals ────────────────────────────── */
+  --surface-500: #627FBD;  /* Muted captions & icons */
+  --surface-400: #93ADE4;  /* Secondary body text */
+  --surface-300: #C2D4F8;  /* Subtitles & strong body */
+  --surface-200: #E2ECFE;  /* High contrast text */
+  --surface-100: #F3F7FF;  /* Crisp near-white headings */
+  --surface-50:  #FFFFFF;  /* Pure brilliant white */
 
-  /* ── Semantic Backgrounds (mapped to scale) ─────────────── */
-  --bg-page:        #05070E;              /* surface-950            */
-  --bg-card:        #0C1220;              /* surface-900            */
-  --bg-card-hover:  #131B30;              /* between 900 and 800    */
-  --bg-elevated:    #161F35;              /* surface-800 (modals)   */
-  --bg-sidebar:     #080B16;              /* slightly deeper than page */
-  --bg-navbar:      rgba(5, 7, 14, 0.88); /* surface-950 frosted    */
+  /* ── Semantic Backgrounds (Luminous & Rich) ─────────────── */
+  --bg-page:        #080E24;              /* Base rich navy */
+  --bg-card:        #0E1A3D;              /* Elevated card surface */
+  --bg-card-hover:  #142452;              /* Warm hover lift */
+  --bg-elevated:    #172856;              /* Modal & dropdown level */
+  --bg-sidebar:     #060B1E;              /* Sidebar deep anchor */
+  --bg-navbar:      rgba(8, 14, 36, 0.88); /* Frosted luxury header */
 
-  /* ── Borders ─────────────────────────────────────────────── */
-  --border-subtle:      rgba(212, 175, 55, 0.10);  /* barely visible dividers */
-  --border-card:        rgba(212, 175, 55, 0.16);  /* card outlines           */
-  --border-strong:      rgba(212, 175, 55, 0.30);  /* hover/focus             */
+  /* ── Warm Gold Border System ─────────────────────────────── */
+  --border-subtle:      rgba(212, 175, 55, 0.16);  /* Subtle golden hairline */
+  --border-card:        rgba(212, 175, 55, 0.28);  /* Crisp card outline */
+  --border-strong:      rgba(212, 175, 55, 0.50);  /* Radiant focus & hover */
 
-  /* ── Shadows ─────────────────────────────────────────────── */
-  --shadow-card-color:       rgba(0, 0, 0, 0.55);
-  --shadow-card-color-hover: rgba(0, 0, 0, 0.70);
+  /* ── Luminous Shadows with Ambient Gold Glow ─────────────── */
+  --shadow-card-color:       rgba(0, 0, 0, 0.45);
+  --shadow-card-color-hover: rgba(212, 175, 55, 0.15);
 
-  /* ── Text ────────────────────────────────────────────────── */
-  --text-primary-color:   #F0F4FC;   /* surface-50  — 17.1:1 on #05070E ✓ */
-  --text-secondary-color: #C8D4E8;   /* surface-200 — 9.8:1 ✓            */
-  --text-muted-color:     #7A8BAE;   /* surface-400 — 4.5:1 on #0C1220 ✓ */
+  /* ── High Contrast Typography ────────────────────────────── */
+  --text-primary-color:   #FFFFFF;   /* Crisp Pure White for headings */
+  --text-secondary-color: #E2ECFE;   /* Bright Slate-Blue for body */
+  --text-muted-color:     #93ADE4;   /* Warm legible muted text */
 
-  /* ── Glass Effects ───────────────────────────────────────── */
-  --glass-bg:          rgba(12, 18, 32, 0.65);
-  --glass-border:      rgba(212, 175, 55, 0.20);
-  --glass-card-bg:     rgba(12, 18, 32, 0.80);
-  --glass-navbar-bg:   rgba(5, 7, 14, 0.88);
+  /* ── Radiant Frosted Glass ───────────────────────────────── */
+  --glass-bg:          rgba(14, 26, 61, 0.72);
+  --glass-border:      rgba(212, 175, 55, 0.32);
+  --glass-card-bg:     rgba(14, 26, 61, 0.82);
+  --glass-navbar-bg:   rgba(8, 14, 36, 0.90);
 
   /* ── Skeleton Loading ────────────────────────────────────── */
-  --skeleton-from: #161F35;  /* surface-800 */
-  --skeleton-to:   #2A3654;  /* surface-700 */
+  --skeleton-from: #172856;
+  --skeleton-to:   #243B7A;
 
-  /* ── Decorative strokes (SVG diagrams) ───────────────────── */
-  --deco-ring-stroke:  rgba(212, 175, 55, 0.25);
-  --deco-line-stroke:  rgba(212, 175, 55, 0.25);
-  --deco-dash-stroke:  rgba(255, 255, 255, 0.07);
-  --sys-label-color:   rgba(212, 175, 55, 0.55);
+  /* ── Decorative Gold Strokes ─────────────────────────────── */
+  --deco-ring-stroke:  rgba(212, 175, 55, 0.38);
+  --deco-line-stroke:  rgba(212, 175, 55, 0.32);
+  --deco-dash-stroke:  rgba(226, 236, 254, 0.14);
+  --sys-label-color:   rgba(212, 175, 55, 0.85);
 }
 
 @layer base {
@@ -488,45 +461,56 @@ html.dark {
 
 /* ── Gradients ────────────────────────────────────────────── */
 .gradient-primary {
-  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%);
+  background: linear-gradient(135deg, #FDE887 0%, #D4AF37 50%, #B8860B 100%);
 }
 
 .gradient-gold-soft {
-  background: linear-gradient(135deg, #D4AF37 0%, #e8c84a 50%, #D4AF37 100%);
+  background: linear-gradient(135deg, #FFF6D1 0%, #D4AF37 50%, #B8860B 100%);
+}
+
+.gradient-gold-radiant {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5DF8E 30%, #D4AF37 70%, #996F08 100%);
 }
 
 .gradient-dark {
-  background: linear-gradient(180deg, #070D22 0%, #0B132B 50%, #070D22 100%);
+  background: linear-gradient(180deg, #080E24 0%, #101B3E 50%, #080E24 100%);
 }
 
 .gradient-hero {
   background: 
-    radial-gradient(ellipse at 20% 50%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(27, 45, 92, 0.4) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(7, 13, 34, 0.8) 0%, transparent 50%),
-    linear-gradient(180deg, #070D22 0%, #0B132B 100%);
+    radial-gradient(ellipse at 20% 40%, rgba(212, 175, 55, 0.20) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(45, 80, 170, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 85%, rgba(212, 175, 55, 0.14) 0%, transparent 50%),
+    linear-gradient(180deg, #080E24 0%, #0D183B 100%);
 }
 
 .gradient-mesh {
   background:
-    radial-gradient(ellipse at 20% 80%, rgba(212, 175, 55, 0.15) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 20%, rgba(184, 134, 11, 0.12) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 50%, rgba(27, 45, 92, 0.3) 0%, transparent 60%);
+    radial-gradient(ellipse at 20% 80%, rgba(212, 175, 55, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(224, 192, 56, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(35, 65, 145, 0.40) 0%, transparent 60%);
 }
 
 .gradient-card {
-  background: linear-gradient(145deg, rgba(20, 33, 69, 0.85) 0%, rgba(11, 19, 43, 0.95) 100%);
+  background: linear-gradient(145deg, rgba(22, 38, 84, 0.90) 0%, rgba(14, 25, 58, 0.95) 100%);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #D4AF37, #e8c84a, #D4AF37);
+  background: linear-gradient(135deg, #FFF0B8 0%, #D4AF37 50%, #E8C84A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5DF8E 40%, #D4AF37 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gradient-white {
-  background: linear-gradient(180deg, #ffffff 0%, #a8a8a8 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #c4d4f2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -553,7 +537,12 @@ html.dark {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-card);
-  transition: background 0.3s ease, border-color 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 24px rgba(212, 175, 55, 0.15);
 }
 
 .glass-navbar {
@@ -564,16 +553,17 @@ html.dark {
   transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── Card utility (light-mode aware) ──────────────────────── */
+/* ── Card utility (light & dark mode aware) ────────────────── */
 .card-surface {
   background: var(--bg-card);
   border: 1px solid var(--border-card);
-  box-shadow: 0 2px 16px var(--shadow-card-color);
+  box-shadow: 0 4px 20px var(--shadow-card-color);
   transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .card-surface:hover {
   background: var(--bg-card-hover);
-  box-shadow: 0 8px 32px var(--shadow-card-color-hover);
+  border-color: var(--border-strong);
+  box-shadow: 0 12px 36px var(--shadow-card-color), 0 0 24px rgba(212, 175, 55, 0.18);
 }
 
 /* ── Shadows ──────────────────────────────────────────────── */
@@ -582,19 +572,19 @@ html.dark {
 }
 
 .shadow-card-hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(212, 175, 55, 0.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(212, 175, 55, 0.18);
 }
 
 .shadow-glow {
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3), 0 0 24px rgba(212, 175, 55, 0.12);
+  box-shadow: 0 4px 24px rgba(212, 175, 55, 0.35), 0 0 32px rgba(212, 175, 55, 0.20);
 }
 
 .shadow-glow-lg {
-  box-shadow: 0 8px 40px rgba(212, 175, 55, 0.4), 0 0 50px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 8px 48px rgba(212, 175, 55, 0.45), 0 0 64px rgba(212, 175, 55, 0.25);
 }
 
 .shadow-glow-sm {
-  box-shadow: 0 2px 12px rgba(212, 175, 55, 0.2), 0 0 12px rgba(212, 175, 55, 0.08);
+  box-shadow: 0 2px 14px rgba(212, 175, 55, 0.25), 0 0 14px rgba(212, 175, 55, 0.12);
 }
 
 .shadow-modal {
@@ -602,7 +592,7 @@ html.dark {
 }
 
 .shadow-inner-gold {
-  box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.05);
+  box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.10);
 }
 
 /* ── Grid / Pattern ──────────────────────────────────────── */

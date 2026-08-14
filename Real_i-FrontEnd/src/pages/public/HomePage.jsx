@@ -179,39 +179,44 @@ export default function HomePage() {
           HERO SECTION
           ═══════════════════════════════════════════════════════ */}
       <section ref={heroRef} className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-surface-950">
+        {/* Ambient Gold & Royal Navy Lighting Blobs */}
+        <div className="absolute top-1/4 -left-32 w-[600px] h-[600px] bg-primary-500/15 blur-[160px] rounded-full pointer-events-none z-0" />
+        <div className="absolute top-1/3 -right-32 w-[700px] h-[700px] bg-primary-400/12 blur-[180px] rounded-full pointer-events-none z-0" />
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none z-0" />
+
         {/* Multi-layered Background */}
         {/* Layer 1: Base Grid */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-20" />
+        <div className="absolute inset-0 bg-grid-pattern opacity-25" />
         {/* Layer 2: Abstract Nodes/Connections (Cinematic Depth) */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           {/* Node 1 */}
           <div
             className="absolute top-[20%] right-[15%] w-32 h-32 rounded-full animate-spin-slow"
-            style={{ border: '1px solid var(--deco-ring-stroke, rgba(212,175,55,0.20))' }}
+            style={{ border: '1px solid var(--deco-ring-stroke, rgba(212,175,55,0.30))' }}
           >
-            <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary-500 rounded-full -translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute top-0 left-1/2 w-[1px] h-4 bg-primary-500/50 -translate-x-1/2" />
-            <div className="absolute bottom-0 left-1/2 w-[1px] h-4 bg-primary-500/50 -translate-x-1/2" />
-            <div className="absolute left-0 top-1/2 w-4 h-[1px] bg-primary-500/50 -translate-y-1/2" />
-            <div className="absolute right-0 top-1/2 w-4 h-[1px] bg-primary-500/50 -translate-y-1/2" />
+            <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary-400 rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
+            <div className="absolute top-0 left-1/2 w-[1px] h-4 bg-primary-500/60 -translate-x-1/2" />
+            <div className="absolute bottom-0 left-1/2 w-[1px] h-4 bg-primary-500/60 -translate-x-1/2" />
+            <div className="absolute left-0 top-1/2 w-4 h-[1px] bg-primary-500/60 -translate-y-1/2" />
+            <div className="absolute right-0 top-1/2 w-4 h-[1px] bg-primary-500/60 -translate-y-1/2" />
           </div>
           {/* Node 2 */}
           <div
             className="absolute bottom-[30%] right-[30%] w-64 h-64 rounded-full"
-            style={{ border: '1px solid var(--deco-dash-stroke, rgba(255,255,255,0.05))' }}
+            style={{ border: '1px solid var(--deco-dash-stroke, rgba(212,175,55,0.15))' }}
           >
-            <div className="absolute top-1/4 right-0 w-2 h-2 bg-primary-400 rounded-full" />
-            <div className="absolute bottom-1/4 left-1/4 w-[1px] h-32 bg-gradient-to-t from-primary-500/30 to-transparent rotate-45 origin-bottom" />
+            <div className="absolute top-1/4 right-0 w-2 h-2 bg-primary-400 rounded-full shadow-[0_0_10px_rgba(212,175,55,0.9)]" />
+            <div className="absolute bottom-1/4 left-1/4 w-[1px] h-32 bg-gradient-to-t from-primary-500/40 to-transparent rotate-45 origin-bottom" />
           </div>
-          {/* Decorative gold accent marks — brand identity, not terminal */}
-          <div className="absolute top-[40%] right-[5%] hidden md:flex flex-col gap-1">
-            <div className="w-8 h-[2px] bg-primary-500/20" />
-            <div className="w-4 h-[2px] bg-primary-500/40" />
-            <div className="w-6 h-[2px] bg-primary-500/30" />
+          {/* Decorative gold accent marks */}
+          <div className="absolute top-[40%] right-[5%] hidden md:flex flex-col gap-1.5">
+            <div className="w-10 h-[2px] bg-primary-400/40" />
+            <div className="w-5 h-[2px] bg-primary-400/60" />
+            <div className="w-8 h-[2px] bg-primary-400/50" />
           </div>
         </div>
         {/* Layer 3: Radial Gradient Overlay for depth */}
-        <div className="absolute inset-0 bg-radial-gradient from-transparent via-surface-950/60 to-surface-950 z-0 pointer-events-none" />
+        <div className="absolute inset-0 bg-radial-gradient from-transparent via-surface-950/40 to-surface-950 z-0 pointer-events-none" />
         
         {/* Content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 hero-parallax">
@@ -219,35 +224,34 @@ export default function HomePage() {
             {/* Text Column (Left aligned) */}
             <div className="lg:col-span-7 flex flex-col items-start text-left">
               <div className="flex items-center gap-3 mb-6 opacity-0 hero-action">
-                <span className="w-12 h-[2px] bg-primary-500" />
-                <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary-500">System Online</span>
+                <span className="w-12 h-[2px] bg-primary-500 dark:bg-primary-400 shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
+                <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary-600 dark:text-primary-400 font-semibold">System Online</span>
               </div>
-              <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl text-surface-100 mb-6 tracking-tight opacity-0 hero-title font-bold">
+              <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl text-surface-50 dark:text-surface-100 mb-6 tracking-tight opacity-0 hero-title font-bold">
                 <span className="inline-block glitch-char uppercase">R</span>
                 <span className="inline-block glitch-char uppercase">E</span>
                 <span className="inline-block glitch-char uppercase">A</span>
                 <span className="inline-block glitch-char uppercase">L</span>_
-                <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-500 to-primary-700 inline-block glitch-char drop-shadow-[0_0_15px_rgba(212,175,55,0.4)] lowercase">i</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-400 via-primary-500 to-primary-600 dark:from-primary-400 dark:via-primary-300 dark:to-primary-500 inline-block glitch-char drop-shadow-[0_0_20px_rgba(212,175,55,0.6)] lowercase">i</span>
               </h1>
-              <p className="font-heading text-2xl md:text-3xl lg:text-4xl text-surface-400 mb-10 max-w-2xl opacity-0 hero-subtitle tracking-tight leading-tight">
+              <p className="font-heading text-2xl md:text-3xl lg:text-4xl text-surface-200 mb-10 max-w-2xl opacity-0 hero-subtitle tracking-tight leading-tight">
                 <span className="inline-block glitch-word">Real</span> <span className="inline-block glitch-word">Intelligence</span> <span className="inline-block glitch-word">isn't</span> <span className="inline-block glitch-word">predicted.</span> <br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600 inline-block glitch-word font-semibold">It's</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600 inline-block glitch-word font-semibold">built.</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500 inline-block glitch-word font-bold drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">It's</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500 inline-block glitch-word font-bold drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">built.</span>
               </p>
               <div className="flex flex-col sm:flex-row items-center gap-6 opacity-0 hero-action w-full sm:w-auto">
                 <Link
                   to="/login?register=true"
-                  className="hero-cta-primary relative group bg-surface-950 border border-primary-500/50 text-primary-400 px-8 py-4 font-mono uppercase font-bold tracking-widest overflow-hidden transition-all duration-300 hover:border-primary-500 hover:text-surface-950 w-full sm:w-auto flex items-center justify-center gap-3"
+                  className="hero-cta-primary relative group bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 px-8 py-4 font-mono uppercase font-bold tracking-widest overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.55)] hover:scale-[1.02] w-full sm:w-auto flex items-center justify-center gap-3 rounded-xl shadow-md cursor-pointer"
                 >
-                  <span className="absolute inset-0 bg-primary-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0" />
                   <span className="relative z-10">Start Learning</span>
                   <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
                   to="/courses"
-                  className="hero-cta-secondary relative group bg-transparent border border-white/10 text-surface-400 px-8 py-4 font-mono uppercase font-bold tracking-widest transition-all duration-300 hover:border-white/30 hover:text-surface-100 w-full sm:w-auto flex items-center justify-center gap-3"
+                  className="hero-cta-secondary relative group bg-surface-900 border border-surface-600/50 dark:border-primary-500/30 hover:border-primary-500 text-surface-200 hover:text-surface-50 dark:text-surface-200 dark:hover:text-white px-8 py-4 font-mono uppercase font-bold tracking-widest transition-all duration-300 hover:bg-surface-800 dark:hover:bg-primary-500/10 shadow-sm hover:shadow-md w-full sm:w-auto flex items-center justify-center gap-3 rounded-xl"
                 >
                   <span className="relative z-10">Explore Courses</span>
-                  <Play size={20} className="relative z-10" />
+                  <Play size={20} className="relative z-10 text-primary-500 dark:text-primary-400" />
                 </Link>
               </div>
             </div>
@@ -304,73 +308,73 @@ export default function HomePage() {
           FEATURES SECTION — Premium Cyber-Industrial Design
           ═══════════════════════════════════════════════════════ */}
       <section ref={featuresRef} className="py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern opacity-10" />
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary-500/5 blur-[150px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-primary-500/3 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute inset-0 bg-grid-pattern opacity-15" />
+        <div className="absolute top-0 left-1/4 w-[700px] h-[700px] bg-primary-500/10 blur-[180px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-primary-400/8 blur-[160px] rounded-full pointer-events-none" />
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-primary-500/30 to-transparent animate-[scan_4s_ease-in-out_infinite]" style={{top: '20%'}} />
+          <div className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-primary-500/40 to-transparent animate-[scan_4s_ease-in-out_infinite]" style={{top: '20%'}} />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-20">
             <div className="max-w-2xl features-header">
               <div
-                className="inline-flex items-center gap-3 px-5 py-2 mb-6 border border-primary-500/30 backdrop-blur-sm"
+                className="inline-flex items-center gap-3 px-5 py-2 mb-6 border border-primary-500/40 backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(212,175,55,0.15)]"
                 style={{ background: 'var(--glass-card-bg)' }}
               >
-                <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.6)]" />
-                <span className="font-mono text-[11px] text-primary-500 uppercase tracking-[0.3em]">SYS.CAPABILITIES // ACTIVE</span>
+                <div className="w-2 h-2 rounded-full bg-primary-400 animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.9)]" />
+                <span className="font-mono text-[11px] text-primary-400 uppercase tracking-[0.3em] font-semibold">SYS.CAPABILITIES // ACTIVE</span>
               </div>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-100 mb-6 font-heading uppercase tracking-wide leading-[1.1]">
                 Learn Smarter, <br className="hidden sm:block" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 drop-shadow-[0_0_20px_rgba(212,175,55,0.3)]">Not Harder</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-400 to-primary-500 drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]">Not Harder</span>
               </h2>
-              <p className="text-surface-400 text-lg leading-relaxed">
+              <p className="text-surface-300 text-lg leading-relaxed">
                 Our platform combines cutting-edge AI with premium educational content 
                 to create an unmatched learning experience.
               </p>
             </div>
             <div className="hidden lg:flex items-end gap-8">
               <div className="text-right">
-                <p className="font-mono text-[10px] text-surface-600 uppercase tracking-widest mb-1">Modules</p>
-                <p className="font-heading text-5xl font-bold text-surface-800">04</p>
+                <p className="font-mono text-[10px] text-surface-400 uppercase tracking-widest mb-1">Modules</p>
+                <p className="font-heading text-5xl font-bold text-primary-400/40">04</p>
               </div>
-              <div className="w-px h-16 bg-surface-800" />
+              <div className="w-px h-16 bg-surface-700" />
               <div className="text-right">
-                <p className="font-mono text-[10px] text-surface-600 uppercase tracking-widest mb-1">Status</p>
-                <p className="font-mono text-sm text-primary-500 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" /> ALL ONLINE
+                <p className="font-mono text-[10px] text-surface-400 uppercase tracking-widest mb-1">Status</p>
+                <p className="font-mono text-sm text-primary-400 font-semibold flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-primary-400 animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.8)]" /> ALL ONLINE
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-surface-800/30 border border-surface-800/50">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {FEATURES.map((feature, i) => {
               const Icon = ICON_MAP[feature.icon] || Brain;
               const moduleIds = ['AX-01', 'BX-02', 'CX-03', 'DX-04'];
               return (
-                <div key={i} className="feature-card group relative bg-surface-950 p-8 lg:p-10 overflow-hidden cursor-pointer transition-colors duration-700 hover:bg-surface-900/50" style={{opacity: 1}}>
+                <div key={i} className="feature-card group relative bg-surface-900 border border-surface-600/40 dark:border-primary-500/20 hover:border-primary-500/60 rounded-2xl p-8 lg:p-10 overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5),0_0_24px_rgba(212,175,55,0.18)] hover:-translate-y-1 shadow-sm" style={{opacity: 1}}>
                   <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
                   <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
                   <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
                   <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
-                  <div className="absolute top-4 right-5 font-mono text-[9px] text-surface-700 group-hover:text-primary-500/60 transition-colors duration-500 tracking-widest">MOD.{moduleIds[i]}</div>
-                  <div className="absolute -bottom-6 -right-4 font-heading text-[120px] font-bold text-surface-900/50 group-hover:text-primary-500/8 transition-colors duration-700 leading-none select-none pointer-events-none">0{i + 1}</div>
+                  <div className="absolute top-4 right-5 font-mono text-[9px] text-surface-400 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors duration-500 tracking-widest font-semibold">MOD.{moduleIds[i]}</div>
+                  <div className="absolute -bottom-6 -right-4 font-heading text-[120px] font-bold text-surface-600/10 dark:text-surface-800/40 group-hover:text-primary-500/10 transition-colors duration-700 leading-none select-none pointer-events-none">0{i + 1}</div>
 
                   <div className="relative w-16 h-16 mb-8">
                     <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 64 64">
-                      <circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" strokeWidth="1" className="text-surface-800" />
+                      <circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" strokeWidth="1" className="text-surface-600/40 dark:text-surface-700" />
                       <circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="176" strokeDashoffset="176" className="text-primary-500 feature-ring" style={{transition: 'stroke-dashoffset 1s ease-out'}} />
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <Icon size={26} className="text-surface-500 group-hover:text-primary-400 transition-all duration-500 group-hover:drop-shadow-[0_0_12px_rgba(212,175,55,0.5)]" strokeWidth={1.5} />
+                      <Icon size={26} className="text-primary-600 dark:text-primary-400/80 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(212,175,55,0.7)] group-hover:scale-110" strokeWidth={1.5} />
                     </div>
                   </div>
 
-                  <h3 className="text-base font-bold text-surface-200 group-hover:text-surface-50 mb-3 font-heading uppercase tracking-wider transition-colors duration-500">{feature.title}</h3>
-                  <p className="text-sm text-surface-500 group-hover:text-surface-400 leading-relaxed transition-colors duration-500">{feature.description}</p>
-                  <div className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-primary-500 via-primary-400 to-transparent transition-all duration-700 ease-out" />
+                  <h3 className="text-lg font-bold text-surface-50 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-300 mb-3 font-heading uppercase tracking-wider transition-colors duration-500">{feature.title}</h3>
+                  <p className="text-sm text-surface-400 dark:text-surface-300 group-hover:text-surface-300 dark:group-hover:text-surface-200 leading-relaxed transition-colors duration-500">{feature.description}</p>
+                  <div className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-primary-400 via-primary-500 to-transparent transition-all duration-700 ease-out" />
                 </div>
               );
             })}
@@ -382,10 +386,10 @@ export default function HomePage() {
           STATS SECTION
           ═══════════════════════════════════════════════════════ */}
       <section ref={statsRef} className="py-24 relative">
-        <div className="max-w-[900px] mx-auto px-4 sm:px-6 relative z-10">
-          <div className="bg-surface-900 border border-[#D4AF37] rounded-[4px] p-10 md:p-14 relative overflow-hidden">
+        <div className="max-w-[950px] mx-auto px-4 sm:px-6 relative z-10">
+          <div className="bg-gradient-to-b from-surface-900/95 to-surface-900/80 border border-primary-500/40 hover:border-primary-500/60 rounded-2xl p-10 md:p-14 relative overflow-hidden shadow-[0_0_40px_rgba(212,175,55,0.15)] backdrop-blur-xl transition-all duration-500">
             {/* Decorative SVG Circuit Pattern */}
-            <svg className="absolute top-0 right-0 w-48 h-48 opacity-[0.08] dark:opacity-10 text-[#0A1222] dark:text-[#D4AF37] pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
+            <svg className="absolute top-0 right-0 w-52 h-52 opacity-20 text-primary-400 pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
               <circle cx="20" cy="20" r="1.5" fill="currentColor" />
               <circle cx="50" cy="15" r="1.5" fill="currentColor" />
               <circle cx="80" cy="40" r="1.5" fill="currentColor" />
@@ -405,11 +409,11 @@ export default function HomePage() {
                 { value: PLATFORM_STATS.satisfactionRate, label: 'Satisfaction', suffix: '%', highlight: true },
               ].map((stat, i) => (
                 <div key={i} className="text-center">
-                  <p className={`text-[30px] font-medium font-sans tabular-nums ${stat.highlight ? 'text-[#B8860B] dark:text-primary-400' : 'text-[#0F1E33] dark:text-surface-100'}`}>
+                  <p className="text-[34px] md:text-[38px] font-bold font-heading tabular-nums text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-400 to-primary-500 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">
                     <span className="stat-number" data-target={stat.value}>0</span>
                     {stat.suffix}
                   </p>
-                  <p className="text-[12px] uppercase tracking-[0.05em] text-[#A2A2A2] mt-2">{stat.label}</p>
+                  <p className="text-[12px] uppercase tracking-[0.1em] text-surface-300 font-semibold mt-2">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -441,7 +445,7 @@ export default function HomePage() {
           <div className="relative">
             {/* Central Timeline Line (desktop) */}
             <div className="hidden lg:block absolute top-[60px] left-0 right-0 h-[1px] z-0">
-              <div className="w-full h-full bg-surface-800" />
+              <div className="w-full h-full bg-surface-600/40 dark:bg-surface-800" />
               <div className="hiw-progress-line absolute top-0 left-0 h-full w-0 bg-gradient-to-r from-primary-500 via-primary-400 to-primary-500" />
             </div>
 
@@ -453,29 +457,29 @@ export default function HomePage() {
                     <div className="relative">
                       <div className="absolute inset-0 rounded-full bg-primary-500/20 scale-0 group-hover:scale-150 transition-transform duration-700 blur-md" />
                       <div
-                        className="relative w-[72px] h-[72px] border-2 border-surface-700 group-hover:border-primary-500 transition-all duration-500 rounded-full flex items-center justify-center z-10"
-                        style={{ background: 'var(--bg-page)' }}
+                        className="relative w-[72px] h-[72px] border-2 border-surface-600/60 dark:border-surface-700 group-hover:border-primary-500 transition-all duration-500 rounded-full flex items-center justify-center z-10 shadow-sm"
+                        style={{ background: 'var(--bg-card)' }}
                       >
-                        <span className="font-heading text-2xl font-bold text-surface-600 group-hover:text-primary-500 transition-colors duration-500">
+                        <span className="font-heading text-2xl font-bold text-surface-400 dark:text-surface-600 group-hover:text-primary-500 transition-colors duration-500">
                           0{step.step}
                         </span>
                       </div>
-                      <div className="hidden lg:block absolute -bottom-[21px] left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-surface-800 border-2 border-surface-700 group-hover:bg-primary-500 group-hover:border-primary-500 group-hover:shadow-[0_0_12px_rgba(212,175,55,0.6)] transition-all duration-500 z-20" />
+                      <div className="hidden lg:block absolute -bottom-[21px] left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-surface-700 dark:bg-surface-800 border-2 border-surface-600 dark:border-surface-700 group-hover:bg-primary-500 group-hover:border-primary-500 group-hover:shadow-[0_0_12px_rgba(212,175,55,0.6)] transition-all duration-500 z-20" />
                     </div>
-                    <div className="lg:hidden flex-1 h-[1px] bg-surface-800 relative overflow-hidden">
+                    <div className="lg:hidden flex-1 h-[1px] bg-surface-600/40 dark:bg-surface-800 relative overflow-hidden">
                       <div className="absolute inset-0 bg-primary-500/50 -translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
                     </div>
                   </div>
 
                   {/* Card Content */}
-                  <div className="relative bg-surface-950 border border-surface-800/50 group-hover:border-primary-500/30 p-7 transition-all duration-500 overflow-hidden">
+                  <div className="relative bg-surface-900 border border-surface-600/40 dark:border-surface-800/50 group-hover:border-primary-500/50 p-7 transition-all duration-500 overflow-hidden rounded-xl shadow-sm hover:shadow-md">
                     <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/50 transition-all duration-500" />
-                    <div className="absolute inset-0 bg-primary-500/0 group-hover:bg-primary-500/3 transition-all duration-700" />
+                    <div className="absolute inset-0 bg-primary-500/0 group-hover:bg-primary-500/5 transition-all duration-700" />
                     <div className="relative z-10">
-                      <h3 className="text-lg font-bold text-surface-200 group-hover:text-surface-50 mb-3 font-heading uppercase tracking-wider transition-colors duration-500">
+                      <h3 className="text-lg font-bold text-surface-50 dark:text-white mb-3 font-heading uppercase tracking-wider transition-colors duration-500">
                         {step.title}
                       </h3>
-                      <p className="text-sm text-surface-500 group-hover:text-surface-400 leading-relaxed transition-colors duration-500">
+                      <p className="text-sm text-surface-400 dark:text-surface-300 leading-relaxed transition-colors duration-500">
                         {step.description}
                       </p>
                     </div>
@@ -495,100 +499,99 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-dot-pattern opacity-20" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16 section-title">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-light text-xs font-medium text-primary-400 mb-4">
-              <Bot size={12} />
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-900 border border-surface-600/40 dark:border-primary-500/20 text-xs font-medium text-primary-600 dark:text-primary-400 mb-4 shadow-sm">
+              <Bot size={14} />
               AI Agents
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-100 mb-4">
-              Meet Your <span className="text-gradient">AI Team</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 dark:text-surface-100 mb-4 font-heading tracking-tight">
+              Meet Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600">AI Team</span>
             </h2>
-            <p className="text-surface-400 text-lg">
+            <p className="text-surface-400 dark:text-surface-400 text-lg">
               Three specialized AI agents, each designed to help you in a unique way.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[600px]">
             {/* Admin Agent (Large Span) */}
-            <div className="lg:col-span-8 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[450px] lg:min-h-0 h-full" style={{opacity: 1}}>
-              {/* Light overlay tint — lighter in light mode so image shows */}
-              <div className={`absolute inset-0 transition-colors duration-500 z-10 ${isLight ? 'bg-surface-800/20 group-hover:bg-transparent' : 'bg-surface-900/60 group-hover:bg-surface-900/20'}`} />
+            <div className="lg:col-span-8 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[450px] lg:min-h-0 h-full border border-surface-600/40 dark:border-primary-500/20 shadow-lg" style={{opacity: 1}}>
+              <div className="absolute inset-0 bg-slate-950/60 group-hover:bg-slate-950/30 transition-colors duration-500 z-10" />
               <img 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzgzOR4u6w0Sxdjjv_NUxG9UiXJeey13upASnvrEsQCuAl6Kg8xOwZvbxZUBS2PHK5678KNwKRprWsg89vmVXem1ONo9vfKHjqBEorNDL3620By2CQMNW73rxYJGMRNJVkAZH8Qfj56iBvGo9i_iFZfgWQ3OBzIvu-J5p_3M-r5c9rXpTzdNK8tiOH-6-vV4fCVdZKmkvvOl4EQWCkc37nEzh7Ad1vK7yV_q0W-xuG_GaNTYOnKvp-5aLS2qYeauwbLGwcgGoE1AA"
                 alt="Admin Agent"
                 loading="lazy"
                 width="800"
                 height="600"
-                className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${isLight ? 'opacity-70 group-hover:opacity-100 grayscale-[30%] group-hover:grayscale-0' : 'opacity-50 group-hover:opacity-100 grayscale group-hover:grayscale-0 mix-blend-luminosity'}`}
+                className="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 opacity-75 group-hover:opacity-100"
               />
-              {/* Bottom text gradient — dark navy in both modes so text is always readable */}
+              {/* Bottom text gradient — dark in both modes so text is always 100% readable */}
               <div className="absolute bottom-0 left-0 p-8 md:p-12 z-20 w-full"
-                style={{ background: 'linear-gradient(to top, rgba(10,22,40,0.95) 0%, rgba(10,22,40,0.70) 50%, transparent 100%)' }}
+                style={{ background: 'linear-gradient(to top, rgba(7,14,36,0.96) 0%, rgba(7,14,36,0.70) 50%, transparent 100%)' }}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-                  <span className="text-xs font-mono text-surface-400 uppercase tracking-widest">Class: Overseer</span>
+                  <span className="text-xs font-mono text-slate-300 uppercase tracking-widest">Class: Overseer</span>
                 </div>
-                <h3 className="text-3xl md:text-4xl font-extrabold text-surface-100 mb-4 group-hover:text-primary-400 transition-colors duration-300">
+                <h3 className="text-3xl md:text-4xl font-extrabold text-white mb-4 group-hover:text-primary-300 transition-colors duration-300">
                   Admin Agent
                 </h3>
-                <p className="text-base text-surface-300 max-w-xl opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 leading-relaxed">
+                <p className="text-base text-slate-200 max-w-xl opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 leading-relaxed font-sans">
                   A powerful management assistant that helps instructors create quizzes, set guidelines, and monitor student performance through natural language commands.
                 </p>
               </div>
               {/* Decorative Frame */}
-              <div className="absolute top-6 left-6 w-6 h-6 border-t-2 border-l-2 border-primary-500/50 z-20 transition-all duration-500 group-hover:border-primary-400 group-hover:scale-110" />
-              <div className="absolute bottom-6 right-6 w-6 h-6 border-b-2 border-r-2 border-primary-500/50 z-20 transition-all duration-500 group-hover:border-primary-400 group-hover:scale-110" />
+              <div className="absolute top-6 left-6 w-6 h-6 border-t-2 border-l-2 border-primary-400/60 z-20 transition-all duration-500 group-hover:border-primary-400 group-hover:scale-110" />
+              <div className="absolute bottom-6 right-6 w-6 h-6 border-b-2 border-r-2 border-primary-400/60 z-20 transition-all duration-500 group-hover:border-primary-400 group-hover:scale-110" />
             </div>
 
             {/* Side Column for smaller agents */}
             <div className="lg:col-span-4 flex flex-col gap-6 h-full">
               {/* Student Agent */}
-              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[350px] lg:min-h-0" style={{ opacity: 1 }}>
+              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[350px] lg:min-h-0 border border-surface-600/40 dark:border-primary-500/20 shadow-md" style={{ opacity: 1 }}>
                 <img 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJdTkDIHsoWoKj6cpNMZItpvLtHcuCoUodDXzCBcTBdB-hjSufY8s5xO85OGu42BGg0mtFW_68HomCxLvo4sk5QeRWX00ew8q3hNaWnJjwd0-DjtG3l0wdvYHvu4v9k3un6Auj-dMlGfMcJueFmtr50h7Or2-3jnejoX2KC-iMNebGdSQcRsdajmDLcfYy3A1Y4mMYLWv7rCgkP0fAgL35QX0jpAOvjEphfknW3HF_CiBB7z-LRaHbOse5fDFMuqc_FzSbKCu8Ads"
                   alt="Student Agent"
                   loading="lazy"
                   width="400"
                   height="300"
-                  className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 ${isLight ? 'opacity-60 group-hover:opacity-85' : 'opacity-40 group-hover:opacity-70 mix-blend-overlay'}`}
+                  className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 opacity-65 group-hover:opacity-90"
                 />
                 <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end z-20"
-                  style={{ background: 'linear-gradient(to top, rgba(10,22,40,0.95) 0%, rgba(10,22,40,0.65) 45%, transparent 100%)' }}
+                  style={{ background: 'linear-gradient(to top, rgba(7,14,36,0.96) 0%, rgba(7,14,36,0.65) 45%, transparent 100%)' }}
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <span className="w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
-                    <span className="text-xs font-mono text-surface-400 uppercase tracking-widest">Class: Peer</span>
+                    <span className="text-xs font-mono text-slate-300 uppercase tracking-widest">Class: Peer</span>
                   </div>
-                  <h3 className="text-2xl font-bold text-surface-100 mb-2 group-hover:text-primary-400 transition-colors">
+                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-primary-300 transition-colors">
                     Student Agent
                   </h3>
-                  <p className="text-sm text-surface-300 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 line-clamp-3">
+                  <p className="text-sm text-slate-200 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 line-clamp-3 leading-relaxed">
                     An intelligent tutor trained on your exact course materials. Ask it anything about your lectures, and get accurate, grounded answers.
                   </p>
                 </div>
               </div>
 
               {/* Friend Agent */}
-              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[350px] lg:min-h-0" style={{ opacity: 1 }}>
+              <div className="flex-1 glass-card rounded-3xl relative overflow-hidden group scanline-overlay agent-card min-h-[350px] lg:min-h-0 border border-surface-600/40 dark:border-primary-500/20 shadow-md" style={{ opacity: 1 }}>
                 <img 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvn5zETFFGGfNSBUv-cKH2TnSBa8kojciUpRKXhlORLR7u4_dz7lyMh9b4p8AL_ndylREyTOXpiUDZDOGX746zoTkdc1W3lqTNoi0hHyhXf6YxmBNQyWOuC6pzLcbngbfj_aoLClIXJu43eWsATj4mPne4p3T5gj96DWnnX-j_Uq0eXjQ5-rfyqXtlvtgJAVBl5_czDGBwyFTd3EJWidcdy8_STWvjDTup2I_eKlTgGf9nqR8uZYun2bwUb1eNlYW58TepPXvlYT0"
                   alt="Friend Agent"
                   loading="lazy"
                   width="400"
                   height="300"
-                  className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 ${isLight ? 'opacity-60 group-hover:opacity-85' : 'opacity-40 group-hover:opacity-70 mix-blend-overlay'}`}
+                  className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 opacity-65 group-hover:opacity-90"
                 />
                 <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end z-20"
-                  style={{ background: 'linear-gradient(to top, rgba(10,22,40,0.95) 0%, rgba(10,22,40,0.65) 45%, transparent 100%)' }}
+                  style={{ background: 'linear-gradient(to top, rgba(7,14,36,0.96) 0%, rgba(7,14,36,0.65) 45%, transparent 100%)' }}
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <span className="w-2 h-2 bg-primary-500 rounded-full shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
-                    <span className="text-xs font-mono text-surface-400 uppercase tracking-widest">Class: Support</span>
+                    <span className="text-xs font-mono text-slate-300 uppercase tracking-widest">Class: Support</span>
                   </div>
-                  <h3 className="text-2xl font-bold text-surface-100 mb-2 group-hover:text-primary-400 transition-colors">
+                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-primary-300 transition-colors">
                     Friend Agent
                   </h3>
-                  <p className="text-sm text-surface-300 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 line-clamp-3">
+                  <p className="text-sm text-slate-200 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 line-clamp-3 leading-relaxed">
                     A friendly AI companion that helps you navigate the platform, answers general questions, and provides encouragement.
                   </p>
                 </div>
@@ -606,17 +609,17 @@ export default function HomePage() {
         <div className="absolute inset-0" style={{ background: 'var(--bg-page)' }} />
         {/* Subtle tinted overlay */}
         <div className="absolute inset-0" style={{ background: isLight
-          ? 'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(168,121,40,0.05) 0%, transparent 60%)'
-          : 'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212,175,55,0.04) 0%, transparent 60%)'
+          ? 'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(184,134,11,0.06) 0%, transparent 60%)'
+          : 'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212,175,55,0.06) 0%, transparent 60%)'
         }} />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-16">
           <div className="text-center max-w-2xl mx-auto section-title">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-light text-xs font-medium text-primary-400 mb-4 border border-primary-500/20">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-900 border border-surface-600/40 dark:border-primary-500/20 text-xs font-medium text-primary-600 dark:text-primary-400 mb-4 shadow-sm">
               <Star size={12} className="text-primary-500 fill-primary-500" />
               Trusted by Top Performers
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-100 mb-4 font-heading uppercase tracking-wide">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 dark:text-surface-100 mb-4 font-heading uppercase tracking-wide">
               Loved by <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600">Students</span>
             </h2>
           </div>
@@ -624,7 +627,7 @@ export default function HomePage() {
 
         {/* Marquee Container with fade masks */}
         <div className="relative flex overflow-hidden group w-full">
-          {/* Gradient Masks — fade to the actual page bg color, not hardcoded dark */}
+          {/* Gradient Masks */}
           <div className="absolute top-0 bottom-0 left-0 w-32 md:w-64 z-20 pointer-events-none"
             style={{ background: `linear-gradient(to right, var(--bg-page) 0%, transparent 100%)` }} />
           <div className="absolute top-0 bottom-0 right-0 w-32 md:w-64 z-20 pointer-events-none"
@@ -635,19 +638,13 @@ export default function HomePage() {
             {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
               <div 
                 key={i} 
-                className={`w-[280px] sm:w-[340px] flex-shrink-0 relative backdrop-blur-md rounded-xl p-6 sm:p-7 border hover:border-primary-500/30 transition-all duration-500 hover:-translate-y-1 overflow-hidden group ${
-                  isLight
-                    ? 'bg-white/90 border-stone-200 shadow-[0_2px_16px_rgba(26,42,68,0.09)]'
-                    : 'bg-surface-900/40 border-surface-800/60'
-                }`}
+                className="w-[280px] sm:w-[340px] flex-shrink-0 relative backdrop-blur-md rounded-2xl p-6 sm:p-7 border bg-surface-900 border-surface-600/40 dark:border-surface-800/60 hover:border-primary-500/40 transition-all duration-500 hover:-translate-y-1 overflow-hidden group shadow-sm hover:shadow-md"
               >
                 {/* Accent Line */}
-                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary-500/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-l-xl" />
+                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-l-2xl" />
                 
                 {/* Watermark Quote */}
-                <div className={`absolute -top-6 -right-2 text-[120px] font-serif leading-none pointer-events-none select-none group-hover:text-primary-500/10 transition-colors duration-500 ${
-                  isLight ? 'text-stone-200' : 'text-surface-800/30'
-                }`}>
+                <div className="absolute -top-6 -right-2 text-[120px] font-serif leading-none pointer-events-none select-none text-surface-600/20 dark:text-surface-800/30 group-hover:text-primary-500/15 transition-colors duration-500">
                   "
                 </div>
                 
@@ -659,24 +656,18 @@ export default function HomePage() {
                   </div>
                   
                   {/* Quote */}
-                  <p className={`text-[14px] leading-[1.7] mb-6 italic flex-1 font-light ${
-                    isLight ? 'text-slate-600' : 'text-surface-300'
-                  }`}>
+                  <p className="text-[14px] leading-[1.7] mb-6 italic flex-1 font-light text-surface-200 dark:text-surface-300">
                     {t.content}
                   </p>
                   
                   {/* Author Info */}
-                  <div className={`flex items-center gap-3 pt-4 border-t mt-auto ${
-                    isLight ? 'border-stone-100' : 'border-surface-800/40'
-                  }`}>
-                    <div className={`w-9 h-9 rounded-full border flex items-center justify-center text-primary-400 text-sm font-bold font-heading group-hover:border-primary-500/50 transition-colors duration-500 ${
-                      isLight ? 'bg-amber-50 border-amber-200/60' : 'bg-surface-800 border-primary-500/20 shadow-[0_0_10px_rgba(212,175,55,0.1)]'
-                    }`}>
+                  <div className="flex items-center gap-3 pt-4 border-t border-surface-600/30 dark:border-surface-800/40 mt-auto">
+                    <div className="w-9 h-9 rounded-full border border-primary-500/30 bg-surface-800 flex items-center justify-center text-primary-600 dark:text-primary-400 text-sm font-bold font-heading group-hover:border-primary-500 transition-colors duration-500 shadow-sm">
                       {t.name.charAt(0)}
                     </div>
                     <div>
-                      <p className={`text-[13px] font-semibold ${ isLight ? 'text-slate-800' : 'text-surface-100'}`}>{t.name}</p>
-                      <p className="text-[10px] text-primary-500/70 uppercase tracking-wider mt-0.5">{t.role}</p>
+                      <p className="text-[13px] font-semibold text-surface-50 dark:text-surface-100">{t.name}</p>
+                      <p className="text-[10px] text-primary-600 dark:text-primary-400 uppercase tracking-wider mt-0.5 font-medium">{t.role}</p>
                     </div>
                   </div>
                 </div>
@@ -689,11 +680,14 @@ export default function HomePage() {
       {/* ═══════════════════════════════════════════════════════
           CTA SECTION
           ═══════════════════════════════════════════════════════ */}
-      <section ref={ctaRef} className="py-24 relative">
-        <div className="max-w-[900px] mx-auto px-4 sm:px-6 relative z-10">
-          <div className="bg-bg-card rounded-[4px] p-10 md:p-14 relative overflow-hidden text-center" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-card)' }}>
+      <section ref={ctaRef} className="py-28 relative overflow-hidden">
+        {/* Ambient gold glow behind CTA */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-primary-500/15 blur-[160px] rounded-full pointer-events-none" />
+
+        <div className="max-w-[950px] mx-auto px-4 sm:px-6 relative z-10">
+          <div className="bg-gradient-to-b from-surface-900/95 via-surface-900/85 to-surface-900/95 rounded-2xl p-10 md:p-16 relative overflow-hidden text-center border border-primary-500/40 shadow-[0_0_50px_rgba(212,175,55,0.18)] backdrop-blur-xl">
             {/* Decorative SVG geometric mark */}
-            <svg className="absolute top-0 right-0 w-48 h-48 opacity-[0.12] text-primary-500 pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
+            <svg className="absolute top-0 right-0 w-60 h-60 opacity-20 text-primary-400 pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
               <circle cx="20" cy="20" r="1.5" fill="currentColor" />
               <circle cx="50" cy="15" r="1.5" fill="currentColor" />
               <circle cx="80" cy="40" r="1.5" fill="currentColor" />
@@ -706,28 +700,30 @@ export default function HomePage() {
             </svg>
 
             <div className="relative z-10">
-              <span className="block text-[12px] uppercase tracking-[0.15em] text-primary-500 mb-3">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-500/15 border border-primary-500/30 text-xs uppercase tracking-[0.2em] text-primary-300 font-semibold mb-5 shadow-[0_0_15px_rgba(212,175,55,0.2)]">
                 Start your journey
               </span>
-              <h2 className="text-[28px] font-medium text-surface-100 mb-4 font-heading tracking-tight">
-                Ready to Build Real Intelligence?
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-5 font-heading tracking-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.5)]">
+                Ready to Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-400 to-primary-500">Real Intelligence?</span>
               </h2>
-              <p className="text-[15px] text-surface-400 max-w-xl mx-auto mb-8">
+              <p className="text-base sm:text-lg text-surface-200 max-w-xl mx-auto mb-10 leading-relaxed font-sans">
                 Join thousands of students already learning smarter with AI. 
                 Start your journey today — completely free.
               </p>
-              <div className="flex flex-wrap justify-center gap-[12px]">
+              <div className="flex flex-wrap justify-center gap-4">
                 <Link
                   to="/login?register=true"
-                  className="bg-primary-500 text-surface-950 px-[24px] py-[11px] rounded-[4px] text-[14px] font-medium hover:bg-primary-600 transition-colors inline-flex items-center gap-2"
+                  className="bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 px-8 py-3.5 rounded-xl text-sm font-semibold hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] hover:scale-[1.02] transition-all inline-flex items-center gap-2.5 font-sans cursor-pointer"
                 >
-                  Get Started Free
+                  <span>Get Started Free</span>
+                  <ArrowRight size={16} />
                 </Link>
                 <Link
                   to="/courses"
-                  className="bg-transparent border border-primary-500/50 text-primary-400 px-[24px] py-[11px] rounded-[4px] text-[14px] font-medium hover:bg-primary-500/10 hover:border-primary-500 transition-colors inline-flex items-center gap-2"
+                  className="bg-surface-900/80 border border-primary-500/40 text-primary-300 px-8 py-3.5 rounded-xl text-sm font-semibold hover:bg-primary-500/10 hover:border-primary-500 hover:text-white transition-all inline-flex items-center gap-2.5 font-sans"
                 >
-                  Browse Courses
+                  <span>Browse Courses</span>
+                  <Play size={15} className="text-primary-400" />
                 </Link>
               </div>
             </div>
@@ -735,7 +731,7 @@ export default function HomePage() {
         </div>
 
         {/* Tagline */}
-        <p className="text-center mt-12 text-sm text-surface-600 tracking-[0.15em] uppercase font-heading">
+        <p className="text-center mt-12 text-sm text-primary-400/60 tracking-[0.2em] uppercase font-heading">
           Real Intelligence isn't predicted. It's built.
         </p>
       </section>

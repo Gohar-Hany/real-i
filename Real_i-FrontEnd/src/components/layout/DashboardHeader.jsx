@@ -151,13 +151,13 @@ export default function DashboardHeader() {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <header className="sticky top-0 z-30 bg-surface-950/80 backdrop-blur-xl border-b border-surface-800/50">
+    <header className="sticky top-0 z-30 bg-surface-900/90 dark:bg-surface-950/90 backdrop-blur-xl border-b border-surface-600/30 dark:border-surface-800/50 shadow-sm">
       {/* Main Row */}
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
         <div className="flex items-center gap-4 min-w-0">
           <button
             onClick={toggle}
-            className="p-2 text-surface-400 hover:text-surface-100 transition-colors lg:hidden rounded-lg bg-surface-800/50 hover:bg-surface-800 shrink-0"
+            className="p-2 text-surface-400 hover:text-surface-50 dark:hover:text-surface-100 transition-colors lg:hidden rounded-lg bg-surface-800/50 hover:bg-surface-800 shrink-0 cursor-pointer"
             aria-label="Toggle sidebar"
           >
             <Menu size={20} />
@@ -165,19 +165,19 @@ export default function DashboardHeader() {
 
           {/* Title + Breadcrumbs */}
           <div className="min-w-0">
-            <h2 className="text-base font-bold text-surface-100 tracking-wide truncate">
+            <h2 className="text-base font-bold text-surface-50 dark:text-surface-100 font-heading tracking-wide truncate">
               {getPageTitle()}
             </h2>
-            <nav className="hidden sm:flex items-center gap-1 text-[11px] text-surface-500 mt-0.5">
+            <nav className="hidden sm:flex items-center gap-1 text-[11px] text-surface-400 mt-0.5 font-mono">
               {breadcrumbs.map((crumb, i) => (
                 <span key={i} className="flex items-center gap-1">
-                  {i > 0 && <ChevronRight size={10} className="text-surface-600" />}
+                  {i > 0 && <ChevronRight size={10} className="text-surface-500" />}
                   {crumb.isLast ? (
-                    <span className="text-primary-400 font-bold">{crumb.label}</span>
+                    <span className="text-primary-600 dark:text-primary-400 font-bold">{crumb.label}</span>
                   ) : (
                     <Link
                       to={crumb.path}
-                      className="hover:text-primary-400 transition-colors font-medium"
+                      className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium"
                     >
                       {crumb.label}
                     </Link>
@@ -197,27 +197,27 @@ export default function DashboardHeader() {
           <div ref={searchRef} className="relative">
             <button
               onClick={() => { setShowSearch(!showSearch); setShowNotifications(false); setShowUserMenu(false); }}
-              className={`p-2 rounded-lg transition-all ${showSearch ? 'bg-primary-500/10 text-primary-400' : 'text-surface-400 hover:text-surface-100 hover:bg-surface-800/50'}`}
+              className={`p-2 rounded-xl transition-all cursor-pointer ${showSearch ? 'bg-primary-500/15 text-primary-600 dark:text-primary-400' : 'text-surface-400 hover:text-surface-50 dark:hover:text-surface-100 hover:bg-surface-800/60'}`}
               aria-label="Search"
             >
               <Search size={18} />
             </button>
 
             {showSearch && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-surface-900 border border-surface-700 rounded-xl shadow-modal z-50 animate-slide-down overflow-hidden">
+              <div className="absolute right-0 top-full mt-2 w-80 bg-surface-900 border border-surface-600/40 dark:border-surface-700 rounded-2xl shadow-xl z-50 animate-slide-down overflow-hidden">
                 <form onSubmit={handleSearch} className="p-3">
                   <div className="relative">
-                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-500" />
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search students, courses..."
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-950 border border-surface-800 text-sm text-surface-50 placeholder-surface-500 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-950 border border-surface-600/40 dark:border-surface-800 text-sm text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/30 transition-all font-sans"
                     />
                   </div>
-                  <p className="text-[10px] text-surface-600 mt-2 px-1">
-                    Press <kbd className="px-1.5 py-0.5 rounded bg-surface-800 text-surface-400 font-mono text-[9px] border border-surface-700">Enter</kbd> to search · <kbd className="px-1.5 py-0.5 rounded bg-surface-800 text-surface-400 font-mono text-[9px] border border-surface-700">Esc</kbd> to close
+                  <p className="text-[10px] text-surface-400 mt-2 px-1 font-mono">
+                    Press <kbd className="px-1.5 py-0.5 rounded bg-surface-800 text-surface-300 font-mono text-[9px] border border-surface-600/30 dark:border-surface-700">Enter</kbd> to search · <kbd className="px-1.5 py-0.5 rounded bg-surface-800 text-surface-300 font-mono text-[9px] border border-surface-600/30 dark:border-surface-700">Esc</kbd> to close
                   </p>
                 </form>
               </div>
@@ -228,7 +228,7 @@ export default function DashboardHeader() {
           <div className="relative">
             <button
               onClick={() => { setShowNotifications(!showNotifications); setShowSearch(false); setShowUserMenu(false); }}
-              className={`p-2 rounded-lg transition-all relative ${showNotifications ? 'bg-primary-500/10 text-primary-400' : 'text-surface-400 hover:text-surface-100 hover:bg-surface-800/50'}`}
+              className={`p-2 rounded-xl transition-all relative cursor-pointer ${showNotifications ? 'bg-primary-500/15 text-primary-600 dark:text-primary-400' : 'text-surface-400 hover:text-surface-50 dark:hover:text-surface-100 hover:bg-surface-800/60'}`}
               aria-label="Notifications"
             >
               <Bell size={18} />
@@ -242,28 +242,28 @@ export default function DashboardHeader() {
             {showNotifications && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setShowNotifications(false)} />
-                <div className="absolute right-0 top-full mt-2 w-80 bg-surface-900 border border-surface-700 rounded-xl shadow-modal z-50 animate-slide-down overflow-hidden">
-                  <div className="flex items-center justify-between p-4 border-b border-surface-800/50">
-                    <h3 className="text-sm font-bold text-surface-200">Notifications</h3>
-                    <button onClick={() => setShowNotifications(false)} className="text-surface-500 hover:text-surface-300 p-1 rounded hover:bg-surface-800 transition-colors">
+                <div className="absolute right-0 top-full mt-2 w-80 bg-surface-900 border border-surface-600/40 dark:border-surface-700 rounded-2xl shadow-xl z-50 animate-slide-down overflow-hidden">
+                  <div className="flex items-center justify-between p-4 border-b border-surface-600/30 dark:border-surface-800/50">
+                    <h3 className="text-sm font-bold text-surface-50 dark:text-surface-200 font-heading">Notifications</h3>
+                    <button onClick={() => setShowNotifications(false)} className="text-surface-400 hover:text-surface-200 p-1 rounded-lg hover:bg-surface-800 transition-colors cursor-pointer">
                       <X size={14} />
                     </button>
                   </div>
                   {notifications.length === 0 ? (
                     <div className="p-8 text-center">
-                      <div className="w-12 h-12 rounded-xl bg-surface-800 flex items-center justify-center mx-auto mb-3 border border-surface-700">
-                        <Bell size={20} className="text-surface-600" />
+                      <div className="w-12 h-12 rounded-xl bg-surface-800 flex items-center justify-center mx-auto mb-3 border border-surface-600/30 dark:border-surface-700 shadow-sm">
+                        <Bell size={20} className="text-surface-400" />
                       </div>
-                      <p className="text-sm font-bold text-surface-300 mb-1">All caught up!</p>
-                      <p className="text-xs text-surface-500">No new notifications</p>
+                      <p className="text-sm font-bold text-surface-50 dark:text-surface-300 mb-1">All caught up!</p>
+                      <p className="text-xs text-surface-400 font-sans">No new notifications</p>
                     </div>
                   ) : (
                     <div className="max-h-80 overflow-y-auto custom-scrollbar">
                       {notifications.map((n, i) => (
-                        <div key={i} className={`p-4 border-b border-surface-800/50 hover:bg-surface-800/30 transition-colors cursor-pointer ${!n.read ? 'bg-primary-500/5' : ''}`}>
+                        <div key={i} className={`p-4 border-b border-surface-600/30 dark:border-surface-800/50 hover:bg-surface-800/40 transition-colors cursor-pointer ${!n.read ? 'bg-primary-500/5' : ''}`}>
                           <p className="text-sm text-surface-50 font-medium">{n.title}</p>
                           <p className="text-xs text-surface-400 mt-0.5">{n.message}</p>
-                          <p className="text-[10px] text-surface-600 mt-1">{n.time}</p>
+                          <p className="text-[10px] text-surface-400 mt-1 font-mono">{n.time}</p>
                         </div>
                       ))}
                     </div>
@@ -274,19 +274,19 @@ export default function DashboardHeader() {
           </div>
 
           {/* Separator */}
-          <div className="h-6 w-px bg-surface-800/50 mx-1 hidden sm:block"></div>
+          <div className="h-6 w-px bg-surface-600/30 dark:bg-surface-800/50 mx-1 hidden sm:block"></div>
 
           {/* User Menu */}
           <div className="relative" ref={userMenuRef}>
             <button
               onClick={() => { setShowUserMenu(!showUserMenu); setShowSearch(false); setShowNotifications(false); }}
-              className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-xl hover:bg-surface-800/50 transition-all group"
+              className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-xl hover:bg-surface-800/60 transition-all group cursor-pointer"
             >
               <div className="hidden sm:block text-right">
-                <p className="text-sm font-bold text-surface-200 group-hover:text-surface-50 transition-colors">{user?.name}</p>
-                <p className="text-[10px] text-surface-500 capitalize font-medium">{user?.role}</p>
+                <p className="text-sm font-bold text-surface-50 dark:text-surface-200 group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors">{user?.name}</p>
+                <p className="text-[10px] text-surface-400 capitalize font-mono font-semibold">{user?.role}</p>
               </div>
-              <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center text-surface-950 text-sm font-extrabold shadow-glow-sm overflow-hidden">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 flex items-center justify-center text-surface-950 text-sm font-extrabold shadow-sm overflow-hidden">
                 {user?.avatar ? (
                   <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
@@ -298,11 +298,11 @@ export default function DashboardHeader() {
             {showUserMenu && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} />
-                <div className="absolute right-0 top-full mt-2 w-56 bg-surface-900 border border-surface-700 rounded-xl shadow-modal z-50 animate-slide-down overflow-hidden">
+                <div className="absolute right-0 top-full mt-2 w-56 bg-surface-900 border border-surface-600/40 dark:border-surface-700 rounded-2xl shadow-xl z-50 animate-slide-down overflow-hidden">
                   {/* User Info */}
-                  <div className="p-4 border-b border-surface-800/50">
-                    <p className="text-sm font-bold text-surface-50 truncate">{user?.name}</p>
-                    <p className="text-[11px] text-surface-500 font-mono truncate mt-0.5">{user?.email}</p>
+                  <div className="p-4 border-b border-surface-600/30 dark:border-surface-800/50">
+                    <p className="text-sm font-bold text-surface-50 dark:text-surface-100 truncate font-heading">{user?.name}</p>
+                    <p className="text-[11px] text-surface-400 font-mono truncate mt-0.5">{user?.email}</p>
                   </div>
 
                   <div className="py-1.5">
@@ -311,7 +311,7 @@ export default function DashboardHeader() {
                       onClick={() => setShowUserMenu(false)}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors"
                     >
-                      <User size={16} className="text-surface-500" /> My Profile
+                      <User size={16} className="text-surface-400" /> My Profile
                     </Link>
                     {user?.role === 'admin' && (
                       <Link
@@ -319,15 +319,15 @@ export default function DashboardHeader() {
                         onClick={() => setShowUserMenu(false)}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors"
                       >
-                        <Settings size={16} className="text-surface-500" /> Settings
+                        <Settings size={16} className="text-surface-400" /> Settings
                       </Link>
                     )}
                   </div>
 
-                  <div className="border-t border-surface-800/50 py-1.5">
+                  <div className="border-t border-surface-600/30 dark:border-surface-800/50 py-1.5">
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-rose-400 hover:bg-rose-500/10 transition-colors"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-danger-text hover:bg-danger-500/10 transition-colors cursor-pointer"
                     >
                       <LogOut size={16} /> Sign Out
                     </button>

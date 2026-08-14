@@ -132,13 +132,13 @@ export default function ContactPage() {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 contact-hero-content">
             <div className="flex items-center gap-3 mb-4">
-              <span className="w-10 h-[2px] bg-primary-500" />
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary-500">Contact Us</span>
+              <span className="w-10 h-[2px] bg-primary-500 dark:bg-primary-400 shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary-600 dark:text-primary-400 font-semibold">Contact Us</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-primary-500 uppercase tracking-wider mb-4 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">
-              Get In Touch
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-surface-50 dark:text-white uppercase tracking-wider mb-4">
+              Get In <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500">Touch</span>
             </h1>
-            <p className="text-lg text-surface-300 max-w-2xl font-arabic leading-relaxed">
+            <p className="text-lg text-surface-400 dark:text-surface-300 max-w-2xl font-sans leading-relaxed">
               Have a question, feedback, or partnership idea? We'd love to hear from you.
               Our team typically responds within 24 hours.
             </p>
@@ -152,9 +152,9 @@ export default function ContactPage() {
             {/* ── Left Column — Contact Info ── */}
             <div className="lg:col-span-4 space-y-6 contact-info-panel">
               {/* Contact Cards */}
-              <div className="glass-card p-6 border border-surface-800/50 space-y-6">
-                <h3 className="text-lg font-bold text-surface-100 font-heading tracking-wide uppercase flex items-center gap-2">
-                  <MessageSquare size={18} className="text-primary-500" />
+              <div className="bg-surface-900 rounded-2xl p-6 border border-surface-600/40 dark:border-surface-800/50 space-y-6 shadow-sm">
+                <h3 className="text-lg font-bold text-surface-50 dark:text-surface-100 font-heading tracking-wide uppercase flex items-center gap-2">
+                  <MessageSquare size={18} className="text-primary-600 dark:text-primary-400" />
                   Contact Information
                 </h3>
 
@@ -164,50 +164,50 @@ export default function ContactPage() {
                   { icon: MapPin, label: 'Location', value: 'Cairo, Egypt', sublabel: 'Innovation Hub' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-start gap-4 group/item">
-                    <div className="w-10 h-10 shrink-0 bg-surface-900 border border-surface-800 flex items-center justify-center text-primary-500 group-hover/item:border-primary-500/50 group-hover/item:shadow-[0_0_12px_rgba(212,175,55,0.15)] transition-all duration-300">
+                    <div className="w-10 h-10 shrink-0 bg-surface-800 border border-surface-600/40 dark:border-surface-700 rounded-xl flex items-center justify-center text-primary-600 dark:text-primary-400 group-hover/item:border-primary-500/50 group-hover/item:shadow-[0_0_12px_rgba(212,175,55,0.2)] transition-all duration-300 shadow-sm">
                       <item.icon size={18} />
                     </div>
                     <div className="min-w-0">
-                      <p className="font-mono text-[10px] text-surface-500 uppercase tracking-widest mb-0.5">{item.sublabel}</p>
-                      <p className="text-surface-100 text-sm font-medium truncate">{item.value}</p>
+                      <p className="font-mono text-[10px] text-surface-400 uppercase tracking-widest mb-0.5 font-semibold">{item.sublabel}</p>
+                      <p className="text-surface-50 dark:text-surface-100 text-sm font-medium truncate">{item.value}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Response Time */}
-              <div className="glass-card p-6 border border-surface-800/50">
+              <div className="bg-surface-900 rounded-2xl p-6 border border-surface-600/40 dark:border-surface-800/50 shadow-sm">
                 <div className="flex items-center gap-3 mb-3">
-                  <Clock size={16} className="text-primary-500" />
-                  <span className="font-mono text-xs text-surface-400 uppercase tracking-wider">Avg. Response Time</span>
+                  <Clock size={16} className="text-primary-600 dark:text-primary-400" />
+                  <span className="font-mono text-xs text-surface-400 uppercase tracking-wider font-semibold">Avg. Response Time</span>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-surface-100">~4</span>
+                  <span className="text-3xl font-bold text-surface-50 dark:text-surface-100 font-heading">~4</span>
                   <span className="text-surface-400 text-sm">hours</span>
                 </div>
                 <div className="mt-3 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="font-mono text-[10px] text-emerald-400 uppercase tracking-widest">Team Online</span>
+                  <span className="font-mono text-[10px] text-emerald-700 dark:text-emerald-400 uppercase tracking-widest font-bold">Team Online</span>
                 </div>
               </div>
 
               {/* Terminal Status */}
-              <div className="glass-card p-5 border border-surface-800/50 font-mono text-xs text-surface-400">
-                <div className="flex items-center justify-between mb-3 pb-2 border-b border-surface-800/50">
+              <div className="bg-surface-900 rounded-2xl p-5 border border-surface-600/40 dark:border-surface-800/50 font-mono text-xs text-surface-400 shadow-sm">
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-surface-600/30 dark:border-surface-800/50">
                   <div className="flex items-center gap-2">
-                    <Terminal size={14} className="text-primary-500" />
-                    <span className="text-primary-500 uppercase tracking-wider">System Status</span>
+                    <Terminal size={14} className="text-primary-600 dark:text-primary-400" />
+                    <span className="text-primary-600 dark:text-primary-400 uppercase tracking-wider font-bold">System Status</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="uppercase tracking-widest text-[10px]">Online</span>
+                    <span className="uppercase tracking-widest text-[10px] text-emerald-700 dark:text-emerald-400 font-bold">Online</span>
                   </div>
                 </div>
-                <div className="space-y-1.5 opacity-80">
-                  <p>&gt;<span className="text-surface-500"> ping server.real-i.ai</span></p>
-                  <p className="text-emerald-400">64 bytes: icmp_seq=1 ttl=56 time=2.4ms</p>
-                  <p>&gt;<span className="text-surface-500"> check_comms_uplink</span></p>
-                  <p className="text-emerald-400">Uplink stable. Encryption: AES-256.</p>
+                <div className="space-y-1.5 opacity-90">
+                  <p>&gt;<span className="text-surface-400"> ping server.real-i.ai</span></p>
+                  <p className="text-emerald-700 dark:text-emerald-400">64 bytes: icmp_seq=1 ttl=56 time=2.4ms</p>
+                  <p>&gt;<span className="text-surface-400"> check_comms_uplink</span></p>
+                  <p className="text-emerald-700 dark:text-emerald-400">Uplink stable. Encryption: AES-256.</p>
                   <p className="animate-pulse text-primary-500">█</p>
                 </div>
               </div>
@@ -215,24 +215,24 @@ export default function ContactPage() {
 
             {/* ── Right Column — Form ── */}
             <div className="lg:col-span-8 contact-form-panel">
-              <div className="glass-card p-8 sm:p-10 border border-surface-800/50 relative z-50">
+              <div className="bg-surface-900 rounded-2xl p-8 sm:p-10 border border-surface-600/40 dark:border-surface-800/50 shadow-md relative z-50">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-primary-500/5 blur-[60px] rounded-full pointer-events-none" />
 
                 {isSubmitted ? (
                   /* ── Success State ── */
                   <div className="relative z-10 text-center py-16">
                     <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                      <CheckCircle2 size={40} className="text-emerald-400" />
+                      <CheckCircle2 size={40} className="text-emerald-500" />
                     </div>
-                    <h3 className="text-2xl font-bold text-surface-100 font-heading uppercase tracking-wide mb-3">
+                    <h3 className="text-2xl font-bold text-surface-50 dark:text-surface-100 font-heading uppercase tracking-wide mb-3">
                       Message Sent!
                     </h3>
-                    <p className="text-surface-400 max-w-md mx-auto mb-8 leading-relaxed">
+                    <p className="text-surface-400 max-w-md mx-auto mb-8 leading-relaxed font-sans">
                       Thank you for reaching out. We've received your message and will get back to you within 24 hours.
                     </p>
                     <button
                       onClick={handleSendAnother}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-surface-900 border border-surface-700 text-surface-200 font-mono text-xs uppercase tracking-widest hover:border-primary-500/50 hover:text-primary-400 transition-all duration-300"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-surface-800 border border-surface-600/40 dark:border-surface-700 text-surface-50 dark:text-surface-200 font-mono text-xs uppercase tracking-widest hover:border-primary-500 hover:text-primary-500 transition-all duration-300 rounded-xl"
                     >
                       Send Another Message
                       <ArrowRight size={14} />
@@ -241,10 +241,10 @@ export default function ContactPage() {
                 ) : (
                   /* ── Form ── */
                   <div className="relative z-10">
-                    <h3 className="text-xl font-bold text-surface-100 font-heading tracking-wide mb-1 uppercase">
+                    <h3 className="text-xl font-bold text-surface-50 dark:text-surface-100 font-heading tracking-wide mb-1 uppercase">
                       Send a Message
                     </h3>
-                    <p className="text-sm text-surface-500 mb-8">
+                    <p className="text-sm text-surface-400 mb-8 font-sans">
                       Fill out the form below and we'll get back to you shortly.
                     </p>
 
@@ -252,7 +252,7 @@ export default function ContactPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         {/* Name */}
                         <div className="space-y-1.5">
-                          <label htmlFor="contact-name" className="block font-mono text-xs font-medium text-surface-400 uppercase tracking-wider">
+                          <label htmlFor="contact-name" className="block font-mono text-xs font-semibold text-surface-200 dark:text-surface-300 uppercase tracking-wider">
                             Your Name <span className="text-primary-500">*</span>
                           </label>
                           <input
@@ -262,17 +262,17 @@ export default function ContactPage() {
                             value={formData.name}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            className={`w-full bg-surface-900/80 border ${touched.name && errors.name ? 'border-red-500/70 focus:border-red-500' : 'border-surface-800 focus:border-primary-500/70'} px-4 py-3 text-surface-100 text-sm outline-none focus:ring-1 ${touched.name && errors.name ? 'focus:ring-red-500/30' : 'focus:ring-primary-500/20'} transition-all duration-200 placeholder:text-surface-600`}
+                            className={`w-full bg-surface-950 border ${touched.name && errors.name ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/60 focus:border-primary-500'} rounded-xl px-4 py-3 text-surface-50 dark:text-surface-100 text-sm outline-none focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 placeholder:text-surface-400 font-sans`}
                             placeholder="Ahmed Hassan"
                           />
                           {touched.name && errors.name && (
-                            <p className="text-red-400 text-xs font-mono mt-1">{errors.name}</p>
+                            <p className="text-danger-text text-xs font-mono mt-1">{errors.name}</p>
                           )}
                         </div>
 
                         {/* Email */}
                         <div className="space-y-1.5">
-                          <label htmlFor="contact-email" className="block font-mono text-xs font-medium text-surface-400 uppercase tracking-wider">
+                          <label htmlFor="contact-email" className="block font-mono text-xs font-semibold text-surface-200 dark:text-surface-300 uppercase tracking-wider">
                             Email Address <span className="text-primary-500">*</span>
                           </label>
                           <input
@@ -282,18 +282,18 @@ export default function ContactPage() {
                             value={formData.email}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            className={`w-full bg-surface-900/80 border ${touched.email && errors.email ? 'border-red-500/70 focus:border-red-500' : 'border-surface-800 focus:border-primary-500/70'} px-4 py-3 text-surface-100 text-sm outline-none focus:ring-1 ${touched.email && errors.email ? 'focus:ring-red-500/30' : 'focus:ring-primary-500/20'} transition-all duration-200 placeholder:text-surface-600`}
+                            className={`w-full bg-surface-950 border ${touched.email && errors.email ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/60 focus:border-primary-500'} rounded-xl px-4 py-3 text-surface-50 dark:text-surface-100 text-sm outline-none focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 placeholder:text-surface-400 font-sans`}
                             placeholder="ahmed@example.com"
                           />
                           {touched.email && errors.email && (
-                            <p className="text-red-400 text-xs font-mono mt-1">{errors.email}</p>
+                            <p className="text-danger-text text-xs font-mono mt-1">{errors.email}</p>
                           )}
                         </div>
                       </div>
 
                       {/* Subject */}
                       <div className="space-y-1.5">
-                        <label htmlFor="contact-subject" className="block font-mono text-xs font-medium text-surface-400 uppercase tracking-wider">
+                        <label htmlFor="contact-subject" className="block font-mono text-xs font-semibold text-surface-200 dark:text-surface-300 uppercase tracking-wider">
                           Subject <span className="text-primary-500">*</span>
                         </label>
                         <Select
@@ -308,17 +308,17 @@ export default function ContactPage() {
                           placeholder="Select a topic..."
                         />
                         {touched.subject && errors.subject && (
-                          <p className="text-red-400 text-xs font-mono mt-1">{errors.subject}</p>
+                          <p className="text-danger-text text-xs font-mono mt-1">{errors.subject}</p>
                         )}
                       </div>
 
                       {/* Message */}
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <label htmlFor="contact-message" className="block font-mono text-xs font-medium text-surface-400 uppercase tracking-wider">
+                          <label htmlFor="contact-message" className="block font-mono text-xs font-semibold text-surface-200 dark:text-surface-300 uppercase tracking-wider">
                             Message <span className="text-primary-500">*</span>
                           </label>
-                          <span className={`font-mono text-[10px] tracking-wider ${messageLength >= 10 ? 'text-emerald-400' : 'text-surface-500'}`}>
+                          <span className={`font-mono text-[10px] tracking-wider ${messageLength >= 10 ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-surface-400'}`}>
                             {messageLength}/500
                           </span>
                         </div>
@@ -330,11 +330,11 @@ export default function ContactPage() {
                           value={formData.message}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          className={`w-full bg-surface-900/80 border ${touched.message && errors.message ? 'border-red-500/70 focus:border-red-500' : 'border-surface-800 focus:border-primary-500/70'} px-4 py-3 text-surface-100 text-sm outline-none focus:ring-1 ${touched.message && errors.message ? 'focus:ring-red-500/30' : 'focus:ring-primary-500/20'} transition-all duration-200 resize-none placeholder:text-surface-600`}
+                          className={`w-full bg-surface-950 border ${touched.message && errors.message ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/60 focus:border-primary-500'} rounded-xl px-4 py-3 text-surface-50 dark:text-surface-100 text-sm outline-none focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 resize-none placeholder:text-surface-400 font-sans`}
                           placeholder="Tell us what's on your mind..."
                         />
                         {touched.message && errors.message && (
-                          <p className="text-red-400 text-xs font-mono mt-1">{errors.message}</p>
+                          <p className="text-danger-text text-xs font-mono mt-1">{errors.message}</p>
                         )}
                       </div>
 
@@ -342,7 +342,7 @@ export default function ContactPage() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-primary-500 text-surface-950 font-mono text-sm font-bold uppercase tracking-widest hover:bg-primary-400 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300 mt-2"
+                        className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-mono text-sm font-bold uppercase tracking-widest hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-[1.01] rounded-xl disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300 mt-2 cursor-pointer shadow-md"
                       >
                         {isSubmitting ? (
                           <>
@@ -351,13 +351,13 @@ export default function ContactPage() {
                           </>
                         ) : (
                           <>
-                            Send Message
+                            <span>Send Message</span>
                             <Send size={16} />
                           </>
                         )}
                       </button>
 
-                      <p className="text-center text-[11px] text-surface-600 font-mono">
+                      <p className="text-center text-[11px] text-surface-400 font-sans">
                         By submitting, you agree to our privacy policy. We'll never share your data.
                       </p>
                     </form>

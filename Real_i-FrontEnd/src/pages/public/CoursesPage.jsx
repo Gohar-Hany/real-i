@@ -87,13 +87,13 @@ export default function CoursesPage() {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 courses-hero-content">
             <div className="flex items-center gap-3 mb-4">
-              <span className="w-10 h-[2px] bg-primary-500" />
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary-500">Module Library</span>
+              <span className="w-10 h-[2px] bg-primary-500 dark:bg-primary-400 shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary-600 dark:text-primary-400 font-semibold">Module Library</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-primary-500 uppercase tracking-wider mb-4 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">
-              Explore Courses
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-surface-50 dark:text-white uppercase tracking-wider mb-4">
+              Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500">Courses</span>
             </h1>
-            <p className="text-lg text-surface-300 max-w-2xl font-arabic leading-relaxed">
+            <p className="text-lg text-surface-400 dark:text-surface-300 max-w-2xl font-sans leading-relaxed">
               Discover expert-led AI and technology courses designed to build real-world skills.
               Each module is engineered for maximum cognitive throughput.
             </p>
@@ -101,14 +101,14 @@ export default function CoursesPage() {
             {/* Stats row */}
             <div className="flex items-center gap-8 mt-8">
               <div className="flex items-center gap-2">
-                <Cpu size={16} className="text-primary-500" />
-                <span className="font-mono text-xs text-surface-400 uppercase tracking-wider">
+                <Cpu size={16} className="text-primary-600 dark:text-primary-400" />
+                <span className="font-mono text-xs text-surface-400 dark:text-surface-400 uppercase tracking-wider font-semibold">
                   {courses.length} Modules Available
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <BookOpen size={16} className="text-primary-500" />
-                <span className="font-mono text-xs text-surface-400 uppercase tracking-wider">
+                <BookOpen size={16} className="text-primary-600 dark:text-primary-400" />
+                <span className="font-mono text-xs text-surface-400 dark:text-surface-400 uppercase tracking-wider font-semibold">
                   {Math.max(0, categories.length - 1)} Categories
                 </span>
               </div>
@@ -120,43 +120,43 @@ export default function CoursesPage() {
         <section className="relative pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Filters Bar */}
-            <div className="courses-filters glass-card rounded-none p-5 mb-10 border border-surface-800/50 relative">
+            <div className="courses-filters bg-surface-900 rounded-2xl p-5 mb-10 border border-surface-600/40 dark:border-surface-800/50 shadow-sm relative">
               {/* Cyber accent corners */}
-              <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-primary-500/40" />
-              <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-primary-500/40" />
-              <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-primary-500/40" />
-              <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-primary-500/40" />
+              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-primary-500/40 rounded-tl" />
+              <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-primary-500/40 rounded-tr" />
+              <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-primary-500/40 rounded-bl" />
+              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-primary-500/40 rounded-br" />
 
               <div className="relative">
                 <div className="flex flex-col lg:flex-row gap-4">
                   {/* Search */}
                   <div className="relative flex-1">
-                    <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-500" />
+                    <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-400" />
                     <input
                       type="text"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder="Search courses, topics, or skills..."
-                      className="w-full pl-12 pr-10 py-3 bg-surface-900/80 border border-surface-700/50 text-sm text-surface-100 placeholder-surface-500 outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/20 transition-all font-mono"
+                      className="w-full pl-12 pr-10 py-3 bg-surface-950 border border-surface-600/50 dark:border-surface-700/50 rounded-xl text-sm text-surface-50 dark:text-surface-100 placeholder:text-surface-400 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20 transition-all font-sans"
                     />
                     {search && (
-                      <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-500 hover:text-surface-300 transition-colors">
+                      <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400 hover:text-surface-200 transition-colors">
                         <X size={16} />
                       </button>
                     )}
                   </div>
 
                   <div className="flex items-center gap-2 overflow-hidden">
-                    <SlidersHorizontal size={16} className="text-surface-500 shrink-0" />
+                    <SlidersHorizontal size={16} className="text-surface-400 shrink-0" />
                     <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-2 w-full">
                       {levels.map((level) => (
                         <button
                           key={level}
                           onClick={() => setActiveLevel(level)}
-                          className={`px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 shrink-0 ${
+                          className={`px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider rounded-lg transition-all duration-300 shrink-0 cursor-pointer ${
                             activeLevel === level
-                              ? 'bg-primary-500 text-surface-950'
-                              : 'bg-surface-900/80 text-surface-400 border border-surface-700/50 hover:text-surface-200 hover:border-surface-600/50'
+                              ? 'bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 shadow-sm'
+                              : 'bg-surface-950 text-surface-400 border border-surface-600/40 dark:border-surface-700/50 hover:text-surface-100 hover:border-surface-600'
                           }`}
                         >
                           {level}
@@ -172,10 +172,10 @@ export default function CoursesPage() {
                     <button
                       key={cat}
                       onClick={() => setActiveCategory(cat)}
-                      className={`px-4 py-2 text-xs font-mono font-medium whitespace-nowrap transition-all duration-300 uppercase tracking-wider ${
+                      className={`px-4 py-2 text-xs font-mono font-medium rounded-full whitespace-nowrap transition-all duration-300 uppercase tracking-wider cursor-pointer ${
                         activeCategory === cat
-                          ? 'bg-primary-500/15 text-primary-400 border border-primary-500/30'
-                          : 'text-surface-400 border border-surface-800/50 hover:border-surface-600/50 hover:text-surface-200'
+                          ? 'bg-primary-500/15 text-primary-700 dark:text-primary-300 border border-primary-500/40 font-bold'
+                          : 'bg-surface-950 text-surface-400 border border-surface-600/30 dark:border-surface-800/50 hover:border-surface-600 hover:text-surface-200'
                       }`}
                     >
                       {cat}

@@ -123,21 +123,21 @@ export default function Footer() {
             {/* Links Columns */}
             {Object.entries(currentLinks).map(([title, links]) => (
               <div key={title}>
-                <h4 className="text-sm font-semibold text-surface-200 uppercase tracking-wider mb-4">
+                <h4 className="text-sm font-semibold text-surface-50 dark:text-surface-200 uppercase tracking-wider mb-4">
                   {title}
                 </h4>
                 <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.label}>
                       {link.comingSoon ? (
-                        <span className="text-sm text-surface-500 cursor-default flex items-center gap-1 group">
+                        <span className="text-sm text-surface-400 cursor-default flex items-center gap-1 group">
                           {link.label}
-                          <span className="text-[9px] ml-1 px-1.5 py-0.5 rounded bg-surface-800 text-surface-500 font-mono uppercase">Soon</span>
+                          <span className="text-[9px] ml-1 px-1.5 py-0.5 rounded bg-surface-800 text-surface-400 font-mono uppercase">Soon</span>
                         </span>
                       ) : (
                         <Link
                           to={link.to}
-                          className="text-sm text-surface-400 hover:text-primary-400 transition-colors duration-300 flex items-center gap-1 group"
+                          className="text-sm text-surface-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-300 flex items-center gap-1 group font-medium"
                         >
                           {link.label}
                         </Link>
@@ -150,31 +150,31 @@ export default function Footer() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="py-6 border-t border-surface-800/50 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-surface-500">
+          <div className="py-6 border-t border-surface-600/30 dark:border-surface-800/50 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-surface-400">
               © {new Date().getFullYear()} REAL_i — Building Real Intelligence. All rights reserved.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4">
-              <p className="text-xs text-surface-600 flex items-center gap-1">
+              <p className="text-xs text-surface-400 flex items-center gap-1">
                 Crafted with <Heart size={12} className="text-primary-500 fill-primary-500" /> by REAL_i Team
               </p>
-              <div className="hidden sm:block h-3 w-px bg-surface-700"></div>
+              <div className="hidden sm:block h-3 w-px bg-surface-600/40 dark:bg-surface-700"></div>
               <a 
                 href="https://scorpius-platform.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-surface-900/50 border border-surface-700/50 hover:bg-surface-800 hover:border-primary-500/50 transition-all duration-500 hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] cursor-pointer"
+                className="group flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-surface-900 border border-surface-600/40 dark:border-surface-700/50 hover:bg-surface-800 hover:border-primary-500/50 transition-all duration-500 hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] cursor-pointer shadow-sm"
               >
-                <span className="text-[10px] uppercase tracking-widest text-surface-500 group-hover:text-surface-400 transition-colors">
+                <span className="text-[10px] uppercase tracking-widest text-surface-400 group-hover:text-surface-300 transition-colors">
                   Developed by
                 </span>
                 <div className="flex items-center gap-1.5">
                   <img 
                     src="/scorpius-logo.png" 
                     alt="SCORPIUS AI Logo" 
-                    className="h-5 w-auto object-contain brightness-0 invert opacity-70 group-hover:opacity-100 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" 
+                    className="h-5 w-auto object-contain dark:brightness-0 dark:invert opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" 
                   />
-                  <span className="text-xs font-black tracking-widest text-surface-200 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-primary-300 transition-all duration-300">
+                  <span className="text-xs font-black tracking-widest text-surface-50 dark:text-surface-200 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary-600 group-hover:to-primary-400 dark:group-hover:from-white dark:group-hover:to-primary-300 transition-all duration-300">
                     SCORPIUS AI
                   </span>
                 </div>
