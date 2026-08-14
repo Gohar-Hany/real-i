@@ -146,9 +146,7 @@ export default function LoginPage() {
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center mb-6">
-              <div className="w-16 h-16 bg-transparent flex items-center justify-center shadow-glow">
-                <img src="/logo.png" alt="REAL_i Logo" className="w-full h-full object-contain" />
-              </div>
+              <img src="/logo.png" alt="REAL_i Logo" className="w-16 h-16 object-contain drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" />
             </div>
             <h1 className="text-3xl font-bold text-primary-500 font-heading tracking-[0.2em] uppercase mb-2">
               REAL_i

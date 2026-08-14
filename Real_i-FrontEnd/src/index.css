@@ -300,44 +300,44 @@
 }
 
 html.dark {
-  /* ── Dark Mode Surface & Text ────────────────────────── */
-  --surface-50: #fafafa;
-  --surface-100: #f0f0f0;
-  --surface-200: #d6d6d6;
-  --surface-300: #a8a8a8;
-  --surface-400: #737373;
-  --surface-500: #525252;
-  --surface-600: #3d3d3d;
-  --surface-700: #2a2a2a;
-  --surface-800: #1a1a1a;
-  --surface-900: #111111;
-  --surface-950: #0a0a0a;
+  /* ── Dark Mode Surface & Text (Deep Navy Base: #070D22) ────────────────────────── */
+  --surface-50: #F8FAFC;
+  --surface-100: #E8EEFB;
+  --surface-200: #C9D7F5;
+  --surface-300: #9BB0E5;
+  --surface-400: #647BB8;
+  --surface-500: #3D528A;
+  --surface-600: #283A6D;
+  --surface-700: #1D2D59;
+  --surface-800: #142145;
+  --surface-900: #0B132B;
+  --surface-950: #070D22;
 
-  --bg-page: #0a0a0a;
-  --bg-card: #111111;
-  --bg-card-hover: #1a1a1a;
-  --bg-elevated: #1a1a1a;
-  --bg-sidebar: #111111;
-  --bg-navbar: rgba(10, 10, 10, 0.7);
-  --border-subtle: rgba(212, 175, 55, 0.08);
-  --border-card: rgba(212, 175, 55, 0.08);
-  --shadow-card-color: rgba(0, 0, 0, 0.4);
-  --shadow-card-color-hover: rgba(0, 0, 0, 0.5);
-  --text-primary-color: #f0f0f0;
-  --text-secondary-color: #a8a8a8;
-  --text-muted-color: #737373;
-  --glass-bg: rgba(26, 26, 26, 0.4);
-  --glass-border: rgba(212, 175, 55, 0.15);
-  --glass-card-bg: rgba(17, 17, 17, 0.7);
-  --glass-navbar-bg: rgba(10, 10, 10, 0.7);
-  --skeleton-from: #1a1a1a;
-  --skeleton-to: #2a2a2a;
+  --bg-page: #070D22;
+  --bg-card: #0B132B;
+  --bg-card-hover: #101B3B;
+  --bg-elevated: #142145;
+  --bg-sidebar: #050919;
+  --bg-navbar: rgba(7, 13, 34, 0.85);
+  --border-subtle: rgba(212, 175, 55, 0.12);
+  --border-card: rgba(212, 175, 55, 0.18);
+  --shadow-card-color: rgba(0, 0, 0, 0.5);
+  --shadow-card-color-hover: rgba(0, 0, 0, 0.65);
+  --text-primary-color: #F8FAFC;
+  --text-secondary-color: #C9D7F5;
+  --text-muted-color: #9BB0E5;
+  --glass-bg: rgba(11, 19, 43, 0.6);
+  --glass-border: rgba(212, 175, 55, 0.2);
+  --glass-card-bg: rgba(11, 19, 43, 0.75);
+  --glass-navbar-bg: rgba(7, 13, 34, 0.85);
+  --skeleton-from: #142145;
+  --skeleton-to: #1D2D59;
 
   /* ── Decorative strokes — dark mode originals ─────────── */
-  --deco-ring-stroke:    rgba(212, 175, 55, 0.20);  /* gold ring, subtle */
-  --deco-line-stroke:    rgba(212, 175, 55, 0.20);  /* diagonal gold lines */
-  --deco-dash-stroke:    rgba(255, 255, 255, 0.05); /* dashed circle, near invisible */
-  --sys-label-color:     rgba(212, 175, 55, 0.40);  /* diagnostic labels */
+  --deco-ring-stroke:    rgba(212, 175, 55, 0.25);  /* gold ring, subtle */
+  --deco-line-stroke:    rgba(212, 175, 55, 0.25);  /* diagonal gold lines */
+  --deco-dash-stroke:    rgba(255, 255, 255, 0.08); /* dashed circle, near invisible */
+  --sys-label-color:     rgba(212, 175, 55, 0.50);  /* diagnostic labels */
 }
 
 @layer base {
@@ -414,26 +414,26 @@ html.dark {
 }
 
 .gradient-dark {
-  background: linear-gradient(180deg, #0a0a0a 0%, #111111 50%, #0a0a0a 100%);
+  background: linear-gradient(180deg, #070D22 0%, #0B132B 50%, #070D22 100%);
 }
 
 .gradient-hero {
   background: 
-    radial-gradient(ellipse at 20% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(184, 134, 11, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(139, 105, 20, 0.04) 0%, transparent 50%),
-    linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
+    radial-gradient(ellipse at 20% 50%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(27, 45, 92, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(7, 13, 34, 0.8) 0%, transparent 50%),
+    linear-gradient(180deg, #070D22 0%, #0B132B 100%);
 }
 
 .gradient-mesh {
   background:
-    radial-gradient(ellipse at 20% 80%, rgba(212, 175, 55, 0.12) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 20%, rgba(184, 134, 11, 0.09) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 50%, rgba(139, 105, 20, 0.06) 0%, transparent 60%);
+    radial-gradient(ellipse at 20% 80%, rgba(212, 175, 55, 0.15) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(184, 134, 11, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(27, 45, 92, 0.3) 0%, transparent 60%);
 }
 
 .gradient-card {
-  background: linear-gradient(145deg, rgba(26, 26, 26, 0.8) 0%, rgba(17, 17, 17, 0.95) 100%);
+  background: linear-gradient(145deg, rgba(20, 33, 69, 0.85) 0%, rgba(11, 19, 43, 0.95) 100%);
 }
 
 .text-gradient {

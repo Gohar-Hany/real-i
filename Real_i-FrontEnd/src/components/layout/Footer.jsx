@@ -88,8 +88,8 @@ export default function Footer() {
             {/* Brand Column */}
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center gap-3 group">
-                <div className="w-12 h-12 rounded-[4px] border border-[#D4AF37] overflow-hidden transition-all duration-300">
-                  <img src="/logo.png" alt="REAL_i" loading="lazy" width="48" height="48" className="w-full h-full object-contain" />
+                <div className="w-12 h-12 flex items-center justify-center shrink-0">
+                  <img src="/logo.png" alt="REAL_i" loading="lazy" width="48" height="48" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-gradient font-heading tracking-wider">

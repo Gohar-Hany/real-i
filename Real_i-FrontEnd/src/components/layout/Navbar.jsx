@@ -69,7 +69,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div ref={linksRef} className="hidden md:flex items-center gap-8 px-8 py-3 rounded-full bg-surface-900 dark:bg-[#1A1A1A]/80 dark:backdrop-blur-md border border-[#D4AF37]/50 shadow-[0_4px_20px_rgba(212,175,55,0.1)]">
+          <div ref={linksRef} className="hidden md:flex items-center gap-8 px-8 py-3 rounded-full bg-surface-900 dark:bg-[#0B132B]/80 dark:backdrop-blur-md border border-[#D4AF37]/50 shadow-[0_4px_20px_rgba(212,175,55,0.1)]">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
