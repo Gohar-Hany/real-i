@@ -62,28 +62,28 @@ export default function Navbar() {
               <img src="/logo.png" alt="REAL_i Logo" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white font-heading tracking-[0.2em] leading-none">
-                REAL<span className="text-primary-400">_i</span>
+              <h1 className="text-xl font-bold text-surface-50 dark:text-white font-heading tracking-[0.2em] leading-none">
+                REAL<span className="text-primary-600 dark:text-primary-400">_i</span>
               </h1>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div ref={linksRef} className="hidden md:flex items-center gap-8 px-8 py-3 rounded-full bg-surface-900/90 dark:bg-surface-900/85 backdrop-blur-xl border border-primary-500/35 shadow-[0_4px_25px_rgba(212,175,55,0.15)]">
+          <div ref={linksRef} className="hidden md:flex items-center gap-8 px-8 py-3 rounded-full bg-surface-900/90 dark:bg-surface-900/85 backdrop-blur-xl border border-surface-600/30 dark:border-primary-500/35 shadow-[0_4px_25px_rgba(212,175,55,0.15)]">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 className={`relative font-mono text-xs uppercase tracking-widest transition-all duration-300 transform active:scale-95 group ${
                   isActive(link.path)
-                    ? 'text-primary-300 font-bold'
-                    : 'text-surface-300 hover:text-primary-300'
+                    ? 'text-primary-600 dark:text-primary-300 font-bold'
+                    : 'text-surface-600 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-300'
                 }`}
               >
                 {link.label}
                 {/* Non-layout-shifting underline */}
                 <span 
-                  className={`absolute -bottom-2 left-0 h-[2px] bg-primary-400 shadow-[0_0_8px_rgba(212,175,55,0.8)] transition-all duration-300 ease-out ${
+                  className={`absolute -bottom-2 left-0 h-[2px] bg-primary-500 dark:bg-primary-400 shadow-[0_0_8px_rgba(212,175,55,0.8)] transition-all duration-300 ease-out ${
                     isActive(link.path) ? 'w-full' : 'w-0 group-hover:w-1/2'
                   }`} 
                 />
@@ -97,7 +97,7 @@ export default function Navbar() {
             {user ? (
               <Link
                 to={user.role === 'admin' ? '/admin' : '/student'}
-                className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-mono text-xs uppercase font-bold tracking-widest hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 rounded-lg"
+                className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-mono text-xs uppercase font-bold tracking-widest hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 rounded-lg shadow-sm"
               >
                 Dashboard
                 <ChevronRight size={16} />
@@ -106,13 +106,13 @@ export default function Navbar() {
               <>
                 <Link
                   to="/login"
-                  className="font-mono text-xs text-surface-300 uppercase tracking-widest hover:text-primary-300 transition-colors duration-300 px-3 py-2"
+                  className="font-mono text-xs text-surface-50 dark:text-surface-200 uppercase tracking-widest hover:text-primary-600 dark:hover:text-primary-300 transition-colors duration-300 px-3 py-2 font-bold"
                 >
                   Login
                 </Link>
                 <Link
                   to="/login?register=true"
-                  className="px-6 py-2.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-mono text-xs uppercase font-bold tracking-widest hover:shadow-[0_0_20px_rgba(212,175,55,0.5)] hover:scale-[1.02] transition-all duration-300 rounded-lg cursor-pointer"
+                  className="px-6 py-2.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 font-mono text-xs uppercase font-bold tracking-widest hover:shadow-[0_0_20px_rgba(212,175,55,0.5)] hover:scale-[1.02] transition-all duration-300 rounded-lg cursor-pointer shadow-sm"
                 >
                   <span>Get Started</span>
                 </Link>
@@ -123,7 +123,7 @@ export default function Navbar() {
           {/* Mobile Toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-xl text-surface-400 hover:text-surface-100 transition-colors"
+            className="md:hidden p-2 rounded-xl text-surface-50 dark:text-surface-300 hover:text-primary-600 transition-colors"
             aria-expanded={mobileOpen}
             aria-label="Toggle navigation menu"
           >
@@ -134,7 +134,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 glass-navbar border-t border-surface-800/50 animate-slide-down">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-surface-900 border-b border-surface-600/40 dark:border-surface-800/50 shadow-2xl animate-slide-down">
           <div className="px-4 py-6 space-y-2">
             {navLinks.map((link) => (
               <Link
@@ -143,19 +143,19 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive(link.path)
-                    ? 'bg-primary-500/10 text-primary-400'
-                    : 'text-surface-400 hover:bg-surface-800/50 hover:text-surface-100'
+                    ? 'bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold'
+                    : 'text-surface-50 dark:text-surface-300 hover:bg-surface-800 hover:text-primary-600'
                 }`}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="pt-4 border-t border-surface-800/50 space-y-2">
+            <div className="pt-4 border-t border-surface-600/30 dark:border-surface-800/50 space-y-2">
               {user ? (
                 <Link
                   to={user.role === 'admin' ? '/admin' : '/student'}
                   onClick={() => setMobileOpen(false)}
-                  className="block w-full text-center px-4 py-3 rounded-xl gradient-primary text-surface-950 text-sm font-semibold"
+                  className="block w-full text-center px-4 py-3 rounded-xl bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 text-sm font-bold shadow-sm"
                 >
                   Dashboard
                 </Link>
@@ -164,14 +164,14 @@ export default function Navbar() {
                   <Link
                     to="/login"
                     onClick={() => setMobileOpen(false)}
-                    className="block w-full text-center px-4 py-3 rounded-xl border border-surface-700 text-surface-300 text-sm font-medium"
+                    className="block w-full text-center px-4 py-3 rounded-xl border border-surface-600/40 dark:border-surface-700 text-surface-50 dark:text-surface-200 text-sm font-bold hover:bg-surface-800"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/login?register=true"
                     onClick={() => setMobileOpen(false)}
-                    className="block w-full text-center px-4 py-3 rounded-xl gradient-primary text-surface-950 text-sm font-semibold"
+                    className="block w-full text-center px-4 py-3 rounded-xl bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 text-sm font-bold shadow-sm"
                   >
                     Get Started Free
                   </Link>

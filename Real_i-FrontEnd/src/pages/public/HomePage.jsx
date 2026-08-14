@@ -319,17 +319,16 @@ export default function HomePage() {
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-20">
             <div className="max-w-2xl features-header">
               <div
-                className="inline-flex items-center gap-3 px-5 py-2 mb-6 border border-primary-500/40 backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(212,175,55,0.15)]"
-                style={{ background: 'var(--glass-card-bg)' }}
+                className="inline-flex items-center gap-3 px-5 py-2 mb-6 border border-primary-500/40 backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(212,175,55,0.15)] bg-surface-900"
               >
-                <div className="w-2 h-2 rounded-full bg-primary-400 animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.9)]" />
-                <span className="font-mono text-[11px] text-primary-400 uppercase tracking-[0.3em] font-semibold">SYS.CAPABILITIES // ACTIVE</span>
+                <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.9)]" />
+                <span className="font-mono text-[11px] text-primary-600 dark:text-primary-400 uppercase tracking-[0.3em] font-semibold">SYS.CAPABILITIES // ACTIVE</span>
               </div>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-100 mb-6 font-heading uppercase tracking-wide leading-[1.1]">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-50 dark:text-surface-100 mb-6 font-heading uppercase tracking-wide leading-[1.1]">
                 Learn Smarter, <br className="hidden sm:block" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-400 to-primary-500 drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]">Not Harder</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500 drop-shadow-sm">Not Harder</span>
               </h2>
-              <p className="text-surface-300 text-lg leading-relaxed">
+              <p className="text-surface-400 dark:text-surface-300 text-lg leading-relaxed font-sans">
                 Our platform combines cutting-edge AI with premium educational content 
                 to create an unmatched learning experience.
               </p>
@@ -337,13 +336,13 @@ export default function HomePage() {
             <div className="hidden lg:flex items-end gap-8">
               <div className="text-right">
                 <p className="font-mono text-[10px] text-surface-400 uppercase tracking-widest mb-1">Modules</p>
-                <p className="font-heading text-5xl font-bold text-primary-400/40">04</p>
+                <p className="font-heading text-5xl font-bold text-primary-600/40 dark:text-primary-400/40">04</p>
               </div>
-              <div className="w-px h-16 bg-surface-700" />
+              <div className="w-px h-16 bg-surface-600/30 dark:bg-surface-700" />
               <div className="text-right">
                 <p className="font-mono text-[10px] text-surface-400 uppercase tracking-widest mb-1">Status</p>
-                <p className="font-mono text-sm text-primary-400 font-semibold flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-primary-400 animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.8)]" /> ALL ONLINE
+                <p className="font-mono text-sm text-primary-600 dark:text-primary-400 font-semibold flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.8)]" /> ALL ONLINE
                 </p>
               </div>
             </div>
@@ -354,12 +353,12 @@ export default function HomePage() {
               const Icon = ICON_MAP[feature.icon] || Brain;
               const moduleIds = ['AX-01', 'BX-02', 'CX-03', 'DX-04'];
               return (
-                <div key={i} className="feature-card group relative bg-surface-900 border border-surface-600/40 dark:border-primary-500/20 hover:border-primary-500/60 rounded-2xl p-8 lg:p-10 overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5),0_0_24px_rgba(212,175,55,0.18)] hover:-translate-y-1 shadow-sm" style={{opacity: 1}}>
-                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
-                  <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
-                  <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
-                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary-500/0 group-hover:border-primary-500/60 transition-all duration-500 ease-out" />
-                  <div className="absolute top-4 right-5 font-mono text-[9px] text-surface-400 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors duration-500 tracking-widest font-semibold">MOD.{moduleIds[i]}</div>
+                <div key={i} className="feature-card group relative bg-surface-900 border border-surface-600/40 dark:border-primary-500/20 hover:border-primary-500 rounded-2xl p-8 lg:p-10 overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5),0_0_24px_rgba(212,175,55,0.18)] hover:-translate-y-1 shadow-sm" style={{opacity: 1}}>
+                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary-500/0 group-hover:border-primary-500 transition-all duration-500 ease-out" />
+                  <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary-500/0 group-hover:border-primary-500 transition-all duration-500 ease-out" />
+                  <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary-500/0 group-hover:border-primary-500 transition-all duration-500 ease-out" />
+                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary-500/0 group-hover:border-primary-500 transition-all duration-500 ease-out" />
+                  <div className="absolute top-4 right-5 font-mono text-[9px] text-surface-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-500 tracking-widest font-semibold">MOD.{moduleIds[i]}</div>
                   <div className="absolute -bottom-6 -right-4 font-heading text-[120px] font-bold text-surface-600/10 dark:text-surface-800/40 group-hover:text-primary-500/10 transition-colors duration-700 leading-none select-none pointer-events-none">0{i + 1}</div>
 
                   <div className="relative w-16 h-16 mb-8">
@@ -368,12 +367,12 @@ export default function HomePage() {
                       <circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="176" strokeDashoffset="176" className="text-primary-500 feature-ring" style={{transition: 'stroke-dashoffset 1s ease-out'}} />
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <Icon size={26} className="text-primary-600 dark:text-primary-400/80 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(212,175,55,0.7)] group-hover:scale-110" strokeWidth={1.5} />
+                      <Icon size={26} className="text-primary-600 dark:text-primary-400 group-hover:text-primary-500 dark:group-hover:text-primary-300 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(212,175,55,0.7)] group-hover:scale-110" strokeWidth={1.5} />
                     </div>
                   </div>
 
                   <h3 className="text-lg font-bold text-surface-50 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-300 mb-3 font-heading uppercase tracking-wider transition-colors duration-500">{feature.title}</h3>
-                  <p className="text-sm text-surface-400 dark:text-surface-300 group-hover:text-surface-300 dark:group-hover:text-surface-200 leading-relaxed transition-colors duration-500">{feature.description}</p>
+                  <p className="text-sm text-surface-400 dark:text-surface-300 group-hover:text-surface-500 dark:group-hover:text-surface-200 leading-relaxed transition-colors duration-500 font-sans">{feature.description}</p>
                   <div className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-primary-400 via-primary-500 to-transparent transition-all duration-700 ease-out" />
                 </div>
               );
@@ -387,9 +386,9 @@ export default function HomePage() {
           ═══════════════════════════════════════════════════════ */}
       <section ref={statsRef} className="py-24 relative">
         <div className="max-w-[950px] mx-auto px-4 sm:px-6 relative z-10">
-          <div className="bg-gradient-to-b from-surface-900/95 to-surface-900/80 border border-primary-500/40 hover:border-primary-500/60 rounded-2xl p-10 md:p-14 relative overflow-hidden shadow-[0_0_40px_rgba(212,175,55,0.15)] backdrop-blur-xl transition-all duration-500">
+          <div className="bg-surface-900 border border-primary-500/40 hover:border-primary-500/60 rounded-2xl p-10 md:p-14 relative overflow-hidden shadow-md dark:shadow-[0_0_40px_rgba(212,175,55,0.15)] backdrop-blur-xl transition-all duration-500">
             {/* Decorative SVG Circuit Pattern */}
-            <svg className="absolute top-0 right-0 w-52 h-52 opacity-20 text-primary-400 pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
+            <svg className="absolute top-0 right-0 w-52 h-52 opacity-20 text-primary-500 dark:text-primary-400 pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
               <circle cx="20" cy="20" r="1.5" fill="currentColor" />
               <circle cx="50" cy="15" r="1.5" fill="currentColor" />
               <circle cx="80" cy="40" r="1.5" fill="currentColor" />
@@ -409,11 +408,11 @@ export default function HomePage() {
                 { value: PLATFORM_STATS.satisfactionRate, label: 'Satisfaction', suffix: '%', highlight: true },
               ].map((stat, i) => (
                 <div key={i} className="text-center">
-                  <p className="text-[34px] md:text-[38px] font-bold font-heading tabular-nums text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-400 to-primary-500 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+                  <p className="text-[34px] md:text-[38px] font-bold font-heading tabular-nums text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500 drop-shadow-sm">
                     <span className="stat-number" data-target={stat.value}>0</span>
                     {stat.suffix}
                   </p>
-                  <p className="text-[12px] uppercase tracking-[0.1em] text-surface-300 font-semibold mt-2">{stat.label}</p>
+                  <p className="text-[12px] uppercase tracking-[0.1em] text-surface-400 dark:text-surface-300 font-semibold mt-2 font-mono">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -426,18 +425,18 @@ export default function HomePage() {
           ═══════════════════════════════════════════════════════ */}
       <section ref={howItWorksRef} className="py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-dot-pattern opacity-10" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-500/3 blur-[200px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-500/5 blur-[200px] rounded-full pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-2xl mb-20 hiw-header">
-            <div className="inline-flex items-center gap-3 px-5 py-2 mb-6 border border-primary-500/30 bg-surface-950/80 backdrop-blur-sm">
-              <span className="font-mono text-[11px] text-primary-500 uppercase tracking-[0.3em]">&gt;_ INIT.PROTOCOL</span>
+            <div className="inline-flex items-center gap-3 px-5 py-2 mb-6 border border-primary-500/30 bg-surface-900 backdrop-blur-sm rounded-full shadow-sm">
+              <span className="font-mono text-[11px] text-primary-600 dark:text-primary-400 uppercase tracking-[0.3em] font-bold">&gt;_ INIT.PROTOCOL</span>
             </div>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-100 mb-6 font-heading uppercase tracking-wide leading-[1.1]">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-50 dark:text-surface-100 mb-6 font-heading uppercase tracking-wide leading-[1.1]">
               Start in <br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600">4 Steps</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-400 dark:via-primary-500 dark:to-primary-600">4 Steps</span>
             </h2>
-            <p className="text-surface-400 text-lg leading-relaxed">
+            <p className="text-surface-400 dark:text-surface-300 text-lg leading-relaxed font-sans">
               From signup to mastery — our streamlined process gets you learning in minutes.
             </p>
           </div>
@@ -457,10 +456,9 @@ export default function HomePage() {
                     <div className="relative">
                       <div className="absolute inset-0 rounded-full bg-primary-500/20 scale-0 group-hover:scale-150 transition-transform duration-700 blur-md" />
                       <div
-                        className="relative w-[72px] h-[72px] border-2 border-surface-600/60 dark:border-surface-700 group-hover:border-primary-500 transition-all duration-500 rounded-full flex items-center justify-center z-10 shadow-sm"
-                        style={{ background: 'var(--bg-card)' }}
+                        className="relative w-[72px] h-[72px] border-2 border-surface-600/60 dark:border-surface-700 group-hover:border-primary-500 transition-all duration-500 rounded-full flex items-center justify-center z-10 shadow-sm bg-surface-900"
                       >
-                        <span className="font-heading text-2xl font-bold text-surface-400 dark:text-surface-600 group-hover:text-primary-500 transition-colors duration-500">
+                        <span className="font-heading text-2xl font-bold text-surface-400 dark:text-surface-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-500">
                           0{step.step}
                         </span>
                       </div>
@@ -472,14 +470,14 @@ export default function HomePage() {
                   </div>
 
                   {/* Card Content */}
-                  <div className="relative bg-surface-900 border border-surface-600/40 dark:border-surface-800/50 group-hover:border-primary-500/50 p-7 transition-all duration-500 overflow-hidden rounded-xl shadow-sm hover:shadow-md">
-                    <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-primary-500/0 group-hover:border-primary-500/50 transition-all duration-500" />
+                  <div className="relative bg-surface-900 border border-surface-600/40 dark:border-surface-800/50 group-hover:border-primary-500 p-7 transition-all duration-500 overflow-hidden rounded-xl shadow-sm hover:shadow-md">
+                    <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-primary-500/0 group-hover:border-primary-500 transition-all duration-500" />
                     <div className="absolute inset-0 bg-primary-500/0 group-hover:bg-primary-500/5 transition-all duration-700" />
                     <div className="relative z-10">
-                      <h3 className="text-lg font-bold text-surface-50 dark:text-white mb-3 font-heading uppercase tracking-wider transition-colors duration-500">
+                      <h3 className="text-lg font-bold text-surface-50 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-300 mb-3 font-heading uppercase tracking-wider transition-colors duration-500">
                         {step.title}
                       </h3>
-                      <p className="text-sm text-surface-400 dark:text-surface-300 leading-relaxed transition-colors duration-500">
+                      <p className="text-sm text-surface-400 dark:text-surface-300 leading-relaxed transition-colors duration-500 font-sans">
                         {step.description}
                       </p>
                     </div>
@@ -499,14 +497,14 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-dot-pattern opacity-20" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16 section-title">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-900 border border-surface-600/40 dark:border-primary-500/20 text-xs font-medium text-primary-600 dark:text-primary-400 mb-4 shadow-sm">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-900 border border-surface-600/40 dark:border-primary-500/20 text-xs font-medium text-primary-600 dark:text-primary-400 mb-4 shadow-sm font-mono">
               <Bot size={14} />
               AI Agents
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 dark:text-surface-100 mb-4 font-heading tracking-tight">
-              Meet Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600">AI Team</span>
+              Meet Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-400 dark:via-primary-500 dark:to-primary-600">AI Team</span>
             </h2>
-            <p className="text-surface-400 dark:text-surface-400 text-lg">
+            <p className="text-surface-400 dark:text-surface-300 text-lg font-sans">
               Three specialized AI agents, each designed to help you in a unique way.
             </p>
           </div>
@@ -606,21 +604,16 @@ export default function HomePage() {
           ═══════════════════════════════════════════════════════ */}
       <section ref={testimonialsRef} className="py-24 relative overflow-hidden">
         {/* Background: adapts to theme */}
-        <div className="absolute inset-0" style={{ background: 'var(--bg-page)' }} />
-        {/* Subtle tinted overlay */}
-        <div className="absolute inset-0" style={{ background: isLight
-          ? 'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(184,134,11,0.06) 0%, transparent 60%)'
-          : 'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212,175,55,0.06) 0%, transparent 60%)'
-        }} />
+        <div className="absolute inset-0 bg-surface-950" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-16">
           <div className="text-center max-w-2xl mx-auto section-title">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-900 border border-surface-600/40 dark:border-primary-500/20 text-xs font-medium text-primary-600 dark:text-primary-400 mb-4 shadow-sm">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-900 border border-surface-600/40 dark:border-primary-500/20 text-xs font-medium text-primary-600 dark:text-primary-400 mb-4 shadow-sm font-mono">
               <Star size={12} className="text-primary-500 fill-primary-500" />
               Trusted by Top Performers
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface-50 dark:text-surface-100 mb-4 font-heading uppercase tracking-wide">
-              Loved by <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600">Students</span>
+              Loved by <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-400 dark:via-primary-500 dark:to-primary-600">Students</span>
             </h2>
           </div>
         </div>
@@ -638,13 +631,13 @@ export default function HomePage() {
             {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
               <div 
                 key={i} 
-                className="w-[280px] sm:w-[340px] flex-shrink-0 relative backdrop-blur-md rounded-2xl p-6 sm:p-7 border bg-surface-900 border-surface-600/40 dark:border-surface-800/60 hover:border-primary-500/40 transition-all duration-500 hover:-translate-y-1 overflow-hidden group shadow-sm hover:shadow-md"
+                className="w-[280px] sm:w-[340px] flex-shrink-0 relative rounded-2xl p-6 sm:p-7 border bg-surface-900 border-surface-600/40 dark:border-surface-800/60 hover:border-primary-500/60 transition-all duration-500 hover:-translate-y-1 overflow-hidden group shadow-sm hover:shadow-md"
               >
                 {/* Accent Line */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-l-2xl" />
                 
                 {/* Watermark Quote */}
-                <div className="absolute -top-6 -right-2 text-[120px] font-serif leading-none pointer-events-none select-none text-surface-600/20 dark:text-surface-800/30 group-hover:text-primary-500/15 transition-colors duration-500">
+                <div className="absolute -top-6 -right-2 text-[120px] font-serif leading-none pointer-events-none select-none text-surface-600/10 dark:text-surface-800/30 group-hover:text-primary-500/15 transition-colors duration-500">
                   "
                 </div>
                 
@@ -656,7 +649,7 @@ export default function HomePage() {
                   </div>
                   
                   {/* Quote */}
-                  <p className="text-[14px] leading-[1.7] mb-6 italic flex-1 font-light text-surface-200 dark:text-surface-300">
+                  <p className="text-[14px] leading-[1.7] mb-6 italic flex-1 font-light text-surface-50 dark:text-surface-200">
                     {t.content}
                   </p>
                   
@@ -666,8 +659,8 @@ export default function HomePage() {
                       {t.name.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-[13px] font-semibold text-surface-50 dark:text-surface-100">{t.name}</p>
-                      <p className="text-[10px] text-primary-600 dark:text-primary-400 uppercase tracking-wider mt-0.5 font-medium">{t.role}</p>
+                      <p className="text-[13px] font-semibold text-surface-50 dark:text-surface-100 font-heading">{t.name}</p>
+                      <p className="text-[10px] text-primary-600 dark:text-primary-400 uppercase tracking-wider mt-0.5 font-medium font-mono">{t.role}</p>
                     </div>
                   </div>
                 </div>
@@ -685,9 +678,9 @@ export default function HomePage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-primary-500/15 blur-[160px] rounded-full pointer-events-none" />
 
         <div className="max-w-[950px] mx-auto px-4 sm:px-6 relative z-10">
-          <div className="bg-gradient-to-b from-surface-900/95 via-surface-900/85 to-surface-900/95 rounded-2xl p-10 md:p-16 relative overflow-hidden text-center border border-primary-500/40 shadow-[0_0_50px_rgba(212,175,55,0.18)] backdrop-blur-xl">
+          <div className="bg-surface-900 rounded-2xl p-10 md:p-16 relative overflow-hidden text-center border border-primary-500/40 shadow-md dark:shadow-[0_0_50px_rgba(212,175,55,0.18)] backdrop-blur-xl">
             {/* Decorative SVG geometric mark */}
-            <svg className="absolute top-0 right-0 w-60 h-60 opacity-20 text-primary-400 pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
+            <svg className="absolute top-0 right-0 w-60 h-60 opacity-20 text-primary-500 dark:text-primary-400 pointer-events-none transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
               <circle cx="20" cy="20" r="1.5" fill="currentColor" />
               <circle cx="50" cy="15" r="1.5" fill="currentColor" />
               <circle cx="80" cy="40" r="1.5" fill="currentColor" />
@@ -700,30 +693,30 @@ export default function HomePage() {
             </svg>
 
             <div className="relative z-10">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-500/15 border border-primary-500/30 text-xs uppercase tracking-[0.2em] text-primary-300 font-semibold mb-5 shadow-[0_0_15px_rgba(212,175,55,0.2)]">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-500/10 dark:bg-primary-500/15 border border-primary-500/30 text-xs uppercase tracking-[0.2em] text-primary-700 dark:text-primary-300 font-semibold mb-5 shadow-sm font-mono">
                 Start your journey
               </span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-5 font-heading tracking-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.5)]">
-                Ready to Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-400 to-primary-500">Real Intelligence?</span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-surface-50 dark:text-white mb-5 font-heading tracking-tight">
+                Ready to Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500">Real Intelligence?</span>
               </h2>
-              <p className="text-base sm:text-lg text-surface-200 max-w-xl mx-auto mb-10 leading-relaxed font-sans">
+              <p className="text-base sm:text-lg text-surface-400 dark:text-surface-200 max-w-xl mx-auto mb-10 leading-relaxed font-sans">
                 Join thousands of students already learning smarter with AI. 
                 Start your journey today — completely free.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link
                   to="/login?register=true"
-                  className="bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 px-8 py-3.5 rounded-xl text-sm font-semibold hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] hover:scale-[1.02] transition-all inline-flex items-center gap-2.5 font-sans cursor-pointer"
+                  className="bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 px-8 py-3.5 rounded-xl text-sm font-bold hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] hover:scale-[1.02] transition-all inline-flex items-center gap-2.5 font-sans cursor-pointer shadow-sm"
                 >
                   <span>Get Started Free</span>
                   <ArrowRight size={16} />
                 </Link>
                 <Link
                   to="/courses"
-                  className="bg-surface-900/80 border border-primary-500/40 text-primary-300 px-8 py-3.5 rounded-xl text-sm font-semibold hover:bg-primary-500/10 hover:border-primary-500 hover:text-white transition-all inline-flex items-center gap-2.5 font-sans"
+                  className="bg-surface-800 border border-surface-600/40 dark:border-primary-500/40 text-surface-50 dark:text-primary-300 px-8 py-3.5 rounded-xl text-sm font-bold hover:bg-surface-700 hover:border-primary-500 hover:text-primary-600 dark:hover:text-white transition-all inline-flex items-center gap-2.5 font-sans cursor-pointer shadow-sm"
                 >
                   <span>Browse Courses</span>
-                  <Play size={15} className="text-primary-400" />
+                  <Play size={15} className="text-primary-500 dark:text-primary-400" />
                 </Link>
               </div>
             </div>
@@ -731,7 +724,7 @@ export default function HomePage() {
         </div>
 
         {/* Tagline */}
-        <p className="text-center mt-12 text-sm text-primary-400/60 tracking-[0.2em] uppercase font-heading">
+        <p className="text-center mt-12 text-sm text-primary-600 dark:text-primary-400/80 tracking-[0.2em] uppercase font-heading font-semibold">
           Real Intelligence isn't predicted. It's built.
         </p>
       </section>

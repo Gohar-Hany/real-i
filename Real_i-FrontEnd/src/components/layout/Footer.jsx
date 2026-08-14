@@ -92,15 +92,15 @@ export default function Footer() {
                   <img src="/logo.png" alt="REAL_i" loading="lazy" width="48" height="48" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gradient font-heading tracking-wider">
+                  <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500 font-heading tracking-wider">
                     REAL_i
                   </h3>
-                  <p className="text-[9px] text-surface-500 tracking-[0.2em] uppercase">
+                  <p className="text-[9px] text-surface-400 tracking-[0.2em] uppercase font-mono">
                     Building Real Intelligence
                   </p>
                 </div>
               </Link>
-              <p className="text-surface-400 text-sm leading-relaxed max-w-sm mb-6">
+              <p className="text-surface-400 text-sm leading-relaxed max-w-sm mb-6 font-sans">
                 A next-generation AI-powered Learning Management System. 
                 REAL_i adapts to your learning pace, evaluates your performance dynamically, and builds true intelligence.
               </p>
@@ -112,7 +112,7 @@ export default function Footer() {
                     href={social.href}
                     target={social.external ? '_blank' : undefined}
                     rel={social.external ? 'noopener noreferrer' : undefined}
-                    className="w-10 h-10 rounded-[4px] border border-surface-700 flex items-center justify-center text-surface-400 hover:text-[#D4AF37] hover:border-[#D4AF37] transition-colors"
+                    className="w-10 h-10 rounded-xl border border-surface-600/40 dark:border-surface-700 bg-surface-900 flex items-center justify-center text-surface-400 hover:text-primary-500 hover:border-primary-500 transition-colors shadow-sm"
                   >
                     <social.icon size={18} />
                   </a>
