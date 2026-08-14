@@ -172,6 +172,10 @@ export default function Footer() {
                   <img 
                     src="/scorpius-logo.png" 
                     alt="SCORPIUS AI Logo" 
+                    width="20"
+                    height="20"
+                    loading="lazy"
+                    decoding="async"
                     className="h-5 w-auto object-contain dark:brightness-0 dark:invert opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" 
                   />
                   <span className="text-xs font-black tracking-widest text-surface-50 dark:text-surface-200 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary-600 group-hover:to-primary-400 dark:group-hover:from-white dark:group-hover:to-primary-300 transition-all duration-300">

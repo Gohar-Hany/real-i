@@ -159,6 +159,9 @@ export default function LoginPage() {
               <img 
                 src="/logo.png" 
                 alt="REAL_i Logo" 
+                width="36"
+                height="36"
+                decoding="async"
                 className="w-9 h-9 object-contain drop-shadow-[0_0_12px_rgba(212,175,55,0.5)] transition-transform duration-300 group-hover:scale-105" 
               />
               <span className="text-xl font-bold font-heading tracking-wider text-white">
@@ -202,7 +205,7 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Badges / Pill Tags */}
+            {/* Badges / Pill Tags */}
               <div className="flex flex-wrap items-center gap-2 pt-2.5 border-t border-slate-700/60">
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/15 border border-emerald-500/35 text-emerald-300">
                   <CheckCircle2 size={12} />
@@ -236,7 +239,7 @@ export default function LoginPage() {
           <div className="flex items-center justify-between w-full mb-3 lg:mb-4">
             {/* Mobile-only Logo */}
             <div className="flex lg:hidden items-center gap-2.5">
-              <img src="/logo.png" alt="REAL_i" className="w-8 h-8 object-contain" />
+              <img src="/logo.png" alt="REAL_i" width="32" height="32" decoding="async" className="w-8 h-8 object-contain" />
               <span className="text-xl font-bold font-heading tracking-wider text-surface-50 dark:text-white">
                 REAL<span className="text-primary-500">_i</span>
               </span>
