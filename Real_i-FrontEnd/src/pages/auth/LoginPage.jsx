@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, ArrowLeft, Brain, Sparkles, CheckCircle2, ShieldCheck, Award } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, ArrowLeft, Brain, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/components/common/Toast';
 import { Helmet } from 'react-helmet-async';
 
@@ -10,7 +10,7 @@ const LOCKOUT_DURATION = 60; // seconds
 
 export default function LoginPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isRegistering, setIsRegistering] = useState(searchParams.get('register') === 'true');
+  const isRegistering = searchParams.get('register') === 'true';
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,13 +27,7 @@ export default function LoginPage() {
   const toast = useToast();
   const formRef = useRef(null);
 
-  // Sync state with URL parameter if it changes
-  useEffect(() => {
-    setIsRegistering(searchParams.get('register') === 'true');
-  }, [searchParams]);
-
   const toggleAuthMode = (mode) => {
-    setIsRegistering(mode);
     setShowForgotPassword(false);
     setErrors({});
     if (mode) {
