@@ -165,8 +165,8 @@ export default function Footer() {
                 href="https://scorpius-platform.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="SCORPIUS AI Platform"
-                title="SCORPIUS AI Platform"
+                aria-label="Developed by SCORPIUS AI"
+                title="Developed by SCORPIUS AI"
                 className="group flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-surface-900 border border-surface-600/40 dark:border-surface-700/50 hover:bg-surface-800 hover:border-primary-500/50 transition-all duration-500 hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] cursor-pointer shadow-sm"
               >
                 <span className="text-[10px] uppercase tracking-widest text-surface-400 group-hover:text-surface-300 transition-colors">

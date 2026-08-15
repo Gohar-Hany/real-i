@@ -13,8 +13,10 @@ import PageLoader from '@/components/common/PageLoader';
 import PublicLayout from '@/layouts/PublicLayout';
 import DashboardLayout from '@/layouts/DashboardLayout';
 
+// Eager Landing Page (Zero chunk waterfall on initial load)
+import HomePage from '@/pages/public/HomePage';
+
 // Lazy Loaded Pages
-const HomePage = lazy(() => import('@/pages/public/HomePage'));
 const AboutPage = lazy(() => import('@/pages/public/AboutPage'));
 const ContactPage = lazy(() => import('@/pages/public/ContactPage'));
 const CoursesPage = lazy(() => import('@/pages/public/CoursesPage'));

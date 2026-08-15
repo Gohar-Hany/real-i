@@ -27,36 +27,21 @@ export default function HomePage() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // ── Hero Entrance: Glitch-in ──
-      const heroTl = gsap.timeline({ delay: 0.3 });
-      
-      heroTl.to(".hero-title", { opacity: 1, duration: 0.1 })
-            .fromTo(".glitch-char", 
-              { opacity: 0, y: 30, scale: 1.1, filter: "blur(8px)" },
-              { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 1.2, stagger: 0.08, ease: "expo.out" }
-            )
-            .to(".hero-subtitle", { opacity: 1, duration: 0.1 }, "-=0.8")
-            .fromTo(".glitch-word",
-              { opacity: 0, y: 20, filter: "blur(4px)" },
-              { opacity: 1, y: 0, filter: "blur(0px)", duration: 1, stagger: 0.05, ease: "expo.out" },
-              "-=0.8"
-            )
-            .fromTo(".hero-action",
-              { opacity: 0, y: 15 },
-              { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: "expo.out" },
-              "-=0.5"
-            );
-
       // ── Subtle Background Motion (Parallax) ──
       const parallaxContainer = document.querySelector('.hero-parallax');
-      window.handleMouseMove = (e) => {
-          if(parallaxContainer) {
-              const x = (e.clientX / window.innerWidth - 0.5) * 20;
-              const y = (e.clientY / window.innerHeight - 0.5) * 20;
-              gsap.to(parallaxContainer, { x: x, y: y, duration: 1.5, ease: "power2.out" });
-          }
+      const handleMouseMove = (e) => {
+        if (parallaxContainer && window.innerWidth > 768) {
+          const x = (e.clientX / window.innerWidth - 0.5) * 16;
+          const y = (e.clientY / window.innerHeight - 0.5) * 16;
+          gsap.to(parallaxContainer, { x, y, duration: 1.2, ease: "power2.out" });
+        }
       };
-      document.addEventListener("mousemove", window.handleMouseMove);
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+
+      // Clean up parallax on unmount
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+      };
 
       // ── Features Section — Cinematic Staggered Reveal ──
       ScrollTrigger.create({
@@ -223,22 +208,22 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Text Column (Left aligned) */}
             <div className="lg:col-span-7 flex flex-col items-start text-left">
-              <div className="flex items-center gap-3 mb-6 opacity-0 hero-action">
+              <div className="flex items-center gap-3 mb-6 hero-action">
                 <span className="w-12 h-[2px] bg-primary-500 dark:bg-primary-400 shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary-600 dark:text-primary-400 font-semibold">System Online</span>
               </div>
-              <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl text-surface-50 dark:text-surface-100 mb-6 tracking-tight opacity-0 hero-title font-bold">
+              <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl text-surface-50 dark:text-surface-100 mb-6 tracking-tight hero-title font-bold">
                 <span className="inline-block glitch-char uppercase">R</span>
                 <span className="inline-block glitch-char uppercase">E</span>
                 <span className="inline-block glitch-char uppercase">A</span>
                 <span className="inline-block glitch-char uppercase">L</span>_
                 <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-400 via-primary-500 to-primary-600 dark:from-primary-400 dark:via-primary-300 dark:to-primary-500 inline-block glitch-char drop-shadow-[0_0_20px_rgba(212,175,55,0.6)] lowercase">i</span>
               </h1>
-              <p className="font-heading text-2xl md:text-3xl lg:text-4xl text-surface-200 mb-10 max-w-2xl opacity-0 hero-subtitle tracking-tight leading-tight">
+              <p className="font-heading text-2xl md:text-3xl lg:text-4xl text-surface-200 mb-10 max-w-2xl hero-subtitle tracking-tight leading-tight">
                 <span className="inline-block glitch-word">Real</span> <span className="inline-block glitch-word">Intelligence</span> <span className="inline-block glitch-word">isn't</span> <span className="inline-block glitch-word">predicted.</span> <br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500 inline-block glitch-word font-bold drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">It's</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500 inline-block glitch-word font-bold drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">built.</span>
               </p>
-              <div className="flex flex-col sm:flex-row items-center gap-6 opacity-0 hero-action w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-center gap-6 hero-action w-full sm:w-auto">
                 <Link
                   to="/login?register=true"
                   className="hero-cta-primary relative group bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 px-8 py-4 font-mono uppercase font-bold tracking-widest overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.55)] hover:scale-[1.02] w-full sm:w-auto flex items-center justify-center gap-3 rounded-xl shadow-md cursor-pointer"
@@ -257,7 +242,7 @@ export default function HomePage() {
             </div>
             
             {/* Abstract Visual/Data Column (Right) */}
-            <div className="hidden lg:flex lg:col-span-5 relative h-full items-center justify-center opacity-0 hero-action">
+            <div className="hidden lg:flex lg:col-span-5 relative h-full items-center justify-center hero-action">
               {/* High-tech abstract representation */}
               <div className="relative w-full aspect-square max-w-md">
                 {/* Connecting lines */}
@@ -359,7 +344,11 @@ export default function HomePage() {
                   <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary-500/0 group-hover:border-primary-500 transition-all duration-500 ease-out" />
                   <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary-500/0 group-hover:border-primary-500 transition-all duration-500 ease-out" />
                   <div className="absolute top-4 right-5 font-mono text-[9px] text-surface-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-500 tracking-widest font-semibold">MOD.{moduleIds[i]}</div>
-                  <div aria-hidden="true" className="absolute -bottom-6 -right-4 font-heading text-[120px] font-bold text-surface-600/10 dark:text-surface-800/40 group-hover:text-primary-500/10 transition-colors duration-700 leading-none select-none pointer-events-none">0{i + 1}</div>
+                  <svg aria-hidden="true" className="absolute -bottom-6 -right-4 w-40 h-28 pointer-events-none select-none" viewBox="0 0 160 110">
+                    <text x="160" y="100" textAnchor="end" className="font-heading font-bold text-[120px] fill-surface-600/10 dark:fill-surface-800/40 group-hover:fill-primary-500/10 transition-colors duration-700">
+                      0{i + 1}
+                    </text>
+                  </svg>
 
                   <div className="relative w-16 h-16 mb-8">
                     <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 64 64">
@@ -517,6 +506,7 @@ export default function HomePage() {
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzgzOR4u6w0Sxdjjv_NUxG9UiXJeey13upASnvrEsQCuAl6Kg8xOwZvbxZUBS2PHK5678KNwKRprWsg89vmVXem1ONo9vfKHjqBEorNDL3620By2CQMNW73rxYJGMRNJVkAZH8Qfj56iBvGo9i_iFZfgWQ3OBzIvu-J5p_3M-r5c9rXpTzdNK8tiOH-6-vV4fCVdZKmkvvOl4EQWCkc37nEzh7Ad1vK7yV_q0W-xuG_GaNTYOnKvp-5aLS2qYeauwbLGwcgGoE1AA"
                 alt="Admin Agent"
                 loading="lazy"
+                decoding="async"
                 width="800"
                 height="600"
                 className="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 opacity-75 group-hover:opacity-100"
@@ -549,6 +539,7 @@ export default function HomePage() {
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJdTkDIHsoWoKj6cpNMZItpvLtHcuCoUodDXzCBcTBdB-hjSufY8s5xO85OGu42BGg0mtFW_68HomCxLvo4sk5QeRWX00ew8q3hNaWnJjwd0-DjtG3l0wdvYHvu4v9k3un6Auj-dMlGfMcJueFmtr50h7Or2-3jnejoX2KC-iMNebGdSQcRsdajmDLcfYy3A1Y4mMYLWv7rCgkP0fAgL35QX0jpAOvjEphfknW3HF_CiBB7z-LRaHbOse5fDFMuqc_FzSbKCu8Ads"
                   alt="Student Agent"
                   loading="lazy"
+                  decoding="async"
                   width="400"
                   height="300"
                   className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 opacity-65 group-hover:opacity-90"
@@ -575,6 +566,7 @@ export default function HomePage() {
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvn5zETFFGGfNSBUv-cKH2TnSBa8kojciUpRKXhlORLR7u4_dz7lyMh9b4p8AL_ndylREyTOXpiUDZDOGX746zoTkdc1W3lqTNoi0hHyhXf6YxmBNQyWOuC6pzLcbngbfj_aoLClIXJu43eWsATj4mPne4p3T5gj96DWnnX-j_Uq0eXjQ5-rfyqXtlvtgJAVBl5_czDGBwyFTd3EJWidcdy8_STWvjDTup2I_eKlTgGf9nqR8uZYun2bwUb1eNlYW58TepPXvlYT0"
                   alt="Friend Agent"
                   loading="lazy"
+                  decoding="async"
                   width="400"
                   height="300"
                   className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 opacity-65 group-hover:opacity-90"
