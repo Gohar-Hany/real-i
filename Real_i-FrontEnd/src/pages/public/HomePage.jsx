@@ -359,7 +359,7 @@ export default function HomePage() {
                   <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary-500/0 group-hover:border-primary-500 transition-all duration-500 ease-out" />
                   <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary-500/0 group-hover:border-primary-500 transition-all duration-500 ease-out" />
                   <div className="absolute top-4 right-5 font-mono text-[9px] text-surface-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-500 tracking-widest font-semibold">MOD.{moduleIds[i]}</div>
-                  <div className="absolute -bottom-6 -right-4 font-heading text-[120px] font-bold text-surface-600/10 dark:text-surface-800/40 group-hover:text-primary-500/10 transition-colors duration-700 leading-none select-none pointer-events-none">0{i + 1}</div>
+                  <div aria-hidden="true" className="absolute -bottom-6 -right-4 font-heading text-[120px] font-bold text-surface-600/10 dark:text-surface-800/40 group-hover:text-primary-500/10 transition-colors duration-700 leading-none select-none pointer-events-none">0{i + 1}</div>
 
                   <div className="relative w-16 h-16 mb-8">
                     <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 64 64">

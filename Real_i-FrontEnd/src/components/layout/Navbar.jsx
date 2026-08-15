@@ -64,7 +64,7 @@ export default function Navbar() {
                 alt="REAL_i Logo" 
                 width="40" 
                 height="40" 
-                fetchpriority="high"
+                fetchPriority="high"
                 decoding="async"
                 className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]" 
               />
