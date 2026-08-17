@@ -68,7 +68,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div className={`flex items-center h-16 px-4 border-b border-surface-600/30 dark:border-surface-800/50 ${collapsed ? 'justify-center' : 'gap-3'}`}>
         <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 shadow-sm">
-          <img src="/logo.png" alt="REAL_i" loading="lazy" width="36" height="36" className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]" />
+          <img src="/logo.webp" alt="REAL_i" loading="lazy" decoding="async" width="36" height="36" className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]" />
         </div>
         {!collapsed && (
           <div className="animate-fade-in">

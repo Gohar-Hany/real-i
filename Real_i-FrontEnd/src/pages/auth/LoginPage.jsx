@@ -157,7 +157,7 @@ export default function LoginPage() {
           <div className="relative z-10">
             <Link to="/" className="inline-flex items-center gap-2.5 group">
               <img 
-                src="/logo.png" 
+                src="/logo.webp" 
                 alt="REAL_i Logo" 
                 width="36"
                 height="36"
@@ -239,7 +239,7 @@ export default function LoginPage() {
           <div className="flex items-center justify-between w-full mb-3 lg:mb-4">
             {/* Mobile-only Logo */}
             <div className="flex lg:hidden items-center gap-2.5">
-              <img src="/logo.png" alt="REAL_i" width="32" height="32" decoding="async" className="w-8 h-8 object-contain" />
+              <img src="/logo.webp" alt="REAL_i" width="32" height="32" decoding="async" className="w-8 h-8 object-contain" />
               <span className="text-xl font-bold font-heading tracking-wider text-surface-50 dark:text-white">
                 REAL<span className="text-primary-500">_i</span>
               </span>

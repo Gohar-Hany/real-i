@@ -89,7 +89,7 @@ export default function Footer() {
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center gap-3 group">
                 <div className="w-12 h-12 flex items-center justify-center shrink-0">
-                  <img src="/logo.png" alt="REAL_i" loading="lazy" width="48" height="48" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
+                  <img src="/logo.webp" alt="REAL_i" loading="lazy" decoding="async" width="48" height="48" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-amber-700 dark:from-primary-300 dark:via-primary-400 dark:to-primary-500 font-heading tracking-wider">
@@ -174,7 +174,7 @@ export default function Footer() {
                 </span>
                 <div className="flex items-center gap-1.5">
                   <img 
-                    src="/scorpius-logo.png" 
+                    src="/scorpius-logo.webp" 
                     alt="SCORPIUS AI Logo" 
                     width="20"
                     height="20"

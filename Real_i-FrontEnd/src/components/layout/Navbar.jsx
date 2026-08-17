@@ -60,7 +60,7 @@ export default function Navbar() {
           <Link to="/" ref={logoRef} className="flex items-center gap-3 group">
             <div className="w-10 h-10 overflow-hidden group-hover:shadow-glow transition-shadow duration-300 flex items-center justify-center">
               <img 
-                src="/logo.png" 
+                src="/logo.webp" 
                 alt="REAL_i Logo" 
                 width="40" 
                 height="40" 

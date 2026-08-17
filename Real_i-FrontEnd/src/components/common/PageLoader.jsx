@@ -110,8 +110,9 @@ export default function PageLoader({ onComplete }) {
           <div className="loader-logo-ring loader-logo-ring-2" />
           <div className="loader-logo-inner">
             <img
-              src="/logo.png"
+              src="/logo.webp"
               alt="REAL_i"
+              decoding="async"
               className="loader-logo-img"
             />
           </div>
