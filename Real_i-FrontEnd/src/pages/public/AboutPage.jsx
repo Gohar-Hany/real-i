@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ArrowRight, CheckCircle2, Shield, BrainCircuit, Users, Terminal } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Shield, BrainCircuit, Terminal } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 

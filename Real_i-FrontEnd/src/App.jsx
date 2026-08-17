@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState, useEffect } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
@@ -7,7 +7,6 @@ import { AssessmentProvider } from '@/contexts/AssessmentContext';
 import { ToastProvider } from '@/components/common/Toast';
 import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
-import PageLoader from '@/components/common/PageLoader';
 
 // Layouts
 import PublicLayout from '@/layouts/PublicLayout';

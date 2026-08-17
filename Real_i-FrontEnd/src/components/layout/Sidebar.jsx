@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useSidebar } from '@/contexts/SidebarContext';
 import {
   LayoutDashboard, MessageSquare, Database, Upload, BookOpen,
-  BrainCircuit, LogOut, ChevronLeft, ChevronRight, Shield,
+  BrainCircuit, LogOut, ChevronLeft, ChevronRight,
   Users, BarChart3, GraduationCap, UserCircle, FolderOpen,
   Settings, ClipboardList, CalendarDays, Video,
 } from 'lucide-react';
