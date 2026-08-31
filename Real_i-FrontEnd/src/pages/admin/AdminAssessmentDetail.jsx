@@ -19,16 +19,30 @@ export default function AdminAssessmentDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
-  const { getAssessmentById, getSubmissionsForAssessment, publishAssessment, deleteAssessment, duplicateAssessment, fetchAssessments } = useAssessments();
+  const { getAssessmentById, fetchAssessmentById, getSubmissionsForAssessment, publishAssessment, deleteAssessment, duplicateAssessment } = useAssessments();
+
+  const [localAssessment, setLocalAssessment] = useState(() => getAssessmentById(id));
+  const [loadingAssessment, setLoadingAssessment] = useState(!localAssessment);
+  const assessment = localAssessment;
 
   const [submissions, setSubmissions] = useState([]);
   const [loadingSubs, setLoadingSubs] = useState(true);
 
   useEffect(() => {
-    fetchAssessments();
     let isMounted = true;
-    const loadSubmissions = async () => {
-      setLoadingSubs(true);
+    const loadData = async () => {
+      const existing = getAssessmentById(id);
+      if (existing) {
+        setLocalAssessment(existing);
+        setLoadingAssessment(false);
+      } else {
+        setLoadingAssessment(true);
+        const fetched = await fetchAssessmentById(id);
+        if (isMounted) {
+          setLocalAssessment(fetched);
+          setLoadingAssessment(false);
+        }
+      }
       try {
         const subs = await getSubmissionsForAssessment(id);
         if (isMounted) setSubmissions(Array.isArray(subs) ? subs : []);
@@ -38,11 +52,18 @@ export default function AdminAssessmentDetail() {
         if (isMounted) setLoadingSubs(false);
       }
     };
-    loadSubmissions();
+    loadData();
     return () => { isMounted = false; };
-  }, [id, getSubmissionsForAssessment, fetchAssessments]);
+  }, [id, getAssessmentById, fetchAssessmentById, getSubmissionsForAssessment]);
 
-  const assessment = getAssessmentById(id);
+  if (loadingAssessment) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 animate-fade-in-up">
+        <div className="w-10 h-10 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mb-4" />
+        <p className="text-sm text-surface-400 font-medium">Loading assessment details...</p>
+      </div>
+    );
+  }
 
   if (!assessment) {
     return (

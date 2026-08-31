@@ -49,7 +49,7 @@ export default function AdminStudents() {
   const handleRoleChange = async (userId, newRole) => {
     try {
       await updateUserRole(userId, newRole);
-      setUsers(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
+      setUsers(prev => prev.map(u => (u.id === userId || u._id === userId) ? { ...u, role: newRole } : u));
       toast.success(`Role updated to ${newRole}`);
     } catch (err) {
       toast.error(err.message || 'Failed to update role');
@@ -62,7 +62,7 @@ export default function AdminStudents() {
     }
     try {
       await deleteUser(userId);
-      setUsers(prev => prev.filter(u => u.id !== userId));
+      setUsers(prev => prev.filter(u => u.id !== userId && u._id !== userId));
       toast.success('User deleted successfully');
     } catch (err) {
       toast.error(err.message || 'Failed to delete user');

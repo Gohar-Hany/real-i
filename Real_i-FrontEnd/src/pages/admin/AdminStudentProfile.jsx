@@ -151,7 +151,7 @@ export default function AdminStudentProfile() {
         if (found) {
           // 1. Fetch Quiz Results
           try {
-            const data = await getUserResults(found.id);
+            const data = await getUserResults(found.id || found._id);
             const results = data?.results || [];
             setQuizResults(Array.isArray(results) ? results : []);
           } catch {
@@ -160,7 +160,7 @@ export default function AdminStudentProfile() {
 
           // 2. Fetch Assessment Submissions
           try {
-            const subs = await getStudentSubmissions(found.id);
+            const subs = await getStudentSubmissions(found.id || found._id);
             setStudentSubmissions(Array.isArray(subs) ? subs : []);
           } catch {
             setStudentSubmissions([]);

@@ -88,7 +88,7 @@ export default function AdminAssessmentCreate() {
   const isEdit = !!id;
   const navigate = useNavigate();
   const toast = useToast();
-  const { createAssessment, updateAssessment, getAssessmentById } = useAssessments();
+  const { createAssessment, updateAssessment, getAssessmentById, fetchAssessmentById } = useAssessments();
 
   const [step, setStep] = useState(0);
   const [form, setForm] = useState(INITIAL_FORM);
@@ -111,15 +111,21 @@ export default function AdminAssessmentCreate() {
   // Load existing assessment for edit
   useEffect(() => {
     if (isEdit) {
-      const existing = getAssessmentById(id);
-      if (existing) {
-        setForm({ ...existing, questions: existing.questions?.length > 0 ? existing.questions : [EMPTY_QUESTION()] });
-      } else {
-        toast.error('Assessment not found');
-        navigate('/admin/assessments');
-      }
+      let isMounted = true;
+      const load = async () => {
+        const existing = getAssessmentById(id) || await fetchAssessmentById(id);
+        if (!isMounted) return;
+        if (existing) {
+          setForm({ ...existing, questions: existing.questions?.length > 0 ? existing.questions : [EMPTY_QUESTION()] });
+        } else {
+          toast.error('Assessment not found');
+          navigate('/admin/assessments');
+        }
+      };
+      load();
+      return () => { isMounted = false; };
     }
-  }, [id]);
+  }, [id, isEdit, getAssessmentById, fetchAssessmentById, navigate, toast]);
 
   const update = (key, value) => setForm(prev => ({ ...prev, [key]: value }));
 

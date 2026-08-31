@@ -13,9 +13,12 @@ export default function StudentExamTake() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const toast = useToast();
-  const { getAssessmentById, submitAssessment, saveProgress: ctxSaveProgress, getInProgressSubmission } = useAssessments();
+  const { getAssessmentById, fetchAssessmentById, submitAssessment, saveProgress: ctxSaveProgress, getInProgressSubmission } = useAssessments();
 
-  const assessment = getAssessmentById(id);
+  const [localAssessment, setLocalAssessment] = useState(() => getAssessmentById(id));
+  const [loadingAssessment, setLoadingAssessment] = useState(!localAssessment);
+  const assessment = localAssessment;
+
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(0);
@@ -27,6 +30,26 @@ export default function StudentExamTake() {
 
   // Shuffle questions if needed
   const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      const existing = getAssessmentById(id);
+      if (existing) {
+        setLocalAssessment(existing);
+        setLoadingAssessment(false);
+      } else {
+        setLoadingAssessment(true);
+        const fetched = await fetchAssessmentById(id);
+        if (isMounted) {
+          setLocalAssessment(fetched);
+          setLoadingAssessment(false);
+        }
+      }
+    };
+    load();
+    return () => { isMounted = false; };
+  }, [id, getAssessmentById, fetchAssessmentById]);
 
   useEffect(() => {
     if (!assessment) return;
@@ -124,6 +147,15 @@ export default function StudentExamTake() {
     const s = secs % 60;
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
+
+  if (loadingAssessment) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 animate-fade-in-up">
+        <div className="w-10 h-10 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mb-4" />
+        <p className="text-sm text-surface-400 font-medium">Loading assessment details...</p>
+      </div>
+    );
+  }
 
   if (!assessment || !questions.length) {
     return (

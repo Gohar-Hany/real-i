@@ -192,9 +192,30 @@ export function AssessmentProvider({ children }) {
   }, []);
 
   // ── Queries ────────────────────────────────────────────────
-  const getAssessmentById = useCallback((id) =>
-    assessments.find(a => a.id === id) || null,
-  [assessments]);
+  const getAssessmentById = useCallback((id) => {
+    if (!id) return null;
+    return assessments.find(a => String(a.id) === String(id) || String(a._id) === String(id)) || null;
+  }, [assessments]);
+
+  const fetchAssessmentById = useCallback(async (id) => {
+    if (!id) return null;
+    const existing = assessments.find(a => String(a.id) === String(id) || String(a._id) === String(id));
+    if (existing) return existing;
+    try {
+      const raw = await api.getAssessment(id);
+      if (raw) {
+        const mapped = mapAssessmentToFrontend(raw);
+        setAssessments(prev => {
+          if (prev.some(a => String(a.id) === String(mapped.id))) return prev;
+          return [...prev, mapped];
+        });
+        return mapped;
+      }
+    } catch (e) {
+      console.error(`Failed to fetch assessment ${id}:`, e);
+    }
+    return null;
+  }, [assessments]);
 
   const getSubmissionsForAssessment = useCallback(async (assessmentId) => {
     try {
@@ -254,13 +275,14 @@ export function AssessmentProvider({ children }) {
     saveProgress,
     // Queries
     getAssessmentById,
+    fetchAssessmentById,
     getSubmissionsForAssessment,
     getMySubmissions: getMySubmissionsAction,
     getStudentSubmission,
     getInProgressSubmission,
     getAssessmentStats,
     generateQId,
-  }), [assessments, submissions, loading, fetchAssessments, createAssessment, updateAssessment, deleteAssessment, publishAssessment, duplicateAssessment, submitAssessmentAction, saveProgress, getAssessmentById, getSubmissionsForAssessment, getMySubmissionsAction, getStudentSubmission, getInProgressSubmission, getAssessmentStats]);
+  }), [assessments, submissions, loading, fetchAssessments, createAssessment, updateAssessment, deleteAssessment, publishAssessment, duplicateAssessment, submitAssessmentAction, saveProgress, getAssessmentById, fetchAssessmentById, getSubmissionsForAssessment, getMySubmissionsAction, getStudentSubmission, getInProgressSubmission, getAssessmentStats]);
 
   return <AssessmentContext.Provider value={value}>{children}</AssessmentContext.Provider>;
 }

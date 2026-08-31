@@ -13,14 +13,46 @@ export default function StudentAssignmentSubmit() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const toast = useToast();
-  const { getAssessmentById, submitAssessment, getStudentSubmission } = useAssessments();
+  const { getAssessmentById, fetchAssessmentById, submitAssessment, getStudentSubmission } = useAssessments();
 
-  const assessment = getAssessmentById(id);
-  const existingSub = getStudentSubmission(id, user?.id);
+  const [localAssessment, setLocalAssessment] = useState(() => getAssessmentById(id));
+  const [loadingAssessment, setLoadingAssessment] = useState(!localAssessment);
+  const assessment = localAssessment;
 
   const [textAnswer, setTextAnswer] = useState('');
   const [files, setFiles] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      const existing = getAssessmentById(id);
+      if (existing) {
+        setLocalAssessment(existing);
+        setLoadingAssessment(false);
+      } else {
+        setLoadingAssessment(true);
+        const fetched = await fetchAssessmentById(id);
+        if (isMounted) {
+          setLocalAssessment(fetched);
+          setLoadingAssessment(false);
+        }
+      }
+    };
+    load();
+    return () => { isMounted = false; };
+  }, [id, getAssessmentById, fetchAssessmentById]);
+
+  const existingSub = getStudentSubmission(id, user?.id);
+
+  if (loadingAssessment) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 animate-fade-in-up">
+        <div className="w-10 h-10 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mb-4" />
+        <p className="text-sm text-surface-400 font-medium">Loading assessment details...</p>
+      </div>
+    );
+  }
 
   if (!assessment) {
     return (
