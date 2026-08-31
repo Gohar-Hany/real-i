@@ -1,0 +1,794 @@
+@import "tailwindcss";
+
+/* ── Local Font Declarations ─────────────────────────────── */
+/* Orbitron (hero display) — distinctive brand wordmark font */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/Orbitron-700.woff2') format('woff2');
+}
+
+/* Montserrat (headings) — brand board primary heading font   */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/Montserrat-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/Montserrat-500.ttf') format('truetype'),
+       url('/fonts/Montserrat-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/Montserrat-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/Montserrat-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/Montserrat-800.woff2') format('woff2');
+}
+
+/* Inter (body) — brand board primary body font               */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/Inter-variable.woff2') format('woff2');
+}
+
+/* IBM Plex Mono (code/labels) */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/IBMPlexMono-400.woff2') format('woff2');
+}
+
+/* Tajawal (Arabic) */
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/Tajawal.woff2') format('woff2');
+}
+
+/* Enable class-based dark mode */
+@variant dark (&:where(.dark, .dark *));
+
+/* ═══════════════════════════════════════════════════════════
+   REAL_i Design System — Premium Dark-First Gold Theme
+   ═══════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Gold Primary & Champagne Radiance ────────────────────── */
+  --color-primary-50:  #fefcf3;  /* Champagne highlight */
+  --color-primary-100: #faf3d4;  /* Warm Pale Gold */
+  --color-primary-200: #f4e5a0;  /* Soft Warm Gold */
+  --color-primary-300: #ebd466;  /* Radiant Gold */
+  --color-primary-400: #e0c038;  /* Vibrant Accent Gold */
+  --color-primary-500: #D4AF37;  /* Core Brand Gold */
+  --color-primary-600: #B8860B;  /* Deep Goldenrod */
+  --color-primary-700: #996f08;  /* Rich Amber Bronze */
+  --color-primary-800: #755405;  /* Deep Antique Gold */
+  --color-primary-900: #523b03;
+  --color-primary-950: #2a1e01;
+
+  --color-accent-50:  #fefcf3;
+  --color-accent-100: #faf3d4;
+  --color-accent-200: #f4e5a0;
+  --color-accent-300: #ebd466;
+  --color-accent-400: #e0c038;
+  --color-accent-500: #D4AF37;
+  --color-accent-600: #B8860B;
+  --color-accent-700: #996f08;
+  --color-accent-800: #755405;
+  --color-accent-900: #523b03;
+  --color-accent-950: #2a1e01;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+  --color-warning-900: #78350f;
+
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-200: #fecaca;
+  --color-danger-300: #fca5a5;
+  --color-danger-400: #f87171;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-danger-800: #991b1b;
+  --color-danger-900: #7f1d1d;
+  --color-danger-950: #450a0a;
+
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+
+  /* ── Surface — Dynamic Light & Dark Surface Palette ────────── */
+  --color-surface-50:  var(--surface-50);
+  --color-surface-100: var(--surface-100);
+  --color-surface-200: var(--surface-200);
+  --color-surface-300: var(--surface-300);
+  --color-surface-400: var(--surface-400);
+  --color-surface-500: var(--surface-500);
+  --color-surface-600: var(--surface-600);
+  --color-surface-700: var(--surface-700);
+  --color-surface-800: var(--surface-800);
+  --color-surface-900: var(--surface-900);
+  --color-surface-950: var(--surface-950);
+
+  /* ── Typography — 3-tier font system ────────────────────────── */
+  --font-sans:    'Inter', system-ui, -apple-system, sans-serif;     /* body */
+  --font-heading: 'Orbitron', system-ui, sans-serif;                  /* hero/display: REAL_i wordmark */
+  --font-display: 'Montserrat', system-ui, sans-serif;                /* section headings h2/h3 */
+  --font-mono:    'IBM Plex Mono', 'Fira Code', monospace;            /* code/labels */
+  --font-arabic:  'Tajawal', 'Inter', sans-serif;                     /* Arabic */
+
+  /* ── Semantic UI Colors — WCAG AA contrast-verified ─────────── */
+  --color-success-base:   #2FA86A;
+  --color-success-muted:  #1D6B44;
+  --color-success-text:   #6FD9A0;
+  --color-warning-base:   #D9A441;
+  --color-warning-muted:  #8C6A00;
+  --color-warning-text:   #F0C14B;
+  --color-danger-base:    #E0524A;
+  --color-danger-muted:   #8C2A25;
+  --color-danger-text:    #FF8079;
+  --color-info-base:      #4A90D9;
+  --color-info-muted:     #2C5A8C;
+  --color-info-text:      #8AC0F0;
+
+  /* ── Animations ─────────────────────────────────────────────── */
+  --animate-fade-in: fade-in 0.4s ease-out forwards;
+  --animate-slide-up: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-down: slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-right: slide-right 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-left: slide-left 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-scale-in: scale-in 0.3s ease-out forwards;
+  --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.5s infinite;
+  --animate-bounce-in: bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  --animate-gold-glow: gold-glow 3s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-spin-slow: spin-slow 20s linear infinite;
+}
+
+/* ── Keyframes ───────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-right {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-left {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes typing-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-8px); opacity: 1; }
+}
+
+@keyframes gold-glow {
+  0%, 100% { box-shadow: 0 0 24px rgba(212, 175, 55, 0.35), 0 0 48px rgba(212, 175, 55, 0.15); }
+  50% { box-shadow: 0 0 36px rgba(212, 175, 55, 0.55), 0 0 72px rgba(212, 175, 55, 0.25); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scan {
+  0% { top: -5%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 105%; opacity: 0; }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes line-draw {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes counter {
+  from { --num: 0; }
+}
+
+/* ── Base Styles ──────────────────────────────────────────── */
+:root {
+  /* ═══════════════════════════════════════════════════════════
+     REAL_i Light Mode — Luxury Porcelain + Deep Navy + Gold
+     High contrast, 100% WCAG AA compliant, warm golden accents
+     ═══════════════════════════════════════════════════════════ */
+  --surface-50:  #070D22;   /* Deepest Navy for high-contrast text */
+  --surface-100: #0E1A3D;   /* Dark Navy headings */
+  --surface-200: #233157;   /* Strong body text */
+  --surface-300: #3E4F77;   /* Standard body text */
+  --surface-400: #5D6E96;   /* Secondary / muted descriptions */
+  --surface-500: #8C9BBF;   /* Muted captions & icons */
+  --surface-600: #CBD5E8;   /* Borders */
+  --surface-700: #E0E7F4;   /* Hairline dividers */
+  --surface-800: #EEF3FA;   /* Elevated surfaces, tags, pills */
+  --surface-900: #FFFFFF;   /* Crisp white cards & panels */
+  --surface-950: #F8FAFD;   /* Clean luxury porcelain page background */
+
+  --gold-accent:       #B8860B;   /* Dark goldenrod for light mode contrast */
+  --gold-accent-dark:  #8B6914;
+  --gold-stroke:       #B8860B;
+  --gold-border:       #B8860B;
+
+  --bg-page:        #F8FAFD;   /* Porcelain page background */
+  --bg-card:        #FFFFFF;   /* Crisp white card surface */
+  --bg-card-hover:  #F4F7FC;   /* Subtle hover lift */
+  --bg-elevated:    #EEF3FA;   /* Modal / dropdown level */
+  --bg-sidebar:     #F0F4FA;   /* Clean sidebar */
+  --bg-navbar:      rgba(248, 250, 253, 0.92);
+
+  --border-subtle:      rgba(14, 26, 61, 0.08);
+  --border-card:        rgba(184, 134, 11, 0.22);
+  --border-strong:      rgba(184, 134, 11, 0.45);
+
+  --shadow-card-color:       rgba(14, 26, 61, 0.06);
+  --shadow-card-color-hover: rgba(184, 134, 11, 0.15);
+
+  --text-primary-color:   #070D22;
+  --text-secondary-color: #233157;
+  --text-muted-color:     #5D6E96;
+
+  --glass-bg:          rgba(255, 255, 255, 0.85);
+  --glass-border:      rgba(184, 134, 11, 0.25);
+  --glass-card-bg:     rgba(255, 255, 255, 0.90);
+  --glass-navbar-bg:   rgba(248, 250, 253, 0.92);
+
+  --deco-ring-stroke:  rgba(184, 134, 11, 0.35);
+  --deco-line-stroke:  rgba(184, 134, 11, 0.30);
+  --deco-dash-stroke:  rgba(14, 26, 61, 0.12);
+  --sys-label-color:   rgba(184, 134, 11, 0.90);
+
+  --skeleton-from: #EEF3FA;
+  --skeleton-to:   #E0E7F4;
+}
+
+html.dark {
+  /* ══════════════════════════════════════════════════════════
+     REAL_i Dark Mode — Luminous Deep Navy & Radiant Gold
+     Elevated base with warm champagne & amber lighting
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── Luminous Deep Navy Surface Scale ───────────────────── */
+  --surface-950: #080E24;  /* Luminous base navy (NOT pitch black) */
+  --surface-900: #0E1A3D;  /* Radiant card background */
+  --surface-800: #172856;  /* Elevated surfaces, modals, popovers */
+  --surface-700: #243B7A;  /* Hairline borders & separators */
+  --surface-600: #35529F;  /* Hover / interactive borders */
+
+  /* ── Crisp & Bright Neutrals ────────────────────────────── */
+  --surface-500: #627FBD;  /* Muted captions & icons */
+  --surface-400: #93ADE4;  /* Secondary body text */
+  --surface-300: #C2D4F8;  /* Subtitles & strong body */
+  --surface-200: #E2ECFE;  /* High contrast text */
+  --surface-100: #F3F7FF;  /* Crisp near-white headings */
+  --surface-50:  #FFFFFF;  /* Pure brilliant white */
+
+  /* ── Semantic Backgrounds (Luminous & Rich) ─────────────── */
+  --bg-page:        #080E24;              /* Base rich navy */
+  --bg-card:        #0E1A3D;              /* Elevated card surface */
+  --bg-card-hover:  #142452;              /* Warm hover lift */
+  --bg-elevated:    #172856;              /* Modal & dropdown level */
+  --bg-sidebar:     #060B1E;              /* Sidebar deep anchor */
+  --bg-navbar:      rgba(8, 14, 36, 0.88); /* Frosted luxury header */
+
+  /* ── Warm Gold Border System ─────────────────────────────── */
+  --border-subtle:      rgba(212, 175, 55, 0.16);  /* Subtle golden hairline */
+  --border-card:        rgba(212, 175, 55, 0.28);  /* Crisp card outline */
+  --border-strong:      rgba(212, 175, 55, 0.50);  /* Radiant focus & hover */
+
+  /* ── Luminous Shadows with Ambient Gold Glow ─────────────── */
+  --shadow-card-color:       rgba(0, 0, 0, 0.45);
+  --shadow-card-color-hover: rgba(212, 175, 55, 0.15);
+
+  /* ── High Contrast Typography ────────────────────────────── */
+  --text-primary-color:   #FFFFFF;   /* Crisp Pure White for headings */
+  --text-secondary-color: #E2ECFE;   /* Bright Slate-Blue for body */
+  --text-muted-color:     #93ADE4;   /* Warm legible muted text */
+
+  /* ── Radiant Frosted Glass ───────────────────────────────── */
+  --glass-bg:          rgba(14, 26, 61, 0.72);
+  --glass-border:      rgba(212, 175, 55, 0.32);
+  --glass-card-bg:     rgba(14, 26, 61, 0.82);
+  --glass-navbar-bg:   rgba(8, 14, 36, 0.90);
+
+  /* ── Skeleton Loading ────────────────────────────────────── */
+  --skeleton-from: #172856;
+  --skeleton-to:   #243B7A;
+
+  /* ── Decorative Gold Strokes ─────────────────────────────── */
+  --deco-ring-stroke:  rgba(212, 175, 55, 0.38);
+  --deco-line-stroke:  rgba(212, 175, 55, 0.32);
+  --deco-dash-stroke:  rgba(226, 236, 254, 0.14);
+  --sys-label-color:   rgba(212, 175, 55, 0.85);
+}
+
+@layer base {
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+    background: var(--bg-page);
+    color: var(--text-primary-color);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+
+  /* ── Scrollbar ─────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.5); }
+
+  /* ── Selection ─────────────────────────────────────── */
+  ::selection {
+    background: rgba(212, 175, 55, 0.3);
+    color: #fff;
+  }
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Utility Classes — REAL_i Premium Design System
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Buttons ────────────────────────────────────────────── */
+@layer components {
+  .btn-cyber {
+    @apply relative inline-flex items-center justify-center gap-2 bg-transparent text-primary-500 font-mono text-xs uppercase font-bold tracking-widest px-6 py-3 border border-primary-500/50 hover:bg-primary-500/10 hover:border-primary-500 hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300 rounded-none overflow-hidden cursor-pointer;
+  }
+  .btn-cyber-solid {
+    @apply relative inline-flex items-center justify-center gap-2 bg-primary-500 text-surface-950 font-mono text-xs uppercase font-bold tracking-widest px-6 py-3 border border-transparent hover:bg-primary-400 hover:shadow-[0_0_20px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all duration-300 rounded-none overflow-hidden cursor-pointer;
+  }
+}
+
+/* ── Gradients ────────────────────────────────────────────── */
+.gradient-primary {
+  background: linear-gradient(135deg, #FDE887 0%, #D4AF37 50%, #B8860B 100%);
+}
+
+.gradient-gold-soft {
+  background: linear-gradient(135deg, #FFF6D1 0%, #D4AF37 50%, #B8860B 100%);
+}
+
+.gradient-gold-radiant {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5DF8E 30%, #D4AF37 70%, #996F08 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(180deg, #080E24 0%, #101B3E 50%, #080E24 100%);
+}
+
+.gradient-hero {
+  background: 
+    radial-gradient(ellipse at 20% 40%, rgba(212, 175, 55, 0.20) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(45, 80, 170, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 85%, rgba(212, 175, 55, 0.14) 0%, transparent 50%),
+    linear-gradient(180deg, #080E24 0%, #0D183B 100%);
+}
+
+.gradient-mesh {
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(212, 175, 55, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(224, 192, 56, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(35, 65, 145, 0.40) 0%, transparent 60%);
+}
+
+.gradient-card {
+  background: linear-gradient(145deg, rgba(22, 38, 84, 0.90) 0%, rgba(14, 25, 58, 0.95) 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #FFF0B8 0%, #D4AF37 50%, #E8C84A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5DF8E 40%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-white {
+  background: linear-gradient(180deg, #ffffff 0%, #c4d4f2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Liquid Glassmorphism ─────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  border: 1px solid var(--glass-border);
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-light {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-card {
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-card);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 24px rgba(212, 175, 55, 0.15);
+}
+
+.glass-navbar {
+  background: var(--glass-navbar-bg);
+  backdrop-filter: blur(32px) saturate(2);
+  -webkit-backdrop-filter: blur(32px) saturate(2);
+  border-bottom: 1px solid var(--glass-border);
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Card utility (light & dark mode aware) ────────────────── */
+.card-surface {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  box-shadow: 0 4px 20px var(--shadow-card-color);
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.card-surface:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-strong);
+  box-shadow: 0 12px 36px var(--shadow-card-color), 0 0 24px rgba(212, 175, 55, 0.18);
+}
+
+/* ── Shadows ──────────────────────────────────────────────── */
+.shadow-card {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.shadow-card-hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(212, 175, 55, 0.18);
+}
+
+.shadow-glow {
+  box-shadow: 0 4px 24px rgba(212, 175, 55, 0.35), 0 0 32px rgba(212, 175, 55, 0.20);
+}
+
+.shadow-glow-lg {
+  box-shadow: 0 8px 48px rgba(212, 175, 55, 0.45), 0 0 64px rgba(212, 175, 55, 0.25);
+}
+
+.shadow-glow-sm {
+  box-shadow: 0 2px 14px rgba(212, 175, 55, 0.25), 0 0 14px rgba(212, 175, 55, 0.12);
+}
+
+.shadow-modal {
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6), 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.shadow-inner-gold {
+  box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.10);
+}
+
+/* ── Grid / Pattern ──────────────────────────────────────── */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 175, 55, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Light mode: slightly darker pattern for visibility on white bg */
+:root:not(.dark) .bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(10, 18, 34, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 18, 34, 0.04) 1px, transparent 1px);
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(circle, rgba(212, 175, 55, 0.08) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+:root:not(.dark) .bg-dot-pattern {
+  background-image: radial-gradient(circle, rgba(10, 18, 34, 0.06) 1px, transparent 1px);
+}
+
+/* ── Typography ──────────────────────────────────────────── */
+/* font-heading = Orbitron  → hero/display (REAL_i wordmark)  */
+/* font-display = Montserrat → section headings (h2, h3)      */
+/* font-sans    = Inter      → body text (via CSS var)         */
+.font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: 0.05em;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+.font-arabic {
+  font-family: var(--font-arabic);
+}
+
+/* ── Typing Indicator ─────────────────────────────────────── */
+.typing-dot {
+  animation: typing-dot 1.4s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── Skeleton Loading ─────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, var(--skeleton-from) 25%, var(--skeleton-to) 50%, var(--skeleton-from) 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* ── Gold Border Gradient ─────────────────────────────────── */
+.border-gradient-gold {
+  border: 1px solid transparent;
+  background-image: linear-gradient(var(--bg-card), var(--bg-card)), 
+                    linear-gradient(135deg, #D4AF37, #B8860B, #D4AF37);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* ── Hover Lift Effect ────────────────────────────────────── */
+.hover-lift {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(212, 175, 55, 0.12);
+}
+
+/* ── Gold Underline (No Layout Shift) ─────────────────────── */
+.gold-underline {
+  position: relative;
+}
+.gold-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #D4AF37, #B8860B);
+  border-radius: 2px;
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.gold-underline:hover::after {
+  width: 100%;
+}
+
+/* ── Focus Visible ────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #D4AF37;
+  outline-offset: 2px;
+}
+
+/* ── Spin Slow ────────────────────────────────────────────── */
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-gold-glow {
+  animation: gold-glow 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* ── Light mode overrides (for dashboard) ─────────────────── */
+.light-mode-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  box-shadow: 0 2px 16px var(--shadow-card-color);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT MODE — Global Element Overrides
+   Targets every hardcoded dark value that doesn't respect tokens.
+   ═══════════════════════════════════════════════════════════ */
+:root:not(.dark) {
+  /* Inherit warm bg on entire page */
+  color-scheme: light;
+}
+
+/* 1. GRADIENT UTILITIES — updated to use warm palette ─────── */
+:root:not(.dark) .gradient-dark {
+  background: linear-gradient(180deg, #EDE8DF 0%, #FAF8F4 50%, #EDE8DF 100%);
+}
+
+:root:not(.dark) .gradient-hero {
+  background:
+    radial-gradient(ellipse at 15% 60%, rgba(168, 121, 40, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 15%, rgba(139, 101, 32, 0.04) 0%, transparent 55%),
+    linear-gradient(180deg, #FAF8F4 0%, #F3EFE7 100%);
+}
+
+:root:not(.dark) .gradient-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(247,243,236,1) 100%);
+}
+
+/* Stats section keeps deep navy bg — intentional brand accent */
+:root:not(.dark) .gradient-mesh {
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(168, 121, 40, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(139, 101, 32, 0.07) 0%, transparent 55%),
+    linear-gradient(135deg, #0a1628 0%, #1a2a44 100%);
+}
+
+/* 2. SHADOW UTILITIES — replace black glows with soft navy shadows */
+:root:not(.dark) .shadow-card {
+  box-shadow: 0 4px 24px rgba(26, 42, 68, 0.09), 0 1px 3px rgba(26, 42, 68, 0.06);
+}
+
+:root:not(.dark) .shadow-card-hover {
+  box-shadow: 0 12px 40px rgba(26, 42, 68, 0.14), 0 4px 12px rgba(139, 101, 32, 0.10);
+}
+
+:root:not(.dark) .shadow-modal {
+  box-shadow: 0 32px 80px rgba(26, 42, 68, 0.22), 0 12px 24px rgba(26, 42, 68, 0.12);
+}
+
+:root:not(.dark) .shadow-glow {
+  box-shadow: 0 4px 20px rgba(139, 101, 32, 0.18), 0 2px 8px rgba(139, 101, 32, 0.10);
+}
+
+
+/* ── Gradient Shift Animation ─────────────────────────────── */
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+/* ── Number Counter ───────────────────────────────────────── */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Scanline Overlay for Cards ───────────────────────────── */
+.scanline-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 2px
+  );
+  pointer-events: none;
+  border-radius: inherit;
+}
+
