@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd Real_i-FrontEnd && npm install && npm run build",
+  "outputDirectory": "Real_i-FrontEnd/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
