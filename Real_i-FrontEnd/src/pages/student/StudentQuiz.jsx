@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { generateQuiz, getProjects, getAssignedQuizzes, submitQuizResult, getCompletedQuizzes } from '@/services/api';
+import { generateQuiz, getCourses, getUser, getAssignedQuizzes, submitQuizResult, getCompletedQuizzes } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
 import Select from '@/components/common/Select';
 import {
@@ -15,7 +15,7 @@ export default function StudentQuiz() {
   const [topic, setTopic] = useState('');
   const [numQuestions, setNumQuestions] = useState(5);
   const [projects, setProjects] = useState([]);
-  const [projectId, setProjectId] = useState('testproject1');
+  const [projectId, setProjectId] = useState('');
   const [quizData, setQuizData] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -55,14 +55,30 @@ export default function StudentQuiz() {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const list = await getProjects();
-        setProjects(list);
-        if (list.length > 0) {
-          const hasTest = list.some(p => p.project_id === 'testproject1');
-          setProjectId(hasTest ? 'testproject1' : list[0].project_id);
+        let userEnrolled = user?.enrolled_courses || [];
+        try {
+          const fresh = await getUser(user?.id);
+          if (fresh?.enrolled_courses) userEnrolled = fresh.enrolled_courses;
+        } catch {}
+
+        const allCourses = await getCourses();
+        const enrolled = (Array.isArray(allCourses) ? allCourses : []).filter(c => 
+          userEnrolled.includes(c.id) ||
+          userEnrolled.includes(c._id) ||
+          userEnrolled.includes(c.project_id) ||
+          (c.enrolled_students && c.enrolled_students.includes(user?.id))
+        );
+
+        setProjects(enrolled.map(c => ({
+          project_id: c.project_id || c.id,
+          title: c.title || c.project_id,
+        })));
+
+        if (enrolled.length > 0) {
+          const defaultProj = enrolled[0].project_id || enrolled[0].id;
+          setProjectId(prev => prev || defaultProj);
           
           let allQuizzes = [];
-          
           let completedTasksMap = {};
           try {
              const res = await getCompletedQuizzes(user?.id);
@@ -75,16 +91,18 @@ export default function StudentQuiz() {
              console.error("Failed to fetch completed quizzes", e);
           }
           
-          for (const project of list) {
+          for (const course of enrolled) {
+            const pId = course.project_id || course.id;
             try {
-              const projectQuizzes = await getAssignedQuizzes(project.project_id);
+              const projectQuizzes = await getAssignedQuizzes(pId);
               if (projectQuizzes && projectQuizzes.length > 0) {
                  const enrichedQuizzes = projectQuizzes
                    .map(q => {
                      const completedData = completedTasksMap[q.task_id];
                      return {
                        ...q, 
-                       project_id: project.project_id,
+                       project_id: pId,
+                       course_title: course.title || pId,
                        isCompleted: !!completedData,
                        score: completedData?.score,
                        total: completedData?.total,
@@ -95,15 +113,18 @@ export default function StudentQuiz() {
                  allQuizzes = [...allQuizzes, ...enrichedQuizzes];
               }
             } catch (err) {
-              console.error(`Failed to load quizzes for ${project.project_id}:`, err);
+              console.error(`Failed to load quizzes for ${pId}:`, err);
             }
           }
           // Sort: Uncompleted first, then completed
           allQuizzes.sort((a, b) => (a.isCompleted === b.isCompleted) ? 0 : a.isCompleted ? 1 : -1);
           setAssignedQuizzes(allQuizzes);
+        } else {
+          setAssignedQuizzes([]);
+          setProjects([]);
         }
       } catch (err) {
-        console.error('Failed to load projects:', err);
+        console.error('Failed to load quizzes:', err);
       }
     };
     fetchQuizzes();
@@ -323,19 +344,23 @@ export default function StudentQuiz() {
             </h2>
 
             <div className="space-y-6 relative z-10">
-              {projects.length > 0 && (
+              {projects.length > 0 ? (
                 <div>
                   <label className="block text-sm font-semibold text-surface-300 mb-2 uppercase tracking-wide">
                     Select Course
                   </label>
-                  <div className="relative z-10 w-full md:w-64">
-                  <Select
-                    value={projectId}
-                    onChange={(val) => setProjectId(val)}
-                    options={projects.map(p => ({ value: p.project_id, label: p.project_id }))}
-                    placeholder="Select Course"
-                  />
+                  <div className="relative z-10 w-full">
+                    <Select
+                      value={projectId}
+                      onChange={(val) => setProjectId(val)}
+                      options={projects.map(p => ({ value: p.project_id, label: p.title || p.project_id }))}
+                      placeholder="Select Enrolled Course"
+                    />
+                  </div>
                 </div>
+              ) : (
+                <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs">
+                  You are not enrolled in any courses yet. <a href="/courses" className="font-bold underline">Browse Courses</a> to enroll and unlock AI quizzes.
                 </div>
               )}
 

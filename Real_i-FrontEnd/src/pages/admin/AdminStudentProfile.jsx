@@ -52,12 +52,20 @@ export default function AdminStudentProfile() {
           // Fetch courses for this student
           try {
             const courses = await getCourses();
-            setEnrolledCourses(Array.isArray(courses) ? courses.map(c => ({
+            const studentEnrolledIds = found.enrolled_courses || [];
+            const actuallyEnrolled = (Array.isArray(courses) ? courses : []).filter(c => 
+              studentEnrolledIds.includes(c.id) ||
+              studentEnrolledIds.includes(c._id) ||
+              studentEnrolledIds.includes(c.project_id) ||
+              (c.enrolled_students && c.enrolled_students.includes(found.id))
+            );
+
+            setEnrolledCourses(actuallyEnrolled.map(c => ({
               name: c.title || c.project_id,
               progress: 0,
               grade: '-',
               enrolledOn: c.created_at ? new Date(c.created_at).toLocaleDateString() : 'N/A',
-            })) : []);
+            })));
           } catch { setEnrolledCourses([]); }
         }
       } catch {

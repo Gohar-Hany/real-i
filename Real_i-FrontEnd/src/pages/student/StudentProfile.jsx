@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/common/Toast';
-import { getProjects, getCompletedQuizzes, updateUserProfile } from '@/services/api';
+import { getUser, getCompletedQuizzes, updateUserProfile } from '@/services/api';
 import { UserCircle, Mail, Shield, Calendar, Award, BarChart3, BookOpen, BrainCircuit, Edit2, Check, X, Target, ArrowUpRight, Camera, Save, Key, User } from 'lucide-react';
 
 export default function StudentProfile() {
@@ -36,11 +36,14 @@ export default function StudentProfile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [projects, quizzesRes] = await Promise.all([
-          getProjects().catch(() => []),
-          getCompletedQuizzes(user?.id).catch(() => ({ completed_tasks: [] }))
-        ]);
-        setProjectsCount(projects.length || 0);
+        let enrolledCount = user?.enrolled_courses?.length || 0;
+        try {
+          const fresh = await getUser(user?.id);
+          if (fresh?.enrolled_courses) enrolledCount = fresh.enrolled_courses.length;
+        } catch {}
+
+        const quizzesRes = await getCompletedQuizzes(user?.id).catch(() => ({ completed_tasks: [] }));
+        setProjectsCount(enrolledCount);
         setCompletedQuizzes(quizzesRes.completed_tasks || []);
       } catch (err) {
         console.error('Failed to load profile stats:', err);
