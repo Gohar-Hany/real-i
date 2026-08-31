@@ -467,36 +467,62 @@ export default function LiveMeetingPage() {
   }
 
   if (authStatus === 'forbidden') {
+    const isElevated = user?.role === 'admin' || user?.role === 'superadmin';
+
     return (
       <div className="h-[75vh] flex items-center justify-center p-4 animate-fade-in">
-        <div className="max-w-md w-full bg-surface-900/90 border border-rose-500/30 p-8 rounded-3xl text-center space-y-5 shadow-2xl backdrop-blur-xl">
-          <div className="w-16 h-16 mx-auto bg-rose-500/10 text-rose-400 rounded-2xl flex items-center justify-center border border-rose-500/20">
-            <Lock className="w-8 h-8" />
+        <div className={`max-w-md w-full bg-surface-900/90 border ${isElevated ? 'border-primary-500/30' : 'border-rose-500/30'} p-8 rounded-3xl text-center space-y-5 shadow-2xl backdrop-blur-xl`}>
+          <div className={`w-16 h-16 mx-auto ${isElevated ? 'bg-primary-500/10 text-primary-400 border-primary-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20'} rounded-2xl flex items-center justify-center border`}>
+            {isElevated ? <Video className="w-8 h-8" /> : <Lock className="w-8 h-8" />}
           </div>
           <div>
-            <h2 className="text-xl font-bold text-surface-50 font-heading">Access Restricted</h2>
+            <h2 className="text-xl font-bold text-surface-50 font-heading">
+              {isElevated ? 'Virtual Classroom Session' : 'Access Restricted'}
+            </h2>
             <p className="text-xs text-surface-300 mt-2 leading-relaxed">
-              {authErrorMsg || 'You are not enrolled in the required course cohort to access this virtual classroom session.'}
+              {authErrorMsg || (isElevated 
+                ? 'No active meeting identifier provided. Please select or launch a session from the Live Classes Manager.'
+                : 'You are not enrolled in the required course cohort to access this virtual classroom session.'
+              )}
             </p>
           </div>
 
           <div className="p-3 bg-surface-950 rounded-2xl border border-surface-800 text-[11px] text-surface-400 font-mono">
-            Error Code: 403_COURSE_ENROLLMENT_GUARD
+            {isElevated ? 'ADMIN_MEETING_CONTROLLER' : 'Error Code: 403_COURSE_ENROLLMENT_GUARD'}
           </div>
 
           <div className="flex flex-col gap-2 pt-2">
-            <Link
-              to="/student/courses"
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-400 hover:to-primary-500 text-surface-950 font-bold text-xs transition-all shadow-md"
-            >
-              Browse Course Catalog
-            </Link>
-            <Link
-              to="/student/dashboard"
-              className="w-full py-2.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-surface-300 font-semibold text-xs transition-colors"
-            >
-              Return to Student Portal
-            </Link>
+            {isElevated ? (
+              <>
+                <Link
+                  to="/admin/meetings"
+                  className="w-full py-3 rounded-xl gradient-primary text-surface-950 font-bold text-xs transition-all shadow-md flex items-center justify-center gap-2"
+                >
+                  <Video className="w-4 h-4" /> Go to Live Classes Manager
+                </Link>
+                <Link
+                  to="/admin"
+                  className="w-full py-2.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-surface-300 font-semibold text-xs transition-colors"
+                >
+                  Return to Admin Dashboard
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/student/meetings"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-400 hover:to-primary-500 text-surface-950 font-bold text-xs transition-all shadow-md"
+                >
+                  View My Live Classes
+                </Link>
+                <Link
+                  to="/student"
+                  className="w-full py-2.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-surface-300 font-semibold text-xs transition-colors"
+                >
+                  Return to Student Portal
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
