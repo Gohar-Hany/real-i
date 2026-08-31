@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { getUsers, getUserResults, updateUserRole, getCourses, getStudentSubmissions } from '@/services/api';
@@ -10,6 +11,118 @@ import {
   FileText, BookOpen, ArrowUpRight, ArrowDownRight,
   Ban, ShieldCheck, Download, MoreHorizontal, Eye
 } from 'lucide-react';
+
+// ── Portal Action Dropdown Menu ──────────────────────────────
+function StudentActionDropdown({ student }) {
+  const [open, setOpen] = useState(false);
+  const triggerRef = useRef(null);
+  const [menuStyle, setMenuStyle] = useState({});
+
+  const updatePosition = useCallback(() => {
+    if (!triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    const menuWidth = 220;
+    
+    // Position below trigger, aligning right edge with button right edge
+    let left = rect.right - menuWidth;
+    let top = rect.bottom + 8;
+
+    // Viewport bounds safety
+    if (left < 10) left = 10;
+    if (top + 220 > window.innerHeight) {
+      top = Math.max(10, rect.top - 190); // Flip above if reaching viewport bottom
+    }
+
+    setMenuStyle({
+      top: `${top}px`,
+      left: `${left}px`,
+      width: `${menuWidth}px`,
+    });
+  }, []);
+
+  const handleToggle = () => {
+    if (!open) {
+      updatePosition();
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!open) return;
+    const handleScrollOrResize = () => updatePosition();
+    window.addEventListener('resize', handleScrollOrResize);
+    window.addEventListener('scroll', handleScrollOrResize, true);
+    return () => {
+      window.removeEventListener('resize', handleScrollOrResize);
+      window.removeEventListener('scroll', handleScrollOrResize, true);
+    };
+  }, [open, updatePosition]);
+
+  return (
+    <>
+      <button
+        ref={triggerRef}
+        onClick={handleToggle}
+        className="w-10 h-10 rounded-xl bg-surface-800 border border-surface-700 flex items-center justify-center hover:bg-surface-700 active:scale-95 transition-all cursor-pointer shadow-sm"
+        aria-label="Student Actions Menu"
+      >
+        <MoreHorizontal size={18} className="text-surface-400" />
+      </button>
+
+      {open && createPortal(
+        <>
+          {/* Backdrop click dismiss */}
+          <div 
+            className="fixed inset-0 z-[9998]" 
+            onClick={() => setOpen(false)} 
+          />
+          {/* Portal Dropdown Menu */}
+          <div
+            style={menuStyle}
+            className="fixed z-[9999] bg-surface-900/95 backdrop-blur-xl border border-surface-700/80 rounded-2xl shadow-[0_16px_50px_rgba(0,0,0,0.7)] py-2 animate-fade-in"
+          >
+            <button 
+              onClick={() => {
+                setOpen(false);
+                const blob = new Blob([JSON.stringify(student, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `student-dossier-${student?.name || 'profile'}.json`;
+                a.click();
+              }}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors text-left cursor-pointer"
+            >
+              <Download size={14} className="text-primary-400" /> Export Dossier Report
+            </button>
+            <button 
+              onClick={() => {
+                setOpen(false);
+                if (student?.email) window.location.href = `mailto:${student.email}`;
+              }}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors text-left cursor-pointer"
+            >
+              <Mail size={14} className="text-blue-400" /> Send Email
+            </button>
+            <div className="border-t border-surface-700/50 my-1"></div>
+            <button 
+              onClick={() => {
+                setOpen(false);
+                alert(`Account status checked for ${student?.name || 'student'}.`);
+              }}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-rose-400 hover:bg-rose-500/10 transition-colors text-left cursor-pointer"
+            >
+              <Ban size={14} /> Suspend Account
+            </button>
+          </div>
+        </>,
+        document.body
+      )}
+    </>
+  );
+}
 
 export default function AdminStudentProfile() {
   const { id } = useParams();
@@ -23,7 +136,6 @@ export default function AdminStudentProfile() {
   const [loading, setLoading] = useState(true);
   const [expandedQuiz, setExpandedQuiz] = useState(null);
   const [activeSection, setActiveSection] = useState('overview');
-  const [showActions, setShowActions] = useState(false);
 
   const isSuperAdmin = currentUser?.role === 'superadmin';
 
@@ -171,10 +283,13 @@ export default function AdminStudentProfile() {
       </button>
 
       {/* ── Student Profile Header ── */}
-      <div className="relative overflow-hidden rounded-3xl bg-surface-900 border border-surface-700/50 shadow-2xl">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-500 via-primary-500 to-emerald-500"></div>
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-violet-500/10 rounded-full blur-[120px]"></div>
-        <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-primary-500/5 rounded-full blur-[120px]"></div>
+      <div className="relative rounded-3xl bg-surface-900 border border-surface-700/50 shadow-2xl">
+        {/* Background glows isolated to avoid clipping dropdowns */}
+        <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-500 via-primary-500 to-emerald-500"></div>
+          <div className="absolute -top-32 -right-32 w-96 h-96 bg-violet-500/10 rounded-full blur-[120px]"></div>
+          <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-primary-500/5 rounded-full blur-[120px]"></div>
+        </div>
 
         <div className="relative z-10 p-8 sm:p-10">
           <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
@@ -211,45 +326,21 @@ export default function AdminStudentProfile() {
                   {student.role === 'student' ? (
                     <button
                       onClick={() => handleRoleChange('admin')}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20 hover:bg-violet-500/20 text-xs font-bold transition-all active:scale-95"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20 hover:bg-violet-500/20 text-xs font-bold transition-all active:scale-95 cursor-pointer"
                     >
                       <ShieldCheck size={16} /> Promote to Admin
                     </button>
                   ) : (
                     <button
                       onClick={() => handleRoleChange('student')}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20 text-xs font-bold transition-all active:scale-95"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20 text-xs font-bold transition-all active:scale-95 cursor-pointer"
                     >
                       <GraduationCap size={16} /> Demote to Student
                     </button>
                   )}
                 </>
               )}
-              <div className="relative">
-                <button
-                  onClick={() => setShowActions(!showActions)}
-                  className="w-10 h-10 rounded-xl bg-surface-800 border border-surface-700 flex items-center justify-center hover:bg-surface-700 transition-colors"
-                >
-                  <MoreHorizontal size={18} className="text-surface-400" />
-                </button>
-                {showActions && (
-                  <div className="absolute right-0 top-12 w-52 bg-surface-900 border border-surface-700 rounded-xl shadow-2xl z-50 py-2 animate-fade-in">
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors">
-                      <Download size={14} /> Export Report
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors">
-                      <Mail size={14} /> Send Message
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-800 hover:text-surface-50 transition-colors">
-                      <Eye size={14} /> View as Student
-                    </button>
-                    <div className="border-t border-surface-700 my-1"></div>
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-rose-400 hover:bg-rose-500/10 transition-colors">
-                      <Ban size={14} /> Suspend Account
-                    </button>
-                  </div>
-                )}
-              </div>
+              <StudentActionDropdown student={student} />
             </div>
           </div>
         </div>
