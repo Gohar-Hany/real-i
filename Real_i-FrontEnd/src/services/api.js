@@ -43,11 +43,21 @@ class ApiClient {
       clearTimeout(timeoutId);
       
       if (response.status === 401) {
+        const errorData = await response.json().catch(() => ({}));
+        const isAuthEndpoint = endpoint.includes('/auth/login') || endpoint.includes('/auth/register');
+        
+        if (isAuthEndpoint) {
+          // Specific login / registration credentials error
+          const msg = errorData.detail || errorData.message || 'Incorrect email or password. Please check your credentials and try again.';
+          throw new Error(msg);
+        }
+
+        // Authenticated user session expired
         localStorage.removeItem('reali_token');
         if (window.location.pathname !== '/login' && window.location.pathname !== '/') {
-          window.location.href = '/login';
+          window.location.href = '/login?reason=session_expired';
         }
-        throw new Error('Session expired. Please log in again.');
+        throw new Error(errorData.detail || 'Your session has expired. Please log in again.');
       }
 
       if (!response.ok) {
@@ -58,15 +68,66 @@ class ApiClient {
         }
 
         const errorData = await response.json().catch(() => ({}));
-        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        let errorMessage = '';
+
         if (errorData.detail) {
-          errorMessage = typeof errorData.detail === 'string' 
-            ? errorData.detail 
-            : JSON.stringify(errorData.detail);
+          if (typeof errorData.detail === 'string') {
+            errorMessage = errorData.detail;
+          } else if (Array.isArray(errorData.detail)) {
+            // Pydantic / FastAPI validation errors format
+            errorMessage = errorData.detail
+              .map(item => {
+                const field = item.loc ? item.loc[item.loc.length - 1] : '';
+                const msg = item.msg ? item.msg.replace(/^Value error,\s*/i, '') : 'Invalid field';
+                return field ? `${field}: ${msg}` : msg;
+              })
+              .join(' · ');
+          } else {
+            errorMessage = JSON.stringify(errorData.detail);
+          }
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+        } else if (errorData.error) {
+          errorMessage = typeof errorData.error === 'string' 
+            ? errorData.error 
+            : errorData.error.message || JSON.stringify(errorData.error);
         } else if (errorData.signal) {
           errorMessage = `Signal: ${errorData.signal}`;
+        } else {
+          // User-friendly HTTP status fallbacks
+          switch (response.status) {
+            case 400:
+              errorMessage = 'Invalid request. Please check the entered data.';
+              break;
+            case 403:
+              errorMessage = 'Access denied. You do not have permission for this action.';
+              break;
+            case 404:
+              errorMessage = 'The requested resource was not found.';
+              break;
+            case 409:
+              errorMessage = 'Conflict: An account or record with this information already exists.';
+              break;
+            case 422:
+              errorMessage = 'Validation error. Please check your inputs.';
+              break;
+            case 429:
+              errorMessage = 'Too many requests. Please wait a moment before trying again.';
+              break;
+            case 500:
+            case 502:
+            case 503:
+              errorMessage = 'Server error. Please try again shortly.';
+              break;
+            default:
+              errorMessage = `Request failed (${response.status}: ${response.statusText || 'Unknown Error'})`;
+          }
         }
-        throw new Error(errorMessage);
+
+        const err = new Error(errorMessage);
+        err.status = response.status;
+        err.data = errorData;
+        throw err;
       }
       return await response.json();
     } catch (error) {
@@ -80,7 +141,7 @@ class ApiClient {
           await new Promise(r => setTimeout(r, backoff));
           return this.request(endpoint, options, retries - 1, backoff * 2);
         }
-        throw new Error('Network error: Unable to reach the server. Is the backend running?', { cause: error });
+        throw new Error('Network error: Unable to reach the server. Please check your connection.', { cause: error });
       }
       throw error;
     }

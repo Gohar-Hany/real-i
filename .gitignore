@@ -38,3 +38,5 @@ Thumbs.db
 # Design and Documentation Assets (Ignored to keep repo lightweight)
 design/
 docs/screenshots/
+
+.vercel

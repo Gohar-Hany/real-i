@@ -17,6 +17,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [authError, setAuthError] = useState(null);
   const [attempts, setAttempts] = useState(0);
   const [lockoutEnd, setLockoutEnd] = useState(null);
   const [now, setNow] = useState(() => Date.now());
@@ -30,6 +31,7 @@ export default function LoginPage() {
   const toggleAuthMode = (mode) => {
     setShowForgotPassword(false);
     setErrors({});
+    setAuthError(null);
     if (mode) {
       setSearchParams({ register: 'true' });
     } else {
@@ -71,6 +73,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setAuthError(null);
     if (!validate()) return;
 
     if (lockedOut) {
@@ -91,18 +94,25 @@ export default function LoginPage() {
 
     if (result && result.success) {
       setAttempts(0);
+      setAuthError(null);
       toast.success(isRegistering ? 'Welcome to REAL_i!' : 'Welcome back!');
       navigate(result.user.role === 'admin' ? '/admin' : '/student');
     } else {
       const newAttempts = attempts + 1;
       setAttempts(newAttempts);
+      const errMsg = result?.error || (isRegistering 
+        ? 'Registration failed. Please check the entered data.' 
+        : 'Incorrect email or password. Please verify your credentials.');
+      
+      setAuthError(errMsg);
+      
       if (newAttempts >= MAX_ATTEMPTS) {
         const currentTimestamp = Date.now();
         setNow(currentTimestamp);
         setLockoutEnd(currentTimestamp + LOCKOUT_DURATION * 1000);
         toast.error(`Account locked for ${LOCKOUT_DURATION}s due to too many failed attempts.`);
       } else {
-        toast.error(result?.error || 'Authentication failed. Please check your credentials.');
+        toast.error(errMsg);
       }
     }
   };
@@ -259,18 +269,43 @@ export default function LoginPage() {
           {/* Center Form Container */}
           <div className="w-full max-w-md mx-auto my-auto py-2">
             
-            {/* Inactivity Timeout Notice */}
-            {timeoutReason === 'timeout' && (
-              <div className="mb-6 p-4 rounded-xl bg-warning-500/10 border border-warning-500/30 text-amber-800 dark:text-warning-text text-sm flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-warning-500 animate-pulse" />
-                Session expired due to inactivity. Please sign in again.
+            {/* Inactivity Timeout / Session Expired Notice */}
+            {timeoutReason && (
+              <div className="mb-4 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center gap-2.5">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+                <span className="leading-relaxed">
+                  {timeoutReason === 'timeout' 
+                    ? 'Session expired due to 30 minutes of inactivity. Please sign in again.'
+                    : 'Your previous session has ended. Please sign in to continue.'}
+                </span>
               </div>
             )}
 
             {/* Lockout Warning */}
             {lockedOut && (
-              <div className="mb-6 p-4 rounded-xl bg-danger-500/10 border border-danger-500/30 text-danger-text text-sm text-center">
-                Too many failed attempts. Try again in <span className="font-mono font-bold">{remainingSeconds}s</span>.
+              <div className="mb-4 p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs font-medium text-center">
+                Too many failed attempts. Try again in <span className="font-mono font-bold text-white">{remainingSeconds}s</span>.
+              </div>
+            )}
+
+            {/* User-Friendly Authentication Error Alert */}
+            {authError && (
+              <div className="mb-4 p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs font-medium flex items-start gap-2.5 animate-shake">
+                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="font-semibold text-red-200">
+                    {isRegistering ? 'Registration Unsuccessful' : 'Invalid Credentials'}
+                  </p>
+                  <p className="mt-0.5 text-slate-300 leading-relaxed">{authError}</p>
+                </div>
+                <button 
+                  type="button" 
+                  onClick={() => setAuthError(null)} 
+                  className="text-slate-400 hover:text-white transition-colors"
+                  aria-label="Dismiss error"
+                >
+                  <X size={14} />
+                </button>
               </div>
             )}
 
@@ -305,7 +340,7 @@ export default function LoginPage() {
                       id="forgot-email"
                       type="email"
                       value={forgotEmail}
-                      onChange={(e) => setForgotEmail(e.target.value)}
+                      onChange={(e) => { setForgotEmail(e.target.value); setAuthError(null); }}
                       placeholder="name@example.com"
                       className="w-full pl-10 pr-4 py-2.5 sm:py-3 bg-surface-900 border border-surface-600/50 dark:border-surface-700/80 rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm"
                       required
@@ -324,7 +359,7 @@ export default function LoginPage() {
                 <div className="text-center pt-2">
                   <button
                     type="button"
-                    onClick={() => setShowForgotPassword(false)}
+                    onClick={() => { setShowForgotPassword(false); setAuthError(null); }}
                     className="text-xs text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-semibold transition-colors"
                   >
                     ← Back to Sign In
@@ -347,12 +382,16 @@ export default function LoginPage() {
                         id="auth-name"
                         type="text"
                         value={name}
-                        onChange={(e) => { setName(e.target.value); if (errors.name) setErrors({...errors, name: null}); }}
+                        onChange={(e) => { 
+                          setName(e.target.value); 
+                          if (errors.name) setErrors({...errors, name: null}); 
+                          if (authError) setAuthError(null);
+                        }}
                         placeholder="John Doe"
-                        className={`w-full pl-10 pr-4 py-2.5 sm:py-2.5 bg-surface-900 border ${errors.name ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
+                        className={`w-full pl-10 pr-4 py-2.5 sm:py-2.5 bg-surface-900 border ${errors.name || authError ? 'border-red-500/60 focus:border-red-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
                       />
                     </div>
-                    {errors.name && <p className="text-danger-text text-xs mt-1">{errors.name}</p>}
+                    {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                   </div>
                 )}
 
@@ -367,12 +406,16 @@ export default function LoginPage() {
                       id="auth-email"
                       type="email"
                       value={email}
-                      onChange={(e) => { setEmail(e.target.value); if (errors.email) setErrors({...errors, email: null}); }}
+                      onChange={(e) => { 
+                        setEmail(e.target.value); 
+                        if (errors.email) setErrors({...errors, email: null}); 
+                        if (authError) setAuthError(null);
+                      }}
                       placeholder="name@example.com"
-                      className={`w-full pl-10 pr-4 py-2.5 sm:py-3 bg-surface-900 border ${errors.email ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
+                      className={`w-full pl-10 pr-4 py-2.5 sm:py-3 bg-surface-900 border ${errors.email || authError ? 'border-red-500/60 focus:border-red-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
                     />
                   </div>
-                  {errors.email && <p className="text-danger-text text-xs mt-1">{errors.email}</p>}
+                  {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
                 </div>
 
                 {/* Password field */}
@@ -384,7 +427,7 @@ export default function LoginPage() {
                     {!isRegistering && (
                       <button
                         type="button"
-                        onClick={() => setShowForgotPassword(true)}
+                        onClick={() => { setShowForgotPassword(true); setAuthError(null); }}
                         className="text-xs text-primary-700 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 transition-colors font-semibold"
                       >
                         Forgot password?
@@ -397,9 +440,13 @@ export default function LoginPage() {
                       id="auth-password"
                       type={showPassword ? 'text' : 'password'}
                       value={password}
-                      onChange={(e) => { setPassword(e.target.value); if (errors.password) setErrors({...errors, password: null}); }}
+                      onChange={(e) => { 
+                        setPassword(e.target.value); 
+                        if (errors.password) setErrors({...errors, password: null}); 
+                        if (authError) setAuthError(null);
+                      }}
                       placeholder="••••••••"
-                      className={`w-full pl-10 pr-10 py-2.5 sm:py-3 bg-surface-900 border ${errors.password ? 'border-danger-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
+                      className={`w-full pl-10 pr-10 py-2.5 sm:py-3 bg-surface-900 border ${errors.password || authError ? 'border-red-500/60 focus:border-red-500' : 'border-surface-600/50 dark:border-surface-700/80 focus:border-primary-500'} rounded-xl text-surface-50 dark:text-surface-100 placeholder:text-surface-400 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm`}
                     />
                     <button
                       type="button"
@@ -410,7 +457,7 @@ export default function LoginPage() {
                       {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                     </button>
                   </div>
-                  {errors.password && <p className="text-danger-text text-xs mt-1">{errors.password}</p>}
+                  {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password}</p>}
                 </div>
 
                 {/* Submit Button */}
