@@ -86,8 +86,24 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const isSuperAdmin = user?.role === 'superadmin';
+  const isAdmin = ['superadmin', 'admin'].includes(user?.role);
+  const isStudent = user?.role === 'student';
+  const isInstructor = user?.role === 'instructor';
+
   return (
-    <AuthContext.Provider value={{ user, setUser, login, register, logout, loading }}>
+    <AuthContext.Provider value={{
+      user,
+      setUser,
+      login,
+      register,
+      logout,
+      loading,
+      isAdmin,
+      isSuperAdmin,
+      isStudent,
+      isInstructor
+    }}>
       {children}
     </AuthContext.Provider>
   );

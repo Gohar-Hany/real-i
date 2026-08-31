@@ -74,9 +74,13 @@ function ProtectedRoute({ children, role }) {
   }
 
   if (!user) return <Navigate to="/login" replace />;
-  // Allow admins to access student routes, but not vice versa
-  if (role && user.role !== role && user.role !== 'admin') {
-    return <Navigate to={`/${user.role}`} replace />;
+  
+  const isSuperOrAdmin = ['superadmin', 'admin'].includes(user.role);
+  if (role === 'admin' && !isSuperOrAdmin) {
+    return <Navigate to="/student" replace />;
+  }
+  if (role === 'student' && user.role !== 'student' && !isSuperOrAdmin) {
+    return <Navigate to="/login" replace />;
   }
   return children;
 }
@@ -88,6 +92,8 @@ function AppRoutes() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  const defaultUserPath = user && ['superadmin', 'admin'].includes(user.role) ? '/admin' : '/student';
 
   return (
     <Suspense fallback={
@@ -108,7 +114,7 @@ function AppRoutes() {
         </Route>
 
         {/* ── Auth ── */}
-        <Route path="/login" element={user ? <Navigate to={`/${user.role}`} replace /> : <LoginPage />} />
+        <Route path="/login" element={user ? <Navigate to={defaultUserPath} replace /> : <LoginPage />} />
 
         {/* ── Admin Routes ── */}
         <Route path="/admin" element={<ProtectedRoute role="admin"><DashboardLayout /></ProtectedRoute>}>

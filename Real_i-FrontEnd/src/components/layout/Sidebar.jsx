@@ -38,12 +38,12 @@ const studentLinks = [
 ];
 
 export default function Sidebar() {
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin, isSuperAdmin } = useAuth();
   const { collapsed, toggle: toggleSidebar } = useSidebar();
   const navigate = useNavigate();
 
-  const links = user?.role === 'admin' ? adminLinks : studentLinks;
-  const isAdmin = user?.role === 'admin';
+  const isElevated = isSuperAdmin || isAdmin || ['superadmin', 'admin'].includes(user?.role);
+  const links = isElevated ? adminLinks : studentLinks;
 
   const handleLogout = () => {
     logout();
@@ -76,7 +76,7 @@ export default function Sidebar() {
               REAL_i
             </h1>
             <p className="text-[10px] text-surface-400 font-semibold tracking-wide uppercase font-mono">
-              {isAdmin ? 'Admin Panel' : 'Student Portal'}
+              {isSuperAdmin ? 'Super Admin' : isElevated ? 'Admin Panel' : 'Student Portal'}
             </p>
           </div>
         )}
