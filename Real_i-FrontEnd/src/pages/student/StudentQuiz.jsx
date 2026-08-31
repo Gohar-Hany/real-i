@@ -133,23 +133,81 @@ export default function StudentQuiz() {
     return () => clearInterval(intervalId);
   }, [user?.id]);
 
+// Robust helper to normalize any AI quiz payload into uniform format
+const normalizeQuizPayload = (rawResult, fallbackTopic = 'Custom AI Quiz') => {
+  if (!rawResult) return null;
+  // Unwrap nested quiz wrapper if present
+  let payload = rawResult.quiz || rawResult;
+  let questions = Array.isArray(payload.questions) 
+    ? payload.questions 
+    : (Array.isArray(payload) ? payload : (Array.isArray(rawResult.questions) ? rawResult.questions : null));
+
+  if (!questions || !Array.isArray(questions) || questions.length === 0) {
+    return null;
+  }
+
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+  const normalizedQuestions = questions.map((q, idx) => {
+    if (!q || typeof q !== 'object') {
+      return {
+        question: `Question ${idx + 1}`,
+        options: { A: 'Option A', B: 'Option B', C: 'Option C', D: 'Option D' },
+        correct_answer: 'A',
+        explanation: 'Standard review question.'
+      };
+    }
+
+    let optionsObj = {};
+    if (q.options && typeof q.options === 'object' && !Array.isArray(q.options)) {
+      optionsObj = q.options;
+    } else if (Array.isArray(q.options)) {
+      q.options.forEach((opt, oIdx) => {
+        optionsObj[letters[oIdx] || String(oIdx)] = String(opt);
+      });
+    } else {
+      optionsObj = { A: 'Option A', B: 'Option B', C: 'Option C', D: 'Option D' };
+    }
+
+    const firstKey = Object.keys(optionsObj)[0] || 'A';
+    const correct = String(q.correct_answer || q.correctAnswer || firstKey).trim();
+
+    return {
+      question: q.question || q.title || q.prompt || `Question ${idx + 1}`,
+      options: optionsObj,
+      correct_answer: optionsObj[correct] !== undefined ? correct : firstKey,
+      explanation: q.explanation || 'AI synthesized explanation based on curriculum materials.'
+    };
+  });
+
+  return {
+    topic: payload.topic || fallbackTopic,
+    questions: normalizedQuestions
+  };
+};
+
   const startAssignedQuiz = (quizItem) => {
-    setQuizData(quizItem.quiz);
-    setTopic(quizItem.topic);
+    const normalized = normalizeQuizPayload(quizItem.quiz, quizItem.topic);
+    if (!normalized || !normalized.questions || normalized.questions.length === 0) {
+      toast.error('The selected quiz does not contain valid questions.');
+      return;
+    }
+    setQuizData(normalized);
+    setTopic(quizItem.topic || 'Assigned Quiz');
     setActiveTaskId(quizItem.task_id);
     
     if (quizItem.isCompleted) {
       if (quizItem.pastAnswers) {
         const pastAnswersObj = quizItem.pastAnswers;
         const pastAnswersArray = Object.keys(pastAnswersObj)
-          .sort((a, b) => parseInt(a) - parseInt(b))
+          .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
           .map(k => pastAnswersObj[k]);
         setAnswers(pastAnswersArray);
       } else {
         setAnswers([]);
       }
-      setQuizScore(quizItem.score);
-      setQuizTotal(quizItem.total);
+      setQuizScore(quizItem.score || 0);
+      setQuizTotal(quizItem.total || normalized.questions.length);
       setState(STATES.RESULTS);
     } else {
       setCurrentQuestion(0);
@@ -160,13 +218,12 @@ export default function StudentQuiz() {
       setShowExplanation(false);
       // Timer: 2 min per question
       if (timerEnabled) {
-        const totalSecs = (quizItem.quiz?.questions?.length || 5) * 120;
+        const totalSecs = (normalized.questions.length || 5) * 120;
         setTimeLeft(totalSecs);
       }
       setState(STATES.QUIZ);
     }
   };
-
 
   const startQuiz = async () => {
     if (!topic.trim()) {
@@ -176,49 +233,55 @@ export default function StudentQuiz() {
     setState(STATES.LOADING);
     try {
       const result = await generateQuiz(projectId, topic, numQuestions);
-      setQuizData(result.quiz);
+      const normalized = normalizeQuizPayload(result, topic);
+      if (!normalized || !normalized.questions || normalized.questions.length === 0) {
+        throw new Error('AI was unable to generate questions for this topic. Please try another query or topic.');
+      }
+      setQuizData(normalized);
       setCurrentQuestion(0);
       setAnswers([]);
       setSelectedAnswer(null);
       setShowExplanation(false);
       // Timer: 2 min per question
       if (timerEnabled) {
-        const totalSecs = (result.quiz?.questions?.length || numQuestions) * 120;
+        const totalSecs = (normalized.questions.length || numQuestions) * 120;
         setTimeLeft(totalSecs);
       }
       setState(STATES.QUIZ);
     } catch (err) {
-      toast.error(`Failed to generate quiz: ${err.message}`);
+      console.error('Failed to generate quiz:', err);
+      toast.error(err.message || 'Failed to generate quiz');
       setState(STATES.SETUP);
     }
   };
 
   const handleAnswer = (optionKey) => {
-    if (selectedAnswer) return;
+    if (selectedAnswer || !quizData?.questions?.[currentQuestion]) return;
     setSelectedAnswer(optionKey);
     setShowExplanation(true);
     const question = quizData.questions[currentQuestion];
-    const correctAnsKey = question.correct_answer ? question.correct_answer.trim() : "";
+    const correctAnsKey = question.correct_answer ? String(question.correct_answer).trim() : "";
     setAnswers(prev => [...prev, {
-      question: question.question,
+      question: question.question || `Question ${currentQuestion + 1}`,
       selected: optionKey,
-      selectedText: question.options[optionKey],
+      selectedText: question.options?.[optionKey] || optionKey,
       correct: correctAnsKey,
-      correctText: question.options[correctAnsKey],
+      correctText: question.options?.[correctAnsKey] || correctAnsKey,
       isCorrect: optionKey === correctAnsKey,
     }]);
   };
 
   const nextQuestion = async () => {
-    if (currentQuestion < quizData.questions.length - 1) {
+    const totalQuestions = quizData?.questions?.length || 0;
+    if (currentQuestion < totalQuestions - 1) {
       setCurrentQuestion(prev => prev + 1);
       setSelectedAnswer(null);
       setShowExplanation(false);
     } else {
       // Calculate Score for both assigned and custom quizzes
-      const score = answers.filter(a => a.isCorrect).length;
+      const score = answers.filter(a => a?.isCorrect).length;
       setQuizScore(score);
-      setQuizTotal(quizData.questions.length);
+      setQuizTotal(totalQuestions);
 
       if (activeTaskId) {
         try {
@@ -226,7 +289,7 @@ export default function StudentQuiz() {
               student_id: user?.id,
               task_id: activeTaskId,
               score: score,
-              total: quizData.questions.length,
+              total: totalQuestions,
               answers: answers.reduce((acc, curr, index) => {
                  acc[index] = curr;
                  return acc;
@@ -235,7 +298,7 @@ export default function StudentQuiz() {
             setAssignedQuizzes(prev => {
               const updated = prev.map(q => 
                 q.task_id === activeTaskId 
-                  ? { ...q, isCompleted: true, score: score, total: quizData.questions.length }
+                  ? { ...q, isCompleted: true, score: score, total: totalQuestions }
                   : q
               );
               return updated.sort((a, b) => (a.isCompleted === b.isCompleted) ? 0 : a.isCompleted ? 1 : -1);
@@ -517,10 +580,18 @@ export default function StudentQuiz() {
   }
 
   // ── QUIZ SCREEN ────────────────────────────────────────────
-  if (state === STATES.QUIZ && quizData) {
-    const question = quizData.questions[currentQuestion];
-    const progress = ((currentQuestion + 1) / quizData.questions.length) * 100;
-    const correctSoFar = answers.filter(a => a.isCorrect).length;
+  if (state === STATES.QUIZ && quizData?.questions?.length > 0) {
+    const totalQs = quizData.questions.length;
+    const safeIndex = Math.min(Math.max(0, currentQuestion), totalQs - 1);
+    const question = quizData.questions[safeIndex] || {
+      question: 'Loading question...',
+      options: {},
+      correct_answer: 'A',
+      explanation: ''
+    };
+    const progress = ((safeIndex + 1) / totalQs) * 100;
+    const correctSoFar = answers.filter(a => a?.isCorrect).length;
+    const optionsEntries = Object.entries(question?.options || {});
 
     return (
       <div className="animate-fade-in-up pb-10">
@@ -530,10 +601,10 @@ export default function StudentQuiz() {
             <div className="flex items-end justify-between mb-4">
               <div>
                 <p className="text-xs font-mono text-primary-400 font-bold uppercase tracking-widest mb-1">
-                  {quizData.topic}
+                  {quizData.topic || topic || 'AI Quiz'}
                 </p>
                 <h2 className="text-xl sm:text-2xl font-bold text-surface-50">
-                  Question <span className="text-primary-400">{currentQuestion + 1}</span> <span className="text-surface-500 text-lg">/ {quizData.questions.length}</span>
+                  Question <span className="text-primary-400">{safeIndex + 1}</span> <span className="text-surface-500 text-lg">/ {totalQs}</span>
                 </h2>
               </div>
               <div className="flex items-center gap-3">
@@ -565,21 +636,21 @@ export default function StudentQuiz() {
 
           {/* Question Card */}
           <div
-            key={currentQuestion}
+            key={safeIndex}
             className="glass-card rounded-3xl bg-surface-900/60 border border-surface-700/50 p-6 sm:p-10 shadow-2xl relative overflow-hidden animate-slide-up"
           >
             {/* Subtle Grid Bg */}
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay"></div>
             
             <h3 className="text-xl sm:text-2xl font-bold text-surface-50 mb-8 leading-relaxed relative z-10 drop-shadow-sm">
-              {question.question}
+              {question?.question || 'Question text not available.'}
             </h3>
 
             {/* Options */}
             <div className="space-y-4 relative z-10">
-              {Object.entries(question.options).map(([key, value]) => {
+              {optionsEntries.map(([key, value]) => {
                 const isSelected = selectedAnswer === key;
-                const isCorrect = key === question.correct_answer;
+                const isCorrect = key === question?.correct_answer;
                 const showResult = selectedAnswer !== null;
 
                 let optionStyle = 'border-surface-700 bg-surface-800/50 hover:bg-surface-700 hover:border-primary-500/50';
@@ -635,7 +706,7 @@ export default function StudentQuiz() {
                   <div>
                     <p className="text-sm font-bold text-surface-50 mb-2">AI Explanation</p>
                     <p className="text-sm text-surface-300 leading-relaxed">
-                      {question.explanation}
+                      {question?.explanation || 'AI synthesized explanation.'}
                     </p>
                   </div>
                 </div>
