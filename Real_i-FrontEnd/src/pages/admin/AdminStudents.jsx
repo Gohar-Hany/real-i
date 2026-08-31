@@ -9,7 +9,6 @@ import {
   ArrowUpDown, ArrowUp, ArrowDown
 } from 'lucide-react';
 
-const SUPER_ADMIN_EMAIL = 'goharhany@gmail.com';
 const PAGE_SIZE = 10;
 
 const SortIcon = ({ col, sortBy, sortDir }) => {
@@ -29,7 +28,7 @@ export default function AdminStudents() {
   const [sortBy, setSortBy] = useState('name');
   const [sortDir, setSortDir] = useState('asc');
 
-  const isSuperAdmin = currentUser?.email === SUPER_ADMIN_EMAIL;
+  const isSuperAdmin = currentUser?.role === 'superadmin';
 
   useEffect(() => {
     const fetchUsers = async () => {

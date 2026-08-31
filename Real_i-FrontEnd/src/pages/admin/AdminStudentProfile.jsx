@@ -11,8 +11,6 @@ import {
   Ban, ShieldCheck, Download, MoreHorizontal, Eye
 } from 'lucide-react';
 
-const SUPER_ADMIN_EMAIL = 'goharhany@gmail.com';
-
 export default function AdminStudentProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -27,7 +25,7 @@ export default function AdminStudentProfile() {
   const [activeSection, setActiveSection] = useState('overview');
   const [showActions, setShowActions] = useState(false);
 
-  const isSuperAdmin = currentUser?.email === SUPER_ADMIN_EMAIL;
+  const isSuperAdmin = currentUser?.role === 'superadmin';
 
 
 
