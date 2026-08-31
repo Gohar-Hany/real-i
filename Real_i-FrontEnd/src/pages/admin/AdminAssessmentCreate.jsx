@@ -209,21 +209,26 @@ export default function AdminAssessmentCreate() {
     setStep(s => Math.min(s + 1, steps.length - 1));
   };
 
-  const handleSave = (publish = false) => {
+  const handleSave = async (publish = false) => {
     if (!form.title.trim()) { toast.warning('Title is required'); return; }
+    if (!form.courseId) { toast.warning('Please select a course'); return; }
     const data = {
       ...form,
       status: publish ? 'published' : form.status,
       totalMarks: isQuizOrExam ? form.questions.reduce((s, q) => s + (q.marks || 0), 0) : form.totalMarks,
     };
-    if (isEdit) {
-      updateAssessment(id, data);
-      toast.success('Assessment updated');
-    } else {
-      createAssessment(data);
-      toast.success(publish ? 'Assessment published!' : 'Assessment saved as draft');
+    try {
+      if (isEdit) {
+        await updateAssessment(id, data);
+        toast.success('Assessment updated');
+      } else {
+        await createAssessment(data);
+        toast.success(publish ? 'Assessment published!' : 'Assessment saved as draft');
+      }
+      navigate('/admin/assessments');
+    } catch (err) {
+      toast.error(err?.message || 'Failed to save assessment');
     }
-    navigate('/admin/assessments');
   };
 
   // ── CSV Upload & Download ─────────────────────────────────

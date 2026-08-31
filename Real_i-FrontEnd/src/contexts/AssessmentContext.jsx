@@ -17,8 +17,9 @@ export function AssessmentProvider({ children }) {
     setLoading(true);
     try {
       const data = await api.getAssessments(params);
-      setAssessments(Array.isArray(data) ? data : []);
-      return data;
+      const normalized = Array.isArray(data) ? data.map(mapAssessmentToFrontend) : [];
+      setAssessments(normalized);
+      return normalized;
     } catch (err) {
       console.error('Failed to fetch assessments:', err);
       return [];
@@ -266,15 +267,31 @@ export function AssessmentProvider({ children }) {
 
 // ── Map backend assessment format to frontend-compatible format ──
 function mapAssessmentToFrontend(a) {
+  if (!a) return a;
+  const courseId = a.course_id || a.courseId || '';
+  const startDate = a.start_date || a.startDate || null;
+  const endDate = a.end_date || a.endDate || a.deadline || a.dueDate || a.expires_at || null;
+  const createdAt = a.created_at || a.createdAt || null;
+  const updatedAt = a.updated_at || a.updatedAt || null;
+
   return {
     ...a,
-    courseId: a.course_id || a.courseId,
-    startDate: a.start_date || a.startDate,
-    endDate: a.end_date || a.endDate,
+    id: a.id || a._id,
+    courseId: courseId,
+    course_id: courseId,
+    startDate: startDate,
+    start_date: startDate,
+    endDate: endDate,
+    end_date: endDate,
+    deadline: endDate,
     timeLimit: a.time_limit || a.timeLimit || 0,
+    time_limit: a.time_limit || a.timeLimit || 0,
     passingGrade: a.passing_grade || a.passingGrade || 60,
+    passing_grade: a.passing_grade || a.passingGrade || 60,
     totalMarks: a.total_marks || a.totalMarks || 100,
+    total_marks: a.total_marks || a.totalMarks || 100,
     attempts: a.max_attempts || a.attempts || 1,
+    max_attempts: a.max_attempts || a.attempts || 1,
     randomizeQuestions: a.shuffle_questions || a.randomizeQuestions || false,
     showAnswersAfterSubmission: a.show_results ?? a.showAnswersAfterSubmission ?? true,
     autoGrade: a.settings?.autoGrade ?? ['quiz', 'exam'].includes(a.type),
@@ -283,10 +300,12 @@ function mapAssessmentToFrontend(a) {
     allowLateSubmission: a.settings?.allowLateSubmission ?? false,
     assessmentSubType: a.settings?.assessmentSubType || null,
     attachments: a.settings?.attachments || [],
-    createdAt: a.created_at || a.createdAt,
-    updatedAt: a.updated_at || a.updatedAt,
+    createdAt: createdAt,
+    created_at: createdAt,
+    updatedAt: updatedAt,
+    updated_at: updatedAt,
     questions: (a.questions || []).map((q, idx) => ({
-      id: `q-${idx}`,
+      id: q.id || `q-${idx}`,
       text: q.question || q.text,
       question: q.question || q.text,
       options: q.options

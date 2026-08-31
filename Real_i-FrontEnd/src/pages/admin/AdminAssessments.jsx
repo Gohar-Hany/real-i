@@ -64,21 +64,40 @@ export default function AdminAssessments() {
   };
 
 
+  const formatDeadline = (dateVal) => {
+    if (!dateVal) return null;
+    try {
+      const d = new Date(dateVal);
+      if (isNaN(d.getTime())) return null;
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch {
+      return null;
+    }
+  };
+
   // ── Filtered, sorted, paginated ────────────────────────────
   const filtered = useMemo(() => {
     let result = [...assessments];
     if (activeTab !== 'all') result = result.filter(a => a.type === activeTab);
     if (search.trim()) {
       const q = search.toLowerCase();
-      result = result.filter(a => a.title.toLowerCase().includes(q) || a.description?.toLowerCase().includes(q));
+      result = result.filter(a => a.title?.toLowerCase().includes(q) || a.description?.toLowerCase().includes(q));
     }
     result.sort((a, b) => {
       let cmp = 0;
-      if (sortBy === 'title') cmp = a.title.localeCompare(b.title);
-      else if (sortBy === 'type') cmp = a.type.localeCompare(b.type);
-      else if (sortBy === 'status') cmp = a.status.localeCompare(b.status);
-      else if (sortBy === 'endDate') cmp = new Date(a.endDate || 0) - new Date(b.endDate || 0);
-      else if (sortBy === 'updatedAt') cmp = new Date(a.updatedAt || 0) - new Date(b.updatedAt || 0);
+      if (sortBy === 'title') cmp = (a.title || '').localeCompare(b.title || '');
+      else if (sortBy === 'type') cmp = (a.type || '').localeCompare(b.type || '');
+      else if (sortBy === 'status') cmp = (a.status || '').localeCompare(b.status || '');
+      else if (sortBy === 'endDate') {
+        const dateA = new Date(a.endDate || a.end_date || a.deadline || 0).getTime() || 0;
+        const dateB = new Date(b.endDate || b.end_date || b.deadline || 0).getTime() || 0;
+        cmp = dateA - dateB;
+      }
+      else if (sortBy === 'updatedAt') {
+        const dateA = new Date(a.updatedAt || a.updated_at || 0).getTime() || 0;
+        const dateB = new Date(b.updatedAt || b.updated_at || 0).getTime() || 0;
+        cmp = dateA - dateB;
+      }
       return sortDir === 'asc' ? cmp : -cmp;
     });
     return result;
@@ -219,7 +238,10 @@ export default function AdminAssessments() {
                     const tc = TYPE_CONFIG[assessment.type] || TYPE_CONFIG.task;
                     const TypeIcon = tc.icon;
                     const stats = getAssessmentStats(assessment.id);
-                    const isExpired = assessment.endDate && new Date(assessment.endDate) < new Date();
+                    const rawDeadline = assessment.endDate || assessment.end_date || assessment.deadline || assessment.dueDate;
+                    const formattedDeadline = formatDeadline(rawDeadline);
+                    const isExpired = rawDeadline ? new Date(rawDeadline) < new Date() : false;
+                    const courseDisplay = assessment.courseId || assessment.course_id || '—';
 
                     return (
                       <tr key={assessment.id} className="hover:bg-surface-800/30 transition-colors group">
@@ -232,7 +254,7 @@ export default function AdminAssessments() {
                               <Link to={`/admin/assessments/${assessment.id}`} className="font-bold text-surface-50 group-hover:text-primary-300 transition-colors block truncate max-w-[260px]">
                                 {assessment.title}
                               </Link>
-                              <p className="text-[10px] text-surface-500 font-mono truncate max-w-[260px]">{assessment.courseId}</p>
+                              <p className="text-[10px] text-surface-500 font-mono truncate max-w-[260px]">{courseDisplay}</p>
                             </div>
                           </div>
                         </td>
@@ -252,9 +274,9 @@ export default function AdminAssessments() {
                           </span>
                         </td>
                         <td className="px-4 py-4 text-center hidden xl:table-cell">
-                          {assessment.endDate ? (
-                            <span className={`text-xs font-mono font-bold ${isExpired ? 'text-surface-500 line-through' : 'text-surface-300'}`}>
-                              {new Date(assessment.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          {formattedDeadline ? (
+                            <span className={`text-xs font-mono font-bold ${isExpired ? 'text-rose-400/80 line-through' : 'text-surface-300'}`}>
+                              {formattedDeadline}
                             </span>
                           ) : <span className="text-xs text-surface-600">—</span>}
                         </td>
