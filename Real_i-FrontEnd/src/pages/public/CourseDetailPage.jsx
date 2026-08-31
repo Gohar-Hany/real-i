@@ -12,15 +12,23 @@ import { Helmet } from 'react-helmet-async';
 
 export default function CourseDetailPage() {
   const { courseId } = useParams();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
   const headerRef = useRef(null);
   const [expandedModule, setExpandedModule] = useState(0);
   const [course, setCourse] = useState(null);
+  const [enrolling, setEnrolling] = useState(false);
 
   useEffect(() => {
     getCourse(courseId).then(setCourse).catch(() => setCourse(null));
   }, [courseId]);
+
+  const userEnrolled = user?.enrolled_courses || [];
+  const isEnrolledInThisCourse = Boolean(
+    course?.is_enrolled ||
+    (course && userEnrolled.some(id => id === course.project_id || id === course.id || id === course._id || String(id) === String(course._id))) ||
+    (course?.enrolled_students && user && (course.enrolled_students.includes(user.id) || course.enrolled_students.includes(user._id)))
+  );
 
 
   useEffect(() => {
@@ -205,35 +213,67 @@ export default function CourseDetailPage() {
                 <p className="text-sm text-surface-500 mt-1">Full lifetime access</p>
               </div>
 
+              {/* Enrolled Status Indicator */}
+              {isEnrolledInThisCourse && (
+                <div className="mb-4 flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold font-mono">
+                  <CheckCircle size={14} className="text-emerald-400" />
+                  <span>You are enrolled in this course</span>
+                </div>
+              )}
+
               {/* CTA */}
               <button
+                disabled={enrolling}
                 onClick={async () => {
                   if (!user) {
                     navigate('/login?register=true');
                     return;
                   }
-                  if (user.role === 'admin') {
+                  if (['superadmin', 'admin'].includes(user.role)) {
                     navigate(`/admin/courses/${course.project_id || course.id}`);
                     return;
                   }
                   
-                  // Student logic
-                  if (course.enrolled_students?.includes(user.id)) {
-                    navigate(`/student/courses/${course.id || course.project_id}/learn`);
+                  // Student multi-course enrollment logic
+                  if (isEnrolledInThisCourse) {
+                    navigate(`/student/courses/${course.project_id || course.id}/learn`);
                   } else {
                     try {
+                      setEnrolling(true);
                       const { enrollCourse } = await import('@/services/api');
-                      await enrollCourse(course.id || course.project_id);
-                      window.location.href = `/student/courses/${course.id || course.project_id}/learn`;
+                      await enrollCourse(course.project_id || course.id);
+                      await refreshUser();
+                      navigate(`/student/courses/${course.project_id || course.id}/learn`);
                     } catch (err) {
                       console.error('Failed to enroll:', err);
-                      navigate('/student/courses');
+                      // If already enrolled according to backend, proceed directly to player
+                      if (err?.message?.includes('Already enrolled') || err?.response?.data?.detail?.includes('Already enrolled')) {
+                        await refreshUser();
+                        navigate(`/student/courses/${course.project_id || course.id}/learn`);
+                      } else {
+                        navigate('/student/courses');
+                      }
+                    } finally {
+                      setEnrolling(false);
                     }
                   }
                 }}
-                className="w-full py-4 rounded-xl gradient-primary text-surface-950 font-bold text-base shadow-glow hover:shadow-glow-lg transition-all duration-300 active:scale-95 mb-4"
+                className="w-full py-4 rounded-xl gradient-primary text-surface-950 font-bold text-base shadow-glow hover:shadow-glow-lg transition-all duration-300 active:scale-95 mb-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {!user ? 'Enroll Now — Free' : (user.role === 'admin' ? 'Edit Course' : (course.enrolled_students?.includes(user?.id) ? 'Continue Learning' : 'Start Learning'))}
+                {enrolling ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-surface-950/30 border-t-surface-950 rounded-full animate-spin" />
+                    <span>Enrolling...</span>
+                  </>
+                ) : !user ? (
+                  'Enroll Now — Free'
+                ) : ['superadmin', 'admin'].includes(user.role) ? (
+                  'Edit Course'
+                ) : isEnrolledInThisCourse ? (
+                  'Continue Learning'
+                ) : (
+                  'Enroll & Start Learning'
+                )}
               </button>
 
               {!user && (

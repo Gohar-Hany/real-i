@@ -333,9 +333,14 @@ export default function StudentDashboard() {
               </div>
               <h3 className="text-sm font-bold text-surface-50 dark:text-surface-100 font-heading">Continue Learning</h3>
             </div>
-            <Link to="/student/courses" className="text-[10px] text-primary-600 dark:text-primary-400 font-bold hover:text-primary-500 uppercase tracking-wider flex items-center gap-1 font-mono">
-              View All <ChevronRight size={12} />
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link to="/courses" className="text-[10px] text-surface-400 font-bold hover:text-primary-400 uppercase tracking-wider flex items-center gap-1 font-mono">
+                <Sparkles size={11} className="text-primary-400" /> Catalog
+              </Link>
+              <Link to="/student/courses" className="text-[10px] text-primary-600 dark:text-primary-400 font-bold hover:text-primary-500 uppercase tracking-wider flex items-center gap-1 font-mono">
+                View All <ChevronRight size={12} />
+              </Link>
+            </div>
           </div>
           <div className="p-4">
             {projectsData.length === 0 ? (

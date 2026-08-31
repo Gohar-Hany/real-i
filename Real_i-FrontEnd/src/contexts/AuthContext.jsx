@@ -25,6 +25,22 @@ export function AuthProvider({ children }) {
     initAuth();
   }, []);
 
+  const refreshUser = useCallback(async () => {
+    const token = localStorage.getItem('reali_token');
+    if (token) {
+      try {
+        const res = await api.get('/auth/me');
+        if (res?.user) {
+          setUser(res.user);
+          return res.user;
+        }
+      } catch (err) {
+        console.error("Failed to refresh user", err);
+      }
+    }
+    return null;
+  }, []);
+
   const logout = useCallback(() => {
     setUser(null);
     localStorage.removeItem('reali_token');
@@ -98,6 +114,7 @@ export function AuthProvider({ children }) {
       login,
       register,
       logout,
+      refreshUser,
       loading,
       isAdmin,
       isSuperAdmin,

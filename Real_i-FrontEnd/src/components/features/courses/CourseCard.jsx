@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Clock, Users, Star, BookOpen, Play, ArrowRight } from 'lucide-react';
+import { Clock, Users, Star, BookOpen, Play, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const BADGE_COLORS = {
   Popular: 'bg-primary-500/15 text-primary-700 dark:text-primary-300 border-primary-500/30',
@@ -17,6 +18,14 @@ const LEVEL_COLORS = {
 };
 
 export default function CourseCard({ course }) {
+  const { user } = useAuth();
+  const userEnrolled = user?.enrolled_courses || [];
+  const isEnrolled = Boolean(
+    course?.is_enrolled ||
+    (course && userEnrolled.some(id => id === course.project_id || id === course.id || id === course._id || String(id) === String(course._id))) ||
+    (course?.enrolled_students && user && (course.enrolled_students.includes(user.id) || course.enrolled_students.includes(user._id)))
+  );
+
   return (
     <Link
       to={`/courses/${course.project_id || course.id}`}
@@ -56,7 +65,12 @@ export default function CourseCard({ course }) {
           </div>
         )}
         {/* Level */}
-        <div className="absolute top-3 right-3 px-2.5 py-1 bg-black/60 backdrop-blur-md rounded-full">
+        <div className="absolute top-3 right-3 px-2.5 py-1 bg-black/60 backdrop-blur-md rounded-full flex items-center gap-1.5">
+          {isEnrolled && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-400">
+              <CheckCircle2 size={11} className="text-emerald-400" /> Enrolled
+            </span>
+          )}
           <span className={`text-[10px] font-mono font-semibold ${LEVEL_COLORS[course.level] || 'text-slate-200'}`}>
             {course.level}
           </span>
@@ -69,9 +83,16 @@ export default function CourseCard({ course }) {
       {/* Content */}
       <div className="p-6">
         {/* Category */}
-        <span className="text-[10px] font-mono font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-widest">
-          {course.category}
-        </span>
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-mono font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-widest">
+            {course.category}
+          </span>
+          {isEnrolled && (
+            <span className="text-[10px] font-mono font-bold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md">
+              Enrolled
+            </span>
+          )}
+        </div>
 
         {/* Title */}
         <h3 className="text-lg font-bold text-surface-50 dark:text-surface-100 mt-1.5 mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors duration-300 line-clamp-2 font-heading">
@@ -109,8 +130,14 @@ export default function CourseCard({ course }) {
           </div>
           {/* Price / CTA */}
           <div className="flex items-center gap-1 text-sm font-mono font-semibold text-primary-600 dark:text-primary-400 group-hover:text-primary-500 dark:group-hover:text-primary-300 transition-colors uppercase tracking-wider">
-            {course.price === 0 ? 'Free' : `$${course.price}`}
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            {isEnrolled ? (
+              <span className="text-emerald-500 font-bold">Continue →</span>
+            ) : course.price === 0 ? (
+              'Free'
+            ) : (
+              `$${course.price}`
+            )}
+            {!isEnrolled && <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />}
           </div>
         </div>
       </div>

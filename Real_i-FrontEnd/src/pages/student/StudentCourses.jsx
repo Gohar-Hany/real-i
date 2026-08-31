@@ -137,7 +137,7 @@ export default function StudentCourses() {
   return (
     <div className="space-y-6 lg:space-y-8 animate-fade-in-up pb-10">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-800/80 border border-surface-600/40 dark:border-surface-700 mb-4 backdrop-blur-md">
             <BookOpen size={14} className="text-primary-600 dark:text-primary-400" />
@@ -152,6 +152,14 @@ export default function StudentCourses() {
             Track your progress, continue where you left off, and master new skills.
           </p>
         </div>
+
+        <Link
+          to="/courses"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 text-xs font-bold shadow-md hover:shadow-glow transition-all shrink-0 w-fit"
+        >
+          <Sparkles size={16} />
+          <span>Browse Course Catalog</span>
+        </Link>
       </div>
 
       {/* Stats Strip */}
@@ -351,6 +359,21 @@ export default function StudentCourses() {
               </div>
             </div>
           ))}
+
+          {/* Discover More Courses Card */}
+          <Link
+            to="/courses"
+            className="group relative flex flex-col items-center justify-center text-center p-8 rounded-3xl bg-surface-900/60 border-2 border-dashed border-surface-700/70 hover:border-primary-500/60 hover:bg-surface-900 transition-all duration-300 min-h-[300px] cursor-pointer"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-primary-500/10 text-primary-400 border border-primary-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Sparkles size={24} />
+            </div>
+            <h4 className="text-base font-bold text-surface-100 font-heading mb-1">Discover More Courses</h4>
+            <p className="text-xs text-surface-400 max-w-xs font-sans mb-4">Explore our neural cognitive modules and enroll in additional subjects.</p>
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary-400 group-hover:text-primary-300">
+              Browse Full Catalog <ArrowRight size={14} />
+            </span>
+          </Link>
         </div>
       ) : (
         /* ── List View ── */
