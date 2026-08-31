@@ -76,8 +76,9 @@ export default function StudentMeetings() {
 
   // Join Meeting Handler (Direct token authorization link)
   const handleJoinMeeting = (meeting) => {
-    const slug = meeting.roomSlug || meeting.roomName;
-    navigate(`/student/live?meetingId=${encodeURIComponent(meeting._id)}&roomSlug=${encodeURIComponent(slug)}`);
+    const meetingId = meeting._id || meeting.id || '';
+    const slug = meeting.roomSlug || meeting.roomName || `reali_cls_${String(meetingId).slice(-8)}`;
+    navigate(`/student/live?meetingId=${encodeURIComponent(meetingId)}&roomSlug=${encodeURIComponent(slug)}`);
   };
 
   // Open AI Summary & Quiz Modal

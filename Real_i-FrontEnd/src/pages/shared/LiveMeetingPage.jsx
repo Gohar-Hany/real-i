@@ -80,10 +80,14 @@ export default function LiveMeetingPage() {
     const performAuthorization = async () => {
       setAuthStatus('checking');
       try {
+        const cleanMeetingId = (meetingIdParam && meetingIdParam !== 'undefined' && meetingIdParam !== 'null') ? meetingIdParam : undefined;
+        const cleanRoomSlug = (roomSlugParam && roomSlugParam !== 'undefined' && roomSlugParam !== 'null') ? roomSlugParam : undefined;
+        const cleanRoomName = (legacyRoomName && legacyRoomName !== 'undefined' && legacyRoomName !== 'null') ? legacyRoomName : undefined;
+
         const payload = {
-          meetingId: meetingIdParam || undefined,
-          roomSlug: roomSlugParam || undefined,
-          roomName: legacyRoomName || undefined
+          meetingId: cleanMeetingId,
+          roomSlug: cleanRoomSlug,
+          roomName: cleanRoomName
         };
 
         const res = await authorizeMeetingJoin(payload);
@@ -152,7 +156,7 @@ export default function LiveMeetingPage() {
     const isHost = authorizedData.isHost;
     const meetingInfo = authorizedData.meeting;
     const verifiedUser = authorizedData.user;
-    const roomSlug = meetingInfo.roomSlug || meetingInfo.roomName || 'reali_cls_live';
+    const roomSlug = meetingInfo.roomSlug || meetingInfo.roomName || `reali_cls_${(meetingInfo.id || 'live').slice(-8)}`;
 
     const displayName = `${verifiedUser.name || 'User'} (${isHost ? 'Instructor' : 'Student'})`;
 
@@ -209,11 +213,19 @@ export default function LiveMeetingPage() {
       }
     };
 
+    let safetyTimer;
+
     try {
       const api = new window.JitsiMeetExternalAPI('meet.jit.si', options);
       apiRef.current = api;
 
+      // Gracefully dismiss loading overlay as soon as conference connects or within 3 seconds
+      safetyTimer = setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+
       api.addEventListener('videoConferenceJoined', () => {
+        if (safetyTimer) clearTimeout(safetyTimer);
         setIsLoading(false);
       });
 
