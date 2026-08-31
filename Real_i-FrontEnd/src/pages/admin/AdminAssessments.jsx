@@ -238,7 +238,7 @@ export default function AdminAssessments() {
                     const tc = TYPE_CONFIG[assessment.type] || TYPE_CONFIG.task;
                     const TypeIcon = tc.icon;
                     const stats = getAssessmentStats(assessment.id);
-                    const rawDeadline = assessment.endDate || assessment.end_date || assessment.deadline || assessment.dueDate;
+                    const rawDeadline = assessment.endDate || assessment.end_date || assessment.deadline || assessment.dueDate || assessment.due_date;
                     const formattedDeadline = formatDeadline(rawDeadline);
                     const isExpired = rawDeadline ? new Date(rawDeadline) < new Date() : false;
                     const courseDisplay = assessment.courseId || assessment.course_id || '—';
