@@ -1,108 +1,97 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { getUsers, getCourses, getUserResults } from '@/services/api';
+import { getAnalyticsOverview, getStudentAnalytics, getCourses } from '@/services/api';
 import {
   BookOpen, BrainCircuit, TrendingUp, Award,
-  BarChart3, GraduationCap, Target, AlertTriangle, CheckCircle, Eye, ChevronRight
+  BarChart3, GraduationCap, Target, AlertTriangle, CheckCircle, Eye, ChevronRight, RefreshCw
 } from 'lucide-react';
 
 export default function AdminAnalytics() {
   const [loading, setLoading] = useState(true);
-  const [kpis, setKpis] = useState({ totalStudents: 0, totalProjects: 0, totalQuizzesTaken: 0, avgScore: 0 });
+  const [error, setError] = useState(null);
+  const [kpis, setKpis] = useState({ totalStudents: 0, totalCourses: 0, totalQuizzesTaken: 0, avgScore: 0 });
   const [studentPerformance, setStudentPerformance] = useState([]);
   const [courseBreakdown, setCourseBreakdown] = useState([]);
   const [scoreDistribution, setScoreDistribution] = useState({ excellent: 0, good: 0, average: 0, poor: 0 });
 
-  useEffect(() => {
-    const loadAnalytics = async () => {
-      setLoading(true);
-      try {
-        const [users, courses] = await Promise.all([
-          getUsers().catch(() => []),
-          getCourses().catch(() => []),
-        ]);
+  const loadAnalytics = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Parallel fetch across optimized analytics endpoints
+      const [overviewRes, studentsRes, coursesRes] = await Promise.allSettled([
+        getAnalyticsOverview(),
+        getStudentAnalytics(),
+        getCourses(),
+      ]);
 
-        const students = users.filter(u => u.role === 'student');
+      const overview = overviewRes.status === 'fulfilled' && overviewRes.value ? overviewRes.value : null;
+      const studentsList = studentsRes.status === 'fulfilled' && Array.isArray(studentsRes.value) ? studentsRes.value : [];
+      const coursesList = coursesRes.status === 'fulfilled' && Array.isArray(coursesRes.value) ? coursesRes.value : [];
 
-        // Fetch quiz results for each student
-        const performanceData = [];
-        let totalQuizzes = 0;
-        let totalScoreSum = 0;
-        let totalQuizCount = 0;
+      // 1. Map KPI Cards
+      const totalStudents = overview?.totalStudents ?? studentsList.length;
+      const totalCourses = overview?.totalCourses ?? coursesList.length;
+      const totalQuizzesTaken = overview?.totalSubmissions ?? studentsList.reduce((acc, s) => acc + (s.quizzes_taken || 0), 0);
+      const avgScore = overview?.avgScore ?? (
+        studentsList.filter(s => s.quizzes_taken > 0).length > 0
+          ? Math.round(studentsList.reduce((acc, s) => acc + (s.avg_score || 0), 0) / studentsList.filter(s => s.quizzes_taken > 0).length)
+          : 0
+      );
+
+      setKpis({
+        totalStudents,
+        totalCourses,
+        totalQuizzesTaken,
+        avgScore,
+      });
+
+      // 2. Map Score Distribution
+      if (overview?.scoreDistribution) {
+        setScoreDistribution(overview.scoreDistribution);
+      } else {
         let excellent = 0, good = 0, average = 0, poor = 0;
-
-        for (const student of students) {
-          try {
-            const data = await getUserResults(student.id);
-            const results = Array.isArray(data?.results) ? data.results : [];
-            const quizCount = results.length;
-            totalQuizzes += quizCount;
-
-            if (quizCount > 0) {
-              const avg = Math.round(results.reduce((acc, r) => acc + (r.total > 0 ? (r.score / r.total) * 100 : 0), 0) / quizCount);
-              totalScoreSum += avg;
-              totalQuizCount++;
-
-              // Score distribution
-              if (avg >= 90) excellent++;
-              else if (avg >= 75) good++;
-              else if (avg >= 60) average++;
-              else poor++;
-
-              performanceData.push({
-                id: student.id,
-                name: student.name,
-                email: student.email,
-                quizzes: quizCount,
-                avgScore: avg,
-                bestScore: Math.max(...results.map(r => r.total > 0 ? Math.round((r.score / r.total) * 100) : 0)),
-                passRate: Math.round(results.filter(r => r.total > 0 && (r.score / r.total) * 100 >= 60).length / quizCount * 100),
-              });
-            } else {
-              performanceData.push({
-                id: student.id,
-                name: student.name,
-                email: student.email,
-                quizzes: 0,
-                avgScore: 0,
-                bestScore: 0,
-                passRate: 0,
-              });
-            }
-          } catch {
-            performanceData.push({
-              id: student.id,
-              name: student.name,
-              email: student.email,
-              quizzes: 0,
-              avgScore: 0,
-              bestScore: 0,
-              passRate: 0,
-            });
+        studentsList.forEach(s => {
+          if (s.quizzes_taken > 0) {
+            if (s.avg_score >= 90) excellent++;
+            else if (s.avg_score >= 75) good++;
+            else if (s.avg_score >= 60) average++;
+            else poor++;
           }
-        }
-
-        const overallAvg = totalQuizCount > 0 ? Math.round(totalScoreSum / totalQuizCount) : 0;
-
-        setKpis({
-          totalStudents: students.length,
-          totalCourses: courses.length,
-          totalQuizzesTaken: totalQuizzes,
-          avgScore: overallAvg,
         });
-
-        setStudentPerformance(performanceData.sort((a, b) => b.avgScore - a.avgScore));
         setScoreDistribution({ excellent, good, average, poor });
-        setCourseBreakdown(courses.map(c => ({ id: c.id || c.project_id, name: c.title || c.project_id })));
-      } catch (err) {
-        console.error('Analytics load failed:', err);
-      } finally {
-        setLoading(false);
       }
-    };
 
-    loadAnalytics();
+      // 3. Map Student Performance Leaderboard
+      const formattedStudents = studentsList.map(s => ({
+        id: s.id || s._id,
+        name: s.name || 'Unnamed Student',
+        email: s.email || 'N/A',
+        quizzes: s.quizzes_taken || 0,
+        avgScore: s.avg_score || 0,
+        bestScore: s.best_score || s.avg_score || 0,
+        passRate: s.pass_rate || (s.avg_score >= 60 ? 100 : 0),
+      })).sort((a, b) => b.avgScore - a.avgScore);
+
+      setStudentPerformance(formattedStudents);
+
+      // 4. Map Courses / Projects
+      setCourseBreakdown(coursesList.map(c => ({
+        id: c.id || c.project_id || c._id,
+        name: c.title || c.project_id || 'Untitled Course',
+      })));
+
+    } catch (err) {
+      console.error('Analytics load failed:', err);
+      setError('Unable to load analytics data. Please check your connection and retry.');
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadAnalytics();
+  }, [loadAnalytics]);
 
   const distTotal = scoreDistribution.excellent + scoreDistribution.good + scoreDistribution.average + scoreDistribution.poor;
 
@@ -119,6 +108,24 @@ export default function AdminAnalytics() {
           <div className="absolute inset-2 rounded-full border-r-2 border-blue-500 animate-[spin_1.5s_linear_infinite_reverse]"></div>
         </div>
         <p className="text-surface-400 font-mono text-xs uppercase tracking-widest">Crunching analytics data...</p>
+      </div>
+    );
+  }
+
+  if (error && studentPerformance.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 animate-fade-in text-center px-4">
+        <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mb-4">
+          <AlertTriangle size={32} />
+        </div>
+        <h3 className="text-lg font-bold text-surface-50 mb-2">Analytics Unavailable</h3>
+        <p className="text-sm text-surface-400 max-w-md mb-6">{error}</p>
+        <button
+          onClick={loadAnalytics}
+          className="flex items-center gap-2 px-6 py-2.5 rounded-xl gradient-primary text-surface-950 font-bold text-sm shadow-md hover:opacity-95 active:scale-95 transition-all cursor-pointer"
+        >
+          <RefreshCw size={16} /> Retry Analytics
+        </button>
       </div>
     );
   }
