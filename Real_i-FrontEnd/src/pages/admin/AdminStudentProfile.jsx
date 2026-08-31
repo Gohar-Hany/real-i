@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { getUsers, getUserResults, updateUserRole, getCourses } from '@/services/api';
+import { getUsers, getUserResults, updateUserRole, getCourses, getStudentSubmissions } from '@/services/api';
 import { useToast } from '@/components/common/Toast';
 import {
   ChevronLeft, Shield, GraduationCap, Mail, Calendar, Clock,
@@ -18,7 +18,7 @@ export default function AdminStudentProfile() {
   const toast = useToast();
   const [student, setStudent] = useState(null);
   const [quizResults, setQuizResults] = useState([]);
-  const studentSubmissions = [];
+  const [studentSubmissions, setStudentSubmissions] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedQuiz, setExpandedQuiz] = useState(null);
@@ -27,18 +27,17 @@ export default function AdminStudentProfile() {
 
   const isSuperAdmin = currentUser?.role === 'superadmin';
 
-
-
   useEffect(() => {
     const fetchStudentData = async () => {
       setLoading(true);
       try {
         const users = await getUsers();
         const allUsers = Array.isArray(users) ? users : [];
-        const found = allUsers.find(u => u.id === id);
+        const found = allUsers.find(u => u.id === id || u._id === id);
         setStudent(found || null);
 
         if (found) {
+          // 1. Fetch Quiz Results
           try {
             const data = await getUserResults(found.id);
             const results = data?.results || [];
@@ -47,24 +46,46 @@ export default function AdminStudentProfile() {
             setQuizResults([]);
           }
 
-          // Fetch courses for this student
+          // 2. Fetch Assessment Submissions
+          try {
+            const subs = await getStudentSubmissions(found.id);
+            setStudentSubmissions(Array.isArray(subs) ? subs : []);
+          } catch {
+            setStudentSubmissions([]);
+          }
+
+          // 3. Fetch Enrolled Courses & Calculate Real Progress
           try {
             const courses = await getCourses();
             const studentEnrolledIds = found.enrolled_courses || [];
+            const studentCompletedLessons = found.completed_lessons || [];
+            
             const actuallyEnrolled = (Array.isArray(courses) ? courses : []).filter(c => 
               studentEnrolledIds.includes(c.id) ||
               studentEnrolledIds.includes(c._id) ||
               studentEnrolledIds.includes(c.project_id) ||
-              (c.enrolled_students && c.enrolled_students.includes(found.id))
+              (c.enrolled_students && (c.enrolled_students.includes(found.id) || c.enrolled_students.includes(found._id)))
             );
 
-            setEnrolledCourses(actuallyEnrolled.map(c => ({
-              name: c.title || c.project_id,
-              progress: 0,
-              grade: '-',
-              enrolledOn: c.created_at ? new Date(c.created_at).toLocaleDateString() : 'N/A',
-            })));
-          } catch { setEnrolledCourses([]); }
+            setEnrolledCourses(actuallyEnrolled.map(c => {
+              const allLessonIds = (c.modules || []).flatMap(m => (m.lessons || []).map(l => l.id));
+              const totalLessons = allLessonIds.length;
+              const completedCount = studentCompletedLessons.filter(lId => allLessonIds.includes(lId)).length;
+              const progress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
+
+              return {
+                id: c.id || c._id,
+                name: c.title || c.project_id,
+                progress: progress,
+                completedLessons: completedCount,
+                totalLessons: totalLessons,
+                grade: progress >= 80 ? 'A' : progress >= 60 ? 'B' : progress > 0 ? 'In Progress' : 'Not Started',
+                enrolledOn: c.created_at ? new Date(c.created_at).toLocaleDateString() : 'N/A',
+              };
+            }));
+          } catch { 
+            setEnrolledCourses([]); 
+          }
         }
       } catch {
         toast.error('Failed to load student data');

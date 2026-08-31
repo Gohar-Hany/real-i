@@ -21,8 +21,12 @@ class ApiClient {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
+    const isAiEndpoint = /^\/(agent|nlp|data|admin)/.test(endpoint);
+    const defaultTimeout = isAiEndpoint ? 90000 : 30000;
+    const timeoutMs = options.timeout || defaultTimeout;
+
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second timeout
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
     const config = {
       ...options,
@@ -392,6 +396,9 @@ export const getAssessmentSubmissions = (id) =>
 
 export const getMySubmissions = () =>
   api.get('/assessments/student/me');
+
+export const getStudentSubmissions = (studentId) =>
+  api.get(`/assessments/student/${studentId}`);
 
 export const gradeSubmission = (assessmentId, submissionId, data) =>
   api.request(`/assessments/${assessmentId}/submissions/${submissionId}/grade`, {
