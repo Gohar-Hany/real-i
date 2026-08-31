@@ -10,7 +10,8 @@ import {
 
 const adminLinks = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
-  { to: '/admin/meetings', icon: Video, label: 'Live Classes' },
+  { to: '/admin/live', icon: Video, label: 'Live Studio' },
+  { to: '/admin/meetings', icon: CalendarDays, label: 'Manage Meetings' },
   { to: '/admin/students', icon: Users, label: 'Students' },
   { to: '/admin/courses', icon: FolderOpen, label: 'Courses' },
   { to: '/admin/assessments', icon: ClipboardList, label: 'Assessments' },

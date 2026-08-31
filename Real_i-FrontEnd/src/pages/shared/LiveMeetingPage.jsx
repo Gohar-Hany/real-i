@@ -11,7 +11,8 @@ import {
 } from 'lucide-react';
 import { 
   authorizeMeetingJoin, endMeeting, generateMeetingSummary, 
-  syncMeetingAttendance, createMeetingPoll, voteMeetingPoll, closeMeetingPoll 
+  syncMeetingAttendance, createMeetingPoll, voteMeetingPoll, closeMeetingPoll,
+  getCourses, getMeetings, createMeeting, launchMeeting 
 } from '@/services/api';
 
 const DEFAULT_POLL_PRESETS = [
@@ -67,10 +68,73 @@ export default function LiveMeetingPage() {
   const [selectedOptionId, setSelectedOptionId] = useState(null);
   const [pollTimeRemaining, setPollTimeRemaining] = useState(0);
 
+  // Admin Live Studio Hub state
+  const [studioCourses, setStudioCourses] = useState([]);
+  const [studioMeetings, setStudioMeetings] = useState([]);
+  const [selectedStudioCourse, setSelectedStudioCourse] = useState('');
+  const [instantTitle, setInstantTitle] = useState('Interactive Live Masterclass');
+  const [isLaunchingStudio, setIsLaunchingStudio] = useState(false);
+  const [studioLoading, setStudioLoading] = useState(false);
+
   // Toast Helper
   const triggerToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const loadStudioData = async () => {
+    setStudioLoading(true);
+    try {
+      const [coursesRes, meetingsRes] = await Promise.allSettled([
+        getCourses(),
+        getMeetings()
+      ]);
+      if (coursesRes.status === 'fulfilled' && Array.isArray(coursesRes.value)) {
+        setStudioCourses(coursesRes.value);
+        if (coursesRes.value.length > 0) {
+          setSelectedStudioCourse(coursesRes.value[0]._id || coursesRes.value[0].id);
+        }
+      }
+      if (meetingsRes.status === 'fulfilled' && meetingsRes.value?.success && Array.isArray(meetingsRes.value.meetings)) {
+        setStudioMeetings(meetingsRes.value.meetings);
+      }
+    } catch (e) {
+      console.error("Failed to load studio data:", e);
+    } finally {
+      setStudioLoading(false);
+    }
+  };
+
+  const handleLaunchInstantMeeting = async (e) => {
+    e?.preventDefault();
+    if (!selectedStudioCourse) {
+      triggerToast('Please select a course for the live masterclass');
+      return;
+    }
+    setIsLaunchingStudio(true);
+    try {
+      const payload = {
+        title: instantTitle.trim() || 'Interactive Live Masterclass',
+        courseId: selectedStudioCourse,
+        scheduleType: 'immediate',
+        duration: 60,
+        muteOnEntry: true,
+        requireHostToStart: true,
+        lobbyEnabled: false
+      };
+      const res = await createMeeting(payload);
+      if (res.success && res.meeting) {
+        const meetingObj = res.meeting;
+        navigate(`/admin/live?meetingId=${meetingObj._id || meetingObj.id}&roomSlug=${meetingObj.roomSlug}`);
+      } else {
+        throw new Error(res.message || 'Failed to create instant live session');
+      }
+    } catch (err) {
+      console.error("Failed to start instant session:", err);
+      triggerToast(err.message || 'Failed to launch live classroom');
+    } finally {
+      setIsLaunchingStudio(false);
+    }
   };
 
   // ── 1. GATEKEEPER AUTHORIZATION ON LOAD ───────────────────────
@@ -78,12 +142,25 @@ export default function LiveMeetingPage() {
     let isMounted = true;
 
     const performAuthorization = async () => {
+      const isElevated = user?.role === 'admin' || user?.role === 'superadmin';
+      const cleanMeetingId = (meetingIdParam && meetingIdParam !== 'undefined' && meetingIdParam !== 'null') ? meetingIdParam : undefined;
+      const cleanRoomSlug = (roomSlugParam && roomSlugParam !== 'undefined' && roomSlugParam !== 'null') ? roomSlugParam : undefined;
+      const cleanRoomName = (legacyRoomName && legacyRoomName !== 'undefined' && legacyRoomName !== 'null') ? legacyRoomName : undefined;
+
+      if (!cleanMeetingId && !cleanRoomSlug && !cleanRoomName) {
+        if (isElevated) {
+          setAuthStatus('admin_studio');
+          loadStudioData();
+          return;
+        } else {
+          setAuthStatus('forbidden');
+          setAuthErrorMsg('No active meeting identifier provided. Please join from your student live classes portal.');
+          return;
+        }
+      }
+
       setAuthStatus('checking');
       try {
-        const cleanMeetingId = (meetingIdParam && meetingIdParam !== 'undefined' && meetingIdParam !== 'null') ? meetingIdParam : undefined;
-        const cleanRoomSlug = (roomSlugParam && roomSlugParam !== 'undefined' && roomSlugParam !== 'null') ? roomSlugParam : undefined;
-        const cleanRoomName = (legacyRoomName && legacyRoomName !== 'undefined' && legacyRoomName !== 'null') ? legacyRoomName : undefined;
-
         const payload = {
           meetingId: cleanMeetingId,
           roomSlug: cleanRoomSlug,
@@ -115,7 +192,7 @@ export default function LiveMeetingPage() {
     return () => {
       isMounted = false;
     };
-  }, [meetingIdParam, roomSlugParam, legacyRoomName]);
+  }, [meetingIdParam, roomSlugParam, legacyRoomName, user?.role]);
 
   // ── 2. LOAD JITSI EXTERNAL API SCRIPT ────────────────────────
   useEffect(() => {
@@ -452,6 +529,219 @@ export default function LiveMeetingPage() {
     const s = sec % 60;
     return `${m}m ${s < 10 ? '0' : ''}${s}s`;
   };
+
+  // ── RENDER ACCESS RESTRICTION / GATEKEEPER LOCK SCREENS ─────
+  if (authStatus === 'admin_studio') {
+    return (
+      <div className="space-y-8 animate-fade-in pb-12 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary-500/10 text-primary-400 border border-primary-500/20">
+                Host Broadcast Studio
+              </span>
+              <span className="flex items-center gap-1 text-[11px] text-emerald-400 font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                WebRTC Engine Ready
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-surface-50 font-heading tracking-tight">
+              Live Broadcast <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-200">Studio</span>
+            </h1>
+            <p className="text-surface-400 text-xs sm:text-sm mt-1">
+              Launch instant interactive masterclasses or start scheduled rooms directly as Moderator.
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/admin/meetings"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-surface-200 text-xs font-bold border border-surface-700 transition-all shadow-sm"
+            >
+              <Clock className="w-4 h-4 text-primary-400" />
+              <span>Manage & Schedule Meetings</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Studio Cards Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Quick Launch Card */}
+          <div className="lg:col-span-1 bg-surface-900/90 border border-surface-800 rounded-3xl p-6 shadow-xl backdrop-blur-xl relative overflow-hidden flex flex-col justify-between">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-2xl bg-primary-500/10 text-primary-400 flex items-center justify-center border border-primary-500/20 shadow-glow">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-surface-100 font-heading">Instant Broadcast</h3>
+                  <span className="text-xs text-surface-400">Launch a live class right now</span>
+                </div>
+              </div>
+
+              <form onSubmit={handleLaunchInstantMeeting} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-surface-300 mb-1.5">
+                    Target Course Cohort
+                  </label>
+                  <select
+                    value={selectedStudioCourse}
+                    onChange={(e) => setSelectedStudioCourse(e.target.value)}
+                    className="w-full bg-surface-950 border border-surface-800 rounded-xl px-3.5 py-2.5 text-xs text-surface-200 focus:outline-none focus:border-primary-500 transition-colors"
+                  >
+                    {studioCourses.map(c => (
+                      <option key={c._id || c.id} value={c._id || c.id}>
+                        {c.title || c.project_id}
+                      </option>
+                    ))}
+                    {studioCourses.length === 0 && (
+                      <option value="">No courses found</option>
+                    )}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-surface-300 mb-1.5">
+                    Masterclass Session Title
+                  </label>
+                  <input
+                    type="text"
+                    value={instantTitle}
+                    onChange={(e) => setInstantTitle(e.target.value)}
+                    placeholder="e.g. YOLOv8 Deep Dive & Live Lab"
+                    className="w-full bg-surface-950 border border-surface-800 rounded-xl px-3.5 py-2.5 text-xs text-surface-200 placeholder-surface-600 focus:outline-none focus:border-primary-500 transition-colors"
+                  />
+                </div>
+
+                <div className="p-3 rounded-2xl bg-surface-950/60 border border-surface-800/80 space-y-2 text-[11px] text-surface-400">
+                  <div className="flex items-center justify-between">
+                    <span>Host Controls:</span>
+                    <span className="text-emerald-400 font-medium">Automatic Moderator</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Admission Guard:</span>
+                    <span className="text-surface-300">Enrolled Students Direct</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Attendance Tracking:</span>
+                    <span className="text-primary-400 font-medium">Auto-Synced Log</span>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLaunchingStudio || !selectedStudioCourse}
+                  className="w-full py-3.5 rounded-2xl gradient-primary text-surface-950 font-extrabold text-xs tracking-wide uppercase flex items-center justify-center gap-2 shadow-glow hover:opacity-95 disabled:opacity-50 transition-all cursor-pointer"
+                >
+                  {isLaunchingStudio ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      <span>Initializing Virtual Studio...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-4 h-4 fill-current" />
+                      <span>Launch Broadcast Now</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Active & Scheduled Meetings */}
+          <div className="lg:col-span-2 bg-surface-900/90 border border-surface-800 rounded-3xl p-6 shadow-xl backdrop-blur-xl flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between pb-4 border-b border-surface-800/80 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-surface-800 text-surface-200 flex items-center justify-center border border-surface-700">
+                    <Radio className="w-5 h-5 text-rose-500 animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-surface-100 font-heading">Active & Scheduled Sessions</h3>
+                    <span className="text-xs text-surface-400">Join ongoing rooms or start scheduled masterclasses</span>
+                  </div>
+                </div>
+                <button
+                  onClick={loadStudioData}
+                  className="p-2 rounded-xl bg-surface-800 hover:bg-surface-700 text-surface-400 hover:text-surface-200 transition-colors"
+                  title="Refresh Sessions"
+                >
+                  <RefreshCw className={`w-4 h-4 ${studioLoading ? 'animate-spin text-primary-400' : ''}`} />
+                </button>
+              </div>
+
+              {studioLoading ? (
+                <div className="py-12 text-center text-surface-400 text-xs flex flex-col items-center gap-2">
+                  <RefreshCw className="w-6 h-6 animate-spin text-primary-500" />
+                  <span>Loading active sessions...</span>
+                </div>
+              ) : studioMeetings.length === 0 ? (
+                <div className="py-12 text-center text-surface-400 text-xs">
+                  <Video className="w-12 h-12 text-surface-700 mx-auto mb-2" />
+                  <p className="font-semibold text-surface-300">No active or scheduled sessions found</p>
+                  <p className="text-[11px] text-surface-500 mt-1">Use Instant Broadcast or Schedule a Masterclass to start.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[380px] overflow-y-auto pr-1">
+                  {studioMeetings.map(m => {
+                    const isLive = m.status === 'live';
+                    return (
+                      <div
+                        key={m._id || m.id}
+                        className={`p-4 rounded-2xl border transition-all ${
+                          isLive 
+                            ? 'bg-rose-950/20 border-rose-500/30 hover:border-rose-500/50' 
+                            : 'bg-surface-950 border-surface-800 hover:border-surface-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                            isLive 
+                              ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' 
+                              : 'bg-surface-800 text-surface-400'
+                          }`}>
+                            {isLive ? '🔴 LIVE NOW' : m.status || 'SCHEDULED'}
+                          </span>
+                          <span className="text-[11px] text-surface-400 font-mono">
+                            {m.duration || 60} min
+                          </span>
+                        </div>
+                        <h4 className="font-bold text-surface-100 text-sm line-clamp-1 mb-1">
+                          {m.title}
+                        </h4>
+                        <p className="text-[11px] text-surface-400 line-clamp-1 mb-4">
+                          {m.courseId?.title || m.courseTitle || 'All Enrolled Students'}
+                        </p>
+                        <button
+                          onClick={() => navigate(`/admin/live?meetingId=${m._id || m.id}&roomSlug=${m.roomSlug}`)}
+                          className={`w-full py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-sm ${
+                            isLive 
+                              ? 'bg-rose-600 hover:bg-rose-500 text-white' 
+                              : 'bg-surface-800 hover:bg-surface-700 text-surface-200'
+                          }`}
+                        >
+                          <Play className="w-3.5 h-3.5 fill-current" />
+                          <span>{isLive ? 'Join Live Room' : 'Start Session as Host'}</span>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            <div className="pt-4 mt-4 border-t border-surface-800/80 flex items-center justify-between text-xs text-surface-400">
+              <span>Looking for recurring schedules, calendar sync & attendance?</span>
+              <Link to="/admin/meetings" className="text-primary-400 hover:underline font-semibold flex items-center gap-1">
+                Open Manage Meetings <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ── RENDER ACCESS RESTRICTION / GATEKEEPER LOCK SCREENS ─────
   if (authStatus === 'checking') {
