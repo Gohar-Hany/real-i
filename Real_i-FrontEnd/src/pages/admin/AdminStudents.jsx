@@ -283,7 +283,7 @@ export default function AdminStudents() {
                             <Eye size={14} className="text-primary-500" />
                             <span className="hidden lg:inline">View</span>
                           </Link>
-                          {isSuperAdmin && u.email !== SUPER_ADMIN_EMAIL && (
+                          {isSuperAdmin && u.role !== 'superadmin' && u.id !== currentUser?.id && u.id !== currentUser?._id && (
                             <>
                               <button
                                 onClick={() => handleRoleChange(u.id, u.role === 'admin' ? 'student' : 'admin')}

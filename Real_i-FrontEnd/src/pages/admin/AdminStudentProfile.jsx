@@ -185,7 +185,7 @@ export default function AdminStudentProfile() {
 
             {/* Admin Actions */}
             <div className="flex items-center gap-3 shrink-0">
-              {isSuperAdmin && student.email !== SUPER_ADMIN_EMAIL && (
+              {isSuperAdmin && student.role !== 'superadmin' && student.id !== currentUser?.id && student.id !== currentUser?._id && (
                 <>
                   {student.role === 'student' ? (
                     <button
