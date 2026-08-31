@@ -26,11 +26,11 @@ Real_i/
 ├── branding/               # Brand identity assets (logo, graphics)
 ├── docs/                   # Documentation resources
 │   └── screenshots/        # Application UI screenshots
-├── Raaed-FrontEnd/         # Main frontend React application (to be renamed to 'frontend')
+├── Real_i-FrontEnd/        # Main frontend React application
 └── README.md               # Workspace root overview (this file)
 ```
 
-For detailed info on the Frontend application, please refer to the README inside the [Raaed-FrontEnd](file:///d:/Antigravity/Projects/Real_i/Raaed-FrontEnd) directory.
+For detailed info on the Frontend application, please refer to the README inside the [Real_i-FrontEnd](file:///d:/Antigravity/Projects/Real_i/Real_i-FrontEnd) directory.
 
 ---
 

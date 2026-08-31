@@ -12,7 +12,7 @@ const DEFAULT_SETTINGS = {
   // AI Config
   aiEnabled: true,
   aiModel: 'gpt-4',
-  aiPersonality: 'You are Raaed, a helpful and strict educational assistant...',
+  aiPersonality: 'You are REAL_i, a helpful and strict educational assistant...',
   
   // Security
   maintenanceMode: false,
@@ -62,7 +62,7 @@ export default function AdminSettings() {
 
   const tabs = [
     { id: 'general', label: 'General & Branding', icon: Layout, desc: 'Core platform identity' },
-    { id: 'ai', label: 'AI Configuration', icon: Bot, desc: 'Manage Raaed assistant' },
+    { id: 'ai', label: 'AI Configuration', icon: Bot, desc: 'Manage REAL_i assistant' },
     { id: 'security', label: 'Security & Access', icon: ShieldCheck, desc: 'Maintenance and auth rules' },
     { id: 'integrations', label: 'API & Integrations', icon: Link2, desc: 'Payment and third-party tools' },
   ];
@@ -184,13 +184,13 @@ export default function AdminSettings() {
           {activeTab === 'ai' && (
             <div className="space-y-6 animate-fade-in">
               <h3 className="text-xl font-bold text-surface-50 mb-6 border-b border-surface-800 pb-4 flex items-center gap-2">
-                <Bot className="text-blue-400" size={20} /> AI Configuration (Raaed)
+                <Bot className="text-blue-400" size={20} /> AI Configuration (REAL_i)
               </h3>
               
               <div className="flex items-start justify-between p-5 rounded-2xl bg-blue-500/5 border border-blue-500/20">
                 <div className="pr-6">
                   <p className="text-sm font-bold text-surface-50 mb-1">Enable Global AI Assistant</p>
-                  <p className="text-xs text-surface-400 leading-relaxed">Turn this on to allow students to interact with Raaed in their courses. Turning this off will hide the chat widget for everyone.</p>
+                  <p className="text-xs text-surface-400 leading-relaxed">Turn this on to allow students to interact with REAL_i in their courses. Turning this off will hide the chat widget for everyone.</p>
                 </div>
                 <button 
                   onClick={() => handleToggle('aiEnabled')}
@@ -213,7 +213,7 @@ export default function AdminSettings() {
                     ]}
                   />
                 </div>
-                <p className="text-[10px] text-surface-500 mt-2 mb-6">Select which language model Raaed uses to answer student questions.</p>
+                <p className="text-[10px] text-surface-500 mt-2 mb-6">Select which language model REAL_i uses to answer student questions.</p>
 
                 <label className="block text-xs font-bold text-surface-400 uppercase tracking-wider mb-2">System Prompt (Personality)</label>
                 <textarea
