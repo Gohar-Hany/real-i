@@ -309,7 +309,7 @@ export default function StudentDashboard() {
                     </div>
                   </div>
                   <Link
-                    to={`/student/live?meetingId=${encodeURIComponent(meeting._id)}&roomSlug=${encodeURIComponent(meeting.roomSlug || meeting.roomName)}`}
+                    to={`/student/live?meetingId=${encodeURIComponent(meeting._id || meeting.id || '')}&roomSlug=${encodeURIComponent(meeting.roomSlug || meeting.roomName || `reali_cls_${String(meeting._id || meeting.id || 'live').slice(-8)}`)}`}
                     className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
                       meeting.status === 'live'
                         ? 'bg-red-600 hover:bg-red-500 text-white animate-pulse-soft'

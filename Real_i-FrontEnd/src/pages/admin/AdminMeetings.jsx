@@ -150,8 +150,10 @@ export default function AdminMeetings() {
         resetForm();
         fetchMeetings();
 
-        if (scheduleType === 'immediate' && !isRecurring && response.meeting?.roomSlug) {
-          navigate(`/admin/live?meetingId=${encodeURIComponent(response.meeting._id)}&roomSlug=${encodeURIComponent(response.meeting.roomSlug)}`);
+        if (scheduleType === 'immediate' && !isRecurring && response.meeting) {
+          const mId = response.meeting._id || response.meeting.id || '';
+          const slug = response.meeting.roomSlug || response.meeting.roomName || `reali_cls_${String(mId).slice(-8)}`;
+          navigate(`/admin/live?meetingId=${encodeURIComponent(mId)}&roomSlug=${encodeURIComponent(slug)}`);
         }
       }
     } catch (err) {
@@ -243,7 +245,9 @@ export default function AdminMeetings() {
         console.error('Failed to launch meeting', err);
       }
     }
-    navigate(`/admin/live?meetingId=${encodeURIComponent(meeting._id)}&roomSlug=${encodeURIComponent(meeting.roomSlug || meeting.roomName)}`);
+    const mId = meeting._id || meeting.id || '';
+    const slug = meeting.roomSlug || meeting.roomName || `reali_cls_${String(mId).slice(-8)}`;
+    navigate(`/admin/live?meetingId=${encodeURIComponent(mId)}&roomSlug=${encodeURIComponent(slug)}`);
   };
 
   const handleOpenReport = async (meeting) => {

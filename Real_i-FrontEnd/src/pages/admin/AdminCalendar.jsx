@@ -106,7 +106,7 @@ export default function AdminCalendar() {
           date: new Date(m.scheduledFor),
           type: 'meeting',
           description: `Duration: ${m.expectedDurationMinutes} mins. Room: ${m.roomName}`,
-          link: `/admin/live?meetingId=${encodeURIComponent(m._id)}&roomSlug=${encodeURIComponent(m.roomSlug || m.roomName)}`,
+          link: `/admin/live?meetingId=${encodeURIComponent(m._id || m.id || '')}&roomSlug=${encodeURIComponent(m.roomSlug || m.roomName || `reali_cls_${String(m._id || m.id || 'live').slice(-8)}`)}`,
           linkLabel: m.status === 'live' ? 'Join Live Now' : 'Launch Session',
           meta: [
             m.status === 'live' ? 'LIVE' : m.status,

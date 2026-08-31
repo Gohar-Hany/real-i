@@ -219,12 +219,22 @@ export default function LiveMeetingPage() {
       const api = new window.JitsiMeetExternalAPI('meet.jit.si', options);
       apiRef.current = api;
 
-      // Gracefully dismiss loading overlay as soon as conference connects or within 3 seconds
+      // Gracefully dismiss loading overlay as soon as iframe attaches (1.2s max)
       safetyTimer = setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 1200);
 
       api.addEventListener('videoConferenceJoined', () => {
+        if (safetyTimer) clearTimeout(safetyTimer);
+        setIsLoading(false);
+      });
+
+      api.addEventListener('cameraError', () => {
+        if (safetyTimer) clearTimeout(safetyTimer);
+        setIsLoading(false);
+      });
+
+      api.addEventListener('micError', () => {
         if (safetyTimer) clearTimeout(safetyTimer);
         setIsLoading(false);
       });
@@ -648,7 +658,7 @@ export default function LiveMeetingPage() {
       <div className="relative rounded-3xl overflow-hidden bg-surface-950 border border-surface-800 shadow-2xl h-[72vh] min-h-[520px]">
         {/* Loading Overlay */}
         {isLoading && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-surface-950/95 backdrop-blur-md">
+          <div className="absolute inset-0 z-20 pointer-events-none flex flex-col items-center justify-center bg-surface-950/90 backdrop-blur-md transition-opacity duration-300">
             <div className="relative flex items-center justify-center mb-4">
               <div className="w-14 h-14 rounded-full border-3 border-primary-500/30 border-t-primary-500 animate-spin" />
               <Video className="w-6 h-6 absolute text-primary-400 animate-pulse" />
