@@ -58,7 +58,14 @@ export default function StudentMeetings() {
       }
 
       if (Array.isArray(coursesRes)) {
-        setCourses(coursesRes);
+        const userEnrolled = user?.enrolled_courses || [];
+        const enrolledOnly = coursesRes.filter(c => 
+          userEnrolled.includes(c.id) || 
+          userEnrolled.includes(c._id) || 
+          userEnrolled.includes(c.project_id) ||
+          (c.enrolled_students && c.enrolled_students.includes(user?.id))
+        );
+        setCourses(enrolledOnly);
       }
     } catch (err) {
       console.error('Failed to fetch student meetings:', err);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { getCompletedQuizzes, getCourses, getAssignedQuizzes, getMySubmissions } from '@/services/api';
+import { getCompletedQuizzes, getCourses, getUser, getAssignedQuizzes, getMySubmissions } from '@/services/api';
 import {
   Trophy, BrainCircuit, BookOpen,
   CheckCircle, XCircle, Clock, ChevronRight,
@@ -23,6 +23,16 @@ export default function StudentPerformance() {
     const fetchData = async () => {
       setLoading(true);
       try {
+        let userEnrolledCourses = user?.enrolled_courses || [];
+        let userCompletedLessons = user?.completed_lessons || [];
+        try {
+          const userData = await getUser(user?.id);
+          if (userData) {
+            userEnrolledCourses = userData.enrolled_courses || [];
+            userCompletedLessons = userData.completed_lessons || [];
+          }
+        } catch { /* use cached user */ }
+
         // Fetch completed quizzes
         try {
           const res = await getCompletedQuizzes(user?.id);
@@ -30,21 +40,6 @@ export default function StudentPerformance() {
           setCompletedQuizzes(Array.isArray(completed) ? completed : []);
         } catch {
           setCompletedQuizzes([]);
-        }
-
-        // Fetch assigned quizzes from courses
-        try {
-          const courses = await getCourses();
-          let allQuizzes = [];
-          for (const c of courses) {
-            try {
-              const quizzes = await getAssignedQuizzes(c.project_id || c.id);
-              if (quizzes?.length > 0) allQuizzes.push(...quizzes);
-            } catch { /* skip */ }
-          }
-          setAssignedQuizzes(allQuizzes);
-        } catch {
-          setAssignedQuizzes([]);
         }
 
         // Fetch assignment submissions
@@ -55,20 +50,50 @@ export default function StudentPerformance() {
           setSubmissions([]);
         }
 
-        // Fetch courses for progress tab
+        // Fetch assigned quizzes & progress from ENROLLED courses only
         try {
-          const courseList = await getCourses();
-          const progress = (Array.isArray(courseList) ? courseList : []).map(c => ({
-            id: c.project_id || c.id,
-            title: c.title || c.project_id,
-            progress: 0,
-            lessonsCompleted: 0,
-            totalLessons: c.lessons_count || 0,
-            grade: '-',
-            lastAccessed: 'Recently',
-          }));
+          const courses = await getCourses();
+          const enrolledCourses = (Array.isArray(courses) ? courses : []).filter(c => 
+            userEnrolledCourses.includes(c.id) || 
+            userEnrolledCourses.includes(c._id) || 
+            userEnrolledCourses.includes(c.project_id) ||
+            (c.enrolled_students && c.enrolled_students.includes(user?.id))
+          );
+
+          let allQuizzes = [];
+          for (const c of enrolledCourses) {
+            try {
+              const quizzes = await getAssignedQuizzes(c.project_id || c.id);
+              if (quizzes?.length > 0) allQuizzes.push(...quizzes);
+            } catch { /* skip */ }
+          }
+          setAssignedQuizzes(allQuizzes);
+
+          const progress = enrolledCourses.map(c => {
+            let totalLessons = 0;
+            let completedInProject = 0;
+            if (c.modules && Array.isArray(c.modules)) {
+              c.modules.forEach(mod => {
+                if (mod.lessons && Array.isArray(mod.lessons)) {
+                  totalLessons += mod.lessons.length;
+                  completedInProject += mod.lessons.filter(l => userCompletedLessons.includes(l.id)).length;
+                }
+              });
+            }
+            const progPercent = totalLessons === 0 ? 0 : Math.round((completedInProject / totalLessons) * 100);
+            return {
+              id: c.project_id || c.id,
+              title: c.title || c.project_id,
+              progress: progPercent,
+              lessonsCompleted: completedInProject,
+              totalLessons: totalLessons || c.lessons_count || 0,
+              grade: progPercent > 80 ? 'A' : progPercent > 50 ? 'B' : '-',
+              lastAccessed: 'Recently',
+            };
+          });
           setCourseProgress(progress);
         } catch {
+          setAssignedQuizzes([]);
           setCourseProgress([]);
         }
       } finally {

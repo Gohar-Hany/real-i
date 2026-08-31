@@ -1,7 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { api, getProjects, getAssignedQuizzes, getCompletedQuizzes } from '@/services/api';
+import { api, getCourses, getUser, getAssignedQuizzes, getCompletedQuizzes } from '@/services/api';
 import {
   MessageSquare, BrainCircuit, BookOpen, Sparkles, ArrowRight,
   GraduationCap, Trophy, Target, TrendingUp, Zap,
@@ -21,50 +21,79 @@ export default function StudentDashboard() {
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const list = await getProjects();
-        if (list.length > 0) {
-          let allQuizzes = [];
-          let completedTaskIds = [];
-
-          try {
-            const res = await getCompletedQuizzes(user?.id);
-            setCompletedQuizzes(res.completed_tasks || []);
-            completedTaskIds = res.completed_tasks ? res.completed_tasks.map(ct => ct.task_id) : [];
-          } catch (e) {
-            console.error('Failed to fetch completed quizzes', e);
+        let enrolledIds = user?.enrolled_courses || [];
+        let completedLessons = user?.completed_lessons || [];
+        try {
+          const freshUser = await getUser(user?.id);
+          if (freshUser) {
+            enrolledIds = freshUser.enrolled_courses || [];
+            completedLessons = freshUser.completed_lessons || [];
           }
+        } catch (e) { /* use cached user */ }
 
-          const projData = [];
-          for (let i = 0; i < list.length; i++) {
-            const project = list[i];
-            let totalQ = 0, completedQ = 0;
-            try {
-              const quizzes = await getAssignedQuizzes(project.project_id);
-              if (quizzes?.length > 0) {
-                totalQ = quizzes.length;
-                completedQ = quizzes.filter(q => completedTaskIds.includes(q.task_id)).length;
-                const mapped = quizzes.map(q => ({
-                  ...q,
-                  project_id: project.project_id,
-                  isCompleted: completedTaskIds.includes(q.task_id),
-                }));
-                allQuizzes = [...allQuizzes, ...mapped];
+        const allCourses = await getCourses();
+        const enrolledCourses = (Array.isArray(allCourses) ? allCourses : []).filter(c => 
+          enrolledIds.includes(c.id) || 
+          enrolledIds.includes(c._id) || 
+          enrolledIds.includes(c.project_id) || 
+          (c.enrolled_students && c.enrolled_students.includes(user?.id))
+        );
+
+        let allQuizzes = [];
+        let completedTaskIds = [];
+
+        try {
+          const res = await getCompletedQuizzes(user?.id);
+          setCompletedQuizzes(res.completed_tasks || []);
+          completedTaskIds = res.completed_tasks ? res.completed_tasks.map(ct => ct.task_id) : [];
+        } catch (e) {
+          console.error('Failed to fetch completed quizzes', e);
+        }
+
+        const projData = [];
+        for (let i = 0; i < enrolledCourses.length; i++) {
+          const course = enrolledCourses[i];
+          const projectId = course.project_id || course.id;
+          let totalQ = 0, completedQ = 0;
+          try {
+            const quizzes = await getAssignedQuizzes(projectId);
+            if (quizzes?.length > 0) {
+              totalQ = quizzes.length;
+              completedQ = quizzes.filter(q => completedTaskIds.includes(q.task_id)).length;
+              const mapped = quizzes.map(q => ({
+                ...q,
+                project_id: projectId,
+                isCompleted: completedTaskIds.includes(q.task_id),
+              }));
+              allQuizzes = [...allQuizzes, ...mapped];
+            }
+          } catch (e) { /* skip */ }
+
+          let totalLessons = 0;
+          let completedInProject = 0;
+          if (course.modules && Array.isArray(course.modules)) {
+            course.modules.forEach(mod => {
+              if (mod.lessons && Array.isArray(mod.lessons)) {
+                totalLessons += mod.lessons.length;
+                completedInProject += mod.lessons.filter(l => completedLessons.includes(l.id)).length;
               }
-            } catch (e) { /* skip */ }
-
-            projData.push({
-              id: project.project_id,
-              title: project.project_id,
-              color: COLORS[i % COLORS.length],
-              progress: totalQ === 0 ? 0 : Math.round((completedQ / totalQ) * 100),
-              totalQuizzes: totalQ,
-              completedQuizzes: completedQ,
             });
           }
 
-          setAssignedQuizzes(allQuizzes);
-          setProjectsData(projData);
+          const progress = totalLessons === 0 ? 0 : Math.round((completedInProject / totalLessons) * 100);
+
+          projData.push({
+            id: projectId,
+            title: course.title || projectId,
+            color: course.color || COLORS[i % COLORS.length],
+            progress,
+            totalQuizzes: totalQ,
+            completedQuizzes: completedQ,
+          });
         }
+
+        setAssignedQuizzes(allQuizzes);
+        setProjectsData(projData);
       } catch (err) {
         console.error('Failed to load data', err);
       }
@@ -310,12 +339,23 @@ export default function StudentDashboard() {
           </div>
           <div className="p-4">
             {projectsData.length === 0 ? (
-              <div className="py-10 text-center">
-                <div className="w-16 h-16 rounded-full bg-surface-800 flex items-center justify-center mb-3 mx-auto shadow-sm">
-                  <BookOpen size={28} className="text-blue-500" />
+              <div className="py-10 text-center px-4">
+                <div className="w-16 h-16 rounded-2xl bg-surface-800 border border-surface-700/60 flex items-center justify-center mb-3 mx-auto shadow-sm text-primary-400">
+                  <BookOpen size={28} />
                 </div>
-                <p className="text-sm font-bold text-surface-50 dark:text-surface-100 mb-1 font-heading">No courses yet</p>
-                <p className="text-xs text-surface-400 font-sans">Courses will appear here once assigned</p>
+                <p className="text-sm font-bold text-surface-50 dark:text-surface-100 mb-1 font-heading">
+                  No Enrolled Courses Yet
+                </p>
+                <p className="text-xs text-surface-400 font-sans max-w-xs mx-auto mb-4 leading-relaxed">
+                  You haven't enrolled in any courses yet. Browse our catalog of AI labs and start learning today.
+                </p>
+                <Link
+                  to="/courses"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 text-surface-950 shadow-md shadow-primary-500/20 hover:shadow-primary-500/35 transition-all"
+                >
+                  Browse Course Catalog
+                  <ArrowRight size={14} />
+                </Link>
               </div>
             ) : (
               <div className="space-y-2">

@@ -19,6 +19,18 @@ export default function StudentCourses() {
   useEffect(() => {
     const fetchCoursesProgress = async () => {
       try {
+        let userEnrolledCourses = user?.enrolled_courses || [];
+        let userCompletedLessons = user?.completed_lessons || [];
+        try {
+          const userData = await getUser(user.id);
+          if (userData) {
+            userEnrolledCourses = userData.enrolled_courses || [];
+            userCompletedLessons = userData.completed_lessons || [];
+          }
+        } catch (e) {
+          console.error('Failed to fetch user progress', e);
+        }
+
         const list = await getCourses();
         if (!list || list.length === 0) {
           setCoursesData([]);
@@ -26,17 +38,17 @@ export default function StudentCourses() {
           return;
         }
 
-        let userCompletedLessons = [];
-        try {
-          const userData = await getUser(user.id);
-          userCompletedLessons = userData.completed_lessons || [];
-        } catch (e) {
-          console.error('Failed to fetch user progress', e);
-        }
+        // Filter strictly to courses the student is enrolled in
+        const enrolledList = (Array.isArray(list) ? list : []).filter(c => 
+          userEnrolledCourses.includes(c.id) || 
+          userEnrolledCourses.includes(c._id) || 
+          userEnrolledCourses.includes(c.project_id) ||
+          (c.enrolled_students && c.enrolled_students.includes(user?.id))
+        );
 
         const data = [];
-        for (let i = 0; i < list.length; i++) {
-          const course = list[i];
+        for (let i = 0; i < enrolledList.length; i++) {
+          const course = enrolledList[i];
           const projectId = course.project_id || course.id;
           
           let totalLessons = 0;
